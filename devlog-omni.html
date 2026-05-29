@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OmniPlanner Devlog | RhyGPU</title>
+  <meta name="description" content="Building OmniPlanner: a local-first life operating system. Week-isolated planning, calendar AI, habit tracking, and the plan-vs-actual gap." />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0d12;
+      --text: #e8e8e8;
+      --muted: #8b92a6;
+      --body: #c7cad3;
+      --line: #252a36;
+      --accent: #8ab4ff;
+      --accent-soft: rgba(138, 180, 255, 0.12);
+      --code-bg: #11151d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, rgba(138, 180, 255, 0.09), transparent 32rem), var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      line-height: 1.7;
+    }
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 24px 88px;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back { color: var(--muted); font-size: 0.95rem; display: inline-block; margin-bottom: 40px; }
+    .kicker { color: var(--accent); font-size: 0.9rem; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 1rem; }
+    h1 { font-size: clamp(2.35rem, 7vw, 4.4rem); line-height: 1.05; margin: 0 0 0.8rem; }
+    h2 { font-size: 1.75rem; margin-top: 3.5rem; margin-bottom: 1rem; }
+    h3 { font-size: 1.25rem; margin-top: 2.5rem; margin-bottom: 0.75rem; color: var(--text); }
+    .subtitle { color: var(--text); font-size: clamp(1.25rem, 3vw, 1.65rem); line-height: 1.35; margin: 0 0 1rem; }
+    .meta { color: var(--muted); margin: 0 0 3.5rem; font-size: 0.98rem; }
+    p { color: var(--body); font-size: 1.08rem; margin: 1.25rem 0; }
+    blockquote {
+      margin: 2rem 0; padding: 1.1rem 1.25rem; border-left: 3px solid var(--accent);
+      background: var(--accent-soft); color: var(--text); font-size: 1.18rem; line-height: 1.55;
+    }
+    blockquote.idea { font-size: 1.25rem; font-weight: 700; }
+    .commit-note {
+      margin: 2rem 0; padding: 1.1rem 1.25rem; border: 1px solid var(--line);
+      background: rgba(255,255,255,0.025); border-radius: 12px;
+    }
+    .commit-note p { margin: 0.75rem 0; color: var(--body); }
+    .commit-note p:first-child { margin-top: 0; }
+    .commit-note p:last-child { margin-bottom: 0; }
+    ol { color: var(--body); padding-left: 1.35rem; }
+    li { margin: 0.65rem 0; color: var(--body); font-size: 0.95rem; }
+    code {
+      background: var(--code-bg); color: var(--text); padding: 0.14rem 0.35rem;
+      border-radius: 5px; font-size: 0.95em;
+    }
+    .closing {
+      margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid var(--line);
+      color: var(--muted); font-size: 0.98rem;
+    }
+    .tag {
+      display: inline-block; border: 1px solid var(--line); padding: 3px 10px;
+      border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--muted); margin: 0 4px 6px 0;
+    }
+    .tag.arch { border-color: #334; color: #c8a2c8; }
+    .tag.feat { border-color: #343; color: #7ec8a0; }
+    .tag.fix { border-color: #433; color: #e8a0a0; }
+    .tag.major { border-color: #334; color: #8ab4ff; }
+    .phase { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--line); }
+    .phase:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+    @media (max-width: 560px) {
+      main { padding: 38px 18px 64px; }
+      p { font-size: 1.02rem; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <a class="back" href="/">← Back to RhyGPU</a>
+
+  <p class="kicker">OmniPlanner Devlog</p>
+  <h1>Building a Life OS</h1>
+  <p class="subtitle">Local-first planning, calendar AI, habit tracking, and the plan-vs-actual gap</p>
+  <p class="meta">February 2026 – Present · 70 commits · 22 phases · ~11K lines of TypeScript</p>
+
+  <div style="margin: 2rem 0;">
+    <span class="tag major">Electron Desktop</span>
+    <span class="tag arch">Week-Isolated Planning</span>
+    <span class="tag feat">Habit Engine</span>
+    <span class="tag feat">Calendar AI</span>
+    <span class="tag feat">Email Integration</span>
+    <span class="tag feat">Local AI</span>
+    <span class="tag fix">AGPL-3.0</span>
+  </div>
+
+  <!--.origin -->
+  <div class="phase">
+    <h2>I. Before the Repository</h2>
+    <p>It started as a web app. Vite, React, a weekly planner with tabs for goals and habits. The usual stuff. But the data lived in <code>localStorage</code> inside a browser tab, and the whole thing disappeared if you cleared your cache. That felt wrong for something meant to hold your life plan.</p>
+    <p>The question was: what if a planner was a real app? Something you could trust with years of goals, habits, and history. Something that never sends your data to a server. Something that works on your machine, on your terms.</p>
+    <p>Electron was the fastest path. Tauri was considered, but Electron's ecosystem for IMAP, notifications, and cross-platform builds was more mature. The first commit converted the web app into a desktop app in a single day.</p>
+    <div class="commit-note">
+      <p>The first commits were not glamorous. <code>electron-main.cjs</code>, <code>preload.cjs</code>, <code>run.js</code> launcher, electron-builder config targeting Windows NSIS, macOS DMG, and Linux AppImage. AGPL-3.0 license. GitHub Actions CI that builds executables on every push.</p>
+      <p>Same day: Gemini AI provider wired in. Dead code removed. The project had a protected boundary.</p>
+    </div>
+  </div>
+
+  <!--.domain model -->
+  <div class="phase">
+    <h2>II. The Week Is an Island</h2>
+    <p>The core architectural bet: <strong>week-isolated planning</strong>. Each week is an independent page. Goals, todos, habits, calendar events — all scoped to that week. Changing this week doesn't affect last week or next week. Nothing bleeds.</p>
+    <p>This sounds simple. It's not. Most planners treat time as a flat list. OmniPlanner treats each week as a bounded context with its own goals, its own daily plans, its own habit tracker. The <code>WeekData</code> type became the atom of the system.</p>
+    <p><strong>Phase 2</strong> introduced <code>GoalItem</code>: structured life goals at 10Y, 5Y, 3Y, 1Y, monthly, and weekly horizons. Legacy text blobs were migrated into typed records. Weekly goals could link upward to life goals via <code>Todo.parentGoalId</code>.</p>
+    <p><strong>Phase 4</strong> hardened credentials. <code>services/storage/secureSettings.ts</code> became the single boundary for API keys and IMAP passwords. <code>Electron.safeStorage</code> encrypted everything at rest.</p>
+    <div class="commit-note">
+      <p>The storage layer was abstracted behind a <code>StorageAdapter</code> interface. <code>LocalStorageAdapter</code> for Electron, <code>IndexedDBAdapter</code> for web/PWA. Swappable without touching domain logic. Schema migrations ran automatically on startup.</p>
+    </div>
+  </div>
+
+  <!--.calendar intelligence -->
+  <div class="phase">
+    <h2>III. Calendar as Source of Truth</h2>
+    <p>A planner without a calendar is a todo list. A calendar without a planner is a schedule. OmniPlanner needed both, connected.</p>
+    <p><strong>Phase 5</strong> added <code>CalendarEventKind</code>: meetings, focus blocks, task blocks, and routines. Each could link to a goal and a todo. The weekly grid showed time-blocked events as colored bands.</p>
+    <p><strong>Phase 6</strong> added execution analytics: the weekly review sidebar showed focus block count, goals with time support, completed linked tasks, and unscheduled work that still needed blocks.</p>
+    <p>Email integration came next. IMAP connection with Gmail, Outlook, Yahoo, Naver. Emails could be read inline next to calendar events. One-click "Create Event from Email" parsed meeting requests into calendar blocks.</p>
+    <div class="commit-note">
+      <p>Email errors got a full taxonomy: <code>EMAIL_AUTH_FAILED</code>, <code>EMAIL_IMAP_DISABLED</code>, <code>EMAIL_APP_PASSWORD_REQUIRED</code>, <code>EMAIL_NETWORK_TIMEOUT</code>. Each with a calm, user-facing message and an operation ID for correlating logs. No raw credential leakage in error messages.</p>
+    </div>
+  </div>
+
+  <!--.security and tests -->
+  <div class="phase">
+    <h2>IV. Hardening</h2>
+    <p>138 tests across 7 files. Backup validation. Migration idempotency. Onboarding detection. The app had to survive real use — corrupt storage, failed imports, users who clear their cache.</p>
+    <p><strong>Phase 12</strong> added conflict-free restore: preview backup metadata before overwriting, handle legacy formats, survive mid-migration crashes.</p>
+    <p><strong>Phase 19</strong> was the cleanup pass: strict typecheck with zero errors, ID normalization from <code>number</code> to <code>string</code>, component extraction, AI API cleanup.</p>
+    <p><strong>Phase 22</strong> added OAuth token lifecycle: safe refresh, re-auth on expiry, IMAP preserved as fallback.</p>
+  </div>
+
+  <!--.current: Dashboard -->
+  <div class="phase">
+    <h2>V. The Main Screen Problem</h2>
+    <p>The weekly planner was solid. Habits worked. Calendar connected to email. But the main screen was a grid — and nobody opens a planner to see a grid. They open it to know <em>what's next</em>.</p>
+    <blockquote class="idea">The planner was complete. The entrance was wrong.</blockquote>
+    <p>So the main screen became a <strong>Dashboard</strong>. Today's top events ranked by priority × urgency. Habits due now with one-tap check-off. Recent emails. Top todos. Quick-add forms for new todos and new habits.</p>
+    <p>Every event card has a <strong>Start</strong> button. Tap it when the event begins — the app logs your actual start time. <strong>Skip</strong> marks it missed. <strong>Snooze</strong> reminds you in 5 minutes. Sleep events get "Going to bed" instead of "Start".</p>
+    <p>Priority stars (1-5) on every event and todo. Manual priority always overrides the default heuristic. Urgency (due soonest) fills in when you haven't set priority. The score is <code>priority × 20 + urgency</code>.</p>
+    <p>All mutations flow through <code>setAllWeeks</code> → Weekly Planner, Monthly View, and Goals View all see the same data. No sync needed because there's one source of truth.</p>
+  </div>
+
+  <!--.current: Alarms -->
+  <div class="phase">
+    <h2>VI. Pulse — The Alarm System</h2>
+    <p>A calendar event at 11pm should auto-create a wind-down alarm at 10pm and a wake alarm at 6am. A meeting at 2pm should auto-create a prep alarm at 1:30pm. Not manually. Automatically.</p>
+    <p>The <strong>alarm rules engine</strong> derives alarms from calendar events. Each rule has an event kind filter, an offset in minutes (negative = before, positive = after), and a template string. The calendar is the single source of truth for alarms.</p>
+    <p>The <strong>Pulse</strong> tab shows: daily reminder toggles (morning planner, habit check-in, focus block alert), upcoming event-derived alarms, and sleep alarm rules. Master enable/disable at the top.</p>
+    <p>Mobile notifications fire via <code>@capacitor/local-notifications</code>. Desktop notifications are the next piece.</p>
+    <div class="commit-note">
+      <p>138 tests still pass. Typecheck clean. Electron 42 (upgraded from 26). Auto-backup on app exit. Window state persistence. GitHub release version checking. Corrupt storage auto-repair.</p>
+    </div>
+  </div>
+
+  <!--.next -->
+  <div class="phase">
+    <h2>VII. What's Next</h2>
+    <p>The plan-vs-actual overlay on the weekly grid. Soft translucent blocks for what you planned. Solid opaque blocks for what actually happened. Per-day toggle to compare.</p>
+    <p>Desktop notifications via Electron's <code>Notification</code> API. Rich alerts with Start/Skip/Snooze actions baked into the notification itself.</p>
+    <p>Wearable and lock screen widgets. "What's next?" on your wrist without opening the app.</p>
+    <p>AI ranking: when an AI provider is configured, the dashboard ranking learns from your patterns. "You always skip gym on Mondays. Want to reschedule?"</p>
+  </div>
+
+  <!--.commit coverage -->
+  <div class="phase">
+    <h2>Covered Commits</h2>
+    <p>This devlog covers the full OmniPlanner build from February to May 2026.</p>
+    <ol>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/0534b6c"><code>0534b6c</code></a> Fixed infini load time/ clean up</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/2bc3be3"><code>2bc3be3</code></a> Correct OmniPlanner license notice</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/0434ebd"><code>0434ebd</code></a> Add AGPL license</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/e0867c2"><code>e0867c2</code></a> Phase 21-C: OAuth token lifecycle</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/3bec6fc"><code>3bec6fc</code></a> Phase 21-B: OAuth login foundation</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/6ea2c38"><code>6ea2c38</code></a> Phase 22: email reliability and diagnostics</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/451faea"><code>451faea</code></a> Phase 21: test coverage and release confidence</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/24634e4"><code>24634e4</code></a> Phase 20: reminder visibility polish</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/326dcf0"><code>326dcf0</code></a> Phase 19: engineering hardening</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/96ceb4d"><code>96ceb4d</code></a> Phase 13: Mobile UX and daily-use polish</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/301a9d4"><code>301a9d4</code></a> Phase 12: Offline resilience and conflict-free restore</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/890faae"><code>890faae</code></a> Phase 11: Native secure storage and reminder wiring</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/20c5d2c"><code>20c5d2c</code></a> Phase 10: Capacitor mobile shell and notification service</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/1fa7885"><code>1fa7885</code></a> Phase 9: web shell and local-first PWA</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/945e4c3"><code>945e4c3</code></a> Phase 6: execution analytics and weekly review</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/e435576"><code>e435576</code></a> Phase 5: calendar execution and planning intelligence</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/3e79bbe"><code>3e79bbe</code></a> Phase 3: goal-to-week linking via Todo.parentGoalId</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/62577c8"><code>62577c8</code></a> Phase 2: GoalItem domain model and migration v2</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/2485faf"><code>2485faf</code></a> Phase 0+1: product docs and storage abstraction</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/daf14d3"><code>daf14d3</code></a> Add multi-AI provider system (Gemini, Claude, OpenAI)</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/4a74631"><code>4a74631</code></a> Convert from web app to local Electron desktop app</li>
+      <li><a href="https://github.com/RhyGPU/OmniPlanner/commit/725ced4"><code>725ced4</code></a> Fix upload, Electron crash, AI service, and build issues</li>
+    </ol>
+  </div>
+
+  <p class="closing">Next: the plan-vs-actual weekly overlay, desktop notifications, and AI-powered ranking.</p>
+</main>
+</body>
+</html>
