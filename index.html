@@ -17,8 +17,8 @@
     }
 
     main {
-      max-width: 720px;
-      padding: 40px 24px;
+      max-width: 760px;
+      padding: 56px 24px;
       line-height: 1.6;
     }
 
@@ -34,6 +34,11 @@
 
     a {
       color: #8ab4ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
 
     .tag {
@@ -41,19 +46,53 @@
       font-size: 0.95rem;
       margin-top: 2rem;
     }
+
+    .section {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #252a36;
+    }
+
+    .post {
+      margin-top: 1rem;
+      padding: 18px 0;
+    }
+
+    .post-title {
+      font-size: 1.25rem;
+      margin: 0 0 0.35rem;
+    }
+
+    .post-meta {
+      color: #7d8494;
+      font-size: 0.95rem;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
   <main>
     <h1>RhyGPU</h1>
+
     <p>
       Devlog of Mnemosyne, vibe coding, AI memory systems, and building a local-first roleplay continuity engine.
     </p>
-    <p>
-      Devlog 000 is coming soon.
-    </p>
+
+    <div class="section">
+      <p class="tag">Latest devlog</p>
+
+      <div class="post">
+        <p class="post-title">
+          <a href="/devlog-000.html">Devlog 000, Before the Repository</a>
+        </p>
+        <p class="post-meta">
+          The origin of Mnemosyne, before the repo, before the roadmap, before the app.
+        </p>
+      </div>
+    </div>
+
     <p class="tag">
-      rhygpu.dev is now live.
+      rhygpu.dev is live.
     </p>
   </main>
 </body>
