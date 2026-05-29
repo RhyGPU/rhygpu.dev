@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Devlog 002, Making Hidden State Work | RhyGPU</title>
-  <meta name="description" content="The early Mnemosyne app phase, where hidden state, real model testing, and the Soul update loop started becoming software." />
+  <title>Devlog 002, Splitting Memory in Two | RhyGPU</title>
+  <meta name="description" content="How Mnemosyne split character memory from world continuity: the Soul remembers like a person, and the World Log remembers like a GM." />
   <style>
     :root {
       color-scheme: dark;
@@ -15,7 +15,6 @@
       --line: #252a36;
       --accent: #8ab4ff;
       --accent-soft: rgba(138, 180, 255, 0.12);
-      --code-bg: #11151d;
     }
 
     * {
@@ -33,7 +32,7 @@
     }
 
     main {
-      max-width: 860px;
+      max-width: 820px;
       margin: 0 auto;
       padding: 56px 24px 88px;
     }
@@ -68,12 +67,6 @@
       margin: 0 0 0.8rem;
     }
 
-    h2 {
-      font-size: 1.75rem;
-      margin-top: 3.5rem;
-      margin-bottom: 1rem;
-    }
-
     .subtitle {
       color: var(--text);
       font-size: clamp(1.25rem, 3vw, 1.65rem);
@@ -104,50 +97,8 @@
     }
 
     blockquote.idea {
-      font-size: 1.25rem;
+      font-size: 1.28rem;
       font-weight: 700;
-    }
-
-    .commit-note {
-      margin: 2rem 0;
-      padding: 1.1rem 1.25rem;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.025);
-      border-radius: 12px;
-    }
-
-    .commit-note p {
-      margin: 0.75rem 0;
-      color: var(--body);
-    }
-
-    .covered {
-      margin-top: 4rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--line);
-    }
-
-    .covered p {
-      color: var(--muted);
-      font-size: 0.98rem;
-    }
-
-    ol {
-      color: var(--body);
-      padding-left: 1.35rem;
-    }
-
-    li {
-      margin: 0.65rem 0;
-      color: var(--body);
-    }
-
-    code {
-      background: var(--code-bg);
-      color: var(--text);
-      padding: 0.14rem 0.35rem;
-      border-radius: 5px;
-      font-size: 0.95em;
     }
 
     .closing {
@@ -174,324 +125,195 @@
     <a class="back" href="/">← Back to RhyGPU</a>
 
     <p class="kicker">Mnemosyne Devlog</p>
-    <h1>Devlog 002, Making Hidden State Work</h1>
-    <p class="subtitle">The App Started Testing the Soul</p>
-    <p class="meta">April 2026 · Early repository phase · Hidden state, app scaffolding, and real model testing</p>
+    <h1>Devlog 002, Splitting Memory in Two</h1>
+    <p class="subtitle">The Soul Remembers Like a Person. The World Log Remembers Like a GM.</p>
+    <p class="meta">May 2026 · System design notes · Soul memory and world continuity</p>
 
-    <p>Before the repository existed, Mnemosyne was still mostly living inside chats, prompts, and messy experiments.</p>
+    <p>After I started thinking of the code block as something that could update the Soul, the next problem became obvious.</p>
 
-    <p>The crude code block existed.</p>
+    <p>Not all memory is the same kind of memory.</p>
 
-    <p>The Soul idea existed.</p>
+    <p>At first, I was still thinking too simply. The AI needed to remember what happened, so I needed a better memory system. That sounded reasonable, but it was still too broad. “Memory” was doing too much work as one word.</p>
 
-    <p>The psychology and memory foundation was starting to exist.</p>
+    <p>A character remembering something is not the same as the story remembering something.</p>
 
-    <p>But none of that was really a project yet. It was still pre-repo work, the kind of thing that lives in conversations, notes, and local experiments until you finally decide it is worth protecting.</p>
+    <p>That was the next shift.</p>
 
-    <p>That changed after I started looking into open-source licensing.</p>
+    <p>The Soul should not carry everything.</p>
 
-    <p>I did not want to build something that could just be swallowed, closed off, or copied without giving anything back. The license question was part of the moment where Mnemosyne stopped feeling like a disposable prompt trick and started feeling like something I actually intended to build.</p>
+    <p>The Soul should carry what changed the character.</p>
 
-    <p>So the repo began.</p>
+    <p>That meant emotional memory. Subjective memory. Biased memory. The kind of memory that affects trust, fear, shame, affection, openness, desire, and resolve. The kind of memory that might grow stronger because it hurt, or fade because it never meant anything.</p>
 
-    <div class="commit-note">
-      <p>The first commits were not glamorous. They were foundation work: setting up the repository, adding the AGPL license, declaring that license in the package metadata, and merging the initial GitHub repository state.</p>
-      <p>It was not “the app” yet, but it was the moment Mnemosyne stopped being only a pile of prompts and became something with a protected project boundary.</p>
-    </div>
+    <p>But the world needed a different kind of continuity.</p>
 
-    <p>Then came the desktop client scaffold.</p>
+    <p>Where are we?</p>
 
-    <p>That was the line.</p>
+    <p>What objects are in the room?</p>
 
-    <p>Before that, Mnemosyne was an idea with experiments behind it.</p>
+    <p>What just happened in the plot?</p>
 
-    <p>After that, it was software.</p>
+    <p>What is the active danger?</p>
 
-    <p>Not finished software.</p>
+    <p>What information has been established?</p>
 
-    <p>Not good software.</p>
+    <p>What does the narrator need to know, even if the character does not?</p>
 
-    <p>But software.</p>
+    <p>That did not belong entirely inside the Soul.</p>
 
-    <p>The first real shape was a local desktop client: Tauri, React, Rust, Soul files, local persistence, context compilation, and hidden state parsing. The project was moving out of pure prompting and into an app that could actually hold state outside the model.</p>
+    <p>If I put everything into the Soul, the character would become weirdly omniscient. They would “remember” facts they should not personally know. They would carry scene logistics as if those logistics were emotional memories. A location change, an object on a table, or a background plot thread would sit beside trauma, trust, and fear like they were the same kind of thing.</p>
 
-    <p>That mattered because the question changed.</p>
+    <p>They are not.</p>
 
-    <p>Before, I was asking:</p>
+    <p>That was when the memory system split in my head.</p>
 
-    <blockquote>Can I make the AI remember better with a prompt?</blockquote>
+    <blockquote class="idea">The Soul remembers like a person.</blockquote>
 
-    <p>Now, I was asking:</p>
+    <blockquote class="idea">The World Log remembers like a GM.</blockquote>
 
-    <blockquote>Can an app take what the AI reports, hide the messy machinery from the user, and update the Soul behind the scenes?</blockquote>
+    <p>That distinction mattered a lot.</p>
 
-    <p>That was a completely different problem.</p>
+    <p>The Soul is subjective.</p>
 
-    <p>The crude code block from the earlier experiments had become a prototype for hidden state. It was supposed to sit behind the narration, not inside it. The user should see the scene, the emotion, the character, and the atmosphere.</p>
+    <p>The World Log is operational.</p>
 
-    <p>They should not see the machinery.</p>
+    <p>The Soul can be wrong, biased, incomplete, or emotionally distorted.</p>
 
-    <p>No ugly JSON.</p>
+    <p>The World Log should be stable enough to keep the scene coherent.</p>
 
-    <p>No memory tags.</p>
+    <p>A character might remember the sound of rain because it made them feel safe. The World Log remembers that the scene is taking place at a station, it is raining, the last train is delayed, and a suspicious courier package exists in the scene.</p>
 
-    <p>No trust deltas.</p>
+    <p>A character might forget the exact words someone said, but remember that the tone felt threatening. The World Log remembers the actual exchange happened, where it happened, and what plot thread it touched.</p>
 
-    <p>No retrieval scores.</p>
+    <p>A character might not know there is someone watching from across the platform. The World Log can know that, if the narrative mode allows it.</p>
 
-    <p>No system residue.</p>
+    <p>That was the reason one memory bucket was not enough.</p>
 
-    <p>No visible code box sitting under every reply, reminding them that the character is being calculated.</p>
+    <p>The project needed at least two layers.</p>
 
-    <p>That part was harder than it sounded.</p>
+    <p>The first layer was the Soul.</p>
 
-    <p>At first, the code block was useful because it was visible. I could inspect it. I could see whether the AI was tracking memories, emotional shifts, scene details, and character state. But if Mnemosyne was going to become an actual RP client, that block could not stay in the user-facing experience forever.</p>
+    <p>That layer tracked the character’s inner continuity: emotional variables, relationship changes, trauma state, personal memories, core memories, schemas, and slow personality drift. This was the “what the character has become” layer.</p>
 
-    <p>The app had to separate two things:</p>
+    <p>The second layer was the World Log.</p>
 
-    <blockquote>What the player sees.</blockquote>
+    <p>That layer tracked story continuity: setting, active scene, recent objective events, important objects, plot threads, time passage, and what the narrator needed to keep consistent.</p>
 
-    <blockquote>What the engine reads.</blockquote>
+    <p>Once I saw that split, a lot of earlier problems became easier to name.</p>
 
-    <p>That became one of the first real technical problems.</p>
+    <p>Before the split, I kept asking:</p>
 
-    <p>The narrator response needed to stay clean.</p>
+    <blockquote>How do I make the AI remember everything?</blockquote>
 
-    <p>The hidden state needed to be machine-readable.</p>
+    <p>After the split, the question became sharper:</p>
 
-    <p>The app needed to strip the hidden state from the visible response, parse it, apply it to the Soul, and then store the updated result. If the hidden state leaked into the chat, it broke immersion. If it disappeared completely, the engine lost the update packet.</p>
+    <blockquote>What kind of memory is this?</blockquote>
 
-    <p>Both failures were bad.</p>
+    <p>Is it something the character personally experienced?</p>
 
-    <p>So the turn flow started becoming real.</p>
+    <p>Is it something that emotionally changed them?</p>
 
-    <p>User message.</p>
+    <p>Is it a world fact the narrator needs?</p>
 
-    <p>Compiled context.</p>
+    <p>Is it information the character should not know yet?</p>
 
-    <p>Model response.</p>
+    <p>Is it just recent chat context?</p>
 
-    <p>Visible narration.</p>
+    <p>Is it a long-term plot detail?</p>
 
-    <p>Hidden state.</p>
+    <p>Those categories changed the architecture.</p>
 
-    <p>Parser.</p>
+    <p>A betrayal belongs in the Soul.</p>
 
-    <p>Soul update.</p>
+    <p>A room layout belongs in the World Log.</p>
 
-    <p>Memory scoring.</p>
+    <p>A repeated kindness might become a relationship schema in the Soul.</p>
 
-    <p>Consolidation.</p>
+    <p>A missing keycard belongs in the World Log.</p>
 
-    <p>Save.</p>
+    <p>A traumatic memory might become distorted inside the Soul.</p>
 
-    <p>Repeat.</p>
+    <p>A plot event should remain stable in the World Log.</p>
 
-    <p>That loop was the first version of Mnemosyne actually breathing.</p>
+    <p>That was the first time Mnemosyne started feeling less like “memory for AI RP” and more like an actual simulation layer.</p>
 
-    <div class="commit-note">
-      <p>The first turn-flow commits were mostly about making the app behave like an app. The chat interface needed to send something, receive something, and prove that a hidden-state block could exist inside the pipeline.</p>
-      <p>That led to the early mock provider wiring and later mock acceptance coverage.</p>
-    </div>
+    <p>It was not enough to summarize the chat.</p>
 
-    <p>But I do not want to oversell that mock.</p>
+    <p>A summary says what happened.</p>
 
-    <p>The mock was not where the real RP testing happened.</p>
+    <p>A Soul says what it did to the character.</p>
 
-    <p>It was basically an early placeholder for the chat interface and turn flow. It could return a fixed kind of answer, attach a predictable hidden state block, and make the UI look like it was doing something. That was useful for shaping the app before the real provider path was ready.</p>
+    <p>A World Log says what remains true about the scene.</p>
 
-    <p>But as a test of roleplay, memory, or narration, it was useless.</p>
+    <p>Those are different jobs.</p>
 
-    <p>It did practically nothing.</p>
+    <p>This also solved part of the narrator problem.</p>
 
-    <p>The real testing came from actual LLMs.</p>
+    <p>I did not want the AI to simply be the character. That made the model too likely to speak as the character, steal the user’s actions, and collapse the difference between what the narrator knows and what the character knows.</p>
 
-    <p>I was already a heavy AI RP experimenter, and I had been using OpenRouter to try different models. So when I needed real generations for testing, free OpenRouter models became the obvious choice.</p>
+    <p>The narrator needed to work more like a GM.</p>
 
-    <p>I needed to see whether the system actually held together when a real model answered. A fake response could prove that the button worked. A real model could prove whether the idea survived contact with chaos.</p>
+    <p>The narrator could see the scene.</p>
 
-    <p>That was where the useful failures came from.</p>
+    <p>The character could only know what they experienced.</p>
 
-    <p>A real model might forget to include the hidden state.</p>
+    <p>The Soul could remember subjectively.</p>
 
-    <p>A real model might reveal the code block to the user.</p>
+    <p>The World Log could preserve continuity objectively.</p>
 
-    <p>A real model might wrap the hidden state in the wrong format.</p>
+    <p>That meant Mnemosyne needed a narrator architecture, not just a character chatbot.</p>
 
-    <p>A real model might summarize instead of updating.</p>
+    <p>The character was not supposed to carry the whole universe inside their head.</p>
 
-    <p>A real model might keep adding memories instead of decaying them.</p>
+    <p>The narrator and the system had to carry the universe around them.</p>
 
-    <p>A real model might understand the rule, explain the rule, and then fail to follow the rule three turns later.</p>
+    <p>That was also where the idea of different narrative modes started making more sense.</p>
 
-    <p>That was the kind of failure I needed to see.</p>
+    <p>Realistic mode could restrict the narration to external behavior: body language, voice, movement, visible reactions.</p>
 
-    <p>The mock could help the app have a shape.</p>
+    <p>Reader mode could allow access to the character’s inner thoughts, but only what the character themself knows or feels.</p>
 
-    <p>The real models tested the system.</p>
+    <p>God mode could allow the narrator to reveal wider world information, foreshadowing, or details outside the character’s awareness.</p>
 
-    <div class="commit-note">
-      <p>Once the pipe existed, the next problem was making the state less visible and more machine-readable. That led to encoded hidden state, API hidden-state prompt alignment, and debug tools for inspecting the turn cycle without exposing the raw machinery to the player.</p>
-    </div>
+    <p>Those modes depended on the same split.</p>
 
-    <p>Then came the second hard problem:</p>
+    <p>Without separating Soul memory from World Log memory, God mode would poison the character. The character might start acting on information they should not have. Reader mode could become too omniscient. Realistic mode could accidentally expose internal state.</p>
 
-    <blockquote class="idea">Forgetting.</blockquote>
+    <p>So the memory split also became a knowledge-boundary split.</p>
 
-    <p>I already knew I did not want Mnemosyne to save everything. That would just recreate the same problem in a different form. A giant memory list is not intelligence. It is hoarding.</p>
+    <p>What does the narrator know?</p>
 
-    <p>But making a system forget in a human-like way is not simple.</p>
+    <p>What does the character know?</p>
 
-    <p>If memory decays too aggressively, the character becomes shallow.</p>
+    <p>What does the player see?</p>
 
-    <p>If memory never decays, the character becomes a database.</p>
+    <p>What does the engine store?</p>
 
-    <p>If every emotional moment becomes permanent, nothing is actually important.</p>
+    <p>Those questions became part of the system.</p>
 
-    <p>If nothing becomes permanent, the character never grows.</p>
+    <p>The character’s memory and the world’s memory could not be the same thing.</p>
 
-    <p>That balance was the heart of the Soul.</p>
+    <p>That was the first conceptual breakthrough after the Soul idea.</p>
 
-    <p>The goal was not just to delete old entries.</p>
+    <p>The Soul would carry the character’s lived inner history.</p>
 
-    <p>The goal was to decide what should fade, what should merge into a pattern, and what should become part of the character.</p>
+    <p>The World Log would carry the scene’s objective continuity.</p>
 
-    <p>A boring repeated event should disappear.</p>
+    <p>The narrator would read from both.</p>
 
-    <p>A repeated kindness might become trust.</p>
+    <p>And the player would only see the story.</p>
 
-    <p>A repeated threat might become fear.</p>
+    <p>That became the next foundation of Mnemosyne.</p>
 
-    <p>A repeated silence might become abandonment.</p>
+    <p>Not just:</p>
 
-    <p>So forgetting could not just be a timer.</p>
-
-    <p>It needed meaning.</p>
-
-    <p>At first, I was still trying to make the LLM handle that inside the hidden state.</p>
-
-    <p>The model had the scene. It knew the emotional context. It could judge what mattered. So it felt natural to let it propose memory entries, emotional tags, retrieval strength, and what should fade or stay fresh.</p>
-
-    <p>In theory, that sounded fine.</p>
-
-    <p>In practice, it was asking one generation to do too much.</p>
-
-    <p>It had to write the scene, stay in character, follow lore, avoid speaking for the user, hide the code block, update relationship values, flag memories, and also remember to decay old ones correctly.</p>
-
-    <p>Sometimes it followed the rule.</p>
-
-    <p>Sometimes it explained the rule.</p>
-
-    <p>Sometimes it even performed cleanup when I directly forced it with an OOC command.</p>
-
-    <p>But it was not reliable.</p>
-
-    <p>That was the uncomfortable part.</p>
-
-    <p>I was building an engine, but I was still asking the model to behave like part of the engine.</p>
-
-    <p>At first, I did not fully see the problem. I was more focused on getting the hidden state to appear, disappear from the user-facing chat, and update the Soul at all.</p>
-
-    <p>Then the pattern started to show.</p>
-
-    <p>The character was not really forgetting.</p>
-
-    <p>The memory list kept growing.</p>
-
-    <p>Old entries stayed too strong.</p>
-
-    <p>The system could talk about decay, but it did not consistently decay.</p>
-
-    <p>That was when the question changed again.</p>
-
-    <p>Not:</p>
-
-    <blockquote>How do I prompt the AI well enough?</blockquote>
+    <blockquote>Make the AI remember.</blockquote>
 
     <p>But:</p>
 
-    <blockquote>I need a separate layer to unload the burden.</blockquote>
+    <blockquote class="idea">Make the right layer remember the right thing.</blockquote>
 
-    <p>I thought hard and came to the conclusion that the AI should tell the code how important something is, and the code should take over and decay or preserve it based on rules.</p>
-
-    <p>The LLM writes the scene.</p>
-
-    <p>The hidden state reports candidate changes.</p>
-
-    <p>The app hides and parses the machinery, then starts taking responsibility for managing memory.</p>
-
-    <p>The Soul updates every turn.</p>
-
-    <p>The player sees only the story.</p>
-
-    <p>That sounds obvious now, but it took testing to make it obvious.</p>
-
-    <p>The hardest parts were not the dramatic ones.</p>
-
-    <p>They were small, annoying, practical things.</p>
-
-    <p>How do I stop the AI from showing the hidden state to the user?</p>
-
-    <p>How do I parse the hidden block safely?</p>
-
-    <p>How do I test the interface before the real model path is stable?</p>
-
-    <p>How do I make the LLM judgment reliable?</p>
-
-    <p>Those problems made the project feel real.</p>
-
-    <p>Not because they were exciting, but because they were the kind of problems apps have.</p>
-
-    <p>The moment Mnemosyne had to hide the code box, parse it, and update a Soul file, it stopped being only a prompt experiment.</p>
-
-    <p>It became software.</p>
-
-    <p>The AI was still important.</p>
-
-    <p>The prompt was still important.</p>
-
-    <p>The hidden state was still important.</p>
-
-    <p>But the lesson was becoming clear:</p>
-
-    <blockquote>The LLM should write and evaluate.</blockquote>
-
-    <blockquote>The engine should manage.</blockquote>
-
-    <blockquote>The Soul should change.</blockquote>
-
-    <p>The lesson was not that the engine had already solved the memory.</p>
-
-    <p>It had not.</p>
-
-    <p>The lesson was that the boundary had to move.</p>
-
-    <p class="closing">Next: Devlog 003, the first real architecture push, where the memory layer, context compiler, settings separation, and early patch protocol started making the boundary explicit.</p>
-
-    <section class="covered">
-      <h2>Covered commits</h2>
-      <p>This devlog covers the early repository and hidden-state implementation period.</p>
-      <ol>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/f26cbfead602bea6003dc6445337c8b73ba77bc4"><code>f26cbfe</code></a> Add AGPL-3.0 license</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/a6429539c7fb38ec92f790ad3c3ee6afaf753903"><code>a642953</code></a> Scaffold Tauri desktop client</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/1fe813296f43302429b458ed8bd9dce2543d9798"><code>1fe8132</code></a> Initial commit</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/35bf8bf248391aef64cf7937d099917bd32fe8b9"><code>35bf8bf</code></a> Declare AGPL package license</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/303d4f7635752401588a62c98b5fb97d669d944a"><code>303d4f7</code></a> Merge GitHub initial repository state</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/b0697faee12dbac371a443caea62ca99e6b70086"><code>b0697fa</code></a> Wire mock provider turn flow</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/aee79720d2c325d1bc55f704ae82a633cbd5fbcc"><code>aee7972</code></a> Encode mock hidden state</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/9c242ea77ebfb5174d7202f566efa523ba8389d6"><code>9c242ea</code></a> Add local delete controls</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/505f75b8ded6be914684953e33e6805d37cfa081"><code>505f75b</code></a> Align prototype with narrator architecture</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/c9fe40d76e0a926659450a407423795351568876"><code>c9fe40d</code></a> Fix native Tauri build setup</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/b6fb3706f634234d5872c97068742518b1e121cf"><code>b6fb370</code></a> Add mock turn acceptance coverage</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/365d105634de01d784884622766279c83c60a987"><code>365d105</code></a> Surface memory cycle diagnostics</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/1f6ed4b857267afff046ea0b338e9fca49f47704"><code>1f6ed4b</code></a> Document future settings architecture</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/53a12d1a80116aeb5ea45705ccaffee63adbd328"><code>53a12d1</code></a> Separate setting controls from Soul identity</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/c526a87640e98bfdaffff7cbdd45325645e4a06b"><code>c526a87</code></a> Add Setting Soul lifecycle</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/802e588ba4ed708367e6812b61af5680a645f7ee"><code>802e588</code></a> Align API hidden state prompt</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/21f5efdf29fe70955561eab4ee10183fbda4f7c1"><code>21f5efd</code></a> Add turn debug panel</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/6f07c51fe43079134242f414479de37c0609cb7c"><code>6f07c51</code></a> Improve chat workspace controls</li>
-      </ol>
-    </section>
+    <p class="closing">Next: Devlog 003, when this split had to become software, hidden state had to disappear from the player’s view, and the app started testing whether the Soul could actually update behind the scenes.</p>
   </main>
 </body>
 </html>
