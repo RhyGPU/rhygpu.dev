@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Devlog 000, Before the Repository | RhyGPU</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0b0d12;
+      color: #e8e8e8;
+      font-family: Arial, sans-serif;
+      line-height: 1.7;
+    }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    a {
+      color: #8ab4ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .back {
+      color: #8b92a6;
+      font-size: 0.95rem;
+      margin-bottom: 40px;
+      display: inline-block;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+
+    .meta {
+      color: #8b92a6;
+      margin-bottom: 3rem;
+    }
+
+    p {
+      color: #c7cad3;
+      font-size: 1.08rem;
+      margin: 1.25rem 0;
+    }
+
+    blockquote {
+      border-left: 3px solid #8ab4ff;
+      padding-left: 18px;
+      color: #ffffff;
+      margin: 2rem 0;
+      font-size: 1.15rem;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #252a36;
+      margin: 3rem 0;
+    }
+
+    .note {
+      color: #8b92a6;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="/">← Back to RhyGPU</a>
+
+    <h1>Devlog 000, Before the Repository</h1>
+    <div class="meta">May 2026 · Origin notes · Mnemosyne</div>
+
+    <p>
+      Before Mnemosyne was a repository, it was a frustration I kept running into.
+    </p>
+
+    <p>
+      I was using AI roleplay platforms, trying different bots, different prompts,
+      and different ways to keep a scene alive for more than a few good messages.
+      At first, I thought the problem was just that I needed a better prompt.
+      Then I realized the problem was deeper.
+    </p>
+
+    <p>
+      The AI could write a dramatic scene. It could imitate emotion. It could produce
+      a good moment. But it could not always live through that moment properly.
+    </p>
+
+    <p>
+      Characters changed too fast. Trust jumped too quickly. Fear disappeared because
+      the scene needed to move forward. Shame got solved by one good speech. A character
+      could go from guarded to devoted in a handful of messages, not because the relationship
+      had earned it, but because the model wanted to satisfy the current direction of the scene.
+    </p>
+
+    <p>
+      That broke the illusion for me.
+    </p>
+
+    <p>
+      I did not want a character that only reacted well in the moment. I wanted a character
+      that carried the weight of what had happened before.
+    </p>
+
+    <p>
+      My first solution was not an app. It was not a state engine. It was not even close
+      to a real product.
+    </p>
+
+    <p>
+      It was a crude prompt system.
+    </p>
+
+    <p>
+      I built a narrator that tracked things. At the end of responses, it would keep a compact
+      status block, almost like a little memory compile format for the scene. It tracked scene
+      state, character condition, atmosphere, sensory details, emotional residue, and important
+      memories.
+    </p>
+
+    <p>
+      It was messy, but it worked better than nothing.
+    </p>
+
+    <p>
+      That was the part that bothered me. If a rough prompt hack could make the experience
+      better, then the missing piece was not just better prose. The missing piece was structure.
+    </p>
+
+    <p>
+      The AI needed a way to track continuity outside normal narration.
+    </p>
+
+    <p>
+      Not just a summary. Not just a longer context window. Not just a note saying
+      “remember this character likes coffee.”
+    </p>
+
+    <p>
+      I wanted something that could track what changed inside a character over time.
+    </p>
+
+    <blockquote>
+      Make the AI remember like a character, not like a transcript.
+    </blockquote>
+
+    <p>
+      That meant tracking emotional variables separately. Trust is not the same as affection.
+      Fear is not the same as shame. Attraction is not the same as commitment. A character can
+      like someone and still distrust them. They can feel safe in one place and terrified in another.
+      They can forget an ordinary conversation but remember one small sentence forever because it
+      hit the right wound.
+    </p>
+
+    <p>
+      That became the early shape of the Soul idea.
+    </p>
+
+    <p>
+      Not a fully engineered Soul system yet. Not a database-backed memory engine. Just the idea
+      that a character should have an evolving internal record, and that the narrator should use
+      that record to keep the character human.
+    </p>
+
+    <p>
+      The second problem was memory quality.
+    </p>
+
+    <p>
+      I did not trust platform auto-summaries. They often flattened the wrong things, skipped
+      important emotional turns, or preserved facts without preserving meaning. My workaround was
+      manual: copy the whole chat, paste it into another model, and ask it to summarize the session.
+    </p>
+
+    <p>
+      That worked better, but it was still manual labor. It also proved something important:
+      a memory system should not save everything equally.
+    </p>
+
+    <p>
+      Humans do not remember like databases. We forget most things. We keep fragments. We keep
+      emotional landmarks. We remember what surprised us, hurt us, helped us, threatened us, or
+      changed how we saw someone.
+    </p>
+
+    <p>
+      So the idea shifted again.
+    </p>
+
+    <p>
+      The system should not just summarize the chat.
+    </p>
+
+    <p>
+      It should track what mattered.
+    </p>
+
+    <p>
+      That led to the flagging idea. Important events and dialogue should be marked based on
+      character-specific salience. A betrayal matters more to a character who values loyalty.
+      A small act of protection matters more to someone who has not felt safe. A casual joke
+      might vanish, but the same joke said during fear or grief might become unforgettable.
+    </p>
+
+    <p>
+      The system needed to decide what a character would remember, what they would misremember,
+      and what they would forget.
+    </p>
+
+    <p>
+      It also needed to let characters grow slowly.
+    </p>
+
+    <p>
+      No instant trust. No instant healing. No emotional teleportation.
+    </p>
+
+    <p>
+      If a relationship changed, the system had to ask: was there enough time, enough evidence,
+      enough pressure, enough consistency? If not, the character should resist the change, even
+      if the scene wanted it.
+    </p>
+
+    <p>
+      That was when the project stopped being “I need a better RP prompt.”
+    </p>
+
+    <p>
+      It became a question:
+    </p>
+
+    <blockquote>
+      What would it take to make AI character memory feel human?
+    </blockquote>
+
+    <p>
+      From there, the shape of Mnemosyne started to form.
+    </p>
+
+    <p>
+      First, a crude narrator that tracked status.
+    </p>
+
+    <p>
+      Then, a better memory format.
+    </p>
+
+    <p>
+      Then, emotional progression gates.
+    </p>
+
+    <p>
+      Then, salience-based memory.
+    </p>
+
+    <p>
+      Then, the idea of a Soul that could mutate over time.
+    </p>
+
+    <p>
+      Only after that did it start to feel like something that should become code.
+    </p>
+
+    <blockquote>
+      The narrator writes the scene. The Soul remembers what mattered.
+    </blockquote>
+
+    <p>
+      At this point, there was no polished app. No clean UI. No roadmap. No alpha. No domain.
+      No proper repository history yet.
+    </p>
+
+    <p>
+      There was only the feeling that the current platforms were not enough, and that maybe the
+      fix was not another character card.
+    </p>
+
+    <p>
+      Maybe it was a system.
+    </p>
+
+    <p>
+      That is where Mnemosyne started.
+    </p>
+
+    <p>
+      Not with code.
+    </p>
+
+    <p>
+      With a crude narrator that tracked, and the suspicion that AI characters needed memory
+      built around change, not chat history.
+    </p>
+
+    <hr />
+
+    <p class="note">
+      Next: Devlog 001, the first commit.
+    </p>
+  </main>
+</body>
+</html>
