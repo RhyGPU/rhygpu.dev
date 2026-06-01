@@ -1,260 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Devlog 000, Before the Repository | RhyGPU</title>
-  <meta name="description" content="The origin of Mnemosyne, before the repository, before the roadmap, before the app." />
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0b0d12;
-      --panel: #11151d;
-      --text: #e8e8e8;
-      --muted: #8b92a6;
-      --body: #c7cad3;
-      --line: #252a36;
-      --accent: #8ab4ff;
-      --accent-soft: rgba(138, 180, 255, 0.12);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background:
-        radial-gradient(circle at top left, rgba(138, 180, 255, 0.09), transparent 32rem),
-        var(--bg);
-      color: var(--text);
-      font-family: Arial, sans-serif;
-      line-height: 1.7;
-    }
-
-    main {
-      max-width: 820px;
-      margin: 0 auto;
-      padding: 56px 24px 88px;
-    }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .back {
-      color: var(--muted);
-      font-size: 0.95rem;
-      display: inline-block;
-      margin-bottom: 40px;
-    }
-
-    .kicker {
-      color: var(--accent);
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin: 0 0 1rem;
-    }
-
-    h1 {
-      font-size: clamp(2.35rem, 7vw, 4.4rem);
-      line-height: 1.05;
-      margin: 0 0 0.8rem;
-    }
-
-    .subtitle {
-      color: var(--text);
-      font-size: clamp(1.25rem, 3vw, 1.65rem);
-      line-height: 1.35;
-      margin: 0 0 1rem;
-    }
-
-    .meta {
-      color: var(--muted);
-      margin: 0 0 3.5rem;
-      font-size: 0.98rem;
-    }
-
-    p {
-      color: var(--body);
-      font-size: 1.08rem;
-      margin: 1.25rem 0;
-    }
-
-    blockquote {
-      margin: 2rem 0;
-      padding: 1.1rem 1.25rem;
-      border-left: 3px solid var(--accent);
-      background: var(--accent-soft);
-      color: var(--text);
-      font-size: 1.18rem;
-      line-height: 1.55;
-    }
-
-    blockquote.idea {
-      font-size: 1.28rem;
-      font-weight: 700;
-    }
-
-    .closing {
-      margin-top: 3.5rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.98rem;
-    }
-
-    @media (max-width: 560px) {
-      main {
-        padding: 38px 18px 64px;
-      }
-
-      p {
-        font-size: 1.02rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Devlog 000, Before the Repository | RhyGPU</title>
+<meta name="description" content="The origin of Mnemosyne, before the repository, before the roadmap, before the app." />
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main>
-    <a class="back" href="/">← Back to RhyGPU</a>
+<div class="wrap">
 
-    <p class="kicker">Mnemosyne Devlog</p>
-    <h1>Devlog 000, Before the Repository</h1>
-    <p class="subtitle">I Got Tired of AI RP Forgetting What Mattered</p>
-    <p class="meta">May 2026 · Origin notes · Before the repo</p>
+  <a class="back" href="/">rhygpu.dev</a>
 
-    <p>Before Mnemosyne was code, it was frustration.</p>
+  <article>
+    <header class="post-header">
+      <p class="kicker">Mnemosyne Devlog · 000</p>
+      <h1 class="post-title">Before the Repository</h1>
+      <p class="post-subtitle">I Got Tired of AI RP Forgetting What Mattered</p>
+      <p class="post-meta">May 2026 · Origin notes · Before the repo</p>
+    </header>
 
-    <p>I was using AI roleplay platforms and kept running into the same problem: the AI could write a dramatic scene, but it could not live through one properly. Characters changed too fast. Trust jumped too quickly. Fear disappeared because the scene needed to move forward. Emotional development compressed weeks of growth into a few messages.</p>
+    <div class="prose">
 
-    <p>At first, I did not think I needed to build an engine.</p>
+      <p>Before Mnemosyne was code, it was frustration.</p>
 
-    <p>I thought I just needed a better prompt.</p>
+      <p>I was using AI roleplay platforms and kept running into the same problem: the AI could write a dramatic scene, but it could not live through one properly. Characters changed too fast. Trust jumped too quickly. Fear disappeared because the scene needed to move forward. Emotional development compressed weeks of growth into a few messages.</p>
 
-    <p>So I made my own crude system. It was basically a code block the AI would stack at the end of the chat, a compact tracker for the current scene. It held things like status, scene information, memories, atmosphere, physical condition, sensory details, and character position.</p>
+      <p>At first, I did not think I needed to build an engine.</p>
 
-    <p>It was rough.</p>
+      <p>I thought I just needed a better prompt.</p>
 
-    <p>It was not software.</p>
+      <p>So I made my own crude system. It was basically a code block the AI would stack at the end of the chat, a compact tracker for the current scene. It held things like status, scene information, memories, atmosphere, physical condition, sensory details, and character position.</p>
 
-    <p>It was not a state engine.</p>
+      <p>It was rough. It was not software. It was not a state engine. It was just a prompt-based memory and status block, duct-taped onto the end of a roleplay.</p>
 
-    <p>It was just a prompt-based memory and status block, duct-taped onto the end of a roleplay.</p>
+      <p>But it worked better than nothing.</p>
 
-    <p>But it worked better than nothing.</p>
+      <p>And that was what bothered me.</p>
 
-    <p>And that was what bothered me.</p>
+      <p>If a crude code block could improve continuity, then the problem was not just the quality of the writing. The problem was that the AI had no reliable structure for carrying the scene forward. It could imitate emotional continuity, but it did not really track it.</p>
 
-    <p>If a crude code block could improve continuity, then the problem was not just the quality of the writing. The problem was that the AI had no reliable structure for carrying the scene forward. It could imitate emotional continuity, but it did not really track it.</p>
+      <p>That made the existing platforms feel worse.</p>
 
-    <p>That made the existing platforms feel worse.</p>
+      <p>JanitorAI, Character.AI, and other AI RP services had the same basic weakness in different costumes. The memory was bad, the summaries were unreliable, and somehow the systems that were supposed to fix those problems were often the things placed behind limits, subscriptions, or platform control.</p>
 
-    <p>JanitorAI, Character.AI, and other AI RP services had the same basic weakness in different costumes. The memory was bad, the summaries were unreliable, and somehow the systems that were supposed to fix those problems were often the things placed behind limits, subscriptions, or platform control.</p>
+      <p>The more I used them, the more it felt like I was paying around the problem instead of solving it.</p>
 
-    <p>The more I used them, the more it felt like I was paying around the problem instead of solving it.</p>
+      <p>Then there were the "power user" tools.</p>
 
-    <p>Then there were the “power user” tools.</p>
+      <p>SillyTavern was better in some ways. It gave more control. It could handle memory and context better if you were willing to configure things, feed it lore, manage summaries, and burn tokens. But even there, something felt missing.</p>
 
-    <p>SillyTavern was better in some ways. It gave more control. It could handle memory and context better if you were willing to configure things, feed it lore, manage summaries, and burn tokens. But even there, something felt missing.</p>
+      <p>It remembered more. But remembering more was not the same as being more human.</p>
 
-    <p>It remembered more.</p>
+      <p>A character could have a longer context and still feel hollow. A system could keep more facts and still fail to understand which ones mattered. More tokens did not automatically create a soul. Sometimes it just meant the model had a bigger pile of text to drag behind it.</p>
 
-    <p>But remembering more was not the same as being more human.</p>
+      <p>That was when the problem started becoming clearer to me. The AI did not just need more memory. It needed judgment.</p>
 
-    <p>A character could have a longer context and still feel hollow. A system could keep more facts and still fail to understand which ones mattered. More tokens did not automatically create a soul. Sometimes it just meant the model had a bigger pile of text to drag behind it.</p>
+      <p>The first big realization came when I looked back at one of my own RP tests and noticed the core failure clearly. The character progression was too sudden. The AI was not building trust, fear, shame, affection, or confidence step by step. It was jumping to the next "interesting" emotional state because that made the current scene easier to write.</p>
 
-    <p>That was when the problem started becoming clearer to me.</p>
+      <p>That bothered me. I did not just want better summaries. I wanted a system that could check whether a character had actually earned a change.</p>
 
-    <p>The AI did not just need more memory.</p>
+      <p>So the idea shifted from "make the AI remember more" to something sharper:</p>
 
-    <p>It needed judgment.</p>
+      <blockquote class="idea">Make the AI remember like a character, not like a transcript.</blockquote>
 
-    <p>The first big realization came when I looked back at one of my own RP tests and noticed the core failure clearly. The character progression was too sudden. The AI was not building trust, fear, shame, affection, or confidence step by step. It was jumping to the next “interesting” emotional state because that made the current scene easier to write.</p>
+      <p>That meant tracking emotional variables separately. Trust is not love. Fear is not shame. Affection is not commitment. A character can like someone and still distrust them. They can feel safe in one room and terrified in another. They can remember a small moment forever if it hit the right nerve, while forgetting whole stretches of ordinary conversation.</p>
 
-    <p>That bothered me.</p>
+      <p>That became the early shape of the Soul idea. Not as a finished architecture at first. More like a suspicion.</p>
 
-    <p>I did not just want better summaries. I wanted a system that could check whether a character had actually earned a change.</p>
+      <p>A character should not just be a static prompt. A character should have a changing internal state. Something persistent enough to survive beyond the current message, but compact enough that the AI could actually use it.</p>
 
-    <p>So the idea shifted from “make the AI remember more” to something sharper:</p>
+      <p>The crude code block was the first version of that idea. The Soul came later.</p>
 
-    <blockquote class="idea">Make the AI remember like a character, not like a transcript.</blockquote>
+      <p>The next problem was memory quality. I already did not trust platform auto-summaries. JanitorAI's summarization felt too unreliable, so my workaround was manual: copy the whole chat, paste it into DeepSeek, and make it summarize the session myself. That worked better, but it was still external labor. It also proved the platform-level memory system was not enough.</p>
 
-    <p>That meant tracking emotional variables separately. Trust is not love. Fear is not shame. Affection is not commitment. A character can like someone and still distrust them. They can feel safe in one room and terrified in another. They can remember a small moment forever if it hit the right nerve, while forgetting whole stretches of ordinary conversation.</p>
+      <p>What I wanted was not a generic summary. I wanted the AI to know what was worth remembering.</p>
 
-    <p>That became the early shape of the Soul idea.</p>
+      <p>That led to the flagging idea: important events and dialogue should be marked based on character-specific salience. A betrayal should matter more to a character who values loyalty. A small act of protection should matter more to someone whose safety needs are damaged. A casual joke might vanish, but a joke said at the exact moment a character was afraid might stick forever.</p>
 
-    <p>Not as a finished architecture at first. More like a suspicion.</p>
+      <p>That was the real seed of Mnemosyne.</p>
 
-    <p>A character should not just be a static prompt. A character should have a changing internal state. Something persistent enough to survive beyond the current message, but compact enough that the AI could actually use it.</p>
+      <blockquote>Not "save everything."</blockquote>
+      <blockquote>Not "summarize everything."</blockquote>
 
-    <p>The crude code block was the first version of that idea.</p>
+      <p>But:</p>
 
-    <p>The Soul came later.</p>
+      <blockquote class="idea">Track what changed the character.</blockquote>
 
-    <p>The next problem was memory quality.</p>
+      <p>From there, I started thinking less like a roleplay user and more like someone designing a memory system. The system needed emotional progression gates. It needed salience-based memory. It needed forgetting. It needed the ability to say, in character, "I don't remember," without sounding broken.</p>
 
-    <p>I already did not trust platform auto-summaries. JanitorAI’s summarization felt too unreliable, so my workaround was manual: copy the whole chat, paste it into DeepSeek, and make it summarize the session myself. That worked better, but it was still external labor. It also proved the platform-level memory system was not enough.</p>
+      <p>At first, all of that still lived inside prompts and code blocks. Then it started to feel too big for prompts.</p>
 
-    <p>What I wanted was not a generic summary.</p>
+      <p>Then I saw the Open Claw / boom video.</p>
 
-    <p>I wanted the AI to know what was worth remembering.</p>
+      <p>I do not remember it as some grand technical revelation. It was more like one of those stupidly simple moments where the idea that had been floating around finally snaps into a usable form.</p>
 
-    <p>That led to the flagging idea: important events and dialogue should be marked based on character-specific salience. A betrayal should matter more to a character who values loyalty. A small act of protection should matter more to someone whose safety needs are damaged. A casual joke might vanish, but a joke said at the exact moment a character was afraid might stick forever.</p>
+      <blockquote class="idea">Soul.md.</blockquote>
 
-    <p>That was the real seed of Mnemosyne.</p>
+      <p>That was the part that hit me. I did not need the character to be only a prompt. I did not need the memory to be only a summary. I could treat the character's inner continuity like a living file. Something readable. Something editable. Something that could carry state, scars, preferences, memories, fear, trust, and the slow changes that happen after enough scenes.</p>
 
-    <blockquote>Not “save everything.”</blockquote>
+      <p>Not a full engine yet. Not some perfect architecture. Just a file.</p>
 
-    <blockquote>Not “summarize everything.”</blockquote>
+      <p>But that file changed the direction of the whole idea.</p>
 
-    <p>But:</p>
+      <p>The crude status block at the end of the chat was no longer just a hack. It became the first ugly version of what Soul.md could become: a place where the character's internal life could persist outside the immediate scene.</p>
 
-    <blockquote class="idea">Track what changed the character.</blockquote>
+      <p>That was when Mnemosyne started becoming clearer.</p>
 
-    <p>From there, I started thinking less like a roleplay user and more like someone designing a memory system. The system needed emotional progression gates. It needed salience-based memory. It needed forgetting. It needed the ability to say, in character, “I don’t remember,” without sounding broken.</p>
-
-    <p>At first, all of that still lived inside prompts and code blocks.</p>
-
-    <p>Then it started to feel too big for prompts.</p>
-
-    <p>Then I saw the Open Claw / boom video.</p>
-
-    <p>I do not remember it as some grand technical revelation. It was more like one of those stupidly simple moments where the idea that had been floating around finally snaps into a usable form.</p>
-
-    <blockquote class="idea">Soul.md.</blockquote>
-
-    <p>That was the part that hit me.</p>
-
-    <p>I did not need the character to be only a prompt. I did not need the memory to be only a summary. I could treat the character’s inner continuity like a living file. Something readable. Something editable. Something that could carry state, scars, preferences, memories, fear, trust, and the slow changes that happen after enough scenes.</p>
-
-    <p>Not a full engine yet.</p>
-
-    <p>Not some perfect architecture.</p>
-
-    <p>Just a file.</p>
-
-    <p>But that file changed the direction of the whole idea.</p>
-
-    <p>The crude status block at the end of the chat was no longer just a hack. It became the first ugly version of what Soul.md could become: a place where the character’s internal life could persist outside the immediate scene.</p>
-
-    <p>That was when Mnemosyne started becoming clearer.</p>
-
-    <blockquote>A narrator writes the scene.</blockquote>
-
-    <blockquote>A Soul remembers what mattered.</blockquote>
-
-    <p>And somewhere between frustration, prompt hacks, broken platform memory, and that Soul.md moment, the project stopped feeling like a better roleplay prompt.</p>
-
-    <p>It started feeling like something I could actually build.</p>
-
-    <p class="closing">Next: Devlog 001, the first commit and the first shape of the project.</p>
-  </main>
+      <blockquote>A narrator writes the scene.</blockquote>
+      <blockquote>A Soul remembers what mattered.</blockquote>
+
+      <p>And somewhere between frustration, prompt hacks, broken platform memory, and that Soul.md moment, the project stopped feeling like a better roleplay prompt. It started feeling like something I could actually build.</p>
+
+      <p class="closing">Next: <a href="/devlog-001.html">Devlog 001</a> — the first commit and the first shape of the project.</p>
+
+    </div>
+  </article>
+
+  <footer>
+    <span class="footer-status">
+      <span class="status-dot"></span>
+      rhygpu.dev is live
+    </span>
+    <nav class="footer-links">
+      <a href="/">Index</a>
+      <a href="https://github.com/RhyGPU/rhygpu.dev">GitHub</a>
+    </nav>
+  </footer>
+
+</div>
 </body>
 </html>
