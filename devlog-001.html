@@ -1,306 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Devlog 001, Trying to Give the Soul a Psyche | RhyGPU</title>
-  <meta name="description" content="How the crude code block started becoming an update packet for a human-like Soul system." />
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0b0d12;
-      --panel: #11151d;
-      --text: #e8e8e8;
-      --muted: #8b92a6;
-      --body: #c7cad3;
-      --line: #252a36;
-      --accent: #8ab4ff;
-      --accent-soft: rgba(138, 180, 255, 0.12);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background:
-        radial-gradient(circle at top left, rgba(138, 180, 255, 0.09), transparent 32rem),
-        var(--bg);
-      color: var(--text);
-      font-family: Arial, sans-serif;
-      line-height: 1.7;
-    }
-
-    main {
-      max-width: 820px;
-      margin: 0 auto;
-      padding: 56px 24px 88px;
-    }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .back {
-      color: var(--muted);
-      font-size: 0.95rem;
-      display: inline-block;
-      margin-bottom: 40px;
-    }
-
-    .kicker {
-      color: var(--accent);
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin: 0 0 1rem;
-    }
-
-    h1 {
-      font-size: clamp(2.35rem, 7vw, 4.4rem);
-      line-height: 1.05;
-      margin: 0 0 0.8rem;
-    }
-
-    .subtitle {
-      color: var(--text);
-      font-size: clamp(1.25rem, 3vw, 1.65rem);
-      line-height: 1.35;
-      margin: 0 0 1rem;
-    }
-
-    .meta {
-      color: var(--muted);
-      margin: 0 0 3.5rem;
-      font-size: 0.98rem;
-    }
-
-    p {
-      color: var(--body);
-      font-size: 1.08rem;
-      margin: 1.25rem 0;
-    }
-
-    blockquote {
-      margin: 2rem 0;
-      padding: 1.1rem 1.25rem;
-      border-left: 3px solid var(--accent);
-      background: var(--accent-soft);
-      color: var(--text);
-      font-size: 1.18rem;
-      line-height: 1.55;
-    }
-
-    blockquote.idea {
-      font-size: 1.28rem;
-      font-weight: 700;
-    }
-
-    .closing {
-      margin-top: 3.5rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.98rem;
-    }
-
-    @media (max-width: 560px) {
-      main {
-        padding: 38px 18px 64px;
-      }
-
-      p {
-        font-size: 1.02rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>001, Turning the Code Block Into a Soul Update | RhyGPU</title>
+<meta name="description" content="How the crude code block started becoming an update packet for a human-like Soul system." />
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main>
-    <a class="back" href="/">← Back to RhyGPU</a>
+<div class="wrap">
 
-    <p class="kicker">Mnemosyne Devlog</p>
-    <h1>Devlog 001, Trying to Give the Soul a Psyche</h1>
-    <p class="subtitle">The Code Block Was Not Just a Summary Anymore</p>
-    <p class="meta">May 2026 · System design notes · Soul foundation</p>
+  <a class="back" href="/">rhygpu.dev</a>
 
-    <p>After the Soul.md idea hit, I started looking at my crude status block differently.</p>
+  <article>
+    <header class="post-header">
+      <p class="kicker">Mnemosyne · 001</p>
+      <h1 class="post-title">Turning the Code Block Into a Soul Update</h1>
+      <p class="post-subtitle">The status block stopped being a summary and started looking like a packet.</p>
+      <p class="post-meta">May 2026 · Soul foundation · Psyche variables</p>
+    </header>
 
-    <p>Before that, the code block was just a workaround.</p>
+    <div class="prose">
 
-    <p>It was something the AI stacked at the end of a roleplay so the next response would not completely lose track of the scene. It tracked things like status, memories, location, emotional state, and physical condition.</p>
+      <p>After the Soul.md idea hit, I started looking at the crude status block differently.</p>
 
-    <p>Useful, but ugly.</p>
+      <p>Before that, it was just a workaround. A code block at the end of the chat, holding whatever the model needed so the next reply did not lose the scene.</p>
 
-    <p>But around this point, I started realizing that the code block could be more than a summary.</p>
+      <p>Then the shape changed.</p>
 
-    <blockquote class="idea">It could be an update packet.</blockquote>
+      <blockquote class="idea">The code block could be an update packet.</blockquote>
 
-    <p>That was the shift.</p>
+      <p>The AI did not need to carry the whole character inside normal prose. It could write the scene, then report what changed. Another layer could read that report and update the Soul.</p>
 
-    <p>The AI did not need to carry the whole character inside the chat. Instead, the AI could report what changed, and another system could use that report to update the Soul.</p>
+      <p>That was the first useful split in my head:</p>
 
-    <p>That felt important.</p>
+      <blockquote>The narrator writes what happened.</blockquote>
+      <blockquote>The packet reports what changed.</blockquote>
+      <blockquote>The Soul absorbs the change.</blockquote>
 
-    <p>The code block was no longer just “memory at the bottom of the message.” It was becoming the bridge between narration and persistent character state.</p>
+      <div class="section-label">The packet idea</div>
 
-    <blockquote>The narrator writes what happens.</blockquote>
+      <p>The original block tracked status, scene information, memories, atmosphere, physical condition, sensory details, and position. That was enough to prove the basic point.</p>
 
-    <blockquote>The code block reports what changed.</blockquote>
+      <p>But if it was going to feed a Soul, it needed more than facts.</p>
 
-    <blockquote>The Soul absorbs the change.</blockquote>
+      <p>It needed to say what the scene did to the character.</p>
 
-    <p>That was the first version of the architecture in my head.</p>
+      <p>Not just:</p>
 
-    <p>But then I ran into the harder question:</p>
+      <blockquote>She is scared.</blockquote>
 
-    <blockquote class="idea">What exactly should the Soul contain?</blockquote>
+      <p>But why. What caused it. Whether it was new or familiar. Whether it touched an old wound. Whether it raised distrust, reinforced a pattern, or should fade after the moment passed.</p>
 
-    <p>I did not want it to be just a list of facts. That would be the same mistake every other memory system makes. A list of facts can tell you what happened, but it does not tell you how the character changed.</p>
+      <p>That was when the block stopped feeling like a summary. It started feeling like a bridge between narration and persistent character state.</p>
 
-    <p>So I started thinking about the character less like a bot and more like a psyche.</p>
+      <div class="section-label">Building the psyche</div>
 
-    <p>Not perfectly. Not academically. I was not pretending to be a neuroscientist.</p>
+      <p>The next question was what the Soul should actually contain.</p>
 
-    <p>But I wanted the foundation to at least respect how people seem to work.</p>
+      <p>A list of facts was not enough. That would make the same mistake again, only with cleaner formatting. Facts can say what happened. They do not say what the character became because of it.</p>
 
-    <p>People do not remember everything equally.</p>
+      <p>So I started treating the character less like a bot and more like a psyche.</p>
 
-    <p>They remember what hurt.</p>
+      <p>I asked DeepSeek to help research psychology, memory, emotional states, and how people retain or lose experiences. I was not trying to pretend this was neuroscience. I was trying to build a usable foundation for believable character change.</p>
 
-    <p>They remember what comforted them.</p>
+      <p>The early variables were simple, but they gave the system a shape:</p>
 
-    <p>They remember what violated their expectations.</p>
+      <ul>
+        <li>Trust</li>
+        <li>Fear</li>
+        <li>Shame</li>
+        <li>Affection</li>
+        <li>Openness</li>
+        <li>Attachment</li>
+        <li>Desire</li>
+        <li>Resolve</li>
+      </ul>
 
-    <p>They remember what touched a fear, a desire, a need, or an old wound.</p>
+      <p>Those axes mattered because they are not interchangeable. Trust is not affection. Fear is not shame. Desire is not commitment. A character can warm up to someone and still not feel safe with them.</p>
 
-    <p>They forget boring repetition.</p>
+      <div class="section-label">Memory with meaning</div>
 
-    <p>But repetition can also become ingrained if it forms a pattern.</p>
+      <p>The memory side had the same problem.</p>
 
-    <p>That contradiction was interesting to me.</p>
+      <p>People do not remember everything equally. They remember what hurt, what comforted them, what broke an expectation, and what touched a need or fear. They forget boring repetition, but repetition can still become a pattern if it changes how they see the world.</p>
 
-    <p>A repeated meal is forgettable.</p>
+      <p>A repeated meal is forgettable. Repeated kindness can become trust. Repeated silence can become abandonment.</p>
 
-    <p>A repeated kindness can become trust.</p>
+      <p>So forgetting could not just be a timer.</p>
 
-    <p>A repeated threat can become fear.</p>
+      <p>It needed meaning.</p>
 
-    <p>A repeated silence can become abandonment.</p>
+      <p>The packet had to flag moments based on salience: emotional shift, broken expectation, important decision, core fear, core desire, relationship pressure.</p>
 
-    <p>So memory could not just decay randomly.</p>
+      <p>The Soul would not save everything. It would keep what changed the character.</p>
 
-    <p>It had to decay based on meaning.</p>
+      <div class="section-label">Character card vs Soul</div>
 
-    <p>That was when I started asking DeepSeek to help research human psychology, memory, emotional states, and how people retain or lose experiences. I was trying to turn that research into a foundation for the Soul.</p>
+      <p>The more I worked through it, the less the Soul felt like a character card.</p>
 
-    <p>The early ideas were messy, but the direction was clear.</p>
+      <p>A character card says:</p>
 
-    <p>The Soul needed emotional spectrums.</p>
+      <blockquote>This is who the character is.</blockquote>
 
-    <p>Trust.</p>
+      <p>A Soul says:</p>
 
-    <p>Affection.</p>
+      <blockquote>This is what the character has become.</blockquote>
 
-    <p>Fear.</p>
+      <p>That distinction became the foundation.</p>
 
-    <p>Shame.</p>
+      <p>A static prompt can describe someone as guarded. A Soul can carry why they became guarded, what weakens that guard, what reinforces it, and which memories still shape their reactions.</p>
 
-    <p>Openness.</p>
+      <p>That is why the packet mattered. It was the first mechanism for turning a scene into a change.</p>
 
-    <p>Resolve.</p>
+      <div class="section-label">What this set up</div>
 
-    <p>Desire.</p>
+      <p>I did not have the final app yet.</p>
 
-    <p>But those variables alone were not enough. If I wanted the character to feel human, the Soul also needed a psychological foundation underneath them: attachment style, developmental stage, needs, trauma phases, love components, and memory salience.</p>
+      <p>I did not have the full engine.</p>
 
-    <p>A character should not recover from trauma just because the user says one comforting sentence. A character who does not feel safe should not behave like someone ready for intimacy, ambition, or self-actualization. A lonely character might overvalue kindness. A frightened character might remember threats more easily. A ashamed character might misread neutral silence as rejection.</p>
+      <p>But I had the shape of the problem.</p>
 
-    <p>That was the kind of memory I wanted.</p>
+      <blockquote class="idea">The AI should not be trusted to remember everything by itself.</blockquote>
 
-    <p>Not clean database memory.</p>
+      <p>It should describe the scene and report candidate changes. The Soul should decide what those changes mean.</p>
 
-    <p>Human memory.</p>
+      <p>That moved Mnemosyne away from prompt engineering and toward an actual system.</p>
 
-    <p>Messy, selective, unfair, and sometimes wrong.</p>
+      <p>The prompt was still there. The code block was still there. But now I was designing the thing that would read it.</p>
 
-    <p>The more I thought about it, the more the Soul stopped feeling like a character card.</p>
+      <p class="closing">Next: <a href="/devlog-002.html">002</a>, splitting character memory from world continuity.</p>
 
-    <p>A character card says:</p>
+    </div>
+  </article>
 
-    <blockquote>This is who the character is.</blockquote>
+  <footer>
+    <span class="footer-status">
+      <span class="status-dot"></span>
+      rhygpu.dev is live
+    </span>
+    <nav class="footer-links">
+      <a href="/">Index</a>
+      <a href="https://github.com/RhyGPU/rhygpu.dev">GitHub</a>
+    </nav>
+  </footer>
 
-    <p>A Soul says:</p>
-
-    <blockquote>This is what the character has become.</blockquote>
-
-    <p>That distinction became the foundation.</p>
-
-    <p>A static prompt could describe someone as guarded.</p>
-
-    <p>But a Soul could explain why they became guarded, what weakens that guard, what reinforces it, and which memories still shape their reactions.</p>
-
-    <p>That meant the code block had to become structured enough to feed the Soul.</p>
-
-    <p>Not just:</p>
-
-    <blockquote>She is scared.</blockquote>
-
-    <p>But:</p>
-
-    <p>What caused the fear?</p>
-
-    <p>Was it new or familiar?</p>
-
-    <p>Did it connect to an old wound?</p>
-
-    <p>Did it increase distrust?</p>
-
-    <p>Did it reinforce a pattern?</p>
-
-    <p>Was it intense enough to become a core memory?</p>
-
-    <p>Should it fade after the scene, or stay?</p>
-
-    <p>That was the beginning of the memory scoring idea.</p>
-
-    <p>I did not have the final engine yet.</p>
-
-    <p>I did not have the full app.</p>
-
-    <p>I did not even have the clean architecture.</p>
-
-    <p>But I had the shape of the problem:</p>
-
-    <blockquote class="idea">The AI should not be trusted to remember everything by itself.</blockquote>
-
-    <p>It should describe the scene and report what changed.</p>
-
-    <p>Then the Soul should decide what that change means.</p>
-
-    <p>That was the point where Mnemosyne started moving away from prompt engineering and toward a real system.</p>
-
-    <p>The prompt was still there.</p>
-
-    <p>The code block was still there.</p>
-
-    <p>But now I was designing the thing that would read it.</p>
-
-    <p>A system that could take the crude code block, interpret the emotional and psychological changes, and update the Soul.</p>
-
-    <p>That was the first real Mnemosyne engine idea:</p>
-
-    <blockquote class="idea">Not an AI that remembers everything.</blockquote>
-
-    <blockquote class="idea">A Soul that changes like a person.</blockquote>
-
-    <p class="closing">Next: Devlog 002, when I realized the Soul could not carry every kind of memory, and the system needed to split what a character remembers from what the world needs to remember.</p>
-  </main>
+</div>
 </body>
 </html>
