@@ -1,129 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devlog 005 | Mnemosyne - Fighting "Prose Gravity"</title>
-    <style>
-        :root {
-            --bg-color: #0d1117;
-            --text-color: #c9d1d9;
-            --accent-color: #58a6ff;
-            --secondary-bg: #161b22;
-            --border-color: #30363d;
-            --code-bg: #1f242c;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        header {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
-            margin-bottom: 2rem;
-        }
-        header a {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: bold;
-        }
-        h1, h2, h3 {
-            color: #f0f6fc;
-        }
-        h1 { font-size: 2rem; }
-        h2 { border-bottom: 1px solid var(--border-color); padding-bottom: 0.3rem; margin-top: 2rem; }
-        .date { color: #8b949e; font-size: 0.9rem; }
-        code {
-            background-color: var(--code-bg);
-            padding: 0.2rem 0.4rem;
-            border-radius: 6px;
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-        }
-        pre {
-            background-color: var(--code-bg);
-            padding: 1rem;
-            border-radius: 8px;
-            overflow-x: auto;
-            border: 1px solid var(--border-color);
-        }
-        ul { padding-left: 1.5rem; }
-        .highlight {
-            border-left: 4px solid var(--accent-color);
-            padding: 1rem;
-            background: var(--secondary-bg);
-            margin: 1.5rem 0;
-        }
-        footer {
-            margin-top: 4rem;
-            border-top: 1px solid var(--border-color);
-            padding-top: 1rem;
-            text-align: center;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Devlog 005, Fighting Prose Gravity | RhyGPU</title>
+<meta name="description" content="The live grenade incident, the Context Priority Stack, and how I finally broke Prose Gravity with a hierarchy of truth." />
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <a href="index.html">← RhyGPU</a>
+<div class="wrap">
+
+  <a class="back" href="/">rhygpu.dev</a>
+
+  <article>
+    <header class="post-header">
+      <p class="kicker">Mnemosyne Devlog · 005</p>
+      <h1 class="post-title">Fighting Prose Gravity</h1>
+      <p class="post-subtitle">With a Hierarchy of Truth</p>
+      <p class="post-meta">June 2026 · context_compiler.rs · Priority Stack</p>
     </header>
 
-    <article>
-        <h1>Devlog 005: Fighting "Prose Gravity" with a Hierarchy of Truth</h1>
-        <p class="date">June 2026</p>
+    <div class="prose">
 
-        <p>In the previous logs, I documented the birth of the <strong>Soul</strong> and the <strong>World Log</strong>—the dual-system architecture meant to kill AI amnesia [1, 2]. The hidden state loop was finally "breathing," and the engine was managing character data outside the main prompt [3]. But as soon as I moved into intensive roleplay testing, I hit a wall that every AI developer eventually faces.</p>
+      <p>In the previous logs, I documented the birth of the Soul and the World Log — the two-system architecture meant to kill AI amnesia. The hidden state loop was breathing, and the engine was finally managing character data outside the prompt. But as soon as I moved into intensive roleplay testing, I hit a wall that every AI developer eventually faces.</p>
 
-        <p>I call it <strong>Prose Gravity.</strong></p>
+      <blockquote class="idea">Prose Gravity.</blockquote>
 
-        <h2>The Catalyst: The "Live Grenade" Incident</h2>
-        <p>The setup was simple: <strong>Aurora</strong> (the test character) reacted to a Tinder phone screen, took the device, locked it, and tossed it onto the couch before moving to the kitchen [4].</p>
+      <p>The setup was simple. Aurora reacted to a phone screen, took the phone, locked it, and tossed it onto the couch before moving to the kitchen to heat up food.</p>
 
-        <p>In the very next turn, despite the history being right there in the context, the model described her as <strong>"still holding their phone like it's a live grenade"</strong> [4, 5].</p>
+      <p>In the very next turn, despite the history being right there in the context, the model described her as "still holding their phone like it's a live grenade".</p>
 
-        <div class="highlight">
-            <p><strong>The Realization:</strong> Recent chat is just a transcript to an LLM; it is not a binding law [5]. A long, emotional 800-word paragraph about a phone reveal carries more "attention weight" than a single sentence at the end of the message stating the phone was put away [6].</p>
-        </div>
+      <p>This was my AAAAAAHHHH moment. The engine knew the phone was on the couch. The chat history said she threw it there. But the LLM completely ignored the state in favor of the drama.</p>
 
-        <h2>The Pivot: From Transcript to State</h2>
-        <p>The AI's "Narrator" was fighting with the "Engine's" reality. My initial reaction was to try and track every minor detail—the location of every fork and chair—but I quickly realized that was "too much shit" [7]. It would bloat the state and fight the project’s core goal: <strong>less tokens, best outcome</strong> [8].</p>
+      <p>I realized a fundamental truth: recent chat is just a transcript to an LLM — it is not a binding law. A long, 800-word emotional paragraph about a phone reveal carries more attention weight than a single sentence at the end of the message stating the phone was put away.</p>
 
-        <p>The solution wasn't better memory; it was a <strong>Hierarchy of Truth.</strong> I needed to tell the AI exactly which parts of the prompt were authoritative and which were just "flavor" [6].</p>
+      <p>The AI's Narrator was fighting with the Engine's reality.</p>
 
-        <h2>The Implementation: The Context Priority Stack</h2>
-        <p>I refactored <code>context_compiler.rs</code> to implement a ranked <strong>Context Priority Stack</strong> [9, 10]. Instead of just dumping history into the prompt, the engine now compiles a "State Brief" where priority is enforced by placement and explicit labeling:</p>
+      <p>My initial reaction was to try and track every minor detail — the location of every fork and chair. But I quickly realized that was too much shit. It would bloat the state and fight the project's core goal: less tokens, best outcome.</p>
 
-        <ul>
-            <li><strong>P0: Latest User Input</strong> — The immediate new action that overrides everything else [11].</li>
-            <li><strong>P1: [SCENE STATE]</strong> — The authoritative physical facts: what is true <em>now</em> [9, 12].</li>
-            <li><strong>P2: [DO NOT REPLAY]</strong> — Explicit instructions marking beats that are completed and must not be resurrected [12, 13].</li>
-            <li><strong>P3: [CHARACTER/WORLD SNAPSHOT]</strong> — The underlying psyche and environment [9, 12].</li>
-            <li><strong>P4: [RECENT CHAT]</strong> — Lower-priority excerpts used for tone and dialogue flow only [11, 12].</li>
-        </ul>
+      <blockquote>The solution wasn't better memory. It was a Hierarchy of Truth.</blockquote>
 
-        <h2>The "Tail-End" Breakthrough</h2>
-        <p>While debugging the Priority Stack using the <strong>LLM Payload Inspector</strong>, I found a massive technical flaw: the engine was accidentally feeding the model the <em>beginning</em> of long assistant responses instead of the <em>end</em> [14, 15].</p>
+      <p>I needed to tell the AI exactly which parts of the prompt were authoritative and which were just flavor.</p>
 
-        <p>In a 1,200-character response, the "setup" (Aurora seeing the phone) happens at the start, but the "final state" (Aurora tossing the phone) happens at the end. By feeding the head of the message, I was literally forcing the AI to re-anchor to a state that no longer existed [14].</p>
+      <p>I refactored <code>context_compiler.rs</code> to implement a ranked Context Priority Stack. Instead of dumping history into the prompt, the engine now compiles a State Brief where priority is enforced by placement and explicit labeling.</p>
 
-        <p>I implemented a <strong>Tail-based excerpt system</strong> [16, 17]:</p>
-        <ol>
-            <li><strong>Strip the Noise:</strong> The engine strips status blocks, hidden state JSON, and sensory "clutter" before processing [16].</li>
-            <li><strong>Grab the Tail:</strong> It takes only the last 700–1,200 characters of the response, ensuring the most recent physical actions are what the LLM reads first [16, 18].</li>
-        </ol>
+      <blockquote class="idea">P0 — Latest User Input<br>The immediate new action. Overrides everything else.</blockquote>
 
-        <h2>The Result</h2>
-        <p>By reordering the feed so the <strong>Latest Exchange</strong> appeared at the bottom of the system context—closest to the new user message—I successfully broke the Prose Gravity [19, 20]. <strong>Aurora finally stopped "resurrecting" the phone</strong> and started staying in the kitchen where the state engine said she was [21].</p>
+      <blockquote class="idea">P1 — [LATEST EXCHANGE]<br>The most immediate anchor for continuity.</blockquote>
 
-        <p><strong>The takeaway:</strong> Continuity isn't just about memory; it’s about <strong>enforcing a hierarchy of reality.</strong> The Narrator can be creative, but the Engine must be the law.</p>
-    </article>
+      <blockquote class="idea">P2 — [SCENE STATE]<br>Authoritative physical facts. What is true right now.</blockquote>
 
-    <footer>
-        <p>Next up in Devlog 006: "Opening the Black Box" — Building the LLM Payload Inspector and the fight against schema drift.</p>
-        <p><a href="index.html">Mnemosyne — Remember who you are.</a></p>
-    </footer>
+      <blockquote class="idea">P3 — [CHARACTER / WORLD SNAPSHOT]<br>The underlying psyche and environment.</blockquote>
+
+      <blockquote class="idea">P4 — [RECENT CHAT]<br>Lower-priority excerpts. Tone and dialogue flow only.</blockquote>
+
+      <p>While debugging the Priority Stack using the new LLM Payload Inspector, I found a massive technical flaw: the engine was accidentally feeding the model the beginning of long assistant responses instead of the end.</p>
+
+      <p>In a 1,200-character response, the setup — Aurora seeing the phone — happens at the start. The final state — Aurora tossing the phone — happens at the end. By feeding the head of the message, I was literally forcing the AI to re-anchor to a state that no longer existed.</p>
+
+      <p>I implemented a tail-based excerpt system in three steps.</p>
+
+      <p>First, strip the noise. Before processing, the engine strips status blocks, hidden state JSON, and sensory clutter. Second, grab the tail — only the last 700 to 1,200 characters of the response, ensuring the most recent physical actions are what the LLM reads first. Third, placement: the Latest Exchange goes at the bottom of the system context, right next to the new user message, so it's the last thing the model sees before it writes.</p>
+
+      <p>Aurora finally stopped resurrecting the phone. She stayed in the kitchen where the state engine said she was.</p>
+
+      <blockquote class="idea">Continuity isn't just about memory. It's about enforcing a hierarchy of reality.</blockquote>
+
+      <p>The Narrator can be creative. The Engine must be the law.</p>
+
+      <p class="closing">Next: <a href="/devlog-006.html">Devlog 006</a> — "Opening the Black Box." Building the LLM Payload Inspector and the fight against schema drift.</p>
+
+    </div>
+  </article>
+
+  <footer>
+    <span class="footer-status">
+      <span class="status-dot"></span>
+      rhygpu.dev is live
+    </span>
+    <nav class="footer-links">
+      <a href="/">Index</a>
+      <a href="https://github.com/RhyGPU/rhygpu.dev">GitHub</a>
+    </nav>
+  </footer>
+
+</div>
 </body>
 </html>
