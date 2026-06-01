@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Devlog 004, Feeding the Model a Session Packet | RhyGPU</title>
+  <meta name="description" content="Context Compiler V2, clean recent chat, and state injection in Mnemosyne." />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0d12;
+      --text: #e8e8e8;
+      --muted: #8b92a6;
+      --body: #c7cad3;
+      --line: #252a36;
+      --accent: #8ab4ff;
+      --accent-soft: rgba(138, 180, 255, 0.12);
+      --code-bg: #11151d;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(138, 180, 255, 0.09), transparent 32rem),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      line-height: 1.7;
+    }
+
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 24px 88px;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .back {
+      color: var(--muted);
+      font-size: 0.95rem;
+      display: inline-block;
+      margin-bottom: 40px;
+    }
+
+    .kicker {
+      color: var(--accent);
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0 0 1rem;
+    }
+
+    h1 {
+      font-size: clamp(2.35rem, 7vw, 4.4rem);
+      line-height: 1.05;
+      margin: 0 0 0.8rem;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      margin-top: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.35rem;
+      margin-top: 3rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .subtitle {
+      color: var(--text);
+      font-size: clamp(1.25rem, 3vw, 1.65rem);
+      line-height: 1.35;
+      margin: 0 0 1rem;
+    }
+
+    .meta {
+      color: var(--muted);
+      margin: 0 0 3.5rem;
+      font-size: 0.98rem;
+    }
+
+    p {
+      color: var(--body);
+      font-size: 1.08rem;
+      margin: 1.25rem 0;
+    }
+
+    ul, ol {
+      color: var(--body);
+      padding-left: 1.35rem;
+    }
+
+    li {
+      margin: 0.65rem 0;
+      color: var(--body);
+    }
+
+    pre {
+      overflow-x: auto;
+      background: var(--code-bg);
+      color: var(--text);
+      padding: 1rem 1.15rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      line-height: 1.45;
+      font-size: 0.95rem;
+    }
+
+    code {
+      background: var(--code-bg);
+      color: var(--text);
+      padding: 0.14rem 0.35rem;
+      border-radius: 5px;
+      font-size: 0.95em;
+    }
+
+    .covered {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .closing {
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    @media (max-width: 560px) {
+      main {
+        padding: 38px 18px 64px;
+      }
+
+      p {
+        font-size: 1.02rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="/">← Back to RhyGPU</a>
+
+    <p class="kicker">Mnemosyne Devlog</p>
+    <h1>004, Feeding the Model a Session Packet</h1>
+    <p class="subtitle">Context Compiler V2, clean recent chat, and state injection</p>
+    <p class="meta">May 2026 · Context Compiler V2 · Provider payloads and state injection</p>
+
+    <p>Context Compiler V2 is where the input side started becoming real.</p>
+
+    <p>The app already had the output path taking shape. The model could return narration with a hidden-state block, the app could strip the block, decode it, and start updating Soul and World behind the curtain.</p>
+
+    <p>Now the next turn needed the reverse path.</p>
+
+    <p>The model had to get the session back.</p>
+
+    <p>Not as raw chat history forever. That was the exact kind of bloat I was trying to avoid. But also not as one dead summary that cuts out the rhythm of the scene.</p>
+
+    <p>I needed a packet.</p>
+
+    <p>Current state, character memory, recent events, relationship pressure, world information, and a few recent clean messages.</p>
+
+    <p>The whole session, but carried forward as state.</p>
+
+    <h3>What changed</h3>
+
+    <p>Context Compiler V2 started building the next provider payload from actual session pieces instead of treating the prompt as a loose pile.</p>
+
+    <p>The packet centered on:</p>
+
+    <ul>
+      <li><code>CURRENT STATE</code></li>
+      <li><code>CHARACTER MEMORY</code></li>
+      <li><code>RECENT EVENTS</code></li>
+      <li><code>RELATIONSHIP</code></li>
+      <li><code>WORLD</code></li>
+      <li>clean recent messages</li>
+    </ul>
+
+    <p>That last part matters.</p>
+
+    <p>The recent messages stay clean. No hidden block. No machine JSON. No encoded state being fed back into the model raw.</p>
+
+    <p>The hidden state is for the engine. The visible narration is for the chat history. The compiled packet is what the model gets next.</p>
+
+    <p>That separation is the whole point.</p>
+
+    <h3>Why I touched this</h3>
+
+    <p>The external API tests made the problem obvious fast.</p>
+
+    <p>Without the right input shape, the model drifts back into normal RP chatbot behavior. It talks as the character. It forgets that it is supposed to be a narrator. It treats prompt instructions like vibes instead of rules. It can also start mixing character knowledge, narrator knowledge, and user action if the payload is sloppy.</p>
+
+    <p>That was worrying because Mnemosyne is not supposed to be another character impersonator.</p>
+
+    <p>The app has to hold the session together.</p>
+
+    <p>The model writes from the state, but the model should not be trusted to carry the whole state by itself.</p>
+
+    <p>That was the real pressure behind this work.</p>
+
+    <h3>How the packet works</h3>
+
+    <p>The turn loop now starts to look like this:</p>
+
+    <pre><code>Soul
+World Log
+Recent Events
+Relationship State
+Clean Recent Messages
+        ↓
+Context Compiler V2
+        ↓
+Provider Payload
+        ↓
+Model Response
+        ↓
+Visible Narration + Hidden State
+        ↓
+Strip / Parse
+        ↓
+Soul / World Patch
+        ↓
+Updated Session State
+        ↓
+Compile again</code></pre>
+
+    <p>That is the engine shape I wanted.</p>
+
+    <p>The model still does the writing. The app carries the session.</p>
+
+    <p>The clean recent messages keep the prose alive. They preserve the last exchange, the tone, and the immediate rhythm.</p>
+
+    <p>The compiled state carries the long-term part: what the character remembers, where the scene is, what recently happened, and what the current relationship pressure looks like.</p>
+
+    <p>One side keeps the writing from going cold.</p>
+
+    <p>The other side keeps the session from going empty.</p>
+
+    <h3>What got better</h3>
+
+    <p>The model is no longer starting from only a few recent chat turns.</p>
+
+    <p>It gets a compact version of the session before writing: current scene, character memory, world state, recent events, relationship pressure, and the last clean messages.</p>
+
+    <p>That makes the whole thing easier to reason about.</p>
+
+    <p>If the next response goes wrong, I can check the payload.</p>
+
+    <p>Maybe the model ignored the instructions. Maybe the compiled packet missed something important. Maybe the recent chat window was too short. Maybe the world state was stale.</p>
+
+    <p>That is still annoying, but it is better than the old version of the problem where the answer was just “the AI forgot.”</p>
+
+    <p>Now there is a place to look.</p>
+
+    <h3>Why the categories matter</h3>
+
+    <p>The Soul and World Log split only works if the compiler preserves it.</p>
+
+    <p>A character memory is not the same kind of thing as a room fact.</p>
+
+    <p>Relationship pressure is not the same thing as active plot.</p>
+
+    <p>Recent dialogue is not the same thing as long-term identity.</p>
+
+    <p>If those get mashed together, the model will mash them together too. That is how a character starts knowing narrator-only information, or how old emotional tension keeps bleeding into every scene.</p>
+
+    <p>So the packet needs sections.</p>
+
+    <p>Soul stays Soul-shaped.</p>
+
+    <p>World stays World-shaped.</p>
+
+    <p>Relationship stays relationship-shaped.</p>
+
+    <p>Recent messages stay as actual chat texture.</p>
+
+    <p>That sounds simple, but this is where the design starts paying rent. The split from earlier finally becomes something the app can feed into a model call.</p>
+
+    <h3>Patch protocol entering the same range</h3>
+
+    <p>Patch protocol started showing up here because compiled state creates a new problem.</p>
+
+    <p>If the app sends state forward every turn, then state changes need to be traceable.</p>
+
+    <p>A memory should not just appear.</p>
+
+    <p>A world event should not just mutate.</p>
+
+    <p>A relationship shift should not become permanent without knowing which turn caused it.</p>
+
+    <p>Regenerate, correction, restore, and branch logic all need that trail later.</p>
+
+    <p>So the input side and the patch foundation belong near each other. One decides what the next model call sees. The other starts making state changes explicit enough to survive edits.</p>
+
+    <section class="covered">
+      <h2>Covered commits</h2>
+      <ol>
+        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/af5f3ae"><code>af5f3ae</code></a> Add patch protocol v1 foundation</li>
+        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/b4ad92a"><code>b4ad92a</code></a> Merge pull request #2 from RhyGPU/feat/patch-protocol-v1</li>
+        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/187763a"><code>187763a</code></a> Commit and push Context Compiler V2</li>
+      </ol>
+    </section>
+
+    <p class="closing">Next: state changes need a source trail. Now that the app can compile Soul and World into the next payload, the next pressure is making every meaningful update traceable: what changed, which turn caused it, what branch it belongs to, and whether it should still be active after regenerate or correction.</p>
+  </main>
+</body>
+</html>
