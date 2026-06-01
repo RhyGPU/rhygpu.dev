@@ -1,319 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Devlog 002, Splitting Memory in Two | RhyGPU</title>
-  <meta name="description" content="How Mnemosyne split character memory from world continuity: the Soul remembers like a person, and the World Log remembers like a GM." />
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0b0d12;
-      --text: #e8e8e8;
-      --muted: #8b92a6;
-      --body: #c7cad3;
-      --line: #252a36;
-      --accent: #8ab4ff;
-      --accent-soft: rgba(138, 180, 255, 0.12);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background:
-        radial-gradient(circle at top left, rgba(138, 180, 255, 0.09), transparent 32rem),
-        var(--bg);
-      color: var(--text);
-      font-family: Arial, sans-serif;
-      line-height: 1.7;
-    }
-
-    main {
-      max-width: 820px;
-      margin: 0 auto;
-      padding: 56px 24px 88px;
-    }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .back {
-      color: var(--muted);
-      font-size: 0.95rem;
-      display: inline-block;
-      margin-bottom: 40px;
-    }
-
-    .kicker {
-      color: var(--accent);
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin: 0 0 1rem;
-    }
-
-    h1 {
-      font-size: clamp(2.35rem, 7vw, 4.4rem);
-      line-height: 1.05;
-      margin: 0 0 0.8rem;
-    }
-
-    .subtitle {
-      color: var(--text);
-      font-size: clamp(1.25rem, 3vw, 1.65rem);
-      line-height: 1.35;
-      margin: 0 0 1rem;
-    }
-
-    .meta {
-      color: var(--muted);
-      margin: 0 0 3.5rem;
-      font-size: 0.98rem;
-    }
-
-    p {
-      color: var(--body);
-      font-size: 1.08rem;
-      margin: 1.25rem 0;
-    }
-
-    blockquote {
-      margin: 2rem 0;
-      padding: 1.1rem 1.25rem;
-      border-left: 3px solid var(--accent);
-      background: var(--accent-soft);
-      color: var(--text);
-      font-size: 1.18rem;
-      line-height: 1.55;
-    }
-
-    blockquote.idea {
-      font-size: 1.28rem;
-      font-weight: 700;
-    }
-
-    .closing {
-      margin-top: 3.5rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.98rem;
-    }
-
-    @media (max-width: 560px) {
-      main {
-        padding: 38px 18px 64px;
-      }
-
-      p {
-        font-size: 1.02rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>002, Splitting Memory in Two | RhyGPU</title>
+<meta name="description" content="How Mnemosyne split character memory from world continuity." />
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main>
-    <a class="back" href="/">← Back to RhyGPU</a>
+<div class="wrap">
 
-    <p class="kicker">Mnemosyne Devlog</p>
-    <h1>Devlog 002, Splitting Memory in Two</h1>
-    <p class="subtitle">The Soul Remembers Like a Person. The World Log Remembers Like a GM.</p>
-    <p class="meta">May 2026 · System design notes · Soul memory and world continuity</p>
+  <a class="back" href="/">rhygpu.dev</a>
 
-    <p>After I started thinking of the code block as something that could update the Soul, the next problem became obvious.</p>
+  <article>
+    <header class="post-header">
+      <p class="kicker">Mnemosyne · 002</p>
+      <h1 class="post-title">Splitting Memory in Two</h1>
+      <p class="post-subtitle">The Soul remembers like a person. The World Log remembers like a GM.</p>
+      <p class="post-meta">May 2026 · Soul memory · World continuity · Knowledge boundaries</p>
+    </header>
 
-    <p>Not all memory is the same kind of memory.</p>
+    <div class="prose">
 
-    <p>At first, I was still thinking too simply. The AI needed to remember what happened, so I needed a better memory system. That sounded reasonable, but it was still too broad. “Memory” was doing too much work as one word.</p>
+      <p>After the code block started looking like a Soul update packet, the next problem was memory type.</p>
 
-    <p>A character remembering something is not the same as the story remembering something.</p>
+      <p>Not everything belonged inside the character.</p>
 
-    <p>That was the next shift.</p>
+      <p>That sounds obvious now, but it mattered a lot. If the Soul carried every detail, the character would become weirdly omniscient. Scene logistics, locked doors, hidden observers, active plot threads, and object positions would sit beside fear, trust, shame, and affection like they were the same kind of thing.</p>
 
-    <p>The Soul should not carry everything.</p>
+      <p>They are not.</p>
 
-    <p>The Soul should carry what changed the character.</p>
+      <blockquote class="idea">The character remembering something is not the same as the story remembering something.</blockquote>
 
-    <p>That meant emotional memory. Subjective memory. Biased memory. The kind of memory that affects trust, fear, shame, affection, openness, desire, and resolve. The kind of memory that might grow stronger because it hurt, or fade because it never meant anything.</p>
+      <div class="section-label">What changed</div>
 
-    <p>But the world needed a different kind of continuity.</p>
+      <p>The memory system split in my head.</p>
 
-    <p>Where are we?</p>
+      <p>The Soul would carry subjective character continuity: what the character personally experienced, what changed them, what they misread, what they feared, what they wanted, and what became part of their emotional history.</p>
 
-    <p>What objects are in the room?</p>
+      <p>The World Log would carry operational story continuity: where the scene is, what objects exist, what plot threads are active, what changed in the environment, and what the narrator needs to keep stable.</p>
 
-    <p>What just happened in the plot?</p>
+      <p>That gave the system two jobs instead of one overloaded memory bucket.</p>
 
-    <p>What is the active danger?</p>
+      <blockquote>The Soul remembers like a person.</blockquote>
+      <blockquote>The World Log remembers like a GM.</blockquote>
 
-    <p>What information has been established?</p>
+      <div class="section-label">Why one bucket failed</div>
 
-    <p>What does the narrator need to know, even if the character does not?</p>
+      <p>A betrayal belongs in the Soul.</p>
 
-    <p>That did not belong entirely inside the Soul.</p>
+      <p>A locked door belongs in the World Log.</p>
 
-    <p>If I put everything into the Soul, the character would become weirdly omniscient. They would “remember” facts they should not personally know. They would carry scene logistics as if those logistics were emotional memories. A location change, an object on a table, or a background plot thread would sit beside trauma, trust, and fear like they were the same kind of thing.</p>
+      <p>A repeated kindness might become a relationship pattern in the Soul. A missing keycard belongs in the World Log. A traumatic memory might become distorted inside the Soul. A plot event should remain stable in the World Log.</p>
 
-    <p>They are not.</p>
+      <p>Putting those together makes the model guess what kind of truth it is reading. That is where continuity starts bleeding.</p>
 
-    <p>That was when the memory system split in my head.</p>
+      <p>The character starts acting on information they should not know. World facts start behaving like emotional memories. Old scene details become personality traits. Feelings become objective plot facts.</p>
 
-    <blockquote class="idea">The Soul remembers like a person.</blockquote>
+      <p>That was exactly the kind of mess I wanted to avoid.</p>
 
-    <blockquote class="idea">The World Log remembers like a GM.</blockquote>
+      <div class="section-label">Soul memory</div>
 
-    <p>That distinction mattered a lot.</p>
+      <p>The Soul is subjective.</p>
 
-    <p>The Soul is subjective.</p>
+      <p>It can be biased, incomplete, emotionally distorted, and selective. That is the point. A character might forget the exact words someone said but remember the tone as threatening. They might remember the sound of rain because it made them feel safe. They might carry one small act of protection longer than a whole normal conversation.</p>
 
-    <p>The World Log is operational.</p>
+      <p>The Soul is where trust, fear, shame, affection, openness, attachment, desire, and resolve start to matter as continuity.</p>
 
-    <p>The Soul can be wrong, biased, incomplete, or emotionally distorted.</p>
+      <p>It tracks what the character has become.</p>
 
-    <p>The World Log should be stable enough to keep the scene coherent.</p>
+      <div class="section-label">World Log</div>
 
-    <p>A character might remember the sound of rain because it made them feel safe. The World Log remembers that the scene is taking place at a station, it is raining, the last train is delayed, and a suspicious courier package exists in the scene.</p>
+      <p>The World Log is not emotional memory.</p>
 
-    <p>A character might forget the exact words someone said, but remember that the tone felt threatening. The World Log remembers the actual exchange happened, where it happened, and what plot thread it touched.</p>
+      <p>It is the scene's working memory: setting, time passage, active danger, recent objective events, important objects, plot threads, and facts the narrator needs to keep the world from drifting.</p>
 
-    <p>A character might not know there is someone watching from across the platform. The World Log can know that, if the narrative mode allows it.</p>
+      <p>The character does not automatically know everything in the World Log. That separation matters.</p>
 
-    <p>That was the reason one memory bucket was not enough.</p>
+      <p>The narrator may know there is someone watching from across the platform. The character might not. The World Log can preserve that fact without poisoning the Soul with knowledge the character never earned.</p>
 
-    <p>The project needed at least two layers.</p>
+      <div class="section-label">Knowledge boundaries</div>
 
-    <p>The first layer was the Soul.</p>
+      <p>This split also made the narrative modes make more sense.</p>
 
-    <p>That layer tracked the character’s inner continuity: emotional variables, relationship changes, trauma state, personal memories, core memories, schemas, and slow personality drift. This was the “what the character has become” layer.</p>
+      <p>Realistic mode can stay external: body language, movement, dialogue, visible reactions.</p>
 
-    <p>The second layer was the World Log.</p>
+      <p>Reader mode can show the character's inner thoughts, but only what the character actually knows or feels.</p>
 
-    <p>That layer tracked story continuity: setting, active scene, recent objective events, important objects, plot threads, time passage, and what the narrator needed to keep consistent.</p>
+      <p>God mode can let the narrator reveal wider world information, foreshadowing, or off-screen details, but that information must not leak into the character's behavior unless the character learns it.</p>
 
-    <p>Once I saw that split, a lot of earlier problems became easier to name.</p>
+      <p>Without the split, God mode would poison the character. Reader mode would get too omniscient. Realistic mode would accidentally expose internal state.</p>
 
-    <p>Before the split, I kept asking:</p>
+      <p>The boundary became simple:</p>
 
-    <blockquote>How do I make the AI remember everything?</blockquote>
+      <blockquote>What the Soul knows is not always what the World knows.</blockquote>
 
-    <p>After the split, the question became sharper:</p>
+      <div class="section-label">What this set up</div>
 
-    <blockquote>What kind of memory is this?</blockquote>
+      <p>This was the first real conceptual breakthrough after the Soul idea.</p>
 
-    <p>Is it something the character personally experienced?</p>
+      <p>Mnemosyne was no longer just about making the AI remember more. It was about making the right layer remember the right thing.</p>
 
-    <p>Is it something that emotionally changed them?</p>
+      <p>The Soul would carry the character's lived inner history.</p>
 
-    <p>Is it a world fact the narrator needs?</p>
+      <p>The World Log would carry the scene's objective continuity.</p>
 
-    <p>Is it information the character should not know yet?</p>
+      <p>The narrator would read from both.</p>
 
-    <p>Is it just recent chat context?</p>
+      <p>The player would only see the story.</p>
 
-    <p>Is it a long-term plot detail?</p>
-
-    <p>Those categories changed the architecture.</p>
-
-    <p>A betrayal belongs in the Soul.</p>
-
-    <p>A room layout belongs in the World Log.</p>
-
-    <p>A repeated kindness might become a relationship schema in the Soul.</p>
-
-    <p>A missing keycard belongs in the World Log.</p>
-
-    <p>A traumatic memory might become distorted inside the Soul.</p>
-
-    <p>A plot event should remain stable in the World Log.</p>
-
-    <p>That was the first time Mnemosyne started feeling less like “memory for AI RP” and more like an actual simulation layer.</p>
-
-    <p>It was not enough to summarize the chat.</p>
-
-    <p>A summary says what happened.</p>
-
-    <p>A Soul says what it did to the character.</p>
-
-    <p>A World Log says what remains true about the scene.</p>
-
-    <p>Those are different jobs.</p>
-
-    <p>This also solved part of the narrator problem.</p>
-
-    <p>I did not want the AI to simply be the character. That made the model too likely to speak as the character, steal the user’s actions, and collapse the difference between what the narrator knows and what the character knows.</p>
-
-    <p>The narrator needed to work more like a GM.</p>
-
-    <p>The narrator could see the scene.</p>
-
-    <p>The character could only know what they experienced.</p>
-
-    <p>The Soul could remember subjectively.</p>
-
-    <p>The World Log could preserve continuity objectively.</p>
-
-    <p>That meant Mnemosyne needed a narrator architecture, not just a character chatbot.</p>
-
-    <p>The character was not supposed to carry the whole universe inside their head.</p>
-
-    <p>The narrator and the system had to carry the universe around them.</p>
-
-    <p>That was also where the idea of different narrative modes started making more sense.</p>
-
-    <p>Realistic mode could restrict the narration to external behavior: body language, voice, movement, visible reactions.</p>
-
-    <p>Reader mode could allow access to the character’s inner thoughts, but only what the character themself knows or feels.</p>
-
-    <p>God mode could allow the narrator to reveal wider world information, foreshadowing, or details outside the character’s awareness.</p>
-
-    <p>Those modes depended on the same split.</p>
-
-    <p>Without separating Soul memory from World Log memory, God mode would poison the character. The character might start acting on information they should not have. Reader mode could become too omniscient. Realistic mode could accidentally expose internal state.</p>
-
-    <p>So the memory split also became a knowledge-boundary split.</p>
-
-    <p>What does the narrator know?</p>
-
-    <p>What does the character know?</p>
-
-    <p>What does the player see?</p>
-
-    <p>What does the engine store?</p>
-
-    <p>Those questions became part of the system.</p>
-
-    <p>The character’s memory and the world’s memory could not be the same thing.</p>
-
-    <p>That was the first conceptual breakthrough after the Soul idea.</p>
-
-    <p>The Soul would carry the character’s lived inner history.</p>
-
-    <p>The World Log would carry the scene’s objective continuity.</p>
-
-    <p>The narrator would read from both.</p>
-
-    <p>And the player would only see the story.</p>
-
-    <p>That became the next foundation of Mnemosyne.</p>
-
-    <p>Not just:</p>
-
-    <blockquote>Make the AI remember.</blockquote>
-
-    <p>But:</p>
-
-    <blockquote class="idea">Make the right layer remember the right thing.</blockquote>
-
-    <p class="closing">Next: Devlog 003, when this split had to become software, hidden state had to disappear from the player’s view, and the app started testing whether the Soul could actually update behind the scenes.</p>
-  </main>
+      <p class="closing">Next: <a href="/devlog-003.html">003</a>, hiding the machine so the app could read model output without showing the state layer to the player.</p>
+
+    </div>
+  </article>
+
+  <footer>
+    <span class="footer-status">
+      <span class="status-dot"></span>
+      rhygpu.dev is live
+    </span>
+    <nav class="footer-links">
+      <a href="/">Index</a>
+      <a href="https://github.com/RhyGPU/rhygpu.dev">GitHub</a>
+    </nav>
+  </footer>
+
+</div>
 </body>
 </html>
