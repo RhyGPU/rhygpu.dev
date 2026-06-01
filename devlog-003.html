@@ -1,526 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Devlog 003, Making Hidden State Work | RhyGPU</title>
-  <meta name="description" content="The early Mnemosyne app phase, where mock turn flow, real model testing, encoded hidden state, and diagnostics made the Soul update loop testable." />
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0b0d12;
-      --text: #e8e8e8;
-      --muted: #8b92a6;
-      --body: #c7cad3;
-      --line: #252a36;
-      --accent: #8ab4ff;
-      --accent-soft: rgba(138, 180, 255, 0.12);
-      --code-bg: #11151d;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background:
-        radial-gradient(circle at top left, rgba(138, 180, 255, 0.09), transparent 32rem),
-        var(--bg);
-      color: var(--text);
-      font-family: Arial, sans-serif;
-      line-height: 1.7;
-    }
-
-    main {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 56px 24px 88px;
-    }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .back {
-      color: var(--muted);
-      font-size: 0.95rem;
-      display: inline-block;
-      margin-bottom: 40px;
-    }
-
-    .kicker {
-      color: var(--accent);
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin: 0 0 1rem;
-    }
-
-    h1 {
-      font-size: clamp(2.35rem, 7vw, 4.4rem);
-      line-height: 1.05;
-      margin: 0 0 0.8rem;
-    }
-
-    h2 {
-      font-size: 1.75rem;
-      margin-top: 3.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .subtitle {
-      color: var(--text);
-      font-size: clamp(1.25rem, 3vw, 1.65rem);
-      line-height: 1.35;
-      margin: 0 0 1rem;
-    }
-
-    .meta {
-      color: var(--muted);
-      margin: 0 0 3.5rem;
-      font-size: 0.98rem;
-    }
-
-    p {
-      color: var(--body);
-      font-size: 1.08rem;
-      margin: 1.25rem 0;
-    }
-
-    blockquote {
-      margin: 2rem 0;
-      padding: 1.1rem 1.25rem;
-      border-left: 3px solid var(--accent);
-      background: var(--accent-soft);
-      color: var(--text);
-      font-size: 1.18rem;
-      line-height: 1.55;
-    }
-
-    blockquote.idea {
-      font-size: 1.28rem;
-      font-weight: 700;
-    }
-
-    .covered {
-      margin-top: 4rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--line);
-    }
-
-    .covered p {
-      color: var(--muted);
-      font-size: 0.98rem;
-    }
-
-    ol {
-      color: var(--body);
-      padding-left: 1.35rem;
-    }
-
-    li {
-      margin: 0.65rem 0;
-      color: var(--body);
-    }
-
-    code {
-      background: var(--code-bg);
-      color: var(--text);
-      padding: 0.14rem 0.35rem;
-      border-radius: 5px;
-      font-size: 0.95em;
-    }
-
-    .closing {
-      margin-top: 3.5rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.98rem;
-    }
-
-    @media (max-width: 560px) {
-      main {
-        padding: 38px 18px 64px;
-      }
-
-      p {
-        font-size: 1.02rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>003, Hiding the Machine | RhyGPU</title>
+<meta name="description" content="Mock provider, encoded hidden state, real model testing, and the first output-side Mnemosyne loop." />
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main>
-    <a class="back" href="/">← Back to RhyGPU</a>
+<div class="wrap">
 
-    <p class="kicker">Mnemosyne Devlog</p>
-    <h1>Devlog 003, Making Hidden State Work</h1>
-    <p class="subtitle">The App Started Testing the Soul</p>
-    <p class="meta">May 2026 · Early app implementation · Hidden state, mock flow, real model testing, and diagnostics</p>
+  <a class="back" href="/">rhygpu.dev</a>
 
-    <p>After I split memory into two layers, the next problem was no longer just conceptual.</p>
+  <article>
+    <header class="post-header">
+      <p class="kicker">Mnemosyne · 003</p>
+      <h1 class="post-title">Hiding the Machine</h1>
+      <p class="post-subtitle">Mock provider, encoded hidden state, and the first real model test.</p>
+      <p class="post-meta">May 2026 · Tauri scaffold · Hidden state · Diagnostics · Output control</p>
+    </header>
 
-    <p>The Soul would remember like a person.</p>
+    <div class="prose">
 
-    <p>The World Log would remember like a GM.</p>
+      <p>The first app problem was output control.</p>
 
-    <p>That sounded clean in theory.</p>
+      <p>The model could write a scene, but the app had to catch the machine part before the player saw it.</p>
 
-    <p>But now I had to make the app actually do something with it.</p>
+      <p>That was the job here: visible narration for the player, hidden state for the engine.</p>
 
-    <p>Before this point, a lot of Mnemosyne still lived in prompts, notes, and thought experiments. I had the idea of a Soul. I had the idea of a World Log. I had the crude code block. I had the idea that the AI should report what changed instead of carrying the whole system inside the chat.</p>
+      <p>The old crude code block was useful because I could inspect it. I could see trust move, fear move, a memory get flagged, or the scene state change. But if that block stayed visible after every message, the RP experience was dead.</p>
 
-    <p>But an idea does not become real until something can run.</p>
+      <p>No raw JSON under the dialogue. No trust deltas sitting in the scene. No memory tags breaking the mood. No system residue reminding the player that the character is being calculated.</p>
 
-    <p>That was where the Tauri app started to matter.</p>
+      <blockquote class="idea">The player sees the story. The engine reads the state.</blockquote>
 
-    <p>The early app was not pretty. It was not a finished roleplay client. It was barely even the shape of the thing I wanted. But it gave Mnemosyne a body: a desktop window, a chat interface, Rust behind it, React in front of it, local state, Soul files, provider settings, and the beginning of a pipeline.</p>
+      <div class="section-label">What changed</div>
 
-    <p>That was the shift.</p>
+      <p>The desktop app started becoming more than a prompt experiment.</p>
 
-    <p>Mnemosyne was no longer only a better prompt.</p>
+      <p>Tauri gave the project a body: a window, a chat interface, Rust behind it, React in front of it, local Soul files, provider settings, and a place for the state loop to run.</p>
 
-    <p>It was becoming a machine that could sit between the user and the model.</p>
+      <p>The output loop started taking shape:</p>
 
-    <p>The first job was simple to say and annoying to implement:</p>
+      <pre><code>User Message
+        ↓
+Compiled Context
+        ↓
+Model Response
+        ↓
+Visible Narration + Hidden State
+        ↓
+Strip / Parse
+        ↓
+Soul / World Update
+        ↓
+Save</code></pre>
 
-    <blockquote class="idea">The player should see the story.</blockquote>
+      <p>That was the first version of the app actually breathing.</p>
 
-    <blockquote class="idea">The engine should see the state.</blockquote>
+      <div class="section-label">Why the mock existed</div>
 
-    <p>That was the whole problem.</p>
+      <p>The mock provider was not real RP testing.</p>
 
-    <p>The old crude code block was useful because I could see it. It let me inspect what the AI thought had changed. Trust moved. Fear moved. A memory was flagged. The scene changed. Something became important.</p>
+      <p>It was scaffolding.</p>
 
-    <p>But if the user had to see that code block after every response, the experience was dead.</p>
+      <p>It proved that the UI could send a turn, the backend could return a response, the response could include hidden state, and the app could update the chat. That mattered. But it was not testing narration, psychology, or model behavior.</p>
 
-    <p>No one wants an emotional scene followed by ugly machinery.</p>
+      <p>The mock did not surprise me. It did not drift. It did not forget the format. It did not leak state because a model got confused. It returned what the code told it to return.</p>
 
-    <p>No visible JSON.</p>
+      <p>Useful for the pipe. Useless as proof that the RP experience worked.</p>
 
-    <p>No raw memory tags.</p>
+      <div class="section-label">The first real model test</div>
 
-    <p>No trust deltas under the dialogue.</p>
+      <p>The useful failures came from actual LLMs.</p>
 
-    <p>No retrieval scores.</p>
+      <p>I was already using OpenRouter models for AI RP testing, so using free OpenRouter models inside the app was the obvious next step. I needed real generations to see whether the system survived contact with a model that could misunderstand, improvise, ignore formatting, or write something good for the wrong reason.</p>
 
-    <p>No system residue.</p>
+      <p>The first real test felt good in a way the mock never could.</p>
 
-    <p>No code box reminding the player that the character is being calculated.</p>
+      <p>A real model answered. The chat moved. The scene had atmosphere. The narration had texture. It was not finished, but the product stopped feeling imaginary for a moment.</p>
 
-    <p>So hidden state had to become actually hidden.</p>
+      <p>Then the warning showed up.</p>
 
-    <p>Not fake hidden.</p>
+      <p>The output was nice, but it was also wrong in a dangerous way: the model wanted to talk like the character instead of staying as the narrator.</p>
 
-    <p>Not “scroll past this.”</p>
+      <p>That mattered because Mnemosyne is not supposed to be another character impersonator. The narrator should describe the character. The Soul and World Log should carry continuity underneath. If the model collapses into being the character, knowledge boundaries collapse with it.</p>
 
-    <p>Not “pretend you did not see it.”</p>
+      <p>The first real test proved two things at once:</p>
 
-    <p>The model could output a machine-readable block, but the app had to catch it, strip it out, parse it, and apply it before the user saw the final message.</p>
+      <blockquote>It could feel good.</blockquote>
+      <blockquote>Feeling good was not enough.</blockquote>
 
-    <p>If the block leaked, immersion broke.</p>
+      <div class="section-label">Encoded hidden state</div>
 
-    <p>If the block disappeared, the Soul could not update.</p>
+      <p>Plain hidden JSON was easy to inspect, but too fragile for the actual path.</p>
 
-    <p>If the block was malformed, the engine had to survive.</p>
+      <p>It could leak into the visible response. It could get wrapped in prose. It could be malformed by the model. It also made the boundary between narration and machinery feel weaker than it should.</p>
 
-    <p>That was one of the first moments where Mnemosyne started feeling like real software.</p>
+      <p>So the hidden state moved toward an encoded payload.</p>
 
-    <p>Not because the feature was glamorous.</p>
+      <p>The app needed a recognizable marker, a compact body, and a parser that could support the new format without destroying older test transcripts.</p>
 
-    <p>Because it was annoying in exactly the way real software is annoying.</p>
+      <p>That is where the <code>mne1.&lt;base64url&gt;</code> style payload started to matter.</p>
 
-    <p>The turn flow started becoming concrete:</p>
+      <p>The narration is for the player. The encoded hidden state is for the engine.</p>
 
-    <p>User message.</p>
+      <div class="section-label">Diagnostics</div>
 
-    <p>Compiled context.</p>
+      <p>Once the state became hidden, debugging got harder.</p>
 
-    <p>Model response.</p>
+      <p>If the Soul updated wrong, I needed to know why. If parsing failed, I needed to know where. If a memory got added, scored, discarded, or consolidated, I needed a place to inspect the cycle without dumping the machinery into the player's chat.</p>
 
-    <p>Visible narration.</p>
+      <p>That made the turn debug panel and memory cycle diagnostics necessary.</p>
 
-    <p>Hidden state.</p>
+      <p>Not as polish.</p>
 
-    <p>Parser.</p>
+      <p>As survival.</p>
 
-    <p>Soul update.</p>
+      <p>The player should not see the machinery. The developer absolutely needs to.</p>
 
-    <p>World update.</p>
+      <div class="section-label">What this exposed</div>
 
-    <p>Save.</p>
+      <p>This pass made the first hard boundary visible.</p>
 
-    <p>Repeat.</p>
+      <p>The model should write and propose.</p>
 
-    <p>That loop was the first version of Mnemosyne actually breathing.</p>
+      <p>The app should catch, parse, validate, and manage.</p>
 
-    <p>There was a mock provider in the code, but I do not want to oversell it.</p>
+      <p>At this stage I was still asking one model response to do too much: write the scene, stay in narrator mode, respect user agency, output hidden state, flag memory, judge importance, update relationship values, and remember to forget.</p>
 
-    <p>The mock was not where the real roleplay testing happened.</p>
+      <p>That burden was already showing cracks.</p>
 
-    <p>It was mostly an early placeholder for the chat interface and turn flow. It could return a fixed kind of answer, attach a predictable hidden-state block, and make the UI look like it was doing something.</p>
+      <p>But the app now had somewhere to put the cracks. The mock gave the pipe a shape. Real models gave it failure cases. Encoded hidden state gave the engine something safer to parse. Diagnostics gave me a way to see behind the curtain.</p>
 
-    <p>That was useful for building the app shape.</p>
+      <p>That was enough to move forward.</p>
 
-    <p>It proved that a button could send a message.</p>
+      <section class="covered">
+        <h2>Covered commits</h2>
+        <p>This is the first entry with direct commit coverage. The earlier entries cover origin and design history before the implementation-heavy phase.</p>
+        <ol>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/f26cbfead602bea6003dc6445337c8b73ba77bc4"><code>f26cbfe</code></a> Add AGPL-3.0 license</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/a6429539c7fb38ec92f790ad3c3ee6afaf753903"><code>a642953</code></a> Scaffold Tauri desktop client</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/1fe813296f43302429b458ed8bd9dce2543d9798"><code>1fe8132</code></a> Initial commit</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/35bf8bf248391aef64cf7937d099917bd32fe8b9"><code>35bf8bf</code></a> Declare AGPL package license</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/303d4f7635752401588a62c98b5fb97d669d944a"><code>303d4f7</code></a> Merge GitHub initial repository state</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/b0697faee12dbac371a443caea62ca99e6b70086"><code>b0697fa</code></a> Wire mock provider turn flow</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/aee79720d2c325d1bc55f704ae82a633cbd5fbcc"><code>aee7972</code></a> Encode mock hidden state</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/9c242ea77ebfb5174d7202f566efa523ba8389d6"><code>9c242ea</code></a> Add local delete controls</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/505f75b8ded6be914684953e33e6805d37cfa081"><code>505f75b</code></a> Align prototype with narrator architecture</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/c9fe40d76e0a926659450a407423795351568876"><code>c9fe40d</code></a> Fix native Tauri build setup</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/b6fb3706f634234d5872c97068742518b1e121cf"><code>b6fb370</code></a> Add mock turn acceptance coverage</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/365d105634de01d784884622766279c83c60a987"><code>365d105</code></a> Surface memory cycle diagnostics</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/1f6ed4b857267afff046ea0b338e9fca49f47704"><code>1f6ed4b</code></a> Document future settings architecture</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/53a12d1a80116aeb5ea45705ccaffee63adbd328"><code>53a12d1</code></a> Separate setting controls from Soul identity</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/c526a87640e98bfdaffff7cbdd45325645e4a06b"><code>c526a87</code></a> Add Setting Soul lifecycle</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/802e588ba4ed708367e6812b61af5680a645f7ee"><code>802e588</code></a> Align API hidden state prompt</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/21f5efdf29fe70955561eab4ee10183fbda4f7c1"><code>21f5efd</code></a> Add turn debug panel</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/6f07c51fe43079134242f414479de37c0609cb7c"><code>6f07c51</code></a> Improve chat workspace controls</li>
+        </ol>
+      </section>
 
-    <p>It proved that the backend could return a response.</p>
+      <p class="closing">Next: <a href="/devlog-004.html">004</a>, feeding the model a session packet so the input side of the loop can start carrying Soul, World, relationship pressure, and clean recent chat.</p>
 
-    <p>It proved that hidden state could exist in the pipeline.</p>
+    </div>
+  </article>
 
-    <p>It proved that the UI could update.</p>
+  <footer>
+    <span class="footer-status">
+      <span class="status-dot"></span>
+      rhygpu.dev is live
+    </span>
+    <nav class="footer-links">
+      <a href="/">Index</a>
+      <a href="https://github.com/RhyGPU/rhygpu.dev">GitHub</a>
+    </nav>
+  </footer>
 
-    <p>But as a test of roleplay, memory, narration, or psychology, it was basically useless.</p>
-
-    <p>It did not surprise me.</p>
-
-    <p>It did not drift.</p>
-
-    <p>It did not forget.</p>
-
-    <p>It did not misunderstand the format.</p>
-
-    <p>It did not fail like a real model fails.</p>
-
-    <p>And because it did not fail like a real model, it could not prove the idea.</p>
-
-    <p>The real testing came from actual LLMs.</p>
-
-    <p>I was already using OpenRouter heavily to try different models for AI RP, so free OpenRouter models became the obvious way to test without burning too much money. I needed real generations. I needed actual model behavior. I needed the system to survive contact with chaos.</p>
-
-    <p>A fake response could prove that the interface worked.</p>
-
-    <p>A real model could prove whether the idea held together.</p>
-
-    <p>That was where the useful failures started.</p>
-
-    <p>But before the failures, there was also a good moment.</p>
-
-    <p>The first real test felt good in a way the mock never could.</p>
-
-    <p>For the first time, the app was not just clicking through a fake pipeline. A real model answered. The chat moved. The scene had atmosphere. The narration had texture. It was not the final experience, but it was enough to make the project feel less imaginary.</p>
-
-    <p>That mattered.</p>
-
-    <p>A working mock can tell you the pipe is connected.</p>
-
-    <p>A real model can make you feel the product.</p>
-
-    <p>And for a moment, it did feel like something was there.</p>
-
-    <p>That was encouraging.</p>
-
-    <p>But it was not a clean victory.</p>
-
-    <p>The good feeling came with a warning almost immediately.</p>
-
-    <p>The output was nice, but it was also wrong in a very important way. The model was still talking too much like the character instead of acting like a narrator. It slipped into first-person character presence. It made the experience feel closer to a normal character chatbot than the GM/narrator architecture I wanted.</p>
-
-    <p>That worried me.</p>
-
-    <p>Because Mnemosyne was not supposed to be another character impersonator.</p>
-
-    <p>The whole point was that the narrator should describe the character, while the Soul and World Log carried continuity underneath. If the model collapsed into “being” the character, then the knowledge boundaries would collapse too.</p>
-
-    <p>The character could steal narrator knowledge.</p>
-
-    <p>The narrator could steal the user’s agency.</p>
-
-    <p>The system could drift back into the exact platform behavior I was trying to escape.</p>
-
-    <p>So the first real test was encouraging and alarming at the same time.</p>
-
-    <p>It proved the app could feel good.</p>
-
-    <p>It also proved that feeling good was not enough.</p>
-
-    <p>A real model might forget to include the hidden state.</p>
-
-    <p>A real model might expose the hidden block to the user.</p>
-
-    <p>A real model might wrap the hidden state in the wrong format.</p>
-
-    <p>A real model might summarize instead of updating.</p>
-
-    <p>A real model might produce beautiful narration and then ruin the machine-readable part.</p>
-
-    <p>A real model might keep adding memories instead of letting anything fade.</p>
-
-    <p>A real model might understand the rule, explain the rule, and then fail to follow it three turns later.</p>
-
-    <p>That was exactly the kind of failure I needed to see.</p>
-
-    <p>Because the point was not to make a toy demo work.</p>
-
-    <p>The point was to find the places where a real model would break the architecture.</p>
-
-    <p>One of the first problems was formatting.</p>
-
-    <p>At first, hidden state could be plain JSON. That was easy to inspect, easy to test, and easy to understand. But plain JSON was also fragile and ugly. It was too easy for the model to leak it, corrupt it, or blend it into the visible response.</p>
-
-    <p>So the hidden state had to become more controlled.</p>
-
-    <p>The app needed a recognizable marker.</p>
-
-    <p>The payload needed to be compact.</p>
-
-    <p>The parser needed to support the new format without destroying older test transcripts.</p>
-
-    <p>That was why encoded hidden state became important.</p>
-
-    <p>The hidden block moved toward a versioned payload format: something the engine could identify, decode, and parse without treating it like normal prose.</p>
-
-    <p>That did not make the system perfect.</p>
-
-    <p>But it made the boundary sharper.</p>
-
-    <p>The narration was for the player.</p>
-
-    <p>The encoded hidden state was for the engine.</p>
-
-    <p>That boundary was everything.</p>
-
-    <p>Around the same time, I also started seeing why debug tools mattered.</p>
-
-    <p>When hidden state is visible, debugging is easy. You just read the ugly block.</p>
-
-    <p>When hidden state is actually hidden, debugging becomes harder. If the Soul updates wrong, I need to know why. If the parser fails, I need to know where. If a memory gets added, scored, discarded, or consolidated, I need to see the trace.</p>
-
-    <p>So diagnostics became part of the early app.</p>
-
-    <p>Not as polish.</p>
-
-    <p>As survival.</p>
-
-    <p>I needed a way to inspect the memory cycle without exposing the machinery to the player. I needed to see what the model returned, what the parser extracted, what the engine accepted, and what changed inside the Soul.</p>
-
-    <p>That was the practical reason for turn debug panels and memory cycle diagnostics.</p>
-
-    <p>The player should not see the machinery.</p>
-
-    <p>But the developer absolutely needs to.</p>
-
-    <p>This was also where the narrator architecture became more urgent.</p>
-
-    <p>Before the real test, narrator mode was mostly an architecture principle.</p>
-
-    <p>After the real test, it became a practical requirement.</p>
-
-    <p>If the AI was allowed to behave like the character directly, it would blur everything. It might speak in first person. It might steal the user’s actions. It might treat narrator knowledge as character knowledge. It might expose internal state as dialogue.</p>
-
-    <p>That was not Mnemosyne.</p>
-
-    <p>Mnemosyne needed the model to act as a narrator.</p>
-
-    <p>The narrator writes the visible scene.</p>
-
-    <p>The hidden state reports candidate changes.</p>
-
-    <p>The app strips and parses the hidden state.</p>
-
-    <p>The engine updates the Soul and World Log.</p>
-
-    <p>The player only sees the story.</p>
-
-    <p>That sounds obvious now, but this was the stage where it started becoming obvious through bugs.</p>
-
-    <p>Every failure pointed back to the same lesson:</p>
-
-    <blockquote class="idea">The model should not carry the whole system by itself.</blockquote>
-
-    <p>At this stage, I was still asking the LLM to do too much inside one response.</p>
-
-    <p>It had to write the scene.</p>
-
-    <p>It had to follow the selected narrative mode.</p>
-
-    <p>It had to respect the user’s agency.</p>
-
-    <p>It had to avoid leaking hidden machinery.</p>
-
-    <p>It had to flag memories.</p>
-
-    <p>It had to judge emotional importance.</p>
-
-    <p>It had to update relationship values.</p>
-
-    <p>It had to keep the Soul coherent.</p>
-
-    <p>It had to remember to forget.</p>
-
-    <p>That was too much for one generation to do perfectly.</p>
-
-    <p>But I had not fully escaped that yet.</p>
-
-    <p>This was not the dual-pass breakthrough.</p>
-
-    <p>That came later.</p>
-
-    <p>At this point, the lesson was smaller but important:</p>
-
-    <blockquote>The app needed to catch the model’s output and begin enforcing boundaries around it.</blockquote>
-
-    <p>The AI could propose.</p>
-
-    <p>The engine had to manage.</p>
-
-    <p>That was the start of the real boundary.</p>
-
-    <p>Not complete.</p>
-
-    <p>Not clean.</p>
-
-    <p>But visible.</p>
-
-    <p>The mock provider gave the interface a shape.</p>
-
-    <p>OpenRouter models gave the system real failures.</p>
-
-    <p>The first real test gave me a glimpse of the product.</p>
-
-    <p>Encoded hidden state gave the engine something it could parse.</p>
-
-    <p>Diagnostics gave me a way to see what was happening behind the curtain.</p>
-
-    <p>And the Tauri app gave all of it a place to run.</p>
-
-    <p>That was the point where Mnemosyne stopped being only a conceptual memory system.</p>
-
-    <p>It became an app trying to keep the magic invisible.</p>
-
-    <p class="closing">Next: Devlog 004, where the app had to learn what to send the model: context compiler work, cleaner Soul and World snapshots, provider payloads, API turn handling, and early narrator guardrails.</p>
-
-    <section class="covered">
-      <h2>Covered commits</h2>
-      <p>This is the first devlog with direct commit coverage. Devlogs 000 to 002 covered pre-repository origin work and early design history. This entry starts tracking the repository from the initial legal/project foundation into the early hidden-state implementation period.</p>
-      <ol>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/f26cbfead602bea6003dc6445337c8b73ba77bc4"><code>f26cbfe</code></a> Add AGPL-3.0 license</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/a6429539c7fb38ec92f790ad3c3ee6afaf753903"><code>a642953</code></a> Scaffold Tauri desktop client</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/1fe813296f43302429b458ed8bd9dce2543d9798"><code>1fe8132</code></a> Initial commit</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/35bf8bf248391aef64cf7937d099917bd32fe8b9"><code>35bf8bf</code></a> Declare AGPL package license</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/303d4f7635752401588a62c98b5fb97d669d944a"><code>303d4f7</code></a> Merge GitHub initial repository state</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/b0697faee12dbac371a443caea62ca99e6b70086"><code>b0697fa</code></a> Wire mock provider turn flow</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/aee79720d2c325d1bc55f704ae82a633cbd5fbcc"><code>aee7972</code></a> Encode mock hidden state</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/9c242ea77ebfb5174d7202f566efa523ba8389d6"><code>9c242ea</code></a> Add local delete controls</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/505f75b8ded6be914684953e33e6805d37cfa081"><code>505f75b</code></a> Align prototype with narrator architecture</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/c9fe40d76e0a926659450a407423795351568876"><code>c9fe40d</code></a> Fix native Tauri build setup</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/b6fb3706f634234d5872c97068742518b1e121cf"><code>b6fb370</code></a> Add mock turn acceptance coverage</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/365d105634de01d784884622766279c83c60a987"><code>365d105</code></a> Surface memory cycle diagnostics</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/1f6ed4b857267afff046ea0b338e9fca49f47704"><code>1f6ed4b</code></a> Document future settings architecture</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/53a12d1a80116aeb5ea45705ccaffee63adbd328"><code>53a12d1</code></a> Separate setting controls from Soul identity</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/c526a87640e98bfdaffff7cbdd45325645e4a06b"><code>c526a87</code></a> Add Setting Soul lifecycle</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/802e588ba4ed708367e6812b61af5680a645f7ee"><code>802e588</code></a> Align API hidden state prompt</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/21f5efdf29fe70955561eab4ee10183fbda4f7c1"><code>21f5efd</code></a> Add turn debug panel</li>
-        <li><a href="https://github.com/RhyGPU/mnemosyne/commit/6f07c51fe43079134242f414479de37c0609cb7c"><code>6f07c51</code></a> Improve chat workspace controls</li>
-      </ol>
-    </section>
-  </main>
+</div>
 </body>
 </html>
