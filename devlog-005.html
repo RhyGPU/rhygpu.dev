@@ -259,19 +259,19 @@ P6 Recent Chat Excerpt</code></pre>
 
       <p>The same kind of stale-state bug still showed up: the model could continue as if an object was still central after the scene had already moved on. It could also invent unsupported time because it sounded natural.</p>
 
-      <p>That was the limit of prompt and context fixes.</p>
+      <p>The obvious answer looked like Scene State V1.</p>
 
-      <p>The system was still asking the LLM to infer physical state from recent events and excerpts.</p>
+      <p>Store current physical state. Store object locations. Store completed beats. Make the engine own more of the scene.</p>
 
-      <p>That is not reliable enough.</p>
+      <p>That sounded correct for a moment.</p>
 
-      <p>Object position should not be hidden inside prose.</p>
+      <p>But it also risked becoming exactly the kind of bloat I was trying to avoid.</p>
 
-      <p>Completed actions should not only exist as text the model has to interpret.</p>
+      <p>I did not want to track every tiny physical detail just because one scene failed. If the latest chat was being fed in the wrong order, or if the wrong part of the previous narrator response was being promoted, then adding a bigger state schema would be solving the wrong problem.</p>
 
-      <p>Current physical state should be engine-owned state.</p>
+      <p>So the next move was not to add more memory.</p>
 
-      <p>That points directly to Scene State V1.</p>
+      <p>It was to inspect the actual payload.</p>
 
       <section class="covered">
         <h2>Covered commits / implementation checkpoints</h2>
@@ -284,26 +284,25 @@ P6 Recent Chat Excerpt</code></pre>
 
       <div class="section-label">Next</div>
 
-      <p>Next is Scene State V1.</p>
+      <p>The next step is opening the black box.</p>
 
-      <p>The current system can rank context better, but it still relies too much on the model reading prose correctly. Scene State V1 should move current physical continuity into the engine:</p>
+      <p>Before building heavier scene state, I need to see what the model is actually receiving: the final system message, compiled context, latest exchange, user message, and token estimate.</p>
 
-      <pre><code>current_physical_state
-completed_beats
-do_not_replay
-object_locations
-pending_focus
-time_state</code></pre>
+      <p>If the app is feeding the wrong anchor, no amount of prompt discipline will save the output.</p>
 
-      <p>That is the real next step.</p>
+      <p>That becomes the next debugging layer:</p>
 
-      <p>The model should not have to infer that the phone is on the couch, the food is in the kitchen, or a reveal already happened.</p>
+      <pre><code>show the actual LLM payload
+verify the context order
+check whether Latest Exchange is really near the bottom
+check whether the final state of the last narrator response survives
+copy the payload for diagnosis</code></pre>
 
-      <p>The engine should know.</p>
+      <p>The model might not be ignoring the right context.</p>
 
-      <p>The narrator should continue from that.</p>
+      <p>The app might be sending the wrong one.</p>
 
-      <p class="closing">Next: Scene State V1, moving physical continuity out of prose and into engine-owned world state.</p>
+      <p class="closing">Next: <a href="/devlog-006.html">006, Opening the Black Box</a>. Payload Inspector, Latest Exchange, and finding out what the model actually sees.</p>
 
     </div>
   </article>
