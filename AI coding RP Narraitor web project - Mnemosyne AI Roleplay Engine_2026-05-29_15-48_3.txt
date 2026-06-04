@@ -1,0 +1,524 @@
+- src-tauri/state_engine/src/hidden_state.rs
+
+Goals:
+1. Remove the Rust warning in src-tauri/src/providers/api.rs.
+2. Keep API streaming UTF-8 safe.
+3. Make sure streamed output still stops before [HIDDEN STATE] or [HIDDEN_STATE].
+4. Make sure hidden state never appears in the chat UI.
+5. Clean up narrator status rendering:
+   - If a response contains a fenced ```status block, display it separately or normalize it cleanly.
+   - Do not show malformed inline backticks/status text inside the main narration.
+   - Do not damage normal narration.
+6. Add/keep tests for multibyte streaming:
+   - em dash â€”
+   - Korean characters
+   - emoji
+   - partial hidden marker after multibyte text
+7. Do not start Patch Protocol V1.
+8. Do not change launcher BAT files.
+9. Keep the change small.
+
+Run:
+npm run test:rust
+npm run typecheck
+
+Return:
+- changed files
+- warning fixed
+- rendering cleanup done
+- test results
+After Cursor finishes
+
+Run using your one-click launcher:
+
+run-dev.bat
+
+Test these messages in API mode:
+
+Hello â€” test.
+ì•ˆë…•í•˜ì„¸ìš”.
+Emoji test ðŸ˜Š.
+
+Check:
+
+1. No CMD panic
+2. No Rust warning
+3. Narrator text appears
+4. Hidden state does not appear
+5. Status block is clean, not awkward inline text
+
+Then commit directly on main in GitHub Desktop:
+
+Fix API streaming cleanup and status rendering
+
+After this, the next feature step is Patch Protocol V1.
+
+* * *
+
+**You:**
+
+## Changed files
+- src-tauri/src/providers/api.rs
+- src/App.tsx
+- src/styles.css
+
+No edits to src/tauri.ts, src-tauri/src/commands.rs, or src-tauri/state_engine/src/hidden_state.rs (not required for this pass).
+
+---
+
+## Warning fixed
+The unused_assignments warning (**â€œvalue assigned to emitted_visible_len is never readâ€**) comes from updating emitted_visible_len after the **last** visible chunk in the trailing pending SSE path, where nothing reads it again before return.
+
+In this codebase that path **does not assign** emitted_visible_len; it only emits with slice_at_char_boundaries and leaves the cursor unchanged. **cargo build / cargo test complete cleanly** with no stray assignment on that dead path.
+
+---
+
+## Rendering cleanup (App.tsx + styles.css)
+For **assistant / narrator** messages only:
+
+1. **stripHiddenStateBlocks** â€” removes [HIDDEN STATE]â€¦[/HIDDEN STATE] and legacy [HIDDEN_STATE]â€¦ tails so hidden state never shows in chat.
+2. **stripIncompleteStatusFence** â€” while the model is still streaming a trailing  status block without a closing   , the partial fence is hidden so narration does not acquire broken inline backticks.
+3. **normalizeCompleteStatusBlock** â€” when there is a full trailing  status â€¦   fence, narration and status are separated with a blank line.
+4. **<pre class="narrator-body">** + CSS â€” same typography as body text but **white-space: pre-wrap** so line breaks and the status fence read cleanly.
+
+User messages stay plain <p>; normal narration outside these patterns is untouched.
+
+---
+
+## Streaming / UTF-8 (api.rs)
+- **floor_char_boundary / slice_at_char_boundaries** â€” all emitted slices are on valid UTF-8 boundaries (fixes multibyte panics).
+- **visible_stream_prefix_len** â€” unchanged behavior: stops before **[HIDDEN STATE]** or **[HIDDEN_STATE]**, with safe suffix/holdback using char boundaries.
+
+Multibyte tests added/kept: em dash â€”, Korean, emoji, partial hidden marker after multibyte text.
+
+---
+
+## Test results
+- npm run test:rust â†’ **exit code 0** (cargo test: **17 passed**).
+- npm run typecheck â†’ **exit code 0**.
+- cargo build (src-tauri) â†’ **Finished** successfully.
+
+IDK wtf happened but dev.bat and all the shit is gone
+
+
+* * *
+
+**ChatGPT:**
+
+The launcher files are not gone from GitHub. I checked main, and these files still exist remotely:
+
+run-dev.bat
+build-windows.bat
+launch-built.bat
+
+run-dev.bat is still in the repo root on main. 
+
+run-dev
+
+
+build-windows.bat is still in the repo root on main. 
+
+build-windows
+
+
+launch-built.bat is still in the repo root on main. 
+
+launch-built
+
+So likely one of these happened:
+
+1. Cursor is showing a different folder.
+2. GitHub Desktop is on a different local branch.
+3. The files were deleted locally but not committed.
+4. You are looking inside src-tauri or another subfolder, not the repo root.
+Do this now
+
+In GitHub Desktop:
+
+Make sure branch is:
+main
+Click Fetch origin, then Pull origin if it appears.
+Look at the Changes tab.
+
+If you see these as deleted:
+
+run-dev.bat
+build-windows.bat
+launch-built.bat
+
+then do not commit. Right-click each deleted file and choose:
+
+Discard changes
+
+or discard all deleted launcher-file changes.
+
+In GitHub Desktop, click:
+Repository â†’ Show in Explorer
+
+That opens the real repo root. The .bat files should be there.
+
+If they still do not appear locally
+
+Use Cursor Agent on main and give it this task:
+
+Restore the Windows launcher files from the current GitHub main version if they are missing locally.
+
+Required root files:
+- run-dev.bat
+- build-windows.bat
+- launch-built.bat
+
+Do not modify app logic.
+Do not modify Rust or React files.
+Do not remove any launcher scripts.
+After restoring, show the file list and stop.
+About the Cursor result
+
+The API cleanup result sounds good:
+
+npm run test:rust â†’ 17 passed
+npm run typecheck â†’ passed
+cargo build â†’ passed
+
+But before committing, confirm GitHub Desktop only shows these changed files:
+
+src-tauri/src/providers/api.rs
+src/App.tsx
+src/styles.css
+
+If it also shows deleted .bat files, discard those deletions first.
+
+Commit after cleanup
+
+Once the .bat files are present and only the intended files are changed, commit on main:
+
+Fix API streaming cleanup and status rendering
+
+Then push.
+
+Next step after that
+
+After this commit is pushed, test once more with run-dev.bat.
+
+If it works, the next real feature step is:
+
+Patch Protocol V1
+
+No new branch unless you want one. Since you are solo, we can work directly on main for now and only branch for large risky changes.
+
+* * *
+
+**You:**
+
+Check my Git and move if no problem
+
+
+* * *
+
+**ChatGPT:**
+
+Iâ€™ll check the remote GitHub state I can see. I can verify pushed branches/files/PRs, but I cannot see uncommitted local GitHub Desktop changes unless they were pushed.
+
+* * *
+
+**You:**
+
+Tested and then committed. What now?
+
+* * *
+
+**ChatGPT:**
+
+Iâ€™ll verify the pushed GitHub state I can see, then Iâ€™ll give the next concrete step.
+
+* * *
+
+**You:**
+
+Implemented Context Compiler V2 in [context_compiler.rs](C:/Users/T-ROBOTICS/Downloads/mnemosyne/src-tauri/state_engine/src/context_compiler.rs).
+
+Changed files:
+- [context_compiler.rs](C:/Users/T-ROBOTICS/Downloads/mnemosyne/src-tauri/state_engine/src/context_compiler.rs)
+
+Context format changes:
+- Added ContextBudget with default max_tokens: 2500 and per-section soft caps.
+- Refactored into section builders:
+  - [CURRENT STATE]
+  - [CHARACTER SNAPSHOT]
+  - [WORLD SNAPSHOT]
+  - [RELEVANT MEMORIES]
+  - [RELATIONSHIP]
+  - [RECENT CHAT]
+- Memory selection now prioritizes core memories, schemas, high-salience recent memories, and lexically relevant recent memories while filtering low-salience routine/repetitive observations.
+- World context now includes location, time elapsed, active plots, key objects, and recent events.
+- ContextPreview remains unchanged: text, estimated_tokens, truncated.
+
+Tests added:
+- Required sections are present.
+- Budget is respected.
+- High-salience recent memories are included.
+- Low-salience repetitive memories are excluded/deprioritized.
+- Key objects and active plots appear.
+- Recent chat remains included.
+
+Validation:
+- npm.cmd run test:rust: passed, 17 tests.
+- npm.cmd run typecheck: passed.
+- cargo test --manifest-path src-tauri/state_engine/Cargo.toml --offline: passed, 33 unit tests + 1 integration test.
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check: passed.
+
+Note: PowerShell blocked npm run ... through npm.ps1, so I used npm.cmd run ..., which runs the same package scripts on Windows.
+
+Follow-up work:
+- Retrieval can later grow into entity/location/tag scoring and embeddings, but this keeps V2 lexical and compact as requested.
+
+* * *
+
+**ChatGPT:**
+
+Iâ€™ll check whether this has reached GitHub main yet. If it is still only local, the next action is commit and push before we move on.
+
+* * *
+
+**You:**
+
+todo.md
+íŒŒì¼
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1).txt
+ë¬¸ì„œ
+Implemented Context Compiler V2 in [context_compiler.rs](C:/Users/T-ROBOTICS/Downloads/mnemosyne/src-tauri/state_engine/src/context_compiler.rs).
+
+Changed files:
+- [context_compiler.rs](C:/Users/T-ROBOTICS/Downloads/mnemosyne/src-tauri/state_engine/src/context_compiler.rs)
+
+Context format changes:
+- Added ContextBudget with default max_tokens: 2500 and per-section soft caps.
+- Refactored into section builders:
+  - [CURRENT STATE]
+  - [CHARACTER SNAPSHOT]
+  - [WORLD SNAPSHOT]
+  - [RELEVANT MEMORIES]
+  - [RELATIONSHIP]
+  - [RECENT CHAT]
+- Memory selection now prioritizes core memories, schemas, high-salience recent memories, and lexically relevant recent memories while filtering low-salience routine/repetitive observations.
+- World context now includes location, time elapsed, active plots, key objects, and recent events.
+- ContextPreview remains unchanged: text, estimated_tokens, truncated.
+
+Tests added:
+- Required sections are present.
+- Budget is respected.
+- High-salience recent memories are included.
+- Low-salience repetitive memories are excluded/deprioritized.
+- Key objects and active plots appear.
+- Recent chat remains included.
+
+Validation:
+- npm.cmd run test:rust: passed, 17 tests.
+- npm.cmd run typecheck: passed.
+- cargo test --manifest-path src-tauri/state_engine/Cargo.toml --offline: passed, 33 unit tests + 1 integration test.
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check: passed.
+
+Note: PowerShell blocked npm run ... through npm.ps1, so I used npm.cmd run ..., which runs the same package scripts on Windows.
+
+Follow-up work:
+- Retrieval can later grow into entity/location/tag scoring and embeddings, but this keeps V2 lexical and compact as requested.
+
+seemed to work fine. But seems like there is a problem of knowing what she already did a chat ago
+
+
+* * *
+
+**ChatGPT:**
+
+Document processing confirmation
+
+Processed uploaded files fully:
+
+File	Length detected	Section headers
+todo.md	6 lines, 125 words, 742 characters	None
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1).txt	86 lines, 1,494 words, 8,739 characters	None
+
+Entire document processing: Yes.
+
+First issue: Context Compiler V2 is still not on GitHub main
+
+Remote main still shows the old context_compiler.rs, with TARGET_TOKEN_BUDGET: 2_000, old sections like [CHARACTER MEMORY], [RECENT EVENTS], and no ContextBudget / [WORLD SNAPSHOT] / [RELEVANT MEMORIES]. 
+
+todo
+
+So before anything else:
+
+Commit and push Context Compiler V2.
+
+Commit message:
+
+Improve context compiler v2 memory and world snapshots
+
+Then push.
+
+Second issue: this is not a long-term memory problem
+
+The transcript shows a one-turn continuity failure.
+
+The narrator already had Aurora react to the phone, take it, lock it, toss it onto the couch, then move toward the kitchen. In the very next response, the narrator repeats the phone discovery as if it is happening again. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+That means the problem is not â€œmemory decayâ€ or â€œretrieval.â€ It is more basic:
+
+The model is not being forced to respect the immediately previous assistant action.
+
+This should be fixed before Retrieval Layer V1.
+
+New next step: Immediate Continuity Guard V1
+
+Use Codex.
+
+Task:
+
+You are working in the Mnemosyne repo.
+
+Goal:
+Fix immediate turn-to-turn continuity so the narrator does not repeat an action that already happened one assistant message ago.
+
+Observed failure:
+In a test chat, Aurora already reacted to a phone/Tinder screenshot, took the phone, locked it, tossed it onto the couch, and moved toward the kitchen. On the next user message, the narrator repeated the phone discovery again as if it had not happened.
+
+This is a one-turn continuity problem, not long-term retrieval.
+
+Read:
+- MNEMOSYNE_BIBLE.md
+- src-tauri/state_engine/src/context_compiler.rs
+- src-tauri/src/commands.rs
+- src-tauri/src/db/mod.rs
+- src/App.tsx
+
+Requirements:
+1. Ensure the context compiler always preserves the last assistant message and last user message in full unless impossible.
+2. Add a new section before [RECENT CHAT]:
+
+   [IMMEDIATE CONTINUITY]
+   - Last narrator action:
+   - Last user action:
+   - Current scene must continue from these facts. Do not replay them unless the user explicitly asks for a rewind or retcon.
+
+3. Implement this from recent messages deterministically, not by asking the LLM to summarize.
+4. Keep this compact.
+5. Do not remove Context Compiler V2 sections.
+6. Do not implement embeddings.
+7. Do not implement multi-character yet.
+8. Do not change launcher BAT files.
+9. Add tests:
+   - last assistant message appears in [IMMEDIATE CONTINUITY]
+   - last user message appears in [IMMEDIATE CONTINUITY]
+   - [IMMEDIATE CONTINUITY] appears before [RECENT CHAT]
+   - budget is still respected
+   - recent chat still appears
+10. Run:
+   npm.cmd run test:rust
+   npm.cmd run typecheck
+
+Manual test scenario:
+- User: Hello
+- User: Are you Kit from Tinder?
+- User: I show her the phone.
+- User: I want pad thai too.
+The narrator should not repeat seeing the phone again. It should continue from kitchen/pad thai/emotional reaction state.
+
+Report changed files, test results, and whether the immediate continuity section is visible in Context Preview.
+Also add this to the TODO later
+
+Your todo.md already notes regenerate/fix-last-response, branching between generated messages, and deleting chat needing Soul unwind/logs. 
+
+todo
+
+ That is directly related. Once Immediate Continuity Guard is done, the next UI feature should be:
+
+Regenerate with instruction + branch/choose response
+
+Because when the model repeats itself, you need a fast correction workflow.
+
+Order now
+
+Do this in order:
+
+1. Push Context Compiler V2.
+2. Run run-dev.bat and confirm app still works.
+3. Implement Immediate Continuity Guard V1 with Codex.
+4. Test the phone/pad-thai scenario again.
+5. Commit and push.
+
+After that, move to Retrieval Layer V1.
+
+* * *
+
+**You:**
+
+If we were feeding recent chat, how did this happen? It should not need continuity shit
+
+Implemented the immediate turn continuity fix in [context_compiler.rs](C:/Users/T-ROBOTICS/Downloads/mnemosyne/src-tauri/state_engine/src/context_compiler.rs).
+
+Changed:
+- Added [IMMEDIATE CONTINUITY] before [RECENT CHAT].
+- Deterministically extracts the latest assistant and user messages:
+  - Last narrator action
+  - Last user action
+  - explicit â€œcontinue, do not replay unless rewind/retconâ€ instruction
+- Added budget compaction that trims lower-priority sections first and protects immediate continuity unless it cannot fit.
+- Recent chat still remains part of Context Compiler V2.
+
+Tests:
+- cargo test --manifest-path src-tauri/state_engine/Cargo.toml --offline: passed, 38 unit tests + 1 integration test.
+- npm.cmd run test:rust: passed, 17 tests.
+- npm.cmd run typecheck: passed.
+
+The immediate continuity section is visible in Context Preview because the UI already renders context.text directly in the existing debug preview. No UI, provider, embeddings, multi-character, or launcher BAT changes.
+
+* * *
+
+**ChatGPT:**
+
+Recent chat should help, but it does not guarantee continuity.
+
+The reason is simple:
+
+Recent chat is a transcript. It is not state.
+
+The LLM sees prior messages, but it does not necessarily treat every prior assistant sentence as a binding world fact. It may instead treat the chat as loose narrative examples and continue from whatever part of the scene has the strongest semantic pull.
+
+In your transcript, the phone/Tinder reveal was emotionally intense and visually specific. The next user message said:
+
+â€œSure. I would like some Pad Thai. Also, im here cause Im in the same boat. Lonely and stuff. And thought you were cuteâ€
+
+The model should have continued from Aurora already processed the phone reveal and moved toward food, but instead it latched back onto the prior phone reveal and replayed it. That means the recent chat was present, but the model failed to correctly resolve the latest completed action state. The transcript shows exactly that repetition: Aurora reacts to the phone once, then the next narrator response repeats the phone recognition sequence again. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+Why recent chat failed
+
+There are a few likely causes.
+
+1. The recent chat was too narratively dense
+
+The previous assistant message was long, emotional, and descriptive. Inside that text were many events:
+
+She sees phone
+She recognizes photo
+She is embarrassed
+She locks screen
+She throws phone
+She chooses to continue
+She moves toward kitchen
+Hands tremble
+
+The LLM may not reliably identify the final world state from that paragraph. It might focus on the most emotionally charged event, the phone reveal, rather than the latest state, kitchen/pad thai.
+
+2. â€œRecent chatâ€ does not say what is already completed
+
+A transcript says what happened, but it does not explicitly mark:
+
+COMPLETED:
+- Aurora already saw the phone.
+- Aurora already reacted to the photo.
+- Aurora already accepted the awkwardness.
+- Aurora moved toward the kitchen.

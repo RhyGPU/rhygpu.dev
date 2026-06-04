@@ -1,0 +1,524 @@
+- src/styles.css
+
+Requirements:
+
+1. Add DB table for LLM payload logs.
+
+Suggested table:
+llm_payload_logs:
+- id INTEGER PRIMARY KEY AUTOINCREMENT
+- conversation_id TEXT NOT NULL
+- message_id INTEGER
+- provider TEXT NOT NULL
+- mode TEXT NOT NULL
+- model TEXT NOT NULL
+- base_url TEXT NOT NULL
+- system_message TEXT NOT NULL
+- user_message TEXT NOT NULL
+- context_text TEXT NOT NULL
+- estimated_system_tokens INTEGER NOT NULL
+- estimated_user_tokens INTEGER NOT NULL
+- estimated_total_tokens INTEGER NOT NULL
+- created_at INTEGER NOT NULL
+
+Important:
+- Never store API key.
+- Never export API key.
+- base_url/model/provider are okay.
+
+2. Save an LLM payload log every time an API turn is sent.
+It should capture the final actual payload used by generation:
+- final system message
+- current user message
+- context text
+- model/base_url/mode/provider
+- token estimates
+
+3. Add commands:
+- list_llm_payload_logs(conversation_id)
+- get_llm_payload_log(log_id)
+- export_visible_chat_log(conversation_id)
+- export_llm_payload_history(conversation_id)
+
+4. Visible chat export:
+Export only visible messages:
+- User:
+- Narrator:
+- preserve displayed narrator text
+- strip [HIDDEN STATE] blocks
+- strip hidden state tails
+- do not include backend debug/payload
+- include timestamps if available
+- output as .md or .txt beside app working directory, whichever is simpler
+
+Suggested format:
+
+# Mnemosyne Chat Log
+
+## User
+...
+
+## Narrator
+...
+
+5. LLM payload history export:
+Export as Markdown or JSONL.
+Markdown is easier to read.
+
+Suggested format:
+
+# Mnemosyne LLM Payload History
+
+## Payload 1
+Created:
+Provider:
+Model:
+Mode:
+Base URL:
+Estimated tokens:
+
+### SYSTEM MESSAGE
+...
+
+### USER MESSAGE
+...
+
+### CONTEXT
+...
+
+6. Add UI buttons in debug/payload area:
+- Export Visible Chat Log
+- Export LLM Payload History
+- Show feedback after export, like "Exported!"
+
+7. Keep the current Copy LLM Payload button working.
+
+8. Do not implement true branch timelines yet.
+9. Do not implement clothing tracking yet.
+10. Do not change launcher BAT files.
+11. Do not expose API key anywhere.
+
+Tests:
+- migration creates llm_payload_logs table
+- payload log stores system/user/context without API key
+- visible chat export strips hidden state
+- payload history export includes prior payloads
+- payload history export includes model/base_url/mode but not api_key
+- existing provider/chat tests still pass
+- typecheck passes
+
+Run:
+- npm.cmd run test:rust
+- npm.cmd run typecheck
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Manual test:
+1. Run app.
+2. Send 2 API messages.
+3. Click Export Visible Chat Log.
+4. Confirm file contains only visible chat.
+5. Click Export LLM Payload History.
+6. Confirm file contains multiple payloads, not only the current one.
+7. Confirm API key is not present.
+8. Confirm copied/exported payload shows clothing/context information if present.
+
+Report:
+- changed files
+- DB migration
+- export file locations
+- UI buttons added
+- tests run/results
+After logs work: True Branch Timeline V2
+
+Do this after you can inspect logs.
+
+Task: True Branch Timeline V2.
+
+Goal:
+Upgrade assistant response variants into real conversation branches, so choosing an older response shows or creates the correct downstream timeline instead of keeping unrelated later messages.
+
+Current problem:
+Assistant variants work, but switching an earlier assistant response does not branch the later chat. Later messages remain from the previous response, which breaks continuity.
+
+Desired behavior:
+When a user selects a response variant, the visible chat should follow that variant's branch. Later messages from other variants should not remain visible unless they belong to that selected branch.
+
+Files to inspect:
+- src-tauri/src/db/mod.rs
+- src-tauri/src/commands.rs
+- src/tauri.ts
+- src/App.tsx
+- src/styles.css
+- src-tauri/state_engine/src/context_compiler.rs
+
+Requirements:
+
+1. Add branch-aware conversation structure.
+
+Suggested minimal schema:
+conversation_branches:
+- id TEXT PRIMARY KEY
+- conversation_id TEXT NOT NULL
+- name TEXT
+- root_message_id INTEGER
+- created_at INTEGER NOT NULL
+- updated_at INTEGER NOT NULL
+
+Add to messages:
+- branch_id TEXT
+- parent_message_id INTEGER
+- variant_group_id TEXT optional
+
+Alternative acceptable:
+Use parent_message_id tree only if simpler.
+
+2. Existing flat chats must still load.
+Migration should assign existing messages to a default branch.
+
+3. Active branch:
+Each conversation should have an active branch ID or the frontend should track selected branch.
+Selecting a branch changes visible messages.
+
+4. Assistant variants:
+When regenerating/fixing an assistant response:
+- create a new assistant variant
+- create or select a branch path for that variant
+- later user messages should attach to the currently selected variant branch
+
+5. Selecting an older assistant variant:
+- visible chat should switch to that variant's branch
+- later messages from the old branch should disappear from the visible path
+- do not delete them
+- user can switch back
+
+6. UI:
+For assistant messages:
+- show variant selector: < 1 / N >
+- selecting variant changes the visible branch path
+- clearly show when user is viewing an alternate branch
+
+7. State safety:
+Do not attempt perfect Soul rewind yet unless already available.
+For V2:
+- branch switching changes visible message path
+- generation from an older branch should use the messages on that branch path only
+- if Soul snapshot is not implemented, display a warning when continuing from an older branch:
+  "Continuing from an older branch may not fully rewind Soul state yet."
+This warning is acceptable for V2.
+
+8. Do not delete old branches.
+9. Do not change launcher BAT files.
+10. Do not implement multi-character.
+
+Tests:
+- existing flat chat migrates to default branch
+- selecting assistant variant changes visible path
+- later messages from other branch are hidden
+- branch messages are not deleted
+- current branch is used for context compilation
+- variant selector shows correct count/index
+- typecheck passes
+- rust tests pass
+
+Run:
+- npm.cmd run test:rust
+- npm.cmd run typecheck
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Manual test:
+1. Send user message.
+2. Generate assistant A.
+3. Regenerate assistant B.
+4. Switch between A/B.
+5. Continue from A.
+6. Continue from B.
+7. Confirm each path keeps its own later messages.
+8. Confirm switching variants changes the visible later chat.
+9. Restart app and confirm branches persist.
+
+Report:
+- changed files
+- branch schema
+- migration behavior
+- UI behavior
+- known limitations around Soul rewind
+- tests run/results
+Clothing consistency, after logs
+
+Once logs are available, check whether the payload contains contradictory clothing state.
+
+If it does, fix context/memory.
+If it does not, the LLM is inventing. Then add a small Appearance Continuity Pin, not full tracking:
+
+[APPEARANCE CONTINUITY]
+Current outfit: oversized button-up, black leggings, barefoot.
+Do not change outfit unless user action or narrator event explicitly changes it.
+
+That costs very few tokens and avoids tracking every detail.
+
+Do logs first. Then we can decide whether appearance needs a pin or whether the context is already inconsistent.
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-45df40c9-9b31-43a0-9e7b-ba3fbeb921b6-cd0a0284-d1df-4a2e-87a2-6808d019-visible-chat-log-1778144266.md
+íŒŒì¼
+mnemosyne-local-mock-45df40c9-9b31-43a0-9e7b-ba3fbeb921b6-cd0a0284-d1df-4a2e-87a2-6808d019-llm-payload-history-1778144270.md
+íŒŒì¼
+sucessful? what are the seen issues
+
+* * *
+
+**ChatGPT:**
+
+Document processing confirmation
+
+Processed both uploaded files fully.
+
+File	Length detected	Headers in order	Entire file processed
+Visible chat log .md	238 lines, about 4,942 words, 26,098 characters	# Mnemosyne Chat Log	Yes
+LLM payload history .md	1 line, 4 words, 30 characters	# Mnemosyne LLM Payload History	Yes
+Verdict
+
+Partially successful.
+
+The visible chat log export works. It exported the user/narrator conversation and did not include hidden-state JSON blocks. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+The LLM payload history export did not work usefully. The exported file only contains the title:
+
+# Mnemosyne LLM Payload History
+
+There are no payload entries in it. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+So the current state is:
+
+Visible chat log: successful
+Backend/payload history log: failed or empty
+Important backend issue
+
+The filename includes local-mock, so one possibility is:
+
+Payload logging only runs for API turns, but this export came from a mock/local conversation.
+
+If so, the app should either:
+
+1. Log mock payloads too, or
+2. Show "No payload logs found for this conversation" instead of exporting an empty file.
+
+If this was actually an API conversation, then it is a real backend bug: payloads are not being inserted into llm_payload_logs.
+
+Seen issues in the visible chat
+1. Clothing / outfit drift is real
+
+Early character state has Aurora in an oversized button-up and black leggings. Later she says:
+
+wearing your shirt
+
+That is inconsistent unless the user explicitly gave her his shirt, which does not appear in the visible log. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+This supports your concern: outfit/clothing continuity is not stable.
+
+2. Time drift is still happening
+
+The scene starts as just after midnight / past midnight, but later the narrator says things like:
+
+one in the morning
+two in the morning
+three in the morning
+
+without the user establishing those time jumps. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+Your time discipline rule helps, but it is not enough by itself.
+
+3. User agency leakage
+
+The narrator sometimes describes what the user can sense or experience, for example lines like â€œclose enough that he can smell...â€ That is borderline against your rule that narration should only describe Auroraâ€™s perceptions.
+
+This is not catastrophic, but it means the narrator prompt should be tightened if you want strict POV.
+
+4. Emotional pacing is aggressive
+
+The scene escalates from first meeting to domestic permanence, moving in, radio contact, and future-home imagery very quickly. Some of that comes from the userâ€™s inputs, but Auroraâ€™s internal response also escalates hard.
+
+If you want â€œhuman pace,â€ relationship speed gates are not strong enough yet.
+
+5. Status blocks are still in the visible chat log
+
+This is technically okay if status blocks are part of the visible UI, but if you want a clean â€œnovel/chat transcript,â€ you may want an export option:
+
+Export visible chat with status blocks
+Export clean chat without status blocks
+6. Payload history is not validating backend behavior
+
+Because the payload history file is empty, it cannot currently help debug why the clothing changed or what context was fed to the model.
+
+That is the main thing to fix next.
+
+Next fix
+
+Do not move to branching yet. First fix payload logs, because you need those logs to debug everything else.
+
+Use Codex:
+
+Task: Fix LLM Payload History Export.
+
+Problem:
+Visible chat export works, but LLM payload history export creates an empty file containing only:
+# Mnemosyne LLM Payload History
+
+Goal:
+Make backend payload logging useful for debugging.
+
+Requirements:
+1. Confirm whether llm_payload_logs are inserted for API turns.
+2. If payload logs are only inserted for API provider, add clear UI/export message when no payload logs exist:
+   "No LLM payload logs found for this conversation."
+3. If using Mock provider, either:
+   A. log mock prompt/context payloads too, or
+   B. label export as unavailable for mock conversations.
+4. Export must include all prior payloads for the conversation, not only the current one.
+5. Never include API keys.
+6. Include:
+   - created_at
+   - provider
+   - mode
+   - model
+   - base_url
+   - estimated tokens
+   - system message
+   - user message
+   - context
+7. Add tests:
+   - payload log insertion stores entries
+   - export includes multiple payloads
+   - export excludes API key
+   - empty export clearly says no logs found
+8. Run:
+   npm.cmd run test:rust
+   npm.cmd run typecheck
+   cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Manual test:
+1. Run an API conversation with 2 messages.
+2. Export LLM Payload History.
+3. Confirm the file has 2 payload entries.
+4. Confirm no API key appears.
+5. Export from a mock conversation.
+6. Confirm it either contains mock payloads or clearly says no payload logs found.
+After that
+
+Once payload history actually works, then use it to inspect clothing state. If the payload contains conflicting outfit info, fix the context compiler. If the payload does not contain conflicting outfit info, add a small outfit continuity pin:
+
+[APPEARANCE CONTINUITY]
+Current outfit: oversized button-up, black leggings, barefoot.
+Do not change outfit unless the user or narrator explicitly changes it.
+
+Do not build full clothing tracking yet. Just add a small continuity pin if the logs prove it is needed.
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-45df40c9-9b31-43a0-9e7b-ba3fbeb921b6-ce77d9f2-b474-4c9b-8c03-eeb5c3fc-llm-payload-history-1778200208.md
+íŒŒì¼
+mnemosyne-local-mock-45df40c9-9b31-43a0-9e7b-ba3fbeb921b6-ce77d9f2-b474-4c9b-8c03-eeb5c3fc-visible-chat-log-1778200207.md
+íŒŒì¼
+LLM response feels a bit dumb. I did a new test session and see that she always tries to take my phone not hers... lol
+
+anyway did the fix work?
+
+* * *
+
+**ChatGPT:**
+
+Document processing confirmation
+
+Processed both newly attached files fully.
+
+File	Length detected	Headers detected	Entire file processed
+Visible chat log	140 lines, 2,080 words, 11,654 characters	# Mnemosyne Chat Log, repeated ## User, ## Narrator	Yes
+LLM payload history	1,149 lines, 14,754 words, 95,062 characters	# Mnemosyne LLM Payload History, ## Payload 1 through payload sections, ### SYSTEM MESSAGE, ### USER MESSAGE, ### CONTEXT, repeated system headers	Yes
+Did the logging fix work?
+
+Yes. The LLM payload history fix worked.
+
+Before, the payload history export only contained the title. Now it has multiple full payload entries with system message, user message, context, provider, model, base URL, and token estimates. Payload 1 through later payloads are present, and API key is not exposed. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+The visible chat export also works. It exported only the visible chat transcript, with user and narrator messages. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (2)
+
+So the logging feature is successful.
+
+What the logs reveal
+1. The app is not actually using a â€œfreshâ€ character state
+
+This is the biggest backend issue.
+
+In Payload 1, at the very start of the new â€œdebt collectorâ€ test, the relationship is already:
+
+trust 130, affection 126
+
+That is extremely high for a stranger ringing the bell as a supposed debt collector. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+So the model is being told:
+
+This stranger is already deeply trusted / liked.
+
+That explains why the character response feels â€œdumbâ€ or too warm. It is not only the LLM. The backend state is biasing her.
+
+This is probably because you reused the same Soul from the previous romantic test. Mnemosyne is doing what it was designed to do, persistent Soul memory, but for testing separate scenarios, this is bad.
+
+You need a clear option:
+
+Start New Chat with same Soul continuity
+Start New Chat with fresh scenario state
+Start New Chat with cloned/reset Soul
+2. The world snapshot is wrong for the scene
+
+The payload says:
+
+Location: Aurora's kitchen counter
+
+But the visible scene is at the door/threshold. The first narrator response says the door is cracked open and she is holding the doorway. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (2)
+
+So the backend world state is stale. It is carrying over â€œkitchen counterâ€ from the older pad thai session.
+
+This also affects quality because the LLM gets conflicting information:
+
+World Snapshot: kitchen counter
+Latest Exchange: doorway
+User message: ringing bell / door delivery
+
+Latest Exchange helped enough, but stale World Snapshot still pollutes the context.
+
+3. The â€œphoneâ€ issue is partly user-message ambiguity, partly model behavior
+
+When the user says:
+
+I search up youtube and show her a big news channel vid.
+
+the model reasonably assumes the video is shown on the userâ€™s phone. In the response, Aurora watches the screen and says she is not handing over her own phone. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (2)
+
+So the â€œshe tries to take my phoneâ€ problem is not fully backend. The user message creates ambiguity:
+
+show her a video
+
+usually means:

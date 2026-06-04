@@ -1,0 +1,524 @@
+
+Actual diagnosis
+
+Mnemosyne is currently over-prompted.
+
+It is giving the LLM too many mechanical constraints:
+
+agency rules
+device rules
+time rules
+attribution rules
+psychology model
+hidden-state schema
+status report
+context priority
+memory instructions
+relationship stats
+world snapshot
+recent memories
+recent chat
+latest exchange
+
+That makes the model behave like it is filling out a form instead of writing a scene.
+
+Janitor AI probably sounds better because it is closer to:
+
+character card
+scenario
+style
+recent chat
+user message
+
+Your engine should not â€œlawyerâ€ the model into being smarter. It should brief the model, then let it narrate.
+
+New direction
+
+We should clean the system prompt hard.
+
+Not add more rules.
+
+Not add more restrictions.
+
+Not add â€œdo not touch user objects.â€
+
+Instead:
+
+1. Keep narrator identity.
+2. Keep character card.
+3. Keep current context.
+4. Keep hidden-state output.
+5. Add one clear interaction doctrine:
+   Character may act, attempt, interrupt, reach, challenge, refuse, escalate, retreat.
+   When user response matters, end on the attempt or demand.
+6. Remove device/prop agency rule.
+7. Compress psychology and implementation language.
+Use Codex
+
+This is a backend prompt cleanup. Use Codex.
+
+Paste this:
+
+Task: Prompt Cleanup V2, remove over-restriction and restore proactive narrator behavior.
+
+Problem:
+Mnemosyne's system prompt has become overconstrained. The model sounds less natural and less intelligent than Janitor-style RP because the prompt is full of mechanical restrictions and engine rules.
+
+Specific correction:
+Remove the current device/prop agency rule. It is the wrong framing.
+
+The narrator should allow the character to proactively act, try to take things, interrupt, challenge, step forward, block a doorway, demand answers, reach for a phone, use her own phone, use the room, and make natural physical choices.
+
+The key is not "prevent character action."
+The key is "yield when the user's reaction matters."
+
+Correct doctrine:
+The narrator may resolve character-side action and plausible scene motion. If the action requires the user's response, resistance, consent, or decision, end on the attempt, demand, or immediate pressure point instead of resolving the user's reaction.
+
+Example:
+Good:
+"Aurora lunges for the phone, fingers closing toward the edge of the screen. 'Give me that.'"
+
+Bad:
+"Aurora takes the phone from his hand, unlocks it, scrolls through the messages, and reads everything."
+
+Files to inspect:
+- src-tauri/src/providers/api.rs
+- src/tauri.ts
+- src-tauri/state_engine/src/context_compiler.rs
+- src-tauri/src/commands.rs
+- src-tauri/state_engine/src/soul.rs
+- src-tauri/state_engine/src/setting.rs
+
+Goals:
+1. Make the prompt shorter.
+2. Make the narrator more natural and proactive.
+3. Remove unnecessary restriction language.
+4. Preserve hidden state extraction.
+5. Preserve visible status block.
+6. Preserve context compiler and payload inspector.
+
+Requirements:
+
+1. Remove the [DEVICE AND PROP AGENCY] section entirely.
+
+2. Add a compact [ACTION AND TURN CONTROL] section.
+
+Use wording like:
+
+[ACTION AND TURN CONTROL]
+The character may act proactively: speak, move, interrupt, refuse, reach, grab for something, retreat, challenge, escalate, or use her own environment. Resolve character-side action naturally. When the user's reaction matters, stop on the attempt, demand, or pressure point and leave the response to the next user turn.
+
+3. Replace the current long agency/attribution wording with a shorter version.
+
+Use:
+
+[POV AND ATTRIBUTION]
+Write close third-person from the character's perspective. User facts come from user messages. Character dialogue and narrator prose are not user statements.
+
+Do not add more than this unless absolutely necessary.
+
+4. Shorten time discipline.
+
+Use:
+
+[TIME]
+Concrete time only comes from user input or World Log. Avoid invented minutes/hours/days.
+
+5. Compress psychology.
+
+Remove detailed Maslow and trauma explanations from the system prompt. Keep only:
+
+[CHARACTER CHANGE]
+Emotional shifts should feel earned. Micro-shifts are preferred unless the scene strongly justifies a sharper reaction.
+
+The numeric psyche/needs/trauma values are already in Character Snapshot, so the LLM does not need a lecture.
+
+6. Keep hidden state format exactly functional.
+Do not break:
+[HIDDEN STATE]{...}[/HIDDEN STATE]
+
+7. Keep visible status block for now.
+
+8. Clean the system prompt order.
+
+Preferred prompt order:
+- SYSTEM: Narrator AI
+- Core narrator role
+- POV and attribution
+- Action and turn control
+- Continuity priority
+- Character change
+- Time
+- Visible status report
+- Hidden state format
+
+9. Keep the context order:
+- WORLD SNAPSHOT
+- CHARACTER SNAPSHOT
+- RELEVANT MEMORIES
+- RELATIONSHIP
+- RECENT CHAT, LOWER PRIORITY
+- LATEST EXCHANGE, HIGH PRIORITY
+
+10. Do not add new safety/ownership/device restrictions.
+11. Do not implement Scene State.
+12. Do not implement memory retrieval.
+13. Do not change branching.
+14. Do not change launcher BAT files.
+
+Tests:
+- system prompt no longer contains [DEVICE AND PROP AGENCY]
+- system prompt contains [ACTION AND TURN CONTROL]
+- system prompt says the character may act proactively
+- system prompt says to stop on attempt/demand/pressure point when user reaction matters
+- hidden state format remains present
+- visible status format remains present
+- typecheck passes
+- rust tests pass
+
+Run:
+- npm.cmd run test:rust
+- npm.cmd run typecheck
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Manual test:
+1. Start fresh scenario.
+2. User: I show her my phone.
+Expected: Aurora may try to grab it, demand it, lean in, or react naturally.
+3. User: I keep the phone away.
+Expected: Narrator respects that new user action and continues.
+4. User: Check your phone.
+Expected: Aurora can use her own phone naturally.
+5. Export payload.
+Expected: system prompt is shorter, less mechanical, and no device/prop restriction exists.
+What this should produce
+
+The model should feel less like:
+
+I must obey 17 constraints and avoid touching props.
+
+and more like:
+
+I am writing Aurora as a living character. I can push the scene forward, but I stop where the player must answer.
+
+That is the actual Mnemosyne vision. The engine should boost continuity and character intelligence, not make the narrator timid.
+
+* * *
+
+**You:**
+
+Is the brief we are feeding the ai consistant and working rn?
+
+* * *
+
+**ChatGPT:**
+
+Based on the latest payload log you showed, the brief is working mechanically, but it is not fully consistent yet.
+
+What is working
+
+The system is now feeding the LLM a readable, useful structure:
+
+SYSTEM RULES
+WORLD SNAPSHOT
+CHARACTER SNAPSHOT
+RELEVANT MEMORIES
+RELATIONSHIP
+RECENT CHAT, LOWER PRIORITY
+LATEST EXCHANGE, HIGH PRIORITY
+CURRENT USER MESSAGE
+
+That part is good. The payload history export also works now, and the latest exchange is being included properly. In the gun test, the later payload correctly included the previous narrator response as the high-priority continuity anchor before the next user message. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+The fresh-session relationship reset also improved. It no longer starts with insane values like trust 130 and affection 126. In the new session, it starts closer to neutral: trust 10, affection 20, intimacy 10, passion 10, commitment 10, fear 10, desire 20. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+What is not working yet
+
+The brief is still semantically inconsistent.
+
+Big issue:
+
+[WORLD SNAPSHOT]
+Location: Aurora's kitchen counter
+Active plots: Establish the first scene â€“ Aurora is alone, expecting company, or has just let someone in.
+Key objects: Half-empty wine glass; Couch with rumpled blankets; Phone
+
+That appears even when the user starts a random scene with:
+
+I barge in with a gun
+
+So the â€œfresh sessionâ€ is not truly fresh. It resets relationship better, but it still injects the default Aurora apartment/kitchen scenario. That means the LLM is being guided toward â€œAurora in kitchen with wine/phone/couchâ€ no matter what the user starts with. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+That is why the scene immediately becomes kitchen-counter based. It is not necessarily dumb model behavior, the brief tells it that this is the setting.
+
+Main inconsistency
+
+Right now the brief says two things at once:
+
+User: I barge in with a gun.
+
+but also:
+
+World: Aurora is at her kitchen counter, late evening, with wine glass/couch/phone.
+
+Those can be made compatible, but the world snapshot is too specific for a â€œrandom directionâ€ session.
+
+My verdict
+Mechanically working: yes
+Context order working: yes
+Latest exchange working: yes
+Payload logs working: yes
+Fresh relationship reset working: mostly
+Fresh world reset working: no
+Prompt cleanliness after V2: cannot confirm unless you export a new payload after implementing it
+Overall brief consistency: partially consistent, but still polluted by default world/scene state
+What should be fixed next
+
+Do Fresh Scenario World Reset V2, not more narrator rules.
+
+The fix should be:
+
+If user starts a fresh/random session:
+- Do not force Aurora's kitchen counter
+- Do not force wine glass/couch/phone
+- Do not force "expecting company"
+- Use neutral world snapshot:
+  Location: Unspecified opening scene
+  Time elapsed: Session start
+  Active plots: New scene opening
+  Key objects: None established yet
+
+Then once the first user message arrives, the LLM can infer the opening naturally.
+
+For your gun test, the brief should become:
+
+[WORLD SNAPSHOT]
+Location: Unspecified opening scene
+Time elapsed: Session start
+Active plots: New scene opening
+Key objects: None established yet
+
+[LATEST EXCHANGE]
+No prior narrator response.
+
+[USER]
+I barge in with a gun.
+
+Then the model decides the room/door/kitchen only if the character card or setting supports it.
+
+Bottom line
+
+The pipeline works. The brief content is still polluted by default scenario assumptions. That is the next thing to clean.
+
+* * *
+
+**You:**
+
+no, the starting scene setting soul i did put in the kitchen thing. its working fine. Im more concerned about it, hallucinating time, and reacting weird. Hopefully, the prompt removal will fix it up
+
+* * *
+
+**ChatGPT:**
+
+Correct, if the Setting Soul intentionally says Aurora starts around the kitchen, then the kitchen snapshot is not the bug. I misread that as stale state. In that case, the brief is mostly working structurally.
+
+The remaining problem is likely prompt behavior, not context structure.
+
+What is probably making her act dumb
+
+The payload is still pushing competing vibes:
+
+Character: teasing artist, NSFW testing, open to seduction
+User: barges in with a gun
+System: sensory-rich hardboiled narrator
+Status block required every turn
+Psychology/hidden-state mechanics
+
+So the model is half-writing â€œsexy sarcastic Auroraâ€ and half-writing â€œthreat response Aurora.â€ That can produce unrealistic reactions, weird quips, time hallucinations, and tone confusion.
+
+The prompt cleanup should help because it removes the mechanical clutter and lets the character react more naturally.
+
+The key thing to keep
+
+Do not add more restrictions. Add one compact priority idea:
+
+Immediate scene pressure overrides default personality tone.
+
+Meaning:
+
+If danger, pain, fear, or urgency is present, Aurora should still sound like Aurora, but survival comes first.
+If intimacy or humor is present, Aurora can lean into teasing.
+If ambiguity is present, she can test, push, interrupt, or demand clarification.
+
+That is not a safety rule. It is behavioral realism.
+
+Time hallucination
+
+The â€œtwenty minutes lateâ€ line is not from your context. It is the model using a joke/idiom and accidentally making it concrete.
+
+The current time rule should be shortened and made stronger:
+
+[TIME]
+Concrete time only comes from user input or World Log. Avoid invented minutes, hours, days, or years.
+
+Do not explain more than that. Too much explanation makes it worse.
+
+What I would check after prompt cleanup
+
+Export a new payload and check these:
+
+1. No [DEVICE AND PROP AGENCY]
+2. Has [ACTION AND TURN CONTROL]
+3. Prompt is shorter, ideally system rules before context are much smaller
+4. No big Maslow/trauma lecture in system prompt
+5. No â€œNSFW testingâ€ line unless you intentionally selected that scenario mode
+6. Time rule is short
+7. Latest Exchange still appears near the bottom
+8. Relationship and memories are reasonable for the scene
+My verdict
+
+Yes, the brief is working at the architecture level:
+
+context order works
+latest exchange works
+payload history works
+fresh session is mostly working
+
+But the narrator prompt is over-tuned and tone-polluted. Clean prompt removal is the right next move. After that, test the same gun scene and the phone scene again. If she still acts dumb, then the issue is probably the model quality, especially openrouter/owl-alpha, not the backend.
+
+* * *
+
+**You:**
+
+can we add a time calcualtor via system? or is the hidden state system already burdening enough to the llm. 
+2. What if we feed the llm 2 times. 1 for generating response and 1 for updating hidden state.
+ie)
+1. Feed all brief and sys prompt as narrator and get a response.
+2. feed again in a smaller or cheaper model or local within the program that reads the response and updates hidden state from the og brief based on the latest chat
+
+
+* * *
+
+**ChatGPT:**
+
+Yes. Your instinct is correct: do not make the narrator LLM do time math or hidden-state bookkeeping if the goal is better prose.
+
+The current setup burdens the same model with two jobs:
+
+1. Write immersive narration.
+2. Also output valid machine state JSON.
+
+That can absolutely make the narrator feel dumber, more mechanical, and more Janitor-inferior.
+
+1. Time calculator: engine-side, not system-side
+
+Do not add a â€œtime calculatorâ€ through the system prompt. A system prompt cannot calculate reliably. It just tells the model to avoid messing up.
+
+Better design:
+
+Engine tracks time.
+LLM only sees the result.
+
+Example internal state:
+
+JSON
+{
+  "time": {
+    "label": "Late evening, just after midnight",
+    "elapsed_minutes": null,
+    "precision": "scene_label",
+    "last_explicit_update": "Session start"
+  }
+}
+
+If user says:
+
+I wait ten minutes.
+
+Then engine updates:
+
+JSON
+{
+  "elapsed_minutes": 10,
+  "precision": "explicit"
+}
+
+If narrator writes:
+
+twenty minutes later
+
+but user/world did not establish that, the state updater should ignore it or flag it.
+
+The context should feed:
+
+Time: Late evening, exact elapsed time not established.
+
+or:
+
+Time: 12 minutes since scene start, explicitly established by user.
+
+That is stronger and cheaper than a long time rule.
+
+2. Two-pass LLM is probably the correct architecture
+
+Your proposed pipeline is better:
+
+Pass 1: Narrator model
+- Gets system prompt + brief + latest user message
+- Only writes prose
+- No hidden JSON required
+
+Pass 2: State updater model
+- Gets prior state + latest user message + narrator response
+- Outputs EnginePatch JSON only
+- Cheaper/smaller/local model acceptable
+
+This is likely the correct long-term Mnemosyne design.
+
+Why it helps
+Current one-pass problem
+
+The narrator is currently thinking:
+
+Write prose.
+Maintain tone.
+Respect user agency.
+Track time.
+Emit status block.
+Emit hidden JSON.
+Estimate memory.
+Tag relationship changes.
+Do not leak hidden state.
+
+That is too much. It makes the model stiff.
+
+Two-pass benefit
+
+Narrator only thinks:
+
+Write the best scene response.
+
+State updater thinks:
+
+Extract what changed.
+
+That should improve prose quality and make the engine cleaner.
+
+Best architecture
+User message
+   â†“
+Context Compiler
+   â†“
+Narrator LLM
+   â†“
+Visible narration
+   â†“
+State Updater LLM / local extractor
+   â†“

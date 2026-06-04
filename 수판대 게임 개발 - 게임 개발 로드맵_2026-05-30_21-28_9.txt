@@ -1,0 +1,828 @@
+
+ìµœì¢…ì ìœ¼ë¡œëŠ” ë¶€ìœ„ íƒ€ê²©ì´ ê°€ìž¥ ì¢‹ìŒ.
+
+ë¨¸ë¦¬ ìª½ì„ ë³´ê³  Armor Break â†’ Helmet
+ëª¸í†µì„ ë³´ê³  Armor Break â†’ Chest Armor
+íŒ”ì„ ë³´ê³  Armor Break â†’ Gauntlet
+Armor Break ë³´ìƒ ì„¤ê³„
+
+ê° ìž¥ë¹„ë§ˆë‹¤ ì´ë“ì´ ë‹¬ë¼ì•¼ í•¨. ì´ê±´ ë§¤ìš° ì¢‹ìŒ.
+
+Helmet Break
+- ë¨¸ë¦¬ ì•½ì  ë…¸ì¶œ
+- í—¤ë“œìƒ·/ë¨¸ë¦¬ ê³µê²© ê·¸ë¡œê¸° ì¦ê°€
+- Tactician ë¶„ì„ ë³´ë„ˆìŠ¤
+- ì¼ë¶€ ì ì˜ ì‹œì•¼/ëª…ì¤‘ë¥  ê°ì†Œ
+
+Chest Armor Break
+- ì „ì²´ ë°©ì–´ë ¥ ê°ì†Œ
+- ëª¨ë“  ê³µê²©ì˜ ë©”ì¸ ê·¸ë¡œê¸° ì¦ê°€
+- ëª¸í†µ íƒ€ê²© ì•ˆì „ì„± ì¦ê°€
+- í° ë¬´ê¸°/ë‘”ê¸° ë³´ìƒ ì¦ê°€
+
+Gauntlet Break
+- ì  ê³µê²©ë ¥ ê°ì†Œ
+- ë¬´ê¸° íŒ¨í„´ ì•½í™”
+- íŒ¨ë§ ì„±ê³µ ë³´ìƒ ì¦ê°€
+
+Leg Armor Break
+- ì´ë™ì†ë„ ê°ì†Œ
+- íšŒí”¼/ëŒì§„ íŒ¨í„´ ì•½í™”
+- ë‹¤ìš´/ìŠ¤íƒœê±° ì‹œê°„ ì¦ê°€
+
+Cloak / Magic Mantle Break
+- ì†ì„± ì €í•­ ê°ì†Œ
+- íšŒí”¼/ì€ì‹ /ë§ˆë²• ë°©ì–´ ì œê±°
+
+ì´ëŸ¬ë©´ Armor Breakê°€ â€œí•„ìˆ˜ ê³¼ì •â€ì´ ì•„ë‹ˆë¼ ì „ìˆ  ì„ íƒì´ ë¨.
+
+ìˆ˜í•™ ì‹œìŠ¤í…œ ê´€ì 
+
+ì¤‘ìš”í•œ ê±´ ë‘ ì•¡ì…˜ì„ ë¶„ë¦¬í•˜ëŠ” ê²ƒ.
+
+ì¼ë°˜ Solve Operation
+
+í˜„ìž¬ í‘œì‹œëœ ì‹ ì „ì²´ì— ì—°ì‚° ì ìš©:
+
+2(x + 5) + 2 = 22
+/2
+â†’ (x + 5) + 1 = 11
+Armor Break Operation
+
+ì„ íƒí•œ ìž¥ë¹„ ë ˆì´ì–´ë¥¼ ì œê±°í•˜ê³ , ë‚¨ì€ ìž¥ë¹„ ë ˆì´ì–´ë¡œ ì‹ì„ ë‹¤ì‹œ í‘œì‹œ:
+
+2(x + 5) + 2 = 22
+Chest Ã—2 ì œê±°
+â†’ (x + 5) + 2 = 12
+2(x + 5) + 2 = 22
+Helmet +2 ì œê±°
+â†’ 2(x + 5) = 20
+
+ë‘˜ ë‹¤ ì •ë‹µ x = 5ëŠ” ìœ ì§€ë¨.
+
+êµ¬í˜„ êµ¬ì¡°
+
+ìž¥ë¹„ ë ˆì´ì–´ëŠ” ì´ë ‡ê²Œ ê°€ì•¼ í•¨.
+
+FEquationArmorLayer
+- Operation: Add / Subtract / Multiply / Divide
+- Value: 2
+- Source: Helmet / ChestArmor / Gauntlet / LegArmor
+- BodyPart: Head / Chest / Arm / Leg
+- BreakRewardType
+- bBroken
+
+ê·¸ë¦¬ê³  í•¨ìˆ˜ëŠ” ë‘ ê°œë¡œ ë‚˜ëˆ”.
+
+ApplyOperationToBothSides()
+ì¼ë°˜ ìˆ˜ì‹ ì¡°ìž‘
+
+TryArmorBreak()
+ìž¥ë¹„ íŒŒê´´ ì‹œë„
+
+ì´ ë‘ ê°œë¥¼ ì ˆëŒ€ ì„žìœ¼ë©´ ì•ˆ ë¨.
+
+ìµœì¢… ê·œì¹™ ì •ë¦¬
+1. Armor BreakëŠ” ìžë™ ë°œë™í•˜ì§€ ì•ŠëŠ”ë‹¤.
+2. ì¡°ê±´ì´ ë§žìœ¼ë©´ UI/ë¡œê·¸ë¡œ ê°€ëŠ¥í•˜ë‹¤ê³  ì•Œë ¤ì¤€ë‹¤.
+3. ìœ ì €ê°€ Armor Break inputì„ ëˆŒëŸ¬ì•¼ ê¹¨ì§„ë‹¤.
+4. ìœ ì €ê°€ ì–´ë–¤ ìž¥ë¹„ë¥¼ ê¹°ì§€ ì„ íƒí•  ìˆ˜ ìžˆì–´ì•¼ í•œë‹¤.
+5. ì¼ë°˜ ìˆ˜ì‹ ì¡°ìž‘ì€ ê°‘ì˜·ì„ ê¹¨ì§€ ì•ŠëŠ”ë‹¤.
+6. X ì²˜í˜•ì€ ê°‘ì˜·ì´ ìžˆì–´ë„ ì •ë‹µì´ë©´ ê°€ëŠ¥í•˜ë‹¤.
+7. ê°‘ì˜· íŒŒê´´ëŠ” ì„ íƒ ë³´ìƒì´ë‹¤.
+
+ì´ ë°©í–¥ì´ ë§žìŒ.
+
+ë‹¤ìŒ êµ¬í˜„ì€ ë°”ë¡œ ì´ êµ¬ì¡°ë¡œ ê°€ì•¼ í•¨. ê¸°ì¡´ â€œtop layerë§Œ ì œê±°â€ ë°©ì‹ì€ í•˜ì§€ ë§ìž.
+
+* * *
+
+**You:**
+
+ë‚˜ì¤‘ì— UI:
+
+Armor target radial
+ë¨¸ë¦¬ / í‰ê°‘ / íŒ” / ë‹¤ë¦¬ ì„ íƒ
+ë½ì˜¨ ë¶€ìœ„ ì„ íƒ
+ë§ˆìš°ìŠ¤ë¡œ ì•½ì  ì¡°ì¤€
+
+ìµœì¢…ì ìœ¼ë¡œëŠ” ë¶€ìœ„ íƒ€ê²©ì´ ê°€ìž¥ ì¢‹ìŒ.
+
+ë¨¸ë¦¬ ìª½ì„ ë³´ê³  Armor Break â†’ Helmet
+ëª¸í†µì„ ë³´ê³  Armor Break â†’ Chest Armor
+íŒ”ì„ ë³´ê³  Armor Break â†’ Gauntlet
+
+ë³´ë‹¤ëŠ” ì´ë¯¸ ìˆ˜ì‹ìƒ ì˜ë¯¸ ì—†ì–´ì§„ ê°‘ë°”ë“¤ì´ ì•„ë¨¸ ë¸Œë ˆì´í¬ ê³µê²©ì‹œ ë™ì‹œ íŒŒê´´ê°€ ë‚˜ì€ë“¯. ì¦‰, ì¡°ê±´ ì¶©ì¡±ëœ ëª¨ë“  ê°‘ë°”ëŠ” ë¹„ì£¼ì–¼ìƒ ê¸ˆì´ ê°€ê³ , ì•„ë¨¸ ë¸Œë ˆì´í¬ ê³µê²©ì‹œ ë™ì‚¬íŒŒê´´
+ê·¸ë¦¬ê³  ê° ê°‘ë°”ê°€ ì–´ëŠìˆ˜ì¸ì§€ ë³´ì´ê²Œ UIë¥¼ í•´ì•¼í•´. ë½ì˜¨ëœ ì  í•œì •í•´ì„œ
+
+* * *
+
+**ChatGPT:**
+
+ë§žìŒ. ì´ ë°©í–¥ì´ ë” ì¢‹ìŒ. Target radialì€ ê³¼í•¨.
+
+ì •ë¦¬í•˜ë©´:
+
+ìœ ì €ê°€ ì•„ë¨¸ ë¶€ìœ„ë¥¼ ì§ì ‘ ê³ ë¥´ëŠ” ê²Œ ì•„ë‹ˆë¼,
+ìˆ˜ì‹ ì¡°ìž‘ìœ¼ë¡œ íŠ¹ì • ì•„ë¨¸ë¥¼ â€œìˆ˜í•™ì ìœ¼ë¡œ ë¬´ë ¥í™”â€ì‹œí‚¤ê³ ,
+Armor Break ê³µê²©ì„ ì“°ë©´ ë¬´ë ¥í™”ëœ ëª¨ë“  ì•„ë¨¸ê°€ ë™ì‹œì— íŒŒê´´ë¨.
+
+ì´ê²Œ ì œì¼ ê¹”ë”í•¨.
+
+GDD ê¸°ì¤€ìœ¼ë¡œë„ ArmorëŠ” Base Formula ìœ„ì— ë§ì”Œì›Œì§„ ë°©ì–´ë§‰ì´ê³ , ì œê±°ëŠ” ì—­ì—°ì‚°ìœ¼ë¡œ ê°€ëŠ¥í•´ì•¼ í•¨. ë™ì‹œì— X ì²˜í˜•ì€ ì •ë‹µì´ë©´ ê°€ëŠ¥í•˜ë¯€ë¡œ, Armor BreakëŠ” í•„ìˆ˜ ê³¼ì •ì´ ì•„ë‹ˆë¼ ì „ìˆ ì  ì„ íƒì§€ë¡œ ë‘ëŠ” ê²Œ ë§žìŒ. 
+
+í”¼íƒ€ê³ ë¼ìŠ¤ì˜ ì¡°ìœ¨ ë§Œë¬¼ì€ ìˆ˜ë‹¤ Gdd ë°”ì´ë¸”
+
+ìƒˆ ê·œì¹™: Cracked Armor System
+
+ì•„ë¨¸ ìƒíƒœë¥¼ ì´ë ‡ê²Œ ë‚˜ëˆ”.
+
+Active
+ì•„ì§ ìˆ˜í•™ì ìœ¼ë¡œ ì˜ë¯¸ ìžˆìŒ
+
+Cracked
+ìˆ˜í•™ì ìœ¼ë¡œ í•­ë“±ê°’ì´ ë˜ì–´ ì˜ë¯¸ê°€ ì—†ì–´ì§
+ë¹„ì£¼ì–¼ìƒ ê¸ˆì´ ê°
+ì•„ì§ ë¬¼ë¦¬ì ìœ¼ë¡œ ë¶™ì–´ ìžˆìŒ
+
+Broken
+Armor Break ê³µê²©ìœ¼ë¡œ ì‹¤ì œ íŒŒê´´ë¨
+ë³´ìƒ ë°œë™
+
+í•­ë“±ê°’ ê¸°ì¤€:
+
++ armor: ê°’ì´ 0ì´ë©´ Cracked
+- armor: ê°’ì´ 0ì´ë©´ Cracked
+Ã— armor: ê°’ì´ 1ì´ë©´ Cracked
+Ã· armor: ê°’ì´ 1ì´ë©´ Cracked
+ì˜ˆì‹œ
+
+ì´ˆê¸° ìƒíƒœ:
+
+Displayed:
+2(x + 5) + 2 = 22
+
+Armor UI:
+Helmet: +2 Active
+Chest Armor: Ã—2 Active
+ì„ íƒ 1, Helmet ë¨¼ì € ë¬´ë ¥í™”
+
+ìœ ì €ê°€ -2ë¥¼ ì¼ë°˜ ìˆ˜ì‹ ê³µê²©ìœ¼ë¡œ ì‚¬ìš©:
+
+2(x + 5) + 2 = 22
+-2
+â†’ 2(x + 5) = 20
+
+UI:
+
+Helmet: +0 Cracked
+Chest Armor: Ã—2 Active
+
+ê·¸ë‹¤ìŒ Armor Break ê³µê²©:
+
+Helmet destroyed.
+Head weak point exposed.
+
+ChestëŠ” ì•ˆ ê¹¨ì§.
+
+ì„ íƒ 2, Chest ë¨¼ì € ë¬´ë ¥í™”
+
+ìœ ì €ê°€ /2ë¥¼ ì¼ë°˜ ìˆ˜ì‹ ê³µê²©ìœ¼ë¡œ ì‚¬ìš©:
+
+2(x + 5) + 2 = 22
+/2
+â†’ (x + 5) + 1 = 11
+
+UI:
+
+Helmet: +1 Active
+Chest Armor: Ã—1 Cracked
+
+ê·¸ë‹¤ìŒ Armor Break ê³µê²©:
+
+Chest Armor destroyed.
+Overall defense reduced.
+
+Helmetì€ ì•„ì§ ë‚¨ìŒ.
+
+ì„ íƒ 3, ë‘˜ ë‹¤ ë¬´ë ¥í™” í›„ ë™ì‹œ íŒŒê´´
+
+ìœ ì €ê°€:
+
+/2
+â†’ (x + 5) + 1 = 11
+
+-1
+â†’ x + 5 = 10
+
+UI:
+
+Helmet: +0 Cracked
+Chest Armor: Ã—1 Cracked
+
+ê·¸ë‹¤ìŒ Armor Break ê³µê²©:
+
+Helmet destroyed.
+Chest Armor destroyed.
+
+ë‘˜ ë‹¤ ë™ì‹œì— íŒŒê´´.
+
+ì´ê²Œ ì¢‹ì€ ì´ìœ 
+
+ìœ ì € ì„ íƒì´ ì‚´ì•„ìžˆìŒ.
+
+Helmetì„ ë¨¼ì € ê¹¨ê³  ì‹¶ë‹¤
+â†’ -2ë¥¼ ë¨¼ì € ì“´ë‹¤
+
+Chestë¥¼ ë¨¼ì € ê¹¨ê³  ì‹¶ë‹¤
+â†’ /2ë¥¼ ë¨¼ì € ì“´ë‹¤
+
+ë‘˜ ë‹¤ ìˆ˜ì‹ìœ¼ë¡œ ë¬´ë ¥í™”í•˜ê³  í•œ ë²ˆì— ê¹¨ê³  ì‹¶ë‹¤
+â†’ /2, -1 í›„ Armor Break
+
+ì•„ì˜ˆ ì•ˆ ê¹¨ê³  ì •ë‹µì„ ì•ˆë‹¤
+â†’ 5 ìž…ë ¥ í›„ X ì²˜í˜•
+
+ì¦‰, íƒ€ê²Ÿ ì„ íƒ UI ì—†ì´ë„ ì „ìˆ  ì„ íƒì´ ìƒê¹€.
+
+UIëŠ” ì´ë ‡ê²Œ í•´ì•¼ í•¨, ë½ì˜¨ ì  í•œì •
+
+ë½ì˜¨ëœ ì ì—ê²Œë§Œ Armor Panel í‘œì‹œ.
+
+ì˜ˆ:
+
+LOCKED TARGET: Armored Goblin
+
+Equation:
+2(x + 5) + 2 = 22
+
+Armor Layers:
+[Head] Helmet        +2    Active
+[Chest] Armor        Ã—2    Active
+
+/2 í›„:
+
+Equation:
+(x + 5) + 1 = 11
+
+Armor Layers:
+[Head] Helmet        +1    Active
+[Chest] Armor        Ã—1    Cracked
+
+-1 í›„:
+
+Equation:
+x + 5 = 10
+
+Armor Layers:
+[Head] Helmet        +0    Cracked
+[Chest] Armor        Ã—1    Cracked
+
+Armor Break í›„:
+
+Armor Layers:
+[Head] Helmet        Broken
+[Chest] Armor        Broken
+
+ë˜ëŠ” Brokenì€ UIì—ì„œ ì‚¬ë¼ì§€ê²Œ í•´ë„ ë¨.
+
+ê° ì•„ë¨¸ë³„ íŒŒê´´ ë³´ìƒ
+
+ì´ê±´ ë°˜ë“œì‹œ ìžˆì–´ì•¼ í•¨.
+
+Helmet Broken
+ë¨¸ë¦¬ ì•½ì  ë…¸ì¶œ
+í—¤ë“œ í”¼ê²© ì‹œ ê·¸ë¡œê¸° ì¦ê°€
+ë¶„ì„/ì •ë‹µ ížŒíŠ¸ ë³´ë„ˆìŠ¤ ê°€ëŠ¥
+
+Chest Armor Broken
+ì „ì²´ ë°©ì–´ë ¥ ê°ì†Œ
+ëª¨ë“  ê³µê²©ì˜ ë©”ì¸ ê·¸ë¡œê¸° ì¦ê°€
+ëª¸í†µ íƒ€ê²© ë³´ìƒ ì¦ê°€
+
+Gauntlets Broken
+ì  ê³µê²©ë ¥ ê°ì†Œ
+ì  ë¬´ê¸° íŒ¨í„´ ì•½í™”
+íŒ¨ë§ ë³´ìƒ ì¦ê°€
+
+Leg Armor Broken
+ì´ë™ì†ë„ ê°ì†Œ
+ëŒì§„/íšŒí”¼ íŒ¨í„´ ì•½í™”
+ë‹¤ìš´ ì‹œê°„ ì¦ê°€
+
+Cloak Broken
+ì†ì„± ì €í•­ ê°ì†Œ
+íšŒí”¼/ì€ì‹ /ë§ˆë²• ë°©ì–´ ì œê±°
+
+ì´ëŸ¬ë©´ Armor Breakê°€ â€œí•´ì•¼ë§Œ í•˜ëŠ” ì ˆì°¨â€ê°€ ì•„ë‹ˆë¼ ì „íˆ¬ ì „ëžµì´ ë¨.
+
+ì¡°ìž‘ ì¶”ì²œ
+
+í˜„ìž¬ êµ¬ì¡° ê¸°ì¤€:
+
+LMB = ì¼ë°˜ ìˆ˜ì‹ ê³µê²© / X ê³µê²©
+G = Armor Break ê³µê²©
+
+íë¦„:
+
+N ì„ íƒ, 2 ìž…ë ¥, Enter, LMB
+â†’ ì¼ë°˜ /2
+â†’ Chest Armor becomes Ã—1 Cracked
+
+G
+â†’ ëª¨ë“  Cracked Armor ë™ì‹œ íŒŒê´´
+
+ë˜ëŠ”:
+
+V ì„ íƒ, 2 ìž…ë ¥, Enter, LMB
+â†’ ì¼ë°˜ -2
+â†’ Helmet becomes +0 Cracked
+
+G
+â†’ Helmet íŒŒê´´
+
+ì¤‘ìš”:
+
+GëŠ” ìˆ˜ì‹ì„ ë°”ê¾¸ëŠ” í‚¤ê°€ ì•„ë‹˜.
+GëŠ” ì´ë¯¸ Cracked ëœ ì•„ë¨¸ë¥¼ ì‹¤ì œë¡œ ë¶€ìˆ˜ëŠ” í‚¤.
+êµ¬í˜„ ë°©í–¥
+
+ê¸°ì¡´ Layerë¥¼ ë‹¨ìˆœ â€œì œê±° ëŒ€ìƒâ€ìœ¼ë¡œ ë³´ì§€ ë§ê³ , í˜„ìž¬ ìœ íš¨ê°’ì„ ê°€ì§„ Armor Modifierë¡œ ë´ì•¼ í•¨.
+
+FMathematicalArmorLayer
+- Source: Helmet / Chest / Gauntlet / LegArmor
+- Operation: Add / Multiply / etc.
+- OriginalValue
+- CurrentValue
+- State: Active / Cracked / Broken
+- BreakReward
+
+ìˆ˜ì‹ ì¡°ìž‘ì´ ë“¤ì–´ì˜¤ë©´:
+
+ì¼ë°˜ Solve Operation:
+Displayed equationê³¼ Armor CurrentValueë¥¼ í•¨ê»˜ ê°±ì‹ 
+
+Armor Break:
+State == Crackedì¸ ëª¨ë“  Armorë¥¼ Brokenìœ¼ë¡œ ë³€ê²½
+ë³´ìƒ ë°œë™
+ë¹„ì£¼ì–¼ íŒŒê´´
+ë‹¤ìŒ Codex ë°©í–¥
+
+ì•„ì§ ë°”ë¡œ ë³µìž¡í•˜ê²Œ êµ¬í˜„í•˜ì§€ ë§ê³ , ì§€ê¸ˆì€ ì´ë ‡ê²Œ ì‹œí‚¤ëŠ” ê²Œ ë§žìŒ.
+
+Do not implement target selection or radial UI.
+
+Mathematical Armor should use a Cracked Armor system.
+
+Normal equation operations should not automatically break armor.
+Instead, they can reduce armor modifiers to identity values:
+- Add/Subtract armor is cracked when CurrentValue becomes 0.
+- Multiply/Divide armor is cracked when CurrentValue becomes 1.
+
+Armor Break action should destroy all currently cracked armor layers at once.
+
+Locked target UI later should show each armor layer, its body part, current modifier value, and state.
+
+ì´ì œ Phase 5 êµ¬í˜„ì€ ì´ ê·œì¹™ìœ¼ë¡œ ê°€ë©´ ë¨.
+
+* * *
+
+**You:**
+
+Got it. No target selection, no radial UI, and no automatic armor breaking from normal equation operations.
+
+The revised rule should be:
+
+Normal equation operations affect armor modifier values mathematically, but only change armor state to Cracked when the modifier reaches its identity value.
+
+Armor identities:
+
+- Add armor: cracked when CurrentValue == 0
+- Subtract armor: cracked when CurrentValue == 0
+- Multiply armor: cracked when CurrentValue == 1
+- Divide armor: cracked when CurrentValue == 1
+
+Armor Break action is separate:
+
+- It does not solve the equation.
+- It does not target one layer for now.
+- It destroys all armor layers whose state is currently Cracked.
+- Non-cracked armor remains.
+
+Iâ€™d model each armor layer with something like:
+
+
+cpp
+EEquationArmorState
+{
+    Intact,
+    Cracked,
+    Broken
+};
+
+FEquationArmorLayer
+{
+    EEquationLayerOperation Operation;
+    int32 OriginalValue;
+    int32 CurrentValue;
+    EEquationLayerSource BodyPart;
+    EEquationArmorState State;
+};
+
+
+Then normal operations would do two things:
+
+1. Apply the operation to the displayed equation.
+2. Update armor layer modifier values if that operation mathematically reduces them.
+
+Example:
+
+
+text
+2(x + 5) + 2 = 22
+
+
+Layers:
+
+
+text
+Armor Body: Multiply, CurrentValue 2, Intact
+Helmet: Add, CurrentValue 2, Intact
+
+
+Normal /2:
+
+
+text
+(x + 5) + 1 = 11
+
+
+Armor body multiply layer reaches identity 1, so it becomes Cracked, but not broken.
+
+Helmet is now +1, still intact.
+
+Normal -1:
+
+
+text
+x + 5 = 10
+
+
+Helmet add layer reaches identity 0, so it becomes Cracked, but not broken.
+
+Armor Break action:
+
+
+text
+Destroy all cracked layers.
+
+
+This gives the player three valid paths:
+
+- Solve through armor and execute with X.
+- Use normal operations to crack armor, then Armor Break for tactical reward.
+- Use normal operations to simplify the equation without treating that as armor destruction.
+
+For future locked target UI, the data will already be ready to show:
+
+
+text
+Helmet | +1 | Intact
+Body Armor | x1 | Cracked
+
+
+No radial UI or per-layer targeting needed yet.
+
+ì•„ë¬´ê²ƒë„ ë°”ê¾¸ì§€ ë§ëž˜ì„œ ì•ˆí•œë“¯?
+
+* * *
+
+**ChatGPT:**
+
+ë§žìŒ. ì•„ë¬´ê²ƒë„ ì•ˆ ë°”ë€ ê²Œ ì •ìƒì´ì•¼.
+ë‚´ê°€ â€œDo not modify files yetâ€ë¼ê³  ì‹œí‚¨ ê±´ ì„¤ê³„ ì¶©ëŒì„ ë¨¼ì € ì •ë¦¬í•˜ë ¤ê³  í•œ ê±°ë¼ì„œ, Codexê°€ ê³„íšë§Œ ë‚¸ ìƒíƒœìž„.
+
+ì´ì œ ë°©í–¥ í™•ì •:
+
+ìžë™ Armor Break ì—†ìŒ
+ë¶€ìœ„ ì„ íƒ UI ì—†ìŒ
+ì¼ë°˜ ìˆ˜ì‹ ì—°ì‚°ì€ ìˆ˜ì‹ì„ ì¡°ìž‘í•¨
+ìˆ˜ì‹ìƒ ì˜ë¯¸ ì—†ì–´ì§„ ê°‘ì˜·ì€ Cracked ìƒíƒœê°€ ë¨
+G í‚¤ Armor Break ê³µê²© ì‹œ Cracked ëœ ëª¨ë“  ê°‘ì˜· ë™ì‹œ íŒŒê´´
+ë½ì˜¨ UIëŠ” ë‚˜ì¤‘ì— ê° ê°‘ì˜·ì˜ ìˆ˜ì‹ê°’ê³¼ ìƒíƒœë¥¼ ë³´ì—¬ì¤Œ
+
+ê·¸ë¦¬ê³  ê¸°ì¡´ â€œtop layerë¶€í„° ì œê±°â€ ë°©ì‹ì€ íê¸°. ì§€ê¸ˆë¶€í„°ëŠ” Cracked Armor Systemìœ¼ë¡œ ê°„ë‹¤.
+
+Codexì— ë„£ì„ êµ¬í˜„ í”„ë¡¬í”„íŠ¸
+
+ê·¸ëŒ€ë¡œ ë„£ì–´.
+
+Implement Mathematical Armor Cracked System v1.
+
+Important:
+Do NOT implement target selection.
+Do NOT implement radial UI.
+Do NOT automatically break armor during normal equation operations.
+Do NOT use the previous top-layer removal design.
+
+Current design:
+Normal equation operations can mathematically reduce armor modifier values.
+When an armor modifier reaches its identity value, it becomes Cracked.
+Armor Break is a separate action that destroys all currently Cracked armor layers at once.
+
+Armor identities:
+- Add armor is Cracked when CurrentValue == 0
+- Subtract armor is Cracked when CurrentValue == 0
+- Multiply armor is Cracked when CurrentValue == 1
+- Divide armor is Cracked when CurrentValue == 1
+
+Modify only what is necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+
+Do not add real UI widgets, real weapon actors, animations, inventory, AI, lock-on, or save systems yet.
+
+Goal:
+Support examples like:
+
+Base:
+x + 5 = 10
+
+Armor layers:
+Chest Armor: Multiply 2
+Helmet: Add 2
+
+Displayed:
+2(x + 5) + 2 = 22
+
+Normal division by 2:
+2(x + 5) + 2 = 22
+/2
+â†’ (x + 5) + 1 = 11
+
+Chest Armor CurrentValue becomes 1 and State becomes Cracked.
+Helmet CurrentValue becomes 1 and remains Intact.
+
+Normal subtraction by 1:
+(x + 5) + 1 = 11
+-1
+â†’ x + 5 = 10
+
+Helmet CurrentValue becomes 0 and State becomes Cracked.
+
+Armor Break action:
+Destroy all Cracked armor layers.
+Chest Armor and Helmet become Broken.
+This should trigger debug messages, but should not change the equation further because they are already identity values.
+
+Requirements:
+
+1. In EquationTypes.h, add enum:
+EEquationArmorState
+- Intact
+- Cracked
+- Broken
+
+2. In EquationTypes.h, add or update armor layer struct:
+FEquationArmorLayer
+
+Fields:
+- EEquationLayerOperation Operation
+- int32 OriginalValue
+- int32 CurrentValue
+- EEquationLayerSource Source
+- FText DisplayName
+- EEquationArmorState State
+- bool bIsArmor
+
+Use bIsArmor so later non-armor operation layers can exist without showing as armor.
+
+3. In UEnemyEquationComponent, add:
+- TArray<FEquationArmorLayer> EquationArmorLayers
+- int32 LayeredRightValue
+- bool bUseLayeredEquation
+
+The base polynomial equation should remain the base formula.
+For Armored Goblin:
+Base polynomial:
+x + 5 = 10
+
+LayeredRightValue:
+22
+
+Armor layers:
+Chest Armor Multiply 2
+Helmet Add 2
+
+4. Display behavior:
+GetDisplayText() should return layered display if bUseLayeredEquation is true.
+
+Examples:
+Base only:
+x + 5 = 10
+
+Multiply 2:
+2(x + 5) = 20
+
+Multiply 2 + Add 2:
+2(x + 5) + 2 = 22
+
+After divide by 2:
+(x + 5) + 1 = 11
+
+After subtract by 1:
+x + 5 = 10
+
+Display should skip identity modifiers:
+- Multiply 1 should not be shown
+- Add 0 should not be shown
+- Broken layers should not be shown
+
+But Cracked layers should remain in armor status data.
+
+5. Add armor status text helper:
+BlueprintCallable:
+- FText GetArmorStatusText() const
+
+Example status:
+Helmet: +1 Intact
+Chest Armor: x1 Cracked
+
+Use readable text. This is for debug and later UI.
+
+6. Answer checking:
+If bUseLayeredEquation is true:
+- Evaluate base polynomial at SubmittedX.
+- Apply all non-broken armor modifier layers in order.
+- Compare result to LayeredRightValue.
+
+Correct x should still execute through armor.
+
+Example:
+2(x + 5) + 2 = 22
+x = 5
+2(5 + 5) + 2 = 22
+Correct.
+
+7. Normal operations:
+Update ApplyOperationToBothSides so:
+
+If bUseLayeredEquation is false:
+- Keep existing polynomial operation behavior.
+
+If bUseLayeredEquation is true:
+- Modify the layered equation and armor CurrentValue values.
+- Do NOT break armor automatically.
+- Only update armor state to Cracked when it reaches identity.
+
+Addition/Subtraction:
+- Adjust the outermost additive armor or additive non-armor modifier if one exists.
+- For v1, support Helmet Add layer.
+- Subtracting from Add layer reduces CurrentValue.
+- Adding to Add layer increases CurrentValue.
+- Update LayeredRightValue accordingly.
+- If no additive layer exists, create a non-armor Add modifier layer with bIsArmor=false.
+
+Multiplication:
+- Multiply every non-broken layer CurrentValue by Value where mathematically applicable.
+- Multiply LayeredRightValue by Value.
+- Use int64 and prevent int32 overflow.
+- Refresh cracked states.
+
+Division:
+- Value must not be 0.
+- Only succeed if LayeredRightValue and all relevant layer CurrentValues divide cleanly by Value.
+- Divide every non-broken layer CurrentValue by Value.
+- Divide LayeredRightValue by Value.
+- Refresh cracked states.
+- If not cleanly divisible, return false and leave unchanged.
+
+8. Cracked state update:
+Add helper:
+- void RefreshArmorCrackedStates()
+
+Rules:
+- If bIsArmor == false, do not mark as armor cracked.
+- Broken layers stay Broken.
+- Add/Subtract armor:
+  CurrentValue == 0 => Cracked
+  otherwise Intact
+- Multiply/Divide armor:
+  CurrentValue == 1 => Cracked
+  otherwise Intact
+
+9. Armor Break:
+Add to UEnemyEquationComponent:
+BlueprintCallable:
+- int32 BreakAllCrackedArmorLayers()
+
+Behavior:
+- Find all layers where bIsArmor == true and State == Cracked.
+- Set them to Broken.
+- Return number broken.
+- Log each broken layer and source.
+- Do not change LayeredRightValue.
+- Do not solve the equation.
+- Refresh display.
+
+10. In APrototypeEquationEnemy, add:
+BlueprintCallable:
+- int32 BreakCrackedArmorOnEnemy()
+
+It should call EquationComponent->BreakAllCrackedArmorLayers() and refresh display.
+
+Also add CallInEditor test setup functions:
+- TestSetArmoredGoblin()
+- TestSetArmoredGoblinWithHelmet()
+
+TestSetArmoredGoblin:
+Base: x + 5 = 10
+Chest Armor: Multiply 2
+Displayed: 2(x + 5) = 20
+
+TestSetArmoredGoblinWithHelmet:
+Base: x + 5 = 10
+Chest Armor: Multiply 2
+Helmet: Add 2
+Displayed: 2(x + 5) + 2 = 22
+
+11. In APythagoreanHarmonyCharacter:
+Bind G to prototype Armor Break action:
+- Find nearest equation enemy.
+- If none, print "No equation enemy in range."
+- Call BreakCrackedArmorOnEnemy().
+- If count > 0, print "Armor Break: destroyed N cracked armor layer(s)."
+- If count == 0, print "No cracked armor to break."
+
+G should not require number input.
+G should not alter normal equation value except removing broken identity layers visually.
+G should not submit X answer.
+
+12. Preserve existing behavior:
+- Normal Goblin still starts as x + 5 = 10.
+- 5 + X still executes.
+- 13 + Subtraction still transforms normal Goblin to x - 8 = -3.
+- Addition/Subtraction/Multiplication/Clean Division still work on non-armored equations.
+- Current Z/V/B/N/M weapon selection still works.
+- Enter arms equation action.
+- LMB uses armed equation action.
+- LMB without armed action prints Basic attack.
+- C cancels input/action.
+
+13. Add debug messages:
+- Layered equation initialized.
+- Armor value changed.
+- Armor became Cracked.
+- Armor Break destroyed Helmet.
+- Armor Break destroyed Chest Armor.
+- No cracked armor to break.
+
+14. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. What structs/enums were added
+3. How normal operations affect armor values
+4. How Cracked state works
+5. How G Armor Break works
+6. How answer checking works through armor
+7. How to test Armored Goblin
+8. How to test Armored Goblin with Helmet
+í…ŒìŠ¤íŠ¸ ìˆœì„œ
+1. ê¸°ë³¸ ê³ ë¸”ë¦° ë³´ì¡´
+ê¸°ë³¸ x + 5 = 10
+M ì„ íƒ
+5 ìž…ë ¥
+Enter
+LMB
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+2. Armored Goblin With Helmet ì„¸íŒ…
+
+ì—ë””í„°ì—ì„œ ì  ì„ íƒ:
+
+TestSetArmoredGoblinWithHelmet
+
+ê¸°ëŒ€ í‘œì‹œ:
+
+2(x + 5) + 2 = 22
+3. Chest Armorë§Œ Crack
+N ì„ íƒ, Division
+2 ìž…ë ¥
+Enter
+LMB
+
+ê¸°ëŒ€ í‘œì‹œ:
+
+(x + 5) + 1 = 11
+
+Armor status ê¸°ëŒ€:

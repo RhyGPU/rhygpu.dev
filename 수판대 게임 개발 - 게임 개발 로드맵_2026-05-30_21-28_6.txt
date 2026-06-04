@@ -1,0 +1,829 @@
+ì´ê±´ ë§¤ìš° ì¢‹ìŒ.
+
+ì§€ê¸ˆ ë°”ë¡œ ì»¤ë°‹
+
+GitHub Desktopì—ì„œ:
+
+Summary:
+Add polynomial equation model v1
+
+Description:
+Added polynomial equation data structures and migrated answer checking and subtraction operation to evaluate equation data instead of relying on shallow A/B fields.
+
+Commit + Push.
+
+ë§Œì•½ ì§€ê¸ˆ polynomial-equation-refactor ë¸Œëžœì¹˜ì— ìžˆë‹¤ë©´ ê·¸ ë¸Œëžœì¹˜ì— pushí•˜ë©´ ë¨.
+
+ë‹¤ìŒ ëª©í‘œ: ì‚¬ì¹™ì—°ì‚° Operation v1
+
+ì´ì œ í•  ì¼ì€ ëª…í™•í•¨.
+
+í˜„ìž¬ëŠ”:
+
+Q = Subtraction only
+
+ë‹¤ìŒì€ polynomial model ìœ„ì— ì§„ì§œ ì‚¬ì¹™ì—°ì‚°ì„ ë¶™ì´ëŠ” ê²ƒ:
+
+Addition:      ì–‘ë³€ì— +n
+Subtraction:   ì–‘ë³€ì— -n
+Multiplication: ì–‘ë³€ì— Ã—n
+Division:      ì–‘ë³€ì— Ã·n, ë‹¨ ì •ìˆ˜ë¡œ ë‚˜ëˆ„ì–´ë–¨ì–´ì§ˆ ë•Œë§Œ
+
+ì•„ì§ ë¬´ê¸°, ì• ë‹ˆë©”ì´ì…˜, ì¸ë²¤í† ë¦¬ëŠ” ë§Œë“¤ì§€ ì•ŠìŒ.
+í‚¤ë³´ë“œ ìž„ì‹œ ìž…ë ¥ìœ¼ë¡œ ê¸°ëŠ¥ë§Œ ê²€ì¦.
+
+ìž„ì‹œ í‚¤ ë°°ì¹˜
+
+ì¶”ì²œ:
+
+E = Addition operation
+Q = Subtraction operation
+R = Multiplication operation
+F = Division operation
+X = X answer submission
+
+ì˜ˆì‹œ:
+
+x + 5 = 10
+
+3 ìž…ë ¥ + E
+â†’ x + 8 = 13
+
+2 ìž…ë ¥ + R
+â†’ 2x + 16 = 26
+
+2 ìž…ë ¥ + F
+â†’ x + 8 = 13
+
+8 ìž…ë ¥ + Q
+â†’ x = 5
+
+5 ìž…ë ¥ + X
+â†’ AXIOM EXECUTION
+Codexì— ë„£ì„ í”„ë¡¬í”„íŠ¸
+Add prototype arithmetic operations on top of the polynomial equation model.
+
+Modify only what is necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+
+Do not add real weapons, animations, UI widgets, inventory, AI, lock-on, or save systems yet.
+
+Goal:
+Support prototype addition, subtraction, multiplication, and division operations that apply to both sides of the current polynomial equation.
+
+Requirements:
+
+1. Add enum EPrototypeOperationType if useful:
+- Add
+- Subtract
+- Multiply
+- Divide
+
+2. In UEnemyEquationComponent, add BlueprintCallable function:
+- bool ApplyOperationToBothSides(EPrototypeOperationType OperationType, int32 Value)
+
+3. Keep existing ApplySubtractionOperation(int32 Value), but make it call ApplyOperationToBothSides(Subtract, Value) internally.
+
+4. Operation behavior:
+
+Addition:
+- If Value == 0, return false for now.
+- Add Value to the polynomial constant term.
+- Add Value to RightValue.
+- Normalize terms.
+- Refresh display.
+- Return true.
+
+Subtraction:
+- If Value == 0, return false for now.
+- Subtract Value from the polynomial constant term.
+- Subtract Value from RightValue.
+- Normalize terms.
+- Refresh display.
+- Return true.
+
+Multiplication:
+- If Value == 0, return false for now.
+- Multiply every left-side coefficient by Value.
+- Multiply RightValue by Value.
+- Use int64 during calculation.
+- If any result would overflow int32, return false and leave the equation unchanged.
+- Normalize terms.
+- Refresh display.
+- Return true.
+
+Division:
+- If Value == 0, return false.
+- Only succeed if every left-side coefficient and RightValue divides cleanly by Value.
+- If not cleanly divisible, return false and leave the equation unchanged.
+- Divide every left-side coefficient by Value.
+- Divide RightValue by Value.
+- Normalize terms.
+- Refresh display.
+- Return true.
+
+5. Add helper functions if useful:
+- bool CanMultiplyEquationBy(int32 Value) const
+- bool CanDivideEquationByCleanly(int32 Value) const
+
+6. In APrototypeEquationEnemy, add BlueprintCallable functions:
+- bool ApplyAdditionToEnemy(int32 Value)
+- bool ApplySubtractionToEnemy(int32 Value)
+- bool ApplyMultiplicationToEnemy(int32 Value)
+- bool ApplyDivisionToEnemy(int32 Value)
+- bool ApplyOperationToEnemy(EPrototypeOperationType OperationType, int32 Value)
+
+Each should call the equation component and refresh display only when successful.
+
+7. In APythagoreanHarmonyCharacter, bind temporary prototype keys:
+- E = apply addition to nearest equation enemy using current input
+- Q = apply subtraction to nearest equation enemy using current input
+- R = apply multiplication to nearest equation enemy using current input
+- F = apply division to nearest equation enemy using current input
+- X behavior should remain answer submission
+
+8. Reuse existing nearest enemy lookup.
+
+9. If no input, show:
+"No input."
+
+10. If no enemy is in range, show:
+"No equation enemy in range."
+
+11. On operation success, show:
+"Applied Addition: +N"
+"Applied Subtraction: -N"
+"Applied Multiplication: xN"
+"Applied Division: /N"
+
+12. On operation failure, show:
+"Operation failed."
+
+13. Clear input after attempting an operation.
+
+14. Add UE_LOG messages:
+- Old equation
+- Operation applied
+- New equation
+- Failure reason for multiplication overflow, division by zero, or non-clean division
+
+15. Preserve existing behavior:
+- Default Goblin starts as x + 5 = 10
+- 5 + X executes
+- 13 + Q transforms to x - 8 = -3
+- 5 + X after that executes
+- Wrong answer still evolves enemy
+
+16. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. Which operation keys were bound
+3. How each operation mutates the polynomial equation
+4. How division failure works
+5. How to test in Play mode
+í…ŒìŠ¤íŠ¸ ì„¸íŠ¸
+
+ìˆ˜ì • í›„ ì»´íŒŒì¼:
+
+Ctrl + Alt + F11
+Test A, ê¸°ì¡´ ê¸°ëŠ¥ ë³´ì¡´
+5 ìž…ë ¥
+X
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+Test B, Subtraction
+ìƒˆ Play
+13 ìž…ë ¥
+Q
+
+ê¸°ëŒ€:
+
+x - 8 = -3
+
+ê·¸ ë‹¤ìŒ:
+
+5 ìž…ë ¥
+X
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+Test C, Addition
+ìƒˆ Play
+3 ìž…ë ¥
+E
+
+ê¸°ëŒ€:
+
+x + 8 = 13
+
+ê·¸ ë‹¤ìŒ:
+
+5 ìž…ë ¥
+X
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+Test D, Multiplication
+ìƒˆ Play
+2 ìž…ë ¥
+R
+
+ê¸°ëŒ€:
+
+2x + 10 = 20
+
+ê·¸ ë‹¤ìŒ:
+
+5 ìž…ë ¥
+X
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+Test E, Clean Division
+
+ë¨¼ì €:
+
+2 ìž…ë ¥
+R
+
+ë³´í†µ:
+
+2x + 10 = 20
+
+ê·¸ ë‹¤ìŒ:
+
+2 ìž…ë ¥
+F
+
+ê¸°ëŒ€:
+
+x + 5 = 10
+Test F, Non-clean Division ì‹¤íŒ¨
+
+ê¸°ë³¸ ìƒíƒœì—ì„œ:
+
+2 ìž…ë ¥
+F
+
+ê¸°ëŒ€:
+
+Operation failed.
+ì‹ ê·¸ëŒ€ë¡œ x + 5 = 10
+
+ì´ìœ :
+
+x coefficient 1ì´ 2ë¡œ ì•ˆ ë‚˜ëˆ„ì–´ë–¨ì–´ì§
+
+ì´ê±° ì„±ê³µí•˜ë©´ ë“œë””ì–´ ì‚¬ì¹™ì—°ì‚° ë¬´ê¸° ì‹œìŠ¤í…œì˜ ìˆ˜í•™ ì½”ì–´ê°€ ìƒê¹€.
+ê·¸ ë‹¤ìŒì€ â€œí‚¤ ìž…ë ¥â€ì„ â€œìž„ì‹œ ë¬´ê¸° ìŠ¬ë¡¯â€ìœ¼ë¡œ ë°”ê¾¸ê³ , ê·¸ ë’¤ì— Division Shieldì™€ Armored Goblinìœ¼ë¡œ ê°€ë©´ ë¨.
+
+* * *
+
+**You:**
+
+ì„±ê³µì 
+
+* * *
+
+**ChatGPT:**
+
+ì¢‹ì•„. ì‚¬ì¹™ì—°ì‚° Operation v1 ì„±ê³µ.
+ì´ì œ ìˆ˜í•™ ì½”ì–´ëŠ” ê½¤ ê°•í•´ì¡ŒìŒ.
+
+í˜„ìž¬ ê°€ëŠ¥í•œ í•µì‹¬:
+
+x + 5 = 10
+
+E: +n ì–‘ë³€ ì ìš©
+Q: -n ì–‘ë³€ ì ìš©
+R: Ã—n ì–‘ë³€ ì ìš©
+F: Ã·n ì–‘ë³€ ì ìš©, ì •ìˆ˜ë¡œ ê¹”ë”í•˜ê²Œ ë‚˜ëˆ ì§ˆ ë•Œë§Œ
+X: í˜„ìž¬ ìž…ë ¥ê°’ìœ¼ë¡œ ì •ë‹µ ì œì¶œ
+
+ì´ì œ ë°”ë¡œ ì»¤ë°‹.
+
+Summary:
+Add polynomial arithmetic operations
+
+Description:
+Added prototype addition, subtraction, multiplication, and clean division operations that apply to both sides of polynomial equations.
+
+Commit + Push.
+
+ë‹¤ìŒìœ¼ë¡œ í•  ì¼
+
+ì´ì œ ìˆ˜í•™ ì½”ì–´ëŠ” ì¶©ë¶„í•˜ë‹ˆê¹Œ, ë‹¤ìŒì€ ìž„ì‹œ í‚¤ ì‹œìŠ¤í…œì„ ë¬´ê¸° ì‹œìŠ¤í…œì²˜ëŸ¼ ì •ë¦¬í•´ì•¼ í•¨.
+
+ì§€ê¸ˆì€:
+
+E = Addition
+Q = Subtraction
+R = Multiplication
+F = Division
+X = Answer Submit
+
+ì´ê±´ ê°œë°œ í…ŒìŠ¤íŠ¸ìš©ì´ê³ , ë‹¤ìŒ ë‹¨ê³„ì—ì„œëŠ” ì´ê±¸ ì´ë ‡ê²Œ ë°”ê¿”ì•¼ í•¨:
+
+í˜„ìž¬ ì„ íƒëœ Operation Weapon
+í˜„ìž¬ ìž…ë ¥ ìˆ«ìž
+Attack/Use key
+â†’ í•´ë‹¹ operation ì ìš©
+
+í•˜ì§€ë§Œ ë°”ë¡œ ë¬´ê¸° ì¸ë²¤í† ë¦¬ ë§Œë“¤ì§€ ë§ê³ , Prototype Weapon Slot v0ë§Œ ë§Œë“¤ë©´ ë¨.
+
+ë‹¤ìŒ Phase: Prototype Weapon Slot v0
+
+ëª©í‘œ:
+
+1ë²ˆ í‚¤: Addition weapon ì„ íƒ
+2ë²ˆ í‚¤: Subtraction weapon ì„ íƒ
+3ë²ˆ í‚¤: Multiplication weapon ì„ íƒ
+4ë²ˆ í‚¤: Division weapon ì„ íƒ
+5ë²ˆ í‚¤: X weapon ì„ íƒ
+
+Left Mouse ë˜ëŠ” Space ê°™ì€ ìž„ì‹œ ì‚¬ìš©í‚¤:
+í˜„ìž¬ ì„ íƒ ë¬´ê¸° ì‚¬ìš©
+
+ì˜ˆ:
+
+2 ëˆ„ë¦„
+í˜„ìž¬ ë¬´ê¸°: Subtraction
+
+13 ìž…ë ¥
+Left Mouse
+â†’ x - 8 = -3
+
+5 ëˆ„ë¦„
+í˜„ìž¬ ë¬´ê¸°: X
+
+5 ìž…ë ¥
+Left Mouse
+â†’ AXIOM EXECUTION
+
+ì´ë ‡ê²Œ í•´ì•¼ ë‚˜ì¤‘ì— ì‹¤ì œ ë¬´ê¸°/ì• ë‹ˆë©”ì´ì…˜/ë‚´êµ¬ë„ ë¶™ì´ê¸° ì‰¬ì›€.
+
+Codexì— ë„£ì„ ë‹¤ìŒ í”„ë¡¬í”„íŠ¸
+Add a prototype weapon selection layer over the existing operation keys.
+
+Modify only what is necessary.
+
+Likely files:
+- EquationTypes.h if enum placement is useful
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+
+Do not add real weapon actors, animations, inventory, UI widgets, meshes, AI, lock-on, or save systems yet.
+
+Goal:
+Replace direct operation hotkeys with a simple selected prototype weapon mode.
+
+Current temporary behavior:
+- E applies addition directly
+- Q applies subtraction directly
+- R applies multiplication directly
+- F applies division directly
+- X submits answer directly
+
+New behavior:
+- Number keys still append digits as before.
+- Add weapon selection keys:
+  - Alpha1 selects Addition weapon
+  - Alpha2 selects Subtraction weapon
+  - Alpha3 selects Multiplication weapon
+  - Alpha4 selects Division weapon
+  - Alpha5 selects X weapon
+- Add one use key:
+  - Left Mouse Button applies the currently selected weapon/action using current input.
+
+Weapon behavior:
+- Addition weapon: apply addition operation to nearest equation enemy.
+- Subtraction weapon: apply subtraction operation to nearest equation enemy.
+- Multiplication weapon: apply multiplication operation to nearest equation enemy.
+- Division weapon: apply division operation to nearest equation enemy.
+- X weapon: submit current input as answer to nearest equation enemy.
+
+Requirements:
+
+1. Add enum EPrototypeWeaponMode if useful:
+- Addition
+- Subtraction
+- Multiplication
+- Division
+- XAnswer
+
+2. Store current selected weapon mode on APythagoreanHarmonyCharacter.
+
+3. Default selected weapon should be XAnswer or Subtraction. Use XAnswer unless there is a reason not to.
+
+4. Bind weapon selection keys:
+- 1, 2, 3, 4, 5 would conflict with digit input.
+Important:
+Do not break digit input.
+
+Because number keys are currently used for digit input, use function keys for weapon selection for now:
+- F1 = Addition
+- F2 = Subtraction
+- F3 = Multiplication
+- F4 = Division
+- F5 = XAnswer
+
+5. Bind Left Mouse Button to UseSelectedPrototypeWeapon().
+
+6. Keep existing direct operation keys E/Q/R/F/X working for now as debug shortcuts if they do not cause conflicts, but mark them as temporary in comments.
+
+7. UseSelectedPrototypeWeapon should:
+- Check current input.
+- If no input, show "No input."
+- Find nearest equation enemy.
+- If no enemy, show "No equation enemy in range."
+- If selected weapon is XAnswer, submit answer.
+- If selected weapon is operation type, apply operation.
+- Clear input after attempt.
+- Print debug messages showing selected weapon and result.
+
+8. Add debug message when switching weapon:
+- "Selected Weapon: Addition"
+- "Selected Weapon: Subtraction"
+- "Selected Weapon: Multiplication"
+- "Selected Weapon: Division"
+- "Selected Weapon: X"
+
+9. Preserve existing behavior:
+- Digit input still works.
+- Backspace still works.
+- C still clears input.
+- Direct debug keys E/Q/R/F/X still work if possible.
+- 5 + X still executes using old debug shortcut.
+- F2, 13, Left Mouse should apply subtraction.
+- F5, 5, Left Mouse should execute.
+
+10. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. Which keys are now weapon selection keys
+3. Which key uses the selected weapon
+4. What old debug keys still exist
+5. How to test in Play mode
+í…ŒìŠ¤íŠ¸
+ê¸°ì¡´ ë°©ì‹ ìœ ì§€ í™•ì¸
+5 ìž…ë ¥
+X
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+ìƒˆ ë¬´ê¸° ë°©ì‹ í™•ì¸
+F2 ëˆ„ë¦„
+13 ìž…ë ¥
+Left Mouse
+
+ê¸°ëŒ€:
+
+x - 8 = -3
+
+ê·¸ë‹¤ìŒ:
+
+F5 ëˆ„ë¦„
+5 ìž…ë ¥
+Left Mouse
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+ë‹¤ë¥¸ ë¬´ê¸° í…ŒìŠ¤íŠ¸
+F1
+3 ìž…ë ¥
+Left Mouse
+â†’ x + 8 = 13
+
+F3
+2 ìž…ë ¥
+Left Mouse
+â†’ 2x + 16 = 26
+
+F4
+2 ìž…ë ¥
+Left Mouse
+â†’ x + 8 = 13, clean divisionì´ë©´ ì„±ê³µ
+
+ì´ê±° ë˜ë©´ ë‹¤ìŒì€ ë‚´êµ¬ë„ ì†Œëª¨ë¡œ ê°€ë©´ ë¨.
+
+* * *
+
+**You:**
+
+ì§ˆë¬¸: ì´ë”°ê°€ë©´ ìˆ«ìž íœ ë¡œ ë°”ê¿€ê±´ë°.. ë¬´ê¸°ëŠ” ì–´ì¼€í• ì§€ ë¯¸ì •ì´ê±°ë“ ? ì†”ì§ížˆ ìŠ¬ë¡¯ ã…ˆã„´ ë§Žìž–ì•„. ë¬´ê²Œë•œì— ìºë¦­í„°ê°€ ë‹¤ ë‚„ìˆ˜ ìžˆëŠ”ê°€ëŠ” ë³„ê°œì§€ë§Œ ìž¥ì°© ê°€ëŠ¥í•œ ìŠ¬ë¡¯ì´ ë§Žì€ë° ì´ê±´ ì¸ë²¤ì† í…œì´ ì•„ë‹Œ ìºë¦­í„° ëª¸ì— ë‹¬ë¦° ë¬´ê¸°ë“¤ì´ê±°ë“ . ê·¸ëž˜ì„œ ì†ì˜ ìž¥ë¹„ëž‘ í€µ ìŠ¤ì™‘ ê°€ëŠ¥í•´ì•¼ í•˜ëŠ”ë° ë°©ë²•ì„ ëª¨ë¥´ê² ì–´
+
+
+* * *
+
+**ChatGPT:**
+
+ã…‡ã…‡, ì´ê±° ì§€ê¸ˆ ì •í•´ì•¼ í•¨.
+ê²°ë¡ ë¶€í„° ë§í•˜ë©´ ë¬´ê¸° ì‹œìŠ¤í…œì€ â€œì¸ë²¤í† ë¦¬â€ê°€ ì•„ë‹ˆë¼ â€œëª¸ì— ìž¥ì°©ëœ ë¬´ê¸° ë°°ì—´ + ì†ì— ë“  í™œì„± ë¬´ê¸°â€ë¡œ ì„¤ê³„í•´ì•¼ í•¨. GDDì—ë„ ìž¥ë¹„ ìŠ¬ë¡¯ê³¼ ì‹ ì²´ ë¶€ìœ„ë³„ ìŠ¬ë¡¯ ê°œë…ì´ ë“¤ì–´ê°€ ìžˆê³ , í”„ë¡œí† íƒ€ìž…ì€ ë‹¨ìˆœí™”í•˜ë˜ ë‚˜ì¤‘ì— ë¬´ê¸° í¬ê¸°ë³„ ìŠ¬ë¡¯ ì ìœ ëŸ‰ì„ ê³ ë ¤í•œë‹¤ê³  ë˜ì–´ ìžˆìŒ. 
+
+í”¼íƒ€ê³ ë¼ìŠ¤ì˜ ì¡°ìœ¨ ë§Œë¬¼ì€ ìˆ˜ë‹¤ Gdd ë°”ì´ë¸”
+
+í•µì‹¬ êµ¬ì¡°
+
+ë¬´ê¸°ë¥¼ ì´ë ‡ê²Œ 3ë‹¨ìœ¼ë¡œ ë‚˜ëˆ„ë©´ ë¨.
+
+1. Inventory
+ì†Œìœ  ì¤‘ì¸ ëª¨ë“  ì•„ì´í…œ
+ì§€ê¸ˆì€ ë§Œë“¤ì§€ ì•ŠìŒ
+
+2. Body Loadout
+ìºë¦­í„° ëª¸ì— ì‹¤ì œë¡œ ìž¥ì°©ëœ ë¬´ê¸°ë“¤
+í—ˆë¦¬, ë“±, ì–´ê¹¨, ë‹¤ë¦¬, ë°©íŒ¨ ìœ„ì¹˜ ë“±
+
+3. Active Hands
+ì§€ê¸ˆ ì†ì— ë“¤ê³  ìžˆëŠ” ë¬´ê¸°
+ì‹¤ì œë¡œ ê³µê²©ì— ì“°ì´ëŠ” ë¬´ê¸°
+
+ì¦‰, í”Œë ˆì´ì–´ê°€ ë¬´ê¸°ë¥¼ â€œê°€ì§€ê³  ìžˆë‹¤â€ì™€ â€œëª¸ì— ë§¤ë‹¬ê³  ìžˆë‹¤â€ì™€ â€œì†ì— ë“¤ê³  ìžˆë‹¤â€ëŠ” ì™„ì „ížˆ ë‹¤ë¥¸ ìƒíƒœìž„.
+
+ì¶”ì²œ ì„¤ê³„
+1. ëª¸ ìž¥ì°© ìŠ¬ë¡¯
+
+ì˜ˆì‹œ:
+
+Back Slot
+Right Shoulder Slot
+Left Shoulder Slot
+Right Waist Slot
+Left Waist Slot
+Right Hip Slot
+Left Hip Slot
+Shield Back Slot
+Small Tool Slot 1
+Small Tool Slot 2
+
+ê° ìŠ¬ë¡¯ì—ëŠ” ë¬´ê¸° í•˜ë‚˜ê°€ ë¶™ìŒ.
+
+ì˜ˆ:
+
+Back Slot: Multiplication Greatsword
+Right Waist Slot: X Straight Sword
+Left Waist Slot: Subtraction Rapier
+Left Arm Slot: Division Shield
+Small Tool Slot: Addition Dagger
+
+ì´ ë¬´ê¸°ë“¤ì€ ëª¨ë‘ ìºë¦­í„° ëª¸ì— ë³´ì´ëŠ” ìƒíƒœë¡œ ìž¥ì°©ë˜ì–´ ìžˆìŒ.
+
+2. ì† ìŠ¬ë¡¯
+
+ì†ì€ ë³„ë„ìž„.
+
+Main Hand
+Off Hand
+
+ì˜ˆ:
+
+Main Hand: Subtraction Rapier
+Off Hand: Division Shield
+
+ì†ì— ë“  ë¬´ê¸°ëŠ” ê³µê²© ê°€ëŠ¥.
+ëª¸ì—ë§Œ ë‹¬ë¦° ë¬´ê¸°ëŠ” ì•„ì§ ê³µê²© ë¶ˆê°€, í•˜ì§€ë§Œ ë¹ ë¥´ê²Œ ë½‘ì„ ìˆ˜ ìžˆìŒ.
+
+3. Quick Swap
+
+Quick Swapì€ ì¸ë²¤í† ë¦¬ì—ì„œ êº¼ë‚´ëŠ” ê²Œ ì•„ë‹ˆë¼, ëª¸ì— ë‹¬ë¦° ë¬´ê¸° ì¤‘ í•˜ë‚˜ë¥¼ ì†ìœ¼ë¡œ ê°€ì ¸ì˜¤ëŠ” ë™ìž‘ìž„.
+
+ì˜ˆ:
+
+F2 ëˆ„ë¦„
+Subtraction Rapier ì„ íƒ
+ìºë¦­í„° í—ˆë¦¬ì—ì„œ ë ˆì´í”¼ì–´ë¥¼ ë½‘ìŒ
+Main Hand = Subtraction Rapier
+F5 ëˆ„ë¦„
+X Sword ì„ íƒ
+í˜„ìž¬ ì† ë¬´ê¸°ë¥¼ í—ˆë¦¬ì— ë„£ìŒ
+X Swordë¥¼ ë½‘ìŒ
+Main Hand = X Sword
+
+ë‚˜ì¤‘ì— ì• ë‹ˆë©”ì´ì…˜ ë¶™ì´ë©´ ì´ êµ¬ì¡°ê°€ ìžì—°ìŠ¤ëŸ¬ì›€.
+
+ìˆ«ìž íœ ê³¼ ë¬´ê¸° ìŠ¤ì™‘ì€ ë¶„ë¦¬í•´ì•¼ í•¨
+
+ìˆ«ìž íœ ì€ ì´ê±°ë§Œ ë‹´ë‹¹:
+
+í˜„ìž¬ ìž…ë ¥ ìˆ«ìž ì„¤ì •
+
+ë¬´ê¸° ìŠ¤ì™‘ì€ ë³„ë„:
+
+í˜„ìž¬ ì‚¬ìš©í•  ë¬´ê¸° ì„ íƒ
+
+ì ˆëŒ€ ìˆ«ìž íœ  ì•ˆì— ë¬´ê¸°ë¥¼ ì„žì§€ ë§ˆ.
+ë‚˜ì¤‘ì— ì»¨íŠ¸ë¡¤ ê¼¬ìž„.
+
+ì¢‹ì€ êµ¬ì¡°:
+
+ìˆ«ìž íœ :
+0~9 ìˆ«ìž ìž…ë ¥, ì‚­ì œ, í™•ì •
+
+ë¬´ê¸° ìŠ¤ì™‘:
+ëª¸ì— ìž¥ì°©í•œ ë¬´ê¸° ì¤‘ í•˜ë‚˜ë¥¼ ì†ìœ¼ë¡œ ì „í™˜
+
+ê³µê²© ë²„íŠ¼:
+í˜„ìž¬ ì† ë¬´ê¸° + í˜„ìž¬ ìˆ«ìž ìž…ë ¥ê°’ ì‚¬ìš©
+
+ì˜ˆ:
+
+ìˆ«ìž íœ ë¡œ 13 ìž…ë ¥
+Subtraction Rapier ìž¥ì°©
+ê³µê²©
+â†’ -13 ì ìš©
+
+ìˆ«ìž íœ ë¡œ 5 ìž…ë ¥
+X Sword ìž¥ì°©
+ê³µê²©
+â†’ x = 5 íŒì •
+ì‹¤ì œ ê²Œìž„ ì¡°ìž‘ ì¶”ì²œ
+
+í‚¤ë³´ë“œ ê¸°ì¤€:
+
+Tab ê¸¸ê²Œ ëˆ„ë¦„: Weapon Radial ì—´ê¸°
+ë§ˆìš°ìŠ¤ ë°©í–¥: ëª¸ì— ìž¥ì°©ëœ ë¬´ê¸° ì„ íƒ
+Tab ë—Œ: í•´ë‹¹ ë¬´ê¸°ë¥¼ ì†ì— ë“¦
+
+ìˆ«ìž íœ  í‚¤ ê¸¸ê²Œ ëˆ„ë¦„: Number Wheel ì—´ê¸°
+ë§ˆìš°ìŠ¤ ë°©í–¥/í‚¤ ìž…ë ¥: ìˆ«ìž ìž…ë ¥
+ë—Œ: ìˆ«ìž ìž¥ì „
+
+Left Mouse: í˜„ìž¬ ë¬´ê¸° ì‚¬ìš©
+Right Mouse: ë°©ì–´/ë³´ì¡°
+
+íŒ¨ë“œ ê¸°ì¤€:
+
+D-pad: quick swap
+LB/L1 ê¸¸ê²Œ: weapon wheel
+RB/R1: attack
+LT/L2: block or aim
+Number wheelì€ ë³„ë„ ë²„íŠ¼ í™€ë“œ
+Unreal ì½”ë“œ êµ¬ì¡°ëŠ” ì´ë ‡ê²Œ ê°€ë©´ ë¨
+
+ë‚˜ì¤‘ì— ë§Œë“¤ ì»´í¬ë„ŒíŠ¸:
+
+UEquipmentComponent
+
+ì—­í• :
+
+ëª¸ì— ìž¥ì°©ëœ ë¬´ê¸° ëª©ë¡ ê´€ë¦¬
+í˜„ìž¬ ì†ì— ë“  ë¬´ê¸° ê´€ë¦¬
+ë¬´ê¸° ìŠ¤ì™‘ ì²˜ë¦¬
+ì†Œì¼“ì— ë¬´ê¸° ë¶™ì´ê¸°
+
+ë°ì´í„° êµ¬ì¡° ì˜ˆì‹œ:
+
+FEquippedWeaponSlot
+- SlotName
+- SocketName
+- WeaponData
+- WeaponActor
+- bIsActiveInHand
+
+ë¬´ê¸° ë°ì´í„°:
+
+UWeaponDataAsset
+- WeaponName
+- OperationType
+- WeaponFamily
+- Durability
+- Weight
+- BodySocket
+- HandSocket
+- SlotSize
+- Mesh
+
+ì˜ˆ:
+
+Subtraction Rapier
+OperationType: Subtract
+WeaponFamily: Rapier
+BodySocket: Waist_R
+HandSocket: Hand_R
+Weight: Light
+SlotSize: 1
+
+X Sword:
+
+OperationType: XAnswer
+WeaponFamily: StraightSword
+BodySocket: Waist_L
+HandSocket: Hand_R
+
+Division Shield:
+
+OperationType: Divide
+WeaponFamily: Shield
+BodySocket: Back_Shield
+HandSocket: Hand_L
+í˜„ìž¬ í”„ë¡œí† íƒ€ìž…ì—ì„œëŠ” ë‹¨ìˆœí•˜ê²Œ
+
+ì§€ê¸ˆ ë‹¹ìž¥ full equipment system ë§Œë“¤ í•„ìš” ì—†ìŒ.
+
+ë‹¤ìŒ ë‹¨ê³„ëŠ” ì´ë ‡ê²Œ í•˜ë©´ ë¨:
+
+CurrentPrototypeWeaponMode
+
+ì´ê±¸ â€œë¬´ê¸°ì²˜ëŸ¼â€ ì·¨ê¸‰.
+
+ìž„ì‹œ:
+
+F1: Addition Sword ì„ íƒ
+F2: Subtraction Rapier ì„ íƒ
+F3: Multiplication Greatsword ì„ íƒ
+F4: Division Shield ì„ íƒ
+F5: X Sword ì„ íƒ
+Left Mouse: í˜„ìž¬ ë¬´ê¸° ì‚¬ìš©
+
+í•˜ì§€ë§Œ ë‚´ë¶€ ì´ë¦„ì€ ë²Œì¨ ë¬´ê¸°ì²˜ëŸ¼ í•´ë‘¬ì•¼ í•¨.
+
+ë‚˜ìœ ì´ë¦„:
+
+CurrentOperationMode
+
+ì¢‹ì€ ì´ë¦„:
+
+CurrentPrototypeWeapon
+CurrentEquippedWeaponMode
+SelectedWeaponMode
+
+ì´ìœ : ë‚˜ì¤‘ì— ì§„ì§œ ë¬´ê¸° ì‹œìŠ¤í…œìœ¼ë¡œ ê°ˆ ë•Œ ëœ ê°ˆì•„ì—ŽìŒ.
+
+ìž¥ê¸°ì ìœ¼ë¡œ ì œì¼ ì¢‹ì€ êµ¬ì¡°
+
+ìµœì¢… êµ¬ì¡°ëŠ” ì´ê±°ìž„.
+
+Owned Inventory
+â†“
+Equipped Body Loadout
+â†“
+Active Hand Weapon
+â†“
+Attack uses Current Number Input
+â†“
+Equation Operation Applied
+
+ì˜ˆì‹œ íë¦„:
+
+í”Œë ˆì´ì–´ ëª¸ì— ë¬´ê¸° 6ê°œ ìž¥ì°©
+
+í—ˆë¦¬: X Sword
+í—ˆë¦¬: Subtraction Rapier
+ë“±: Multiplication Greatsword
+ì™¼íŒ”: Division Shield
+ë‹¤ë¦¬: Addition Dagger
+ì–´ê¹¨: X Greatsword
+
+í”Œë ˆì´ì–´ê°€ Weapon Wheelë¡œ Subtraction Rapier ì„ íƒ
+ìˆ«ìž íœ ë¡œ 13 ìž…ë ¥
+ê³µê²©
+â†’ x + 5 = 10 becomes x - 8 = -3
+
+Weapon Wheelë¡œ X Sword ì„ íƒ
+ìˆ«ìž íœ ë¡œ 5 ìž…ë ¥
+ê³µê²©
+â†’ AXIOM EXECUTION
+ì§€ê¸ˆ ê²°ë¡ 
+
+ì§€ê¸ˆì€ ì´ë ‡ê²Œ ê°€ìž:
+
+1. Prototype Weapon Mode ë§Œë“¤ê¸°
+2. F1~F5ë¡œ ë¬´ê¸° ì„ íƒ
+3. Left Mouseë¡œ í˜„ìž¬ ë¬´ê¸° ì‚¬ìš©
+4. ê¸°ì¡´ E/Q/R/F/XëŠ” debug shortcutìœ¼ë¡œ ìž ì‹œ ìœ ì§€
+5. ë‚˜ì¤‘ì— Weapon Wheelë¡œ F1~F5ë¥¼ ëŒ€ì²´
+6. ê·¸ ë‹¤ìŒ Body Slot + Hand Slot + Socket attachment êµ¬í˜„
+
+ì¦‰, ì§€ê¸ˆì€ ë¬´ê¸° ì„ íƒ ë ˆì´ì–´ë§Œ ë§Œë“¤ê³ , ì‹¤ì œ ìž¥ì°© ìŠ¬ë¡¯/ì†Œì¼“/ì• ë‹ˆë©”ì´ì…˜ì€ ë‚˜ì¤‘.
+í•˜ì§€ë§Œ ì„¤ê³„ëŠ” ì´ë¯¸ â€œëª¸ì— ìž¥ì°©ëœ ë¬´ê¸°ë¥¼ ì†ìœ¼ë¡œ ë½‘ëŠ”ë‹¤â€ ê¸°ì¤€ìœ¼ë¡œ ìž¡ìœ¼ë©´ ë¨.
+
+* * *
+
+**You:**
+
+ìž‘ë™ ìž˜í•¨
+ì´ìŠˆ: ê³„ì† ëª¨ë“œ ìœ ì§€ë¨. ê³µì‹ ê³µê²© í•˜ë©´ í‰íƒ€ë¡œ ìžë™ íšŒê·€í•´ì•¼í•˜ê³ , ìº”ìŠ¬ ë°©ë„ ìžˆê¸´ í•´ì•¼í• í…œë°...?
+
+* * *
+
+**ChatGPT:**
+
+ë§žìŒ. ì§€ê¸ˆ ê³„ì† ëª¨ë“œ ìœ ì§€ë˜ëŠ” ê±´ ìž¥ê¸°ì ìœ¼ë¡œ ì•ˆ ì¢‹ìŒ.
+ì§€ê¸ˆ êµ¬ì¡°ëŠ” â€œë¬´ê¸° ì„ íƒ ëª¨ë“œâ€ì²˜ëŸ¼ ë˜ì–´ ìžˆëŠ”ë°, ì‹¤ì œ ê²Œìž„ì—ì„œëŠ” ì´ë ‡ê²Œ ë‚˜ëˆ ì•¼ í•¨:

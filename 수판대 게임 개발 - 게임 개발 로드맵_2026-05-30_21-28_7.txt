@@ -1,0 +1,829 @@
+
+ìž¥ì°© ë¬´ê¸° = ê³„ì† ìœ ì§€ë¨
+ê³µì‹ ê³µê²© ëª¨ë“œ = 1íšŒì„±ìœ¼ë¡œ ë°œë™ í›„ í•´ì œë¨
+í‰íƒ€ ìƒíƒœ = ê¸°ë³¸ ìƒíƒœ
+
+ì¦‰, Subtraction Rapierë¥¼ ì†ì— ë“¤ê³  ìžˆì–´ë„, í•­ìƒ -n ê³µê²©ë§Œ ë‚˜ê°€ëŠ” ê²Œ ì•„ë‹ˆë¼:
+
+í‰ìƒì‹œ LMB = í‰íƒ€
+ìˆ«ìž ìž¥ì „ + ê³µì‹ê³µê²© ìž…ë ¥ = -n ì ìš©
+ê³µì‹ê³µê²© ëë‚˜ë©´ ë‹¤ì‹œ í‰íƒ€
+
+ì´ê²Œ ë§žìŒ.
+
+ì¶”ì²œ êµ¬ì¡°
+
+í˜„ìž¬:
+
+F2 ì„ íƒ
+13 ìž…ë ¥
+LMB
+â†’ ê³„ì† Subtraction ëª¨ë“œ ìœ ì§€
+
+ë°”ê¿€ ë°©í–¥:
+
+F2 ì„ íƒ
+13 ìž…ë ¥
+LMB
+â†’ Subtraction ê³µì‹ ê³µê²© 1íšŒ ì‚¬ìš©
+â†’ ìž…ë ¥ê°’ clear
+â†’ Action ModeëŠ” Normalë¡œ ë³µê·€
+â†’ ìž¥ì°© ë¬´ê¸°ëŠ” Subtraction Rapier ê·¸ëŒ€ë¡œ
+
+í•µì‹¬ì€ ì´ê±°ìž„:
+
+Selected Weaponì€ ìœ ì§€
+Equation Attack Armed ìƒíƒœëŠ” í•´ì œ
+ìƒíƒœë¥¼ 2ê°œë¡œ ë‚˜ëˆ ì•¼ í•¨
+1. Current Equipped Weapon
+
+ì´ê±´ ê³„ì† ìœ ì§€ë¨.
+
+Subtraction Rapier
+X Sword
+Division Shield
+2. Current Action State
+
+ì´ê±´ ì¼ì‹œì ìž„.
+
+NormalCombat
+EquationAttackArmed
+
+ì˜ˆì‹œ:
+
+CurrentEquippedWeapon = Subtraction Rapier
+CurrentActionState = NormalCombat
+
+ìˆ«ìž 13 ìž…ë ¥
+UseSelectedWeapon
+â†’ EquationAttackArmedì²˜ëŸ¼ ì²˜ë¦¬
+â†’ -13 ì ìš©
+â†’ CurrentActionState = NormalCombat
+â†’ Input cleared
+
+ë‚˜ì¤‘ì— ì• ë‹ˆë©”ì´ì…˜ ë“¤ì–´ê°€ë©´:
+
+NormalCombat
+DrawingWeapon
+EquationAttackWindup
+EquationAttackRecover
+NormalCombat
+
+ì´ë ‡ê²Œ í™•ìž¥ ê°€ëŠ¥.
+
+ìº”ìŠ¬ë„ í•„ìš”í•¨
+
+ë§žìŒ. ì·¨ì†Œí‚¤ ìžˆì–´ì•¼ í•¨.
+
+ì¶”ì²œ:
+
+Right Mouse Button = cancel current input / equation attack preparation
+ë˜ëŠ”
+Esc = cancel input
+ë˜ëŠ”
+C = clear number input, í˜„ìž¬ ì´ë¯¸ ìžˆìŒ
+
+ì§€ê¸ˆì€ Cê°€ ìˆ«ìž clearë‹ˆê¹Œ, ì¶”ê°€ë¡œ ì´ë ‡ê²Œ í•˜ìž:
+
+Right Mouse Button:
+- ìˆ«ìž ìž…ë ¥ ìžˆìœ¼ë©´ clear
+- ê³µì‹ ê³µê²© ì¤€ë¹„ ìƒíƒœë©´ cancel
+- ë©”ì‹œì§€: Equation input canceled.
+
+ë‚˜ì¤‘ì—ëŠ” ìš°í´ë¦­ì´ ë°©ì–´ë¼ë©´ Cë‚˜ Mouse Thumb Buttonìœ¼ë¡œ ë°”ê¾¸ë©´ ë¨. ì§€ê¸ˆì€ í”„ë¡œí† íƒ€ìž…ì´ë¼ RMB ì¨ë„ ë¨.
+
+ì§€ê¸ˆ êµ¬í˜„í•  ì •í™•í•œ ë³€ê²½
+
+í˜„ìž¬ F1~F5ëŠ” ë¬´ê¸° ì„ íƒìœ¼ë¡œ ìœ ì§€.
+
+F1 Addition weapon
+F2 Subtraction weapon
+F3 Multiplication weapon
+F4 Division weapon
+F5 X weapon
+
+LMBëŠ” í˜„ìž¬ ë¬´ê¸° ì‚¬ìš©.
+
+ì‚¬ìš© í›„:
+
+input clear
+action state reset
+debug message:
+Returned to normal attack.
+
+ê·¸ë¦¬ê³  ì·¨ì†Œ:
+
+RMB or C:
+input clear
+action state reset
+debug message:
+Equation input canceled.
+
+ë‹¨, CëŠ” ì´ë¯¸ clearë¼ì„œ, ë¨¼ì € Cë¥¼ cancelë¡œ í™•ìž¥í•˜ëŠ” ê²Œ ì œì¼ ì•ˆì „í•¨.
+
+Codexì— ë„£ì„ í”„ë¡¬í”„íŠ¸
+Improve the prototype weapon/action mode so equation attacks are one-shot and return to normal combat after use.
+
+Modify only what is necessary.
+
+Likely files:
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+
+Do not add real weapon actors, animations, UI widgets, inventory, AI, lock-on, or save systems yet.
+
+Current behavior:
+- F1/F2/F3/F4/F5 selects a prototype weapon mode.
+- Left Mouse uses the selected weapon with the current input.
+- The selected mode persists forever.
+
+Problem:
+This feels wrong. In the final design, the equipped weapon can remain selected, but an equation attack should be a one-shot action. After a formula/operation/X attack is used, the character should return to normal combat behavior.
+
+Requirements:
+
+1. Keep the selected prototype weapon mode.
+This represents the currently equipped/selected weapon and should NOT automatically change after use.
+
+2. Add a simple action state if useful:
+- NormalCombat
+- EquationActionArmed
+
+But keep it simple. If an explicit enum is overkill, use a boolean such as bEquationActionArmed.
+
+3. Left Mouse behavior:
+- If there is a valid current input and a nearest enemy is found, use the selected prototype weapon once.
+- After the attempt, always:
+  - Clear player input
+  - Return action state to NormalCombat
+  - Print "Returned to normal attack."
+- The selected weapon should remain the same.
+
+4. If there is no input:
+- Show "No input."
+- Return to NormalCombat.
+
+5. If there is no enemy in range:
+- Show "No equation enemy in range."
+- Clear input if there was input.
+- Return to NormalCombat.
+
+6. Add or update cancel behavior:
+- C already clears input.
+- Extend C so it also cancels equation action preparation and returns to NormalCombat.
+- Print "Equation input canceled." when C is pressed and there was input or an armed equation action.
+- Backspace should still only remove one digit and should not cancel the whole action unless input becomes empty.
+
+7. Optional:
+- Bind Right Mouse Button to CancelEquationInput if it does not conflict with existing template behavior.
+- If Right Mouse is already used or risky, skip it for now.
+
+8. Keep existing debug shortcuts E/Q/R/F/X working if possible.
+For those shortcuts too, after operation/submission attempt:
+- Clear input
+- Return to NormalCombat
+- Print "Returned to normal attack."
+
+9. Debug messages when using selected weapon:
+- "Using Weapon: Addition"
+- "Using Weapon: Subtraction"
+- "Using Weapon: Multiplication"
+- "Using Weapon: Division"
+- "Using Weapon: X"
+Then result message.
+Then "Returned to normal attack."
+
+10. Preserve existing behavior:
+- Digit input works.
+- Backspace works.
+- C clears/cancels.
+- F1-F5 weapon selection works.
+- LMB uses selected weapon once.
+- Selected weapon remains selected after use.
+- 13 + F2 + LMB transforms x + 5 = 10 into x - 8 = -3.
+- After that, LMB with no input shows "No input" instead of repeating -13.
+- F5 + 5 + LMB executes.
+
+11. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. What state was added
+3. What resets after an equation attack
+4. What remains selected after an equation attack
+5. How cancel works
+6. How to test in Play mode
+í…ŒìŠ¤íŠ¸
+í…ŒìŠ¤íŠ¸ 1, ìžë™ í‰íƒ€ ë³µê·€
+F2
+13 ìž…ë ¥
+LMB
+
+ê¸°ëŒ€:
+
+x - 8 = -3
+Returned to normal attack.
+Input cleared.
+
+ê·¸ ìƒíƒœì—ì„œ ë°”ë¡œ ë‹¤ì‹œ LMB:
+
+No input.
+
+ì¦‰, -13ì´ ë°˜ë³µë˜ë©´ ì•ˆ ë¨.
+
+í…ŒìŠ¤íŠ¸ 2, ë¬´ê¸° ì„ íƒì€ ìœ ì§€
+
+ìœ„ í…ŒìŠ¤íŠ¸ í›„ ë‹¤ì‹œ:
+
+3 ìž…ë ¥
+LMB
+
+ê¸°ëŒ€:
+
+í˜„ìž¬ ì„ íƒ ë¬´ê¸°ê°€ ì—¬ì „ížˆ Subtractionì´ë©´
+x - 11 = -6
+
+ì¦‰, ë¬´ê¸°ëŠ” ìœ ì§€ë˜ì§€ë§Œ ìž…ë ¥/ê³µì‹ê³µê²© ìƒíƒœë§Œ ì´ˆê¸°í™”ë˜ëŠ” ê²Œ ë§žìŒ.
+
+í…ŒìŠ¤íŠ¸ 3, ìº”ìŠ¬
+13 ìž…ë ¥
+C
+
+ê¸°ëŒ€:
+
+Equation input canceled.
+Input: -
+
+ê·¸ ë‹¤ìŒ LMB:
+
+No input.
+
+ì´ë ‡ê²Œ í•˜ë©´ êµ¬ì¡°ê°€ ì¢‹ì•„ì§.
+ë‚˜ì¤‘ì— ì‹¤ì œ í‰íƒ€ê°€ ìƒê¸°ë©´ NormalCombat ìƒíƒœì—ì„œ LMBëŠ” ê¸°ë³¸ ê³µê²©, NumberInput + selected weapon use ìƒíƒœì—ì„œë§Œ ê³µì‹ ê³µê²©ìœ¼ë¡œ ë¶„ê¸°í•˜ë©´ ë¨.
+
+* * *
+
+**You:**
+
+ìš°ë¦¬ í”„ë¡œí† íƒ€ìž… ê¹Œì§€ ê°€ëŠ” ê³„íš ë¬¸ì„œ ì½ê³  ì§€ê¸ˆ íŽ˜ì´ì§€ ëª‡ì¸ì§€ ì–¼ë§ˆë‚˜ ì™”ëŠ”ì§€ì 
+
+* * *
+
+**ChatGPT:**
+
+ë¬¸ì„œ ì²˜ë¦¬ í™•ì¸: Plan till prototype.docx ì „ì²´ ì²˜ë¦¬ë¨.
+ê°ì§€ ê¸¸ì´: 245ê°œ ë¬¸ë‹¨, ë¹„ì–´ ìžˆì§€ ì•Šì€ ë¬¸ë‹¨ 228ê°œ, ì•½ 4,990ìž. ë Œë” ê¸°ì¤€ ì´ 12íŽ˜ì´ì§€, ë‹¨ 12íŽ˜ì´ì§€ëŠ” ë¹ˆ íŽ˜ì´ì§€ë¼ ì‹¤ë‚´ìš©ì€ 11íŽ˜ì´ì§€ìž„. ì „ì²´ ë¬¸ì„œ ì²˜ë¦¬ ì™„ë£Œ.
+
+ì„¹ì…˜ í—¤ë” ìˆœì„œ:
+
+1ì°¨ ë¡œë“œë§µ
+Phase 0, ì˜¤ëŠ˜ í•  ì¼: ê°œë°œ í´ë”ì™€ ëª©í‘œ ê³ ì •
+Phase 1, 1ì£¼ì°¨: íšŒìƒ‰ ë°•ìŠ¤ ì „íˆ¬ìž¥ ë§Œë“¤ê¸°
+Phase 2, 2ì£¼ì°¨: ìˆ˜í•™ ìƒëª… ì‹œìŠ¤í…œ
+Phase 3, 3ì£¼ì°¨: X ë¬´ê¸°ì™€ ìˆ«ìž ìž…ë ¥
+Phase 4, 4ì£¼ì°¨: ì‚¬ì¹™ì—°ì‚° ë¬´ê¸°
+Phase 5, 5ì£¼ì°¨: Mathematical Armor
+Phase 6, 6ì£¼ì°¨: ì „íˆ¬ ë§› ì¶”ê°€
+Phase 7, 7ì£¼ì°¨: UIì™€ í”¼ë“œë°±
+Phase 8, 8ì£¼ì°¨: AI ì—ì…‹ ì‚¬ìš©
+1ì°¨ ì™„ì„± ê¸°ì¤€, Vertical Slice
+ì§€ê¸ˆ ë‹¹ìž¥ ë„ˆì˜ ìž‘ì—… ìˆœì„œ
+
+ë¡œë“œë§µ ë¬¸ì„œìƒ Phase 4ëŠ” â€œì‚¬ì¹™ì—°ì‚° ë¬´ê¸°â€ ë‹¨ê³„ì´ê³ , ì²˜ìŒ êµ¬í˜„í•  ì—°ì‚°ìœ¼ë¡œ Apply -n to both sides, Apply /n to both sides, Check X answerê°€ ìž¡í˜€ ìžˆìŒ. 
+
+Plan till prototype
+
+ì§€ê¸ˆ ìœ„ì¹˜
+
+í˜„ìž¬ ìš°ë¦¬ëŠ” ë¬¸ì„œ ê¸°ì¤€ Page 6~7ì¯¤, Phase 4ì— ìžˆìŒ.
+
+ì •í™•ížˆ ë§í•˜ë©´:
+
+ë¬¸ì„œ ì „ì²´ ì‹¤ë‚´ìš© 11íŽ˜ì´ì§€ ì¤‘
+í˜„ìž¬ ìœ„ì¹˜: 6~7íŽ˜ì´ì§€
+ì§„í–‰ë¥ : ì•½ 55~60%
+
+ë‹¤ë§Œ ê¸°ëŠ¥ ê¸°ì¤€ìœ¼ë¡œ ë³´ë©´ ì¡°ê¸ˆ ë‹¤ë¦„.
+
+ì™„ë£Œëœ ê²ƒ
+Phase 0: ì™„ë£Œ
+í”„ë¡œì íŠ¸ ìƒì„±, GitHub, Codex ë¬¸ì„œ ì„¸íŒ… ì™„ë£Œ
+
+Phase 1: ë¶€ë¶„ ì™„ë£Œ
+Third-person ì´ë™, ë”ë¯¸ ì , ì  ë°©ì •ì‹ í‘œì‹œ ì™„ë£Œ
+ë‹¨, lock-onì€ ì•„ì§ ì•ˆ í•¨
+
+Phase 2: ì™„ë£Œ + ì´ˆê³¼ ë‹¬ì„±
+ìˆ˜í•™ ìƒëª… ì‹œìŠ¤í…œ ì™„ë£Œ
+EquationComponent ì™„ë£Œ
+ë°©ì •ì‹ í‘œì‹œ, ì •ë‹µ ê²€ì‚¬, ì˜¤ë‹µ ì§„í™” ì™„ë£Œ
+ì‹¬ì§€ì–´ polynomial equation model v1ê¹Œì§€ ë“¤ì–´ê°
+
+Phase 3: ì™„ë£Œ
+ìˆ«ìž ìž…ë ¥ ì™„ë£Œ
+X ì œì¶œ ì™„ë£Œ
+ì •ë‹µì´ë©´ AXIOM EXECUTION ì™„ë£Œ
+ì˜¤ë‹µì´ë©´ ì§„í™” ì™„ë£Œ
+
+Phase 4: ì§„í–‰ ì¤‘, ê±°ì˜ í•µì‹¬ ìˆ˜í•™ ì½”ì–´ëŠ” ì™„ë£Œ
+ì‚¬ì¹™ì—°ì‚° +, -, Ã—, Ã· ì–‘ë³€ ì ìš© ì™„ë£Œ
+Divisionì€ clean integer division ì¡°ê±´ìœ¼ë¡œ ìž‘ë™
+Prototype weapon modeë„ ìž‘ë™
+Left Mouseë¡œ í˜„ìž¬ ë¬´ê¸° ì‚¬ìš©ê¹Œì§€ ë¨
+ì•„ì§ ì•ˆ ëœ ê²ƒ
+Phase 1ì˜ lock-on
+ì§„ì§œ ë¬´ê¸° actor/mesh/animation
+ë¬´ê¸° ë‚´êµ¬ë„
+ì‹¤ì œ ê³µê²© íŒì •
+Armored Goblin
+Mathematical Armor
+Equation Break Stagger
+ìŠ¤íƒœë¯¸ë‚˜
+ì  ê³µê²© AI
+ê·¸ë¡œê¸°
+ê¸°ë³¸ HUD/ì „íˆ¬ ë¡œê·¸ UI
+AI 3D ì—ì…‹
+ë‚´ íŒë‹¨
+
+ìš°ë¦¬ëŠ” ë¡œë“œë§µ ìˆœì„œìƒìœ¼ë¡œëŠ” Phase 4 ì¤‘í›„ë°˜ìž„.
+ê·¼ë° ìˆ˜í•™ ì½”ì–´ë§Œ ë³´ë©´ Phase 4ë¥¼ ë„˜ì–´ì„œ ìž¥ê¸° êµ¬ì¡°ê¹Œì§€ ì¼ë¶€ ì„ í–‰í–ˆìŒ.
+
+íŠ¹ížˆ ì›ëž˜ Phase 4 ëª©í‘œëŠ”:
+
+Enemy: x + 5 = 10
+Player inputs 5
+Subtraction Rapier hits
+Equation becomes x = 5
+Player inputs 5
+X Sword hits
+Enemy dies
+
+ì˜€ëŠ”ë°, ì§€ê¸ˆì€ ì´ê²ƒë³´ë‹¤ ë” ë¨:
+
+x + 5 = 10
+13 ìž…ë ¥ + Subtraction
+â†’ x - 8 = -3
+
+5 ìž…ë ¥ + X
+â†’ AXIOM EXECUTION
+
+Addition, Subtraction, Multiplication, Division ëª¨ë‘ polynomial ê¸°ë°˜ìœ¼ë¡œ ìž‘ë™
+
+ì¦‰, Phase 4ì˜ ìˆ˜í•™ ì—”ì§„ì€ ëª©í‘œ ì´ˆê³¼ ë‹¬ì„±ìž„.
+
+ë‹¤ìŒ ì§„ì§œ ëª©í‘œ
+
+ì´ì œ ë¬¸ì„œìƒ ë‹¤ìŒ í° ë‹¨ê³„ëŠ”:
+
+Phase 5: Mathematical Armor
+
+ì¦‰:
+
+Armored Goblin
+(x + 5) Ã— 2 = 20
+
+2 ìž…ë ¥
+Division Shield
+â†’ x + 5 = 10
+
+5 ìž…ë ¥
+X Sword
+â†’ AXIOM EXECUTION
+
+ê·¸ ì „ì— ë°©ê¸ˆ ë§í•œ ê³µì‹ ê³µê²© í›„ í‰íƒ€ ë³µê·€ / cancel ì²˜ë¦¬ë§Œ ì •ë¦¬í•˜ê³  ê°€ë©´ ë¨.
+
+ìš”ì•½í•˜ë©´:
+
+í˜„ìž¬ ìœ„ì¹˜: Page 6~7 / ì‹¤ë‚´ìš© 11íŽ˜ì´ì§€
+í˜„ìž¬ Phase: Phase 4, ì‚¬ì¹™ì—°ì‚° ë¬´ê¸°
+ì§„í–‰ë¥ : ë¡œë“œë§µ ê¸°ì¤€ ì•½ 55~60%
+ìˆ˜í•™ ì½”ì–´ ê¸°ì¤€: Phase 4 ëª©í‘œ ì´ˆê³¼ ë‹¬ì„±
+ë‹¤ìŒ í•µì‹¬: Action mode ì •ë¦¬ í›„ Phase 5 Mathematical Armor
+
+* * *
+
+**You:**
+
+ì‘.. ì•ˆë¨.
+1. f1 f2 f3 f4 ëˆ„ë¦„ ue ì°½ì˜ í™”ë©´ì´ ì¢€ ë°”ë€œ. ì´ê±° ì˜¤ë°”ìž„. ë‹¤ë¥¸ ë‹¨ì¶•í‚¤ë¡œ ë°”ê¿”ì•¼í•¨. 
+2.  F2
+13 ìž…ë ¥
+LMB
+x - 8 = -3
+Returned to normal attack.
+Input cleared.
+ë¼ê³  ë–  ë†“ê³  ìˆ«ìž ì•„ë¬´ê±°ë‚˜ ë„£ê³  í´ë¦­í•˜ë©´ ë˜ ê·¸ ìˆ«ìžë¥¼ ëºŒ. ë¬´ê¸°ê°€ í‰íƒ€ëª¨ë“œ ëŒì•„ê°€ëŠ”ê²Œ ì•„ë‹ˆë¼ no inputì´ë¼ ëœ¨ë˜, ìˆ«ìžìžˆìŒ ê·¸ê±¸ ë˜ ë¹¼ë˜ í•¨. í‰íƒ€ ê°œë…ì´ ì—†ì–´ ê·¸ë¥¸ê°€?
+
+* * *
+
+**ChatGPT:**
+
+ë§žìŒ. ì§€ê¸ˆ ë¬¸ì œì˜ ë³¸ì§ˆì€ ì´ê±°ìž„.
+
+í˜„ìž¬ ì½”ë“œ:
+Selected Weapon = Subtraction
+ìˆ«ìž ìž…ë ¥ ìžˆìŒ
+LMB
+â†’ ë¬´ì¡°ê±´ Subtraction ê³µì‹ ê³µê²© ì‹¤í–‰
+
+ë¬¸ì œ:
+Normal Attack ìƒíƒœê°€ ì—†ìŒ
+Equation Attack Armed ìƒíƒœë„ ì—†ìŒ
+ê·¸ëž˜ì„œ ìˆ«ìžë§Œ ìžˆìœ¼ë©´ ê³„ì† ê³µì‹ ê³µê²©ìœ¼ë¡œ ì²˜ë¦¬ë¨
+
+ì¦‰, ë„¤ ë§ëŒ€ë¡œ í‰íƒ€ ê°œë…ì´ ì—†ì–´ì„œ ìƒê¸´ ë¬¸ì œìž„.
+
+ê³ ì³ì•¼ í•˜ëŠ” ìµœì¢… êµ¬ì¡°
+
+ì´ë ‡ê²Œ 3ê°œë¡œ ë‚˜ëˆ ì•¼ í•¨.
+
+1. Equipped Weapon
+í˜„ìž¬ ì†ì— ë“¤ê³  ìžˆëŠ” ë¬´ê¸°
+ì˜ˆ: Subtraction Rapier
+
+2. Number Input
+í˜„ìž¬ ìž¥ì „í•œ ìˆ«ìž
+ì˜ˆ: 13
+
+3. Action State
+NormalCombat ë˜ëŠ” EquationActionArmed
+
+ì¤‘ìš”í•œ ê·œì¹™:
+
+ë¬´ê¸°ëŠ” ìœ ì§€ëœë‹¤.
+í•˜ì§€ë§Œ ê³µì‹ ê³µê²© ìƒíƒœëŠ” 1íšŒ ì‚¬ìš© í›„ êº¼ì§„ë‹¤.
+LMBëŠ” ê¸°ë³¸ì ìœ¼ë¡œ í‰íƒ€ë‹¤.
+ê³µì‹ ê³µê²©ì€ "ìž¥ì „/armed" ìƒíƒœì¼ ë•Œë§Œ ë‚˜ê°„ë‹¤.
+ì¡°ìž‘ë„ ë°”ê¾¸ìž
+
+F1~F5ëŠ” Unreal Editorëž‘ ì¶©ëŒ ê°€ëŠ¥ì„±ì´ í¼.
+ê·¸ëž˜ì„œ ì§€ê¸ˆ ë‹¹ìž¥ ë°”ê¾¸ëŠ” ê²Œ ë§žìŒ.
+
+ì¶”ì²œ ìž„ì‹œ í‚¤:
+
+Z = Addition weapon ì„ íƒ
+V = Subtraction weapon ì„ íƒ
+B = Multiplication weapon ì„ íƒ
+N = Division weapon ì„ íƒ
+M = X weapon ì„ íƒ
+
+Enter = í˜„ìž¬ ìˆ«ìžë¥¼ ê³µì‹ ê³µê²©ìœ¼ë¡œ ìž¥ì „
+LMB = ê³µê²©
+C = ìž…ë ¥/ìž¥ì „ ì·¨ì†Œ
+
+íë¦„:
+
+V ëˆ„ë¦„
+â†’ Subtraction Rapier ì„ íƒ
+
+13 ìž…ë ¥
+Enter
+â†’ Equation Action Armed
+
+LMB
+â†’ -13 ì ìš©
+â†’ x - 8 = -3
+â†’ Returned to normal attack
+
+ì•„ë¬´ ìˆ«ìž ìž…ë ¥í•˜ê³  LMB
+â†’ í‰íƒ€ debug messageë§Œ ë‚˜ì™€ì•¼ í•¨
+â†’ ë” ì´ìƒ subtraction ë°˜ë³µë˜ë©´ ì•ˆ ë¨
+
+X ì²˜í˜•ë„ ë˜‘ê°™ì´:
+
+M ëˆ„ë¦„
+5 ìž…ë ¥
+Enter
+LMB
+â†’ AXIOM EXECUTION
+â†’ Returned to normal attack
+ì™œ Enterê°€ í•„ìš”í•˜ëƒ
+
+ì§€ê¸ˆì€ â€œìˆ«ìž ìž…ë ¥ì´ ìžˆìŒ = ê³µì‹ ê³µê²© ì¤€ë¹„ë¨â€ì²˜ëŸ¼ ë˜ì–´ ìžˆìŒ.
+
+ê·¼ë° ì´ëŸ¬ë©´:
+
+ê·¸ëƒ¥ ìˆ«ìž ìž…ë ¥í•´ë‘” ìƒíƒœ
+LMB í‰íƒ€ ì¹˜ê³  ì‹¶ìŒ
+ê·¼ë° ê³µì‹ ê³µê²© ë‚˜ê°
+
+ì´ ë¬¸ì œê°€ ìƒê¹€.
+
+ê·¸ëž˜ì„œ Enterê°€ ìž„ì‹œë¡œ â€œìˆ«ìž ìž¥ì „ í™•ì¸â€ ì—­í• ì„ í•´ì•¼ í•¨.
+ë‚˜ì¤‘ì— ìˆ«ìž íœ ì—ì„œëŠ”:
+
+ìˆ«ìž íœ  ì—´ê¸°
+ìˆ«ìž ì„ íƒ
+íœ  ë‹«ê¸°
+â†’ Equation Action Armed
+
+ìœ¼ë¡œ ëŒ€ì²´í•˜ë©´ ë¨.
+
+Codexì— ë„£ì„ í”„ë¡¬í”„íŠ¸
+Fix the prototype weapon/action flow.
+
+Current problems:
+1. F1-F5 conflict with Unreal Editor behavior, so they should not be used.
+2. Left Mouse currently applies the selected equation weapon whenever there is numeric input.
+3. There is no real Normal Combat state, so after returning to normal, typing another number and clicking still repeats the selected equation operation.
+
+We need a clearer prototype action state.
+
+Modify only what is necessary.
+
+Likely files:
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+
+Do not add real weapon actors, animations, UI widgets, inventory, AI, lock-on, or save systems yet.
+
+Design:
+Separate equipped weapon from equation attack state.
+
+The selected/equipped prototype weapon should persist.
+The equation attack armed state should be one-shot and should reset after use.
+
+Controls:
+- Z selects Addition weapon
+- V selects Subtraction weapon
+- B selects Multiplication weapon
+- N selects Division weapon
+- M selects X weapon
+- Enter arms the current numeric input as an equation action
+- Left Mouse uses the current action
+- C cancels input and any armed equation action
+- Backspace only removes one digit
+
+Remove or stop using F1-F5 weapon selection bindings.
+
+Important behavior:
+- Left Mouse in NormalCombat should NOT apply equation operations, even if there is numeric input.
+- Left Mouse in NormalCombat should print:
+  "Basic attack."
+- Left Mouse should only apply equation operation or X answer when EquationActionArmed is true.
+- After an equation action attempt, always:
+  - clear input
+  - set EquationActionArmed false
+  - return to NormalCombat
+  - print "Returned to normal attack."
+
+Requirements:
+
+1. Add an action state enum or boolean:
+- NormalCombat
+- EquationActionArmed
+
+Use whichever is cleaner, but make the code beginner-readable.
+
+2. Add function:
+- ArmEquationAction()
+
+Behavior:
+- If there is no input, print "No input."
+- Otherwise set EquationActionArmed true
+- Print "Equation action armed."
+
+3. Update Left Mouse behavior:
+If EquationActionArmed is false:
+- Print "Basic attack."
+- Do not apply any equation operation.
+- Do not submit X answer.
+- Do not clear input unless you think it is necessary. Prefer not clearing it.
+
+If EquationActionArmed is true:
+- Find nearest equation enemy.
+- If no enemy, print "No equation enemy in range."
+- If selected weapon is Addition, apply addition.
+- If selected weapon is Subtraction, apply subtraction.
+- If selected weapon is Multiplication, apply multiplication.
+- If selected weapon is Division, apply division.
+- If selected weapon is X, submit answer.
+- Clear input.
+- Set EquationActionArmed false.
+- Print "Returned to normal attack."
+
+4. Update C behavior:
+- Clear input.
+- Set EquationActionArmed false.
+- Print "Equation input canceled."
+
+5. Weapon selection behavior:
+- Z/V/B/N/M should only change selected weapon.
+- They should not automatically apply operations.
+- They should not automatically arm equation action.
+- Print selected weapon messages:
+  "Selected Weapon: Addition"
+  "Selected Weapon: Subtraction"
+  "Selected Weapon: Multiplication"
+  "Selected Weapon: Division"
+  "Selected Weapon: X"
+
+6. Keep old debug direct operation shortcuts E/Q/R/F/X only if they do not interfere.
+But if they make this confusing, comment them out or remove their bindings.
+Priority is the new flow.
+
+7. Preserve digit input:
+- 0-9 still append digits
+- Backspace removes one digit
+- C cancels/clears
+
+8. Test expectations:
+- Press V, type 13, press Enter, press LMB:
+  x + 5 = 10 becomes x - 8 = -3
+  input clears
+  action returns to normal
+
+- Then type 3 and press LMB without pressing Enter:
+  should print "Basic attack."
+  should NOT subtract 3
+
+- Press M, type 5, press Enter, press LMB:
+  enemy executes
+
+- Press Z/V/B/N/M should not change the Unreal Editor viewport or mode like F1-F5 did.
+
+Before finalizing, explain:
+1. Which files changed
+2. Which keys were removed
+3. Which keys were added
+4. What state was added
+5. What LMB does in NormalCombat
+6. What LMB does in EquationActionArmed
+7. How to test the bug is fixed
+í…ŒìŠ¤íŠ¸ëŠ” ì´ë ‡ê²Œ
+í…ŒìŠ¤íŠ¸ 1, Fí‚¤ ë¬¸ì œ í•´ê²°
+Z V B N M ëˆ„ë¥´ê¸°
+
+ê¸°ëŒ€:
+
+Unreal í™”ë©´/ë·°ëª¨ë“œ ì•ˆ ë°”ë€œ
+Selected Weapon ë©”ì‹œì§€ë§Œ ëœ¸
+í…ŒìŠ¤íŠ¸ 2, ê³µì‹ ê³µê²© 1íšŒì„±
+V
+13
+Enter
+LMB
+
+ê¸°ëŒ€:
+
+x - 8 = -3
+Returned to normal attack.
+
+ê·¸ë‹¤ìŒ ë°”ë¡œ:
+
+3
+LMB
+
+ê¸°ëŒ€:
+
+Basic attack.
+
+ì¤‘ìš”:
+
+x - 11 = -6 ìœ¼ë¡œ ë°”ë€Œë©´ ì‹¤íŒ¨
+í…ŒìŠ¤íŠ¸ 3, X ë¬´ê¸°
+M
+5
+Enter
+LMB
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+Returned to normal attack.
+
+ì´ê²Œ ë§žëŠ” ë°©í–¥ìž„.
+ì •ë¦¬í•˜ë©´, ë¬´ê¸° ì„ íƒì€ ìœ ì§€, ê³µì‹ ê³µê²© ìž¥ì „ì€ 1íšŒì„±, LMB ê¸°ë³¸ê°’ì€ í‰íƒ€ë¡œ ë°”ê¿”ì•¼ í•¨.
+
+* * *
+
+**You:**
+
+Works well!
+
+* * *
+
+**ChatGPT:**
+
+ì¢‹ì•„. Prototype Weapon Action Flow ìˆ˜ì • ì™„ë£Œë¡œ ë³´ë©´ ë¨.
+
+í˜„ìž¬ ìƒíƒœ:
+
+Z = Addition weapon ì„ íƒ
+V = Subtraction weapon ì„ íƒ
+B = Multiplication weapon ì„ íƒ
+N = Division weapon ì„ íƒ
+M = X weapon ì„ íƒ
+
+ìˆ«ìž ìž…ë ¥
+Enter = ê³µì‹ ê³µê²© ìž¥ì „
+LMB = ìž¥ì „ëœ ê³µì‹ ê³µê²© ì‚¬ìš©
+
+ìž¥ì „ ì•ˆ ëœ ìƒíƒœì—ì„œ LMB = Basic attack
+C = ìž…ë ¥/ê³µì‹ê³µê²© ì·¨ì†Œ
+
+ì´ì œ êµ¬ì¡°ê°€ í›¨ì”¬ ë§žìŒ:
+
+ë¬´ê¸° ì„ íƒì€ ìœ ì§€ë¨
+ê³µì‹ ê³µê²©ì€ 1íšŒì„±
+ì‚¬ìš© í›„ í‰íƒ€ ìƒíƒœë¡œ ë³µê·€
+ìˆ«ìžë§Œ ìž…ë ¥í•˜ê³  LMB ëˆŒëŸ¬ë„ ê³µì‹ ê³µê²© ì•ˆ ë‚˜ê°
+
+ë°”ë¡œ ì»¤ë°‹í•´.
+
+Summary:
+Fix prototype weapon action flow
+
+Description:
+Separated selected weapon state from one-shot equation action state, replaced F-key weapon selection with Z/V/B/N/M, and made Left Mouse perform basic attack unless an equation action is armed.
+
+Commit + Push.
+
+ë‹¤ìŒì€ Phase 5: Mathematical Armor / Armored Goblinìœ¼ë¡œ ê°€ë©´ ë¨.
+
+* * *
+
+**You:**
+
+ã„±ã„±. í‘¸ì‰¬í•¨. ì°¸ê³ ë¡œ, Mathematical Armor / Armored Goblinë©´, Base Formula: x + 5 = 10 Armor: Ã—2 Displayed: (x + 5) Ã— 2 = 20 ëž‘ Base Formula: x + 5 = 10 Armor: Ã—2 Helmet: +2 Displayed: (x + 5)Ã—2 + 2 = 22ë„ ë˜ì•¼í•¨
+
+
+* * *
+
+**ChatGPT:**
+
+ì¢‹ì•„. Phase 5: Mathematical Armor / Armored Goblin ë“¤ì–´ê°€ìž.
+
+í•µì‹¬ ì„¤ê³„ëŠ” ì´ê±°ìž„:
+
+Base Formula:
+x + 5 = 10
+
+Layer 1, Armor:
+Ã—2
+
+Displayed:
+(x + 5) Ã— 2 = 20
+
+Layer 2, Helmet:
++2
+
+Displayed:
+(x + 5) Ã— 2 + 2 = 22
+
+ì¦‰, ì´ê±´ ë‹¨ìˆœ polynomial expansionì´ ì•„ë‹ˆë¼ ìˆ˜ì‹ ìœ„ì— ë§ì”Œì›Œì§„ layer stackìœ¼ë¡œ ê°€ì•¼ í•¨.
+
+ì¤‘ìš”í•œ ì„¤ê³„ ê²°ì •
+1. Base FormulaëŠ” ìœ ì§€
+
+ë‚´ë¶€ ê¸°ë³¸ì‹:
+
+x + 5 = 10
+2. Mathematical ArmorëŠ” Layerë¡œ ì €ìž¥
+
+ì˜ˆ:
+
+Layer 1: Multiply 2, source = Armor
+Layer 2: Add 2, source = Helmet
+3. DisplayëŠ” Layerë¥¼ ì ìš©í•´ì„œ ë³´ì—¬ì¤Œ
+Base:
+x + 5 = 10
+
+Armor Ã—2:
+(x + 5) Ã— 2 = 20
+
+Helmet +2:
+(x + 5) Ã— 2 + 2 = 22
+4. ì œê±°ëŠ” ë°”ê¹¥ layerë¶€í„°
+
+(x + 5) Ã— 2 + 2 = 22 ìƒíƒœì—ì„œ:
+
+2 ìž…ë ¥
+Subtraction weapon
+â†’ Helmet +2 ì œê±°
+â†’ (x + 5) Ã— 2 = 20
+
+ê·¸ ë‹¤ìŒ:
+
+2 ìž…ë ¥
+Division weapon
+â†’ Armor Ã—2 ì œê±°
+â†’ x + 5 = 10
+
+ê·¸ ë‹¤ìŒ:
+
+5 ìž…ë ¥
+Subtraction weapon
+â†’ x = 5
+
+ê·¸ ë‹¤ìŒ:
+
+5 ìž…ë ¥
+X weapon
+â†’ AXIOM EXECUTION
+
+ì´ê²Œ ì œì¼ ê²Œìž„ì ìœ¼ë¡œ ì¢‹ìŒ.
+
+ì§€ê¸ˆ ë§Œë“¤ ê¸°ëŠ¥
+
+ì´ë²ˆ ë‹¨ê³„ëŠ” Mathematical Layer v1ë§Œ ë§Œë“ ë‹¤.

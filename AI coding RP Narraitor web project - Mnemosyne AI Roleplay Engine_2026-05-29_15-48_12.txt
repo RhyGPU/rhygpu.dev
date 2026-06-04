@@ -1,0 +1,524 @@
+Validated EnginePatch
+   â†“
+Soul + World + Memory update
+
+The narrator prompt becomes much closer to Janitor style:
+
+Character card
+World snapshot
+Relevant memories
+Latest exchange
+User message
+
+No hidden JSON in the narrator output.
+
+State updater prompt should be strict and boring
+
+The updater should not be creative. It should be told:
+
+You are a state extraction engine.
+Do not write prose.
+Do not infer beyond explicit or strongly implied facts.
+If unsure, leave fields unchanged.
+Return valid JSON only.
+
+It can process:
+
+Previous state
+Latest user message
+Narrator response
+
+Then output:
+
+JSON
+{
+  "memory": "User barged in with a gun; Aurora is terrified and cornered.",
+  "tag": "threat",
+  "trust_delta": -40,
+  "fear_delta": 60,
+  "world_event": "Aurora is cornered in the kitchen after the user entered with a gun.",
+  "time_update": null
+}
+
+Then Rust validates and clamps it.
+
+Use cheap/local model?
+
+Yes, but with caution.
+
+Good candidates for updater:
+
+cheap API model
+local small model
+rules + regex hybrid
+
+The state updater does not need beautiful writing. It needs structured extraction.
+
+But do not trust it blindly. Always validate:
+
+clamp numbers
+reject invalid tags
+ignore unsupported time jumps
+dedupe memories
+cap memory count
+Time handling in two-pass system
+
+The state updater can extract time only when explicit.
+
+Examples:
+
+User: I wait ten minutes.
+â†’ elapsed_minutes += 10
+
+User: It is morning now.
+â†’ time label = morning, precision = user_explicit
+
+Narrator: twenty minutes later
+â†’ ignore unless user or world already allowed time jump
+
+Narrator: after a beat / after a moment
+â†’ no numeric update
+
+This solves your â€œtwenty minutesâ€ issue better than prompt rules.
+
+Tradeoff
+
+Two-pass costs more latency and maybe more money.
+
+But it lets you use:
+
+expensive/better model = narration
+cheap/small model = state update
+
+So overall quality per dollar may improve.
+
+My recommendation
+
+Do this next as a major architecture step:
+
+Dual-Pass State Update V1
+
+Do not add more narrator rules. Remove hidden JSON from narrator output, move state update to pass 2, and keep the narrator prompt clean.
+
+Codex task
+Task: Dual-Pass State Update V1.
+
+Goal:
+Separate creative narration from hidden state updating. The narrator model should only write visible narration and status. A second state-updater pass should read the latest turn and produce EnginePatch JSON.
+
+Problem:
+The current one-pass system makes the narrator write prose and hidden state JSON in the same response. This burdens the model, makes prose more mechanical, and may reduce quality compared to Janitor-style RP.
+
+Files to inspect:
+- src-tauri/src/providers/api.rs
+- src-tauri/src/commands.rs
+- src-tauri/state_engine/src/hidden_state.rs
+- src-tauri/state_engine/src/patch.rs
+- src-tauri/state_engine/src/context_compiler.rs
+- src/tauri.ts
+- src/App.tsx
+
+Requirements:
+1. Add dual-pass mode.
+2. Narrator pass:
+   - receives normal narrator prompt + context + user message
+   - outputs visible narration only
+   - no longer required to output [HIDDEN STATE]
+   - keep visible ```status block for now
+3. State updater pass:
+   - receives prior Soul/World summary, latest user message, and narrator response
+   - outputs EnginePatch JSON only
+   - no prose
+   - no markdown
+4. Keep backward compatibility:
+   - existing hidden-state parsing can remain as fallback
+   - one-pass mode can remain as legacy/debug option if easy
+5. Add a compact state updater prompt:
+   - extract only explicit or strongly implied changes
+   - if unsure, leave unchanged
+   - do not invent time jumps
+   - concrete time changes only from user message or World Log
+   - output valid EnginePatch JSON only
+6. Add time handling:
+   - state updater may propose time_update only when explicit
+   - engine validates/ignores unsupported concrete time
+7. Add config option:
+   - State update mode: one-pass hidden state / dual-pass updater
+   - default to dual-pass if stable
+8. Payload logging:
+   - log narrator payload separately
+   - log state-updater payload separately
+   - label source as narrator or state_updater
+9. Do not change launcher BAT files.
+10. Do not implement full Scene State.
+11. Do not implement memory retrieval.
+
+Tests:
+- narrator prompt no longer requires hidden state in dual-pass mode
+- state updater prompt asks for JSON only
+- state updater patch applies through EnginePatch validation
+- unsupported time jumps are ignored
+- explicit user time update is accepted
+- fallback one-pass hidden state still works if enabled
+- payload logs distinguish narrator vs state_updater
+- existing tests pass
+
+Run:
+- npm.cmd run test:rust
+- npm.cmd run typecheck
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Manual test:
+1. Start fresh chat in dual-pass mode.
+2. Confirm narrator output has no [HIDDEN STATE].
+3. Confirm Soul/memory still updates after response.
+4. Export payload history.
+5. Confirm there are narrator and state_updater payload entries.
+6. Test: user says "I wait ten minutes."
+7. Confirm time updates only then.
+8. Test normal dialogue.
+9. Confirm no invented concrete time appears in state.
+
+Bottom line: yes, split it into two passes. That is more aligned with Mnemosyneâ€™s vision than forcing one model to be both writer and database clerk.
+
+* * *
+
+**You:**
+
+I worry if this will cost more tokens. Would it be worth the extra computing? Cause each chat gpt prompt cost 5 + times more computing and resources for relative to a google search. so im kinda worried for user cost.
+
+* * *
+
+**ChatGPT:**
+
+Yes, your concern is valid. A second LLM call can be worth it, but only if it is designed carefully. If we naÃ¯vely feed the full brief twice, it is absolutely not worth it.
+
+The correct answer is:
+
+Do not make dual-pass mandatory.
+Do not feed full context to the updater.
+Do not use the expensive narrator model for state updates.
+Make state updating tiered, optional, and cheap.
+Cost comparison
+
+Current one-pass system:
+
+Narrator input: full system + context + user message
+Narrator output: visible prose + status + hidden state JSON
+Cost: 1 API call
+Quality issue: narrator is burdened by hidden-state bookkeeping
+
+Bad dual-pass system:
+
+Pass 1: full narrator call
+Pass 2: full context again + response + state update prompt
+Cost: nearly 2 API calls
+Verdict: bad
+
+Good dual-pass system:
+
+Pass 1: full narrator call, visible prose only
+Pass 2: tiny state-updater call
+        only prior compact state + latest user + narrator response
+Cost: 1 expensive call + 1 small cheap call
+Verdict: possibly worth it
+
+The updater should not receive the full RP brief. It does not need personality, prose style, status format, full memories, or recent chat. It only needs:
+
+Previous compact state
+Latest user message
+Latest narrator response
+Current patch schema
+
+That can be very small.
+
+Is it worth it?
+
+My judgment:
+
+For local/private power users: yes
+For default open-source user mode: maybe not
+For paid API users: make it optional
+For quality-focused RP: likely yes
+For cheap/default mode: use hybrid
+
+Do not force everyone into two-pass mode.
+
+Best product design
+
+Add State Update Strategy as a setting:
+
+State Update Mode:
+1. Economy
+2. Balanced
+3. Quality
+1. Economy mode
+
+Cheapest.
+
+Narrator does hidden state itself.
+One API call.
+Current behavior.
+
+Use this for users who care about cost.
+
+2. Balanced mode, recommended default
+
+Best compromise.
+
+Narrator writes visible prose only.
+Engine tries deterministic/rule-based update first.
+Second LLM updater only runs when needed.
+
+Run the updater only when the turn has meaningful state changes:
+
+relationship shift
+new memory
+location/object change
+threat
+romance/intimacy
+injury
+time skip
+major decision
+
+Skip updater for low-value turns:
+
+short banter
+one-line dialogue
+small clarification
+repeated idle chatter
+3. Quality mode
+
+Best quality, higher cost.
+
+Narrator pass every turn
+State updater pass every turn
+
+This is for users who want maximum continuity.
+
+Better than full dual-pass: selective updater
+
+The real feature should be:
+
+Selective State Updater V1
+
+Not â€œalways dual-pass.â€
+
+Flow:
+
+User message
+â†“
+Narrator LLM writes response
+â†“
+Engine checks whether turn needs state update
+â†“
+If minor turn: use lightweight deterministic update or skip
+If major turn: call cheap updater model
+â†“
+Validate EnginePatch
+How to decide whether updater is needed
+
+Use simple triggers before calling a second model.
+
+Examples:
+
+Call updater if user or narrator mentions:
+- new location
+- time passed
+- injury
+- threat
+- promise
+- relationship change
+- confession
+- sex/romance escalation
+- boundary
+- item exchange
+- major decision
+
+Skip if:
+
+only banter
+no new fact
+no emotional shift
+no state change
+
+This keeps cost controlled.
+
+Time calculator specifically
+
+Time should be mostly engine-side, not LLM-side.
+
+The engine can parse obvious cases:
+
+"I wait ten minutes" â†’ +10 minutes
+"an hour later" â†’ +60 minutes
+"the next morning" â†’ time label = next morning
+
+But if the narrator invents:
+
+"twenty minutes late"
+
+and user did not establish it, the engine should not update time.
+
+So time update can be:
+
+Rule-based first
+LLM updater only if ambiguous
+Why this may still save cost indirectly
+
+A dual/hybrid system can reduce the narrator prompt. You remove from the expensive narrator call:
+
+hidden state instructions
+JSON schema
+tag list
+optional module fields
+state bookkeeping warnings
+
+That may save a few hundred tokens every turn and improve prose quality.
+
+So the net cost may be:
+
+Narrator prompt gets cheaper and better
+Small updater adds some cost only when needed
+
+Not free, but not necessarily terrible.
+
+My recommendation
+
+Do not implement full dual-pass as default yet.
+
+Implement this instead:
+
+State Update Strategy V1
+
+With three modes:
+
+Economy: current one-pass hidden state
+Balanced: visible narrator + selective cheap updater
+Quality: visible narrator + updater every turn
+
+Default should be:
+
+Balanced
+
+But for development/testing, let yourself toggle modes.
+
+Codex task
+Task: State Update Strategy V1, optional selective dual-pass.
+
+Goal:
+Improve narration quality without forcing every user to pay for a second LLM call every turn.
+
+Problem:
+The current one-pass system burdens the narrator with hidden-state JSON. Full dual-pass may improve quality but can increase cost. We need configurable state update modes.
+
+Implement three modes:
+1. Economy
+   - current one-pass hidden state behavior
+   - one API call
+2. Balanced
+   - narrator writes visible response only
+   - engine uses deterministic/rule-based update when possible
+   - call cheap state updater only when the turn appears state-relevant
+3. Quality
+   - narrator writes visible response only
+   - state updater runs every turn
+
+Requirements:
+- Do not feed the full narrator brief to the state updater.
+- State updater receives only compact prior state, latest user message, narrator response, and patch schema.
+- Add provider/model setting for state updater, separate from narrator model if possible.
+- If no updater model is configured, Balanced falls back to Economy or deterministic update.
+- Payload logs must label entries:
+  narrator
+  state_updater
+  economy_hidden_state
+- Keep current one-pass mode available.
+- Do not change launcher BAT files.
+
+State relevance trigger:
+Call updater when user/narrator mentions or implies:
+- location change
+- time passage
+- injury/threat
+- promise/confession
+- relationship shift
+- item exchange
+- boundary
+- major decision
+- intimacy/romance escalation
+Otherwise skip or apply minimal deterministic update.
+
+Time handling:
+- Engine accepts concrete time only from user message or existing World Log.
+- Narrator-invented concrete durations should not update time unless user established them.
+- Rule-based parser may handle simple phrases like "I wait ten minutes."
+
+Tests:
+- Economy mode still works.
+- Balanced skips updater for trivial banter.
+- Balanced calls updater for threat/injury/confession/item exchange.
+- Quality calls updater every turn.
+- State updater payload is compact and does not include full narrator brief.
+- Payload logs distinguish narrator and updater calls.
+- Time update only accepts explicit user-established time.
+- Existing tests pass.
+
+Run:
+npm.cmd run test:rust
+npm.cmd run typecheck
+cargo fmt --manifest-path src-tauri/Cargo.toml --check
+Bottom line
+
+Two-pass is worth it only if selective and cheap.
+
+The product should not force high cost. Mnemosyne should offer:
+
+Cheap mode for casual users
+Balanced mode for normal users
+Quality mode for serious long-form RP
+
+That fits your open-source / local / bring-your-own-key vision better than one fixed architecture.
+
+* * *
+
+**You:**
+
+didn't get 2 serperate api and links. 
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-45df40c9-9b31-43a0-9e7b-ba3fbeb921b6-4328d013-4cb2-42ea-a02c-9705beb4-llm-payload-history-1778734628.md
+íŒŒì¼
+mnemosyne-local-mock-45df40c9-9b31-43a0-9e7b-ba3fbeb921b6-4328d013-4cb2-42ea-a02c-9705beb4-visible-chat-log-1778734627.md
+íŒŒì¼
+working?
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1).txt
+ë¬¸ì„œ
+WTF IS GOIN ON.
+response does not work
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1).txt
+ë¬¸ì„œ
+I deleted and uploaded similar messages due to error of regeneration.
+Thats why
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-45df40c9-9b31-43a0-9e7b-ba3fbeb921b6-03b18604-5479-45fc-ba2e-4be77cb0-visible-chat-log-1778744150.md
+íŒŒì¼
+mnemosyne-local-mock-45df40c9-9b31-43a0-9e7b-ba3fbeb921b6-03b18604-5479-45fc-ba2e-4be77cb0-llm-payload-history-1778744151.md
+íŒŒì¼

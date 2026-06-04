@@ -1,0 +1,524 @@
+
+**ChatGPT:**
+
+Iâ€™ll check the current GitHub repo state first, then Iâ€™ll give you a practical roadmap plus the exact first Codex/Cursor prompt to run. Since you mentioned Codex/ChatGPT model choice, Iâ€™ll also verify current official OpenAI guidance before recommending a model.
+
+* * *
+
+**You:**
+
+1.I said I have gitdesktop. Is there a reason for using powershell?
+2. How to launch the app to test it?
+
+
+* * *
+
+**ChatGPT:**
+
+No, there is no special reason you must use PowerShell for Git.
+
+I used PowerShell because it is the fastest way to show exact commands, but since you use GitHub Desktop, you can do the Git parts there.
+
+Use GitHub Desktop for:
+
+Create branch
+Commit changes
+Push to GitHub
+Switch branches
+Check file changes
+View history
+
+Use terminal only for:
+
+Installing dependencies
+Launching the app
+Running tests
+Running typecheck/build
+
+So your workflow can be:
+
+GitHub Desktop = Git control
+Cursor / Codex = code editing
+Terminal = run the app and tests
+Using GitHub Desktop instead of PowerShell
+
+In GitHub Desktop:
+
+Open the mnemosyne repository.
+At the top, click the current branch, probably main.
+Click New Branch.
+Name it:
+feat/patch-protocol-v1
+Click Create Branch.
+Open the repo in Cursor.
+Ask Codex/Cursor to make the change.
+When files change, go back to GitHub Desktop.
+Review changes.
+Commit with:
+Add patch protocol v1 foundation
+Click Push origin.
+
+That replaces the Git commands I gave earlier.
+
+2. How to launch the app to test it
+
+This project is a Tauri app, so it needs Node/npm for the frontend and Rust/Tauri dependencies for the desktop backend. The repoâ€™s package.json says the main launch script is:
+
+npm run dev
+
+and it maps to:
+
+tauri dev
+
+The repo also has scripts for build, typecheck, frontend build, and Rust tests. 
+
+package
+
+First-time setup
+
+Open a terminal in the repo folder.
+
+In Cursor, easiest way:
+
+Terminal â†’ New Terminal
+
+Make sure the terminal path is your repo, something like:
+
+E:\...\mnemosyne
+
+Then run:
+
+PowerShell
+npm install
+
+If normal npm has issues on your Windows machine, the README specifically says to use the real Node npm command:
+
+PowerShell
+& "C:\Program Files\nodejs\npm.cmd" install
+
+Then launch:
+
+PowerShell
+npm run dev
+
+or, if npm path causes problems:
+
+PowerShell
+& "C:\Program Files\nodejs\npm.cmd" run dev
+
+The project README also notes that Tauri requires Rust stable MSVC, WebView2, and Microsoft C++ build tools. 
+
+README
+
+ Official Tauri 2 docs also say Windows development needs Microsoft C++ Build Tools and Microsoft Edge WebView2, with WebView2 already installed on Windows 10 version 1803+ and Windows 11 in most cases. 
+Tauri
+
+Regular testing workflow
+
+After first setup, use these:
+
+Launch app
+PowerShell
+npm run dev
+Check TypeScript
+PowerShell
+npm run typecheck
+Build frontend
+PowerShell
+npm run build:frontend
+Run Rust tests
+PowerShell
+npm run test:rust
+Full sanity check before commit
+PowerShell
+npm run typecheck
+npm run build:frontend
+npm run test:rust
+What should happen when launched
+
+When npm run dev works, Tauri should open the Mnemosyne desktop app window. You should be able to see the current UI, create/select Souls and Settings, use Mock provider, and test the chat flow.
+
+Use Mock provider first. Do not test API provider first. Mock provider proves the local app, database, Soul state, hidden-state parsing, and UI flow work without spending API money.
+
+Simple first test checklist
+
+After launching:
+
+1. App opens
+2. Library view loads
+3. Starter Soul exists or can be created
+4. Starter Setting exists or can be created
+5. Enter Chat view
+6. Provider = Mock
+7. Mode = Reader
+8. Send: "I promise this is safe."
+9. Confirm narrator responds
+10. Confirm memory/debug/context/state changes
+11. Send more turns until consolidation runs around 10 turns
+
+If this works, the core engine loop is alive.
+
+Your actual next move
+
+Do this:
+
+GitHub Desktop:
+Create branch feat/patch-protocol-v1
+
+Cursor:
+Open repo
+
+Terminal inside Cursor:
+npm install
+npm run dev
+
+Once the app launches successfully, then give Codex the Patch Protocol V1 prompt.
+
+* * *
+
+**You:**
+
+No, ask cursor or codex to make me an exe or run.bat. smth to launch app with a click. I want speed. not a work around. Also, next step plz
+
+* * *
+
+**ChatGPT:**
+
+Understood. You want a one-click launcher or installer workflow, not â€œopen terminal every time.â€ Iâ€™ll inspect the Tauri config so the prompt I give Codex/Cursor matches the actual repo layout.
+
+* * *
+
+**You:**
+
+It worked. I pushed. The test reveled an issue. I tried chatting. The Narrator shows no text in response but the cmd showed text
+
+CMD:[Mnemosyne] Using Node npm: "C:\Program Files\nodejs\npm.cmd"
+[Mnemosyne] Repo root: C:\Users\T-ROBOTICS\Downloads\mnemosyne
+
+[Mnemosyne] Starting Tauri dev (npm run dev)...
+
+
+also, never say Prompt for Cursor/Codex. Decide for me
+
+
+> mnemosyne@0.1.0 dev
+> tauri dev
+
+     Running BeforeDevCommand (node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 1420)
+
+  VITE v6.4.2  ready in 421 ms
+
+  âžœ  Local:   http://127.0.0.1:1420/
+     Running DevCommand (cargo  run --no-default-features --color always --)
+        Info Watching C:\Users\T-ROBOTICS\Downloads\mnemosyne\src-tauri for changes...
+   Compiling mnemosyne v0.1.0 (C:\Users\T-ROBOTICS\Downloads\mnemosyne\src-tauri)
+    Finished dev profile [unoptimized + debuginfo] target(s) in 7.70s
+     Running target\debug\mnemosyne.exe
+
+thread 'tokio-rt-worker' (18484) panicked at src\providers\api.rs:281:27:
+start byte index 406 is not a char boundary; it is inside 'â€”' (bytes 405..408) of 
+`status
+Aurora Schwarz | Skin: pale, faint freckles across the nose and collarbones | Zones: cool air against exposed chest, bare feet on cold hardwood, the weight of the oversized shirt shifting across her shoulders | Atmosphere: Rain-slicked neon glow `[...]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'tokio-rt-worker' (21288) panicked at src\providers\api.rs:281:27:
+start byte index 160 is not a char boundary; it is inside 'â€”' (bytes 159..162) of `A low, pulsing synth line bleeds from the Bluetooth speaker on the bookshelf, threading through the quiet hum of rain against the windows. The apartment is dimâ€”`
+
+* * *
+
+**ChatGPT:**
+
+Good. The launcher worked, so the repo now has a usable dev loop. The next bug is concrete: the API provider is slicing a Rust String by byte index instead of character boundary. The app panics when the generated text contains a multibyte character such as â€”.
+
+Iâ€™m checking the exact code location so the next instruction is precise.
+
+* * *
+
+**You:**
+
+1. got warnings
+2. says smth panicked.
+3. seems to work?
+
+
+[Mnemosyne] Using Node npm: "C:\Program Files\nodejs\npm.cmd"
+[Mnemosyne] Repo root: C:\Users\T-ROBOTICS\Downloads\mnemosyne
+
+[Mnemosyne] Starting Tauri dev (npm run dev)...
+
+
+> mnemosyne@0.1.0 dev
+> tauri dev
+
+     Running BeforeDevCommand (node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 1420)
+
+  VITE v6.4.2  ready in 415 ms
+
+  âžœ  Local:   http://127.0.0.1:1420/
+     Running DevCommand (cargo  run --no-default-features --color always --)
+        Info Watching C:\Users\T-ROBOTICS\Downloads\mnemosyne\src-tauri for changes...
+   Compiling mnemosyne v0.1.0 (C:\Users\T-ROBOTICS\Downloads\mnemosyne\src-tauri)
+warning: value assigned to emitted_visible_len is never read
+   --> src\providers\api.rs:268:21
+    |
+268 |                     emitted_visible_len = visible_len;
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: #[warn(unused_assignments)] (part of #[warn(unused)]) on by default
+
+warning: mnemosyne (lib) generated 1 warning
+    Finished dev profile [unoptimized + debuginfo] target(s) in 12.19s
+     Running target\debug\mnemosyne.exe
+
+* * *
+
+**ChatGPT:**
+
+Yes, it basically works now.
+
+What your screenshots/log show:
+
+1. App launches from one-click BAT.
+2. API mode returns visible narrator text.
+3. No current panic appears in the CMD output you pasted.
+4. Rust compiler shows 1 warning.
+5. UI still has formatting/streaming cleanup issues.
+
+The old panic was the UTF-8 slicing bug. Your current pasted CMD does not show a panic. It only shows:
+
+warning: value assigned to `emitted_visible_len` is never read
+
+So the app is not crashing right now. It is compiling with a warning. That warning is in the API streaming code in src-tauri/src/providers/api.rs, which contains the streaming logic and visible hidden-state cutoff logic. 
+
+api
+
+My decision: use Cursor Agent next
+
+This is not a Codex-big-architecture task. This is a small cleanup and chat-output stabilization task.
+
+Create this branch in GitHub Desktop:
+
+fix/api-chat-rendering-cleanup
+
+Then use Cursor Agent and paste this task:
+
+Task: clean up API streaming and chat rendering after the UTF-8 panic fix.
+
+Current state:
+- The app launches successfully.
+- API chat now displays narrator text.
+- Rust compiler still warns:
+  value assigned to `emitted_visible_len` is never read
+- The narrator response sometimes shows the status block awkwardly inline instead of cleanly formatted.
+- Hidden-state fallback may be getting used if the model does not emit a valid [HIDDEN STATE] block.
+
+Files to inspect:
+- src-tauri/src/providers/api.rs
+- src-tauri/src/commands.rs
+- src-tauri/state_engine/src/hidden_state.rs
+- src/App.tsx
+- src/tauri.ts
+
+Goals:
+1. Remove the Rust warning in src-tauri/src/providers/api.rs without breaking streaming.
+2. Ensure all streaming string slicing remains UTF-8 safe.
+3. Add or keep tests for multibyte characters:
+   - em dash
+   - Korean text
+   - emoji
+   - partial hidden-state marker after multibyte text
+4. Improve visible response cleanup:
+   - hidden [HIDDEN STATE] blocks must never appear in the chat UI
+   - if a final ```status block exists, it should render cleanly or be normalized before display
+   - do not corrupt normal narration text
+5. Do not rewrite the whole UI.
+6. Do not change the launcher BAT files.
+7. Do not start Patch Protocol V1 yet.
+
+Run:
+- npm run test:rust
+- npm run typecheck
+
+Report:
+- changed files
+- what warning was fixed
+- what rendering cleanup was done
+- test results
+What I want fixed before Patch Protocol
+
+Do not start Patch Protocol yet. Your chat loop still needs to be clean.
+
+Current priority order:
+
+1. Remove Rust warning
+2. Confirm no panic with API streaming
+3. Clean narrator/status rendering
+4. Confirm hidden state is stripped from visible chat
+5. Then start Patch Protocol V1
+How to manually test after Cursor finishes
+
+Launch:
+
+run-dev.bat
+
+Use API mode and send these one by one:
+
+Hello â€” testing em dash.
+ì•ˆë…•í•˜ì„¸ìš”. Can you still respond normally?
+Emoji test ðŸ˜Š, continue the scene.
+
+Expected result:
+
+Narrator text appears.
+No CMD panic.
+No Rust warning on compile.
+No hidden state appears in chat.
+Status block is either cleanly rendered or cleanly normalized.
+Commit after it passes
+
+In GitHub Desktop:
+
+Fix API streaming cleanup and chat rendering
+
+Then push.
+
+After this is clean, the next real feature step is Patch Protocol V1.
+
+* * *
+
+**You:**
+
+why so many branches? when are we merging? I already have 3. Main, chore/windows-launchers, feat/patch-protocol-v1
+
+* * *
+
+**ChatGPT:**
+
+Branches are normal, but you are right to question it. We should not keep making branches forever. Branches are temporary work lanes. Once a branch works, merge it into main, then delete the branch.
+
+I checked GitHub: there are currently no open PRs, and the remote branches include:
+
+main
+chore/windows-launchers
+feat/patch-protocol-v1
+What happened
+
+You have:
+
+main
+
+Stable/default branch.
+
+chore/windows-launchers
+
+This should already be merged now because the launcher worked.
+
+feat/patch-protocol-v1
+
+This should not be touched yet unless actual Patch Protocol work has already started. We paused that because API chat/rendering bugs appeared first.
+
+What to do now
+1. Merge chore/windows-launchers into main
+
+Since the launcher works and you pushed it, merge it now.
+
+In GitHub Desktop:
+
+Switch to main.
+Click Branch menu.
+Click Merge into current branch.
+Select chore/windows-launchers.
+Confirm merge.
+Push main.
+
+Then delete the old branch:
+
+In GitHub Desktop, switch branch menu.
+Right-click or choose chore/windows-launchers.
+Delete branch, both local and remote if offered.
+2. Leave feat/patch-protocol-v1 alone for now
+
+Do not merge it unless it already contains tested patch-protocol code.
+
+If it is empty or accidental, delete it and recreate it later.
+
+My recommendation:
+
+If feat/patch-protocol-v1 has no useful work: delete it.
+If it has useful work but not tested: keep it, but do not merge.
+New rule going forward
+
+Use only one active branch at a time:
+
+main = stable working app
+one feature/fix branch = current work
+
+Merge when:
+
+1. App launches
+2. Main feature works
+3. npm run test:rust passes
+4. npm run typecheck passes
+5. You manually tested the behavior
+
+Then delete the branch.
+
+Current cleanup plan
+
+Do this now:
+
+1. Merge chore/windows-launchers into main
+2. Delete chore/windows-launchers
+3. If feat/patch-protocol-v1 is empty, delete it
+4. Create one new branch only for the current bug:
+   fix/api-chat-rendering-cleanup
+
+But since you dislike too many branches, even simpler:
+
+Merge launcher branch first.
+Then work on the API cleanup directly on main if this is solo development.
+
+For a solo project, working directly on main is acceptable for small fixes. Use branches only for bigger risky changes like Patch Protocol, modular Soul, or database migrations.
+
+* * *
+
+**You:**
+
+now next step
+
+* * *
+
+**ChatGPT:**
+
+I checked remote branches. You are cleaned up now, it shows only:
+
+main
+
+So next step: fix the API chat cleanup on main directly. No new branch needed for this small bugfix.
+
+Next step: use Cursor Agent on main
+
+In GitHub Desktop:
+
+1. Make sure current branch = main
+2. Click Fetch origin / Pull if needed
+3. Open in Cursor
+
+Then in Cursor Agent, paste this:
+
+Task: fix API chat cleanup and remove the current Rust warning.
+
+Current observed behavior:
+- run-dev.bat works.
+- API chat now returns visible narrator text.
+- CMD shows this warning:
+  warning: value assigned to `emitted_visible_len` is never read
+- Narrator text appears, but the status block is rendered awkwardly inline instead of cleanly.
+- Hidden state must never appear in visible chat.
+
+Focus files:
+- src-tauri/src/providers/api.rs
+- src/App.tsx
+- src/tauri.ts
+- src-tauri/src/commands.rs

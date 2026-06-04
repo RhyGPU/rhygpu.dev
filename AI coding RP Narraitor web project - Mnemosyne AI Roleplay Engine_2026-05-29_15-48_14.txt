@@ -1,0 +1,523 @@
+This reduces breakage a lot
+
+Right now a bad memory is just a statement. With provenance, a bad memory becomes:
+
+statement + source + patch + branch + exact turn
+
+So you can:
+
+verify it
+repair it
+invalidate it
+re-summarize it
+inspect it in UI
+
+That is how you make AI memory trustworthy enough.
+
+How likely is it to break if polished?
+
+After the current hygiene patch plus memory provenance:
+
+20-50 turns: should be solid
+100-300 turns: likely usable
+300-800 turns: possible with good models and longer recent chat
+1000+ turns: needs consolidation, checkpoints, and memory audit tools
+
+It will still sometimes pick imperfect memories. But hard corruption should become much rarer because bad state will be traceable and reversible.
+
+Codex next after current patch
+
+After the current Scene State / OOC / Hygiene task, send this:
+
+Task: API Settings + Memory Provenance V1.
+
+Goals:
+1. Add basic and advanced API/model settings.
+2. Add memory provenance anchors so every memory can trace back to its source chat turn.
+
+Requirements:
+- Separate narrator provider/model/settings from state-updater provider/model/settings.
+- Add presets: Fast, Balanced, Literary, Long Context, Experimental.
+- Advanced settings: temperature, top_p, top_k, min_p, penalties, max output tokens, timeout, recent chat turns, memory slot caps, total memory cap.
+- Store memory provenance:
+  conversation_id, branch_id, turn_id, user_message_id, assistant_message_id, assistant_variant_id, source_role, source_start_char, source_end_char, source_excerpt, created_from_patch_id.
+- Add â€œOpen memory sourceâ€ debug command.
+- Show source message plus N messages before/after.
+- Do not use line number as the canonical anchor. Use message ID + char offsets. Line numbers are display-only.
+- Do not include source excerpts in normal narrator context unless debug mode or verification mode is enabled.
+- Existing tests must pass.
+
+Bottom line: yes, add SillyTavern-style settings, but with presets. And yes, memory-source addressing is one of the best ideas so far. It turns memory from â€œAI said soâ€ into â€œAI summarized this exact turn.â€
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-58d58189-4352-4ed8-9386-f123792ce2f5-d13b5313-2302-4bbf-879d-735bd829-visible-chat-log-1779352609.md
+íŒŒì¼
+mnemosyne-local-mock-5e83a6ed-6a24-403d-a62f-c8c151488ee1-e6976e18-62ff-4558-851e-a5b9c2ad-llm-payload-history-1779344045.md
+íŒŒì¼
+mnemosyne-local-mock-5e83a6ed-6a24-403d-a62f-c8c151488ee1-e6976e18-62ff-4558-851e-a5b9c2ad-visible-chat-log-1779344044.md
+íŒŒì¼
+mnemosyne-local-mock-58d58189-4352-4ed8-9386-f123792ce2f5-d13b5313-2302-4bbf-879d-735bd829-llm-payload-history-1779352609.md
+íŒŒì¼
+Implemented the Scene State Priority + OOC Channel + State Hygiene pass.
+
+Key changes:
+- Added resolved scene_state to WorldLog and SessionWorld.
+- Added typed object fields for doors/packages/etc. while preserving phone-specific fields.
+- Routed scene_state through WorldPatch.
+- Deduplicated recent world events.
+- Made OOC/OCC/GM meta turns avoid scene status blocks.
+- Prevented pure OOC/OCC meta turns from calling the state updater LLM; they now get a no-op patch path.
+- Strengthened OOC/OCC entity handling so OCC: does not become a character.
+- Reordered context priority so latest user/latest exchange/resolved scene state outrank plot lists, personality, relationships, events, and memories.
+- Improved unresolved tension retrieval for ambivalence, accusations, ignored calls/texts, emotional risk, and trust pressure.
+- Updated narrator/state-updater prompts and patch schema for the new boundaries.
+
+Verification:
+- npm.cmd run test:rust passed: 106 tests.
+- npm.cmd run typecheck passed.
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check passed.
+
+I tried to do a long session but chat got deleted for some reason when I deleted 1 chat. I already infomred codex to fix it
+
+Fixed the deletion path so deleting the active chat no longer leaves the UI focused on the deleted session clone. It now returns focus to the source Soul/savepoint, so remaining chats should stay visible instead of looking like they vanished.
+
+I also added backend regression tests proving:
+- deleting one normal conversation preserves sibling conversations
+- deleting one session-clone chat preserves other sessions from the same source Soul
+
+Verification:
+- npm.cmd run typecheck passed
+- npm.cmd run test:rust passed: 108 tests
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check passed
+
+If the chats were only hidden by the UI focus bug, they should reappear after this change.
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-a97cd7e6-f126-4efc-ba85-82dabe064d84-3f9518be-49c1-4b5c-ac08-415b43da-llm-payload-history-1779369705.md
+íŒŒì¼
+mnemosyne-local-mock-a97cd7e6-f126-4efc-ba85-82dabe064d84-3f9518be-49c1-4b5c-ac08-415b43da-visible-chat-log-1779369704.md
+íŒŒì¼
+
+* * *
+
+**ChatGPT:**
+
+Document processing confirmation
+File	Length detected	Headers in order	Entire file processed
+LLM payload history	10,570 lines, 117,883 words, 56 payloads	# Mnemosyne LLM Payload History, then ## Payload 1 through ## Payload 56, with repeated ### SYSTEM MESSAGE, ### USER MESSAGE, ### CONTEXT, response metadata, raw/normalized response sections	Yes
+Visible chat log	436 lines, 5,083 words, 45 visible messages: 27 user, 18 narrator	# Mnemosyne Chat Log, then alternating ## User / ## Narrator	Yes
+Game plan	139 lines, 498 words	## Where this fits in the roadmap, ## Recommended next feature cluster, ## Best priority order from the feedback, subheaders, judgment, current action	Yes
+Main finding
+
+The restore worked enough that the session data is not gone, but it also exposed a new restore/visibility bug:
+
+Recovered data exists
+but hidden/failed/retry user messages are being restored as active visible chat
+
+The visible chat shows the same OOC message repeated 7 times before a narrator response, then I knock on the door appears twice, and later another user message repeats 3 times. That is not normal RP behavior, that is a restore/finalization bug. 
+
+mnemosyne-local-mock-a97cd7e6-fâ€¦
+
+What improved
+
+The narrator output is no longer the fake â€œKeep goingâ€ mock response. The OOC answer also correctly appears as plain GM-style text without a status block in the visible chat. 
+
+mnemosyne-local-mock-a97cd7e6-fâ€¦
+
+The payload history now includes raw provider response and normalized response, which is good. The I knock on the door turn has matching raw and normalized provider text, so the response-source integrity patch is working better than before. 
+
+mnemosyne-local-mock-a97cd7e6-fâ€¦
+
+What is still broken
+1. Restore is resurrecting duplicate user turns
+
+This is the biggest bug in the uploaded logs.
+
+Visible chat starts with:
+
+OOC: Is Aurora supposed to be expecting company here?
+
+repeated seven times before the narrator replies. Then I knock on the door. appears twice before the narrator response. 
+
+mnemosyne-local-mock-a97cd7e6-fâ€¦
+
+That means restore is probably reactivating:
+
+pending user messages
+failed attempt user messages
+retry/regenerate user copies
+hidden duplicate rows
+
+Those should not all become active visible messages.
+
+2. Pure OOC still calls the state updater
+
+Codex said pure OOC/OCC meta turns should avoid the state-updater LLM and use a no-op patch. But the payload includes a state_updater payload for:
+
+OOC: Is Aurora supposed to be expecting company here?
+
+The state-updater prompt itself says pure OOC/OCC/GM meta turns are not scene events, but the LLM is still being called. 
+
+mnemosyne-local-mock-a97cd7e6-fâ€¦
+
+So the prompt rule exists, but the routing rule is not fully enforced.
+
+3. Recent-event dedup is still weak
+
+After the knock, the world snapshot contains two near-identical events:
+
+User knocked on Aurora's apartment door...
+User knocked on door; Aurora responded...
+
+That means deduplication is not catching semantic duplicates. 
+
+mnemosyne-local-mock-a97cd7e6-fâ€¦
+
+4. Status block bug still appears once
+
+The visible chat still has a valid status block followed by another fallback-style block:
+
+Scene | Focus: Unknown | Physical state: Not specified | Atmosphere: Not specified
+
+So status recovery improved, but the duplicate fallback status block is not fully solved. 
+
+mnemosyne-local-mock-a97cd7e6-fâ€¦
+
+5. Phone object guard regressed
+
+The payload repeatedly knows the phone has notifications off, vibrate disabled, and screen wake disabled. But later the visible chat says a notification chime echoes and the phone lights up after a text. That contradicts the object state. 
+
+mnemosyne-local-mock-a97cd7e6-fâ€¦
+
+ 
+
+mnemosyne-local-mock-a97cd7e6-fâ€¦
+
+This is the same object-state consistency issue in a new form.
+
+Verdict
+Data recovery: partially successful
+Deletion safety: improved, but not proven safe
+Restore path: broken, because it restores duplicate/pending attempts
+OOC no-op routing: still broken
+Narrator response integrity: mostly improved
+Memory roadmap: still blocked by data-safety bugs
+
+Do not move to API Settings + Memory Provenance yet. The roadmap says memory quality is the next intelligence problem, but this current problem is more basic: active message visibility and restore semantics must be safe first. 
+
+Game-Plan-1
+
+Send Codex this next
+P0.1 Task: Restore Hygiene + Meta No-Op Enforcement + Duplicate Active Message Guard.
+
+Problems from restored Aurora session:
+
+1. Restore Turns restored duplicate user messages as active visible chat.
+Evidence:
+- Same OOC message appeared 7 times before one narrator response.
+- "I knock on the door." appeared twice before one narrator response.
+- Another later user message appeared 3 times.
+
+Fix:
+- Add message status/origin handling:
+  active
+  hidden
+  pending
+  failed
+  retry_attempt
+  regenerated_discarded
+  restored
+- Restore Turns must only restore the selected active branch path.
+- Do not restore pending, failed, retry_attempt, regenerated_discarded, or duplicate user messages as active visible messages.
+- If multiple identical user messages exist within the same turn group/request group, restore only the selected canonical one.
+- Add restore preview: restored_message_ids, skipped_duplicate_ids, skipped_pending_ids, skipped_failed_ids.
+
+2. Pure OOC/OCC/GM still calls state_updater LLM.
+Expected:
+- Pure OOC/OCC/GM meta turn should receive plain GM response.
+- No state_updater provider call.
+- No memory layer debug nonce.
+- No world_patch.
+- No relationship/body patch.
+- Only optional no-op ledger patch if needed for traceability.
+
+3. Recent-event dedup is still weak.
+Evidence:
+- "User knocked on Aurora's apartment door..." and "User knocked on door; Aurora responded..." both appear.
+Fix:
+- Semantic normalize recent_event content before adding:
+  lowercase
+  remove punctuation
+  normalize actor names
+  normalize verbs like knocked/knock
+  compare core action + target + response
+- Do not allow recent_event and event_operations to add the same fact twice.
+
+4. Status fallback still duplicates.
+Evidence:
+- Valid Aurora status block followed by fallback Unknown status.
+Fix:
+- If a valid status block exists, do not append fallback.
+- Collapse all duplicate status blocks to one final valid block.
+
+5. Phone object-state guard still fails.
+Evidence:
+- Phone object says notifications_off, vibrate disabled, screen wake disabled.
+- Narrator says notification chime and phone lights up.
+Fix:
+- If user texts and phone has notifications_off/vibrate=false/screen_wake=false, narrator may say the message is received silently or only visible when checked.
+- Do not render chime/light-up unless object state permits it.
+- Add object contradiction repair instruction before retry.
+
+Tests:
+- restore_turns_does_not_restore_duplicate_user_messages
+- restore_turns_skips_pending_failed_retry_messages
+- restore_turns_restores_only_active_branch_path
+- pure_ooc_no_state_updater_provider_call
+- pure_ooc_no_memory_debug_nonce
+- recent_event_semantic_dedup_knock
+- valid_status_block_prevents_unknown_fallback
+- phone_notifications_off_blocks_chime_and_screen_wake
+- existing tests pass
+
+Run:
+npm.cmd run test:rust
+npm.cmd run typecheck
+cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Report:
+- exact restore root cause
+- how many duplicates skipped in the live Aurora DB
+- whether OOC now bypasses state_updater
+- whether phone contradiction guard is deterministic or prompt-only
+Bottom line
+
+The lost QA data may be mostly recoverable, but the restore path is unsafe because it is restoring too much. Fix restore hygiene before any more long-session testing.
+
+* * *
+
+**You:**
+
+is the categorzed memory thing working well? cause technically the long test was for that. remember?
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1).txt
+ë¬¸ì„œ
+antigravity is for when codex is out of tokens... 
+
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-e0ad2e3b-9729-44d5-a35a-0a11f77c328c-3bc244d9-863f-416a-bafe-8b964d92-llm-payload-history-1779414018.md
+íŒŒì¼
+mnemosyne-local-mock-e0ad2e3b-9729-44d5-a35a-0a11f77c328c-3bc244d9-863f-416a-bafe-8b964d92-visible-chat-log-1779414017.md
+íŒŒì¼
+Implemented the salience/retrieval preservation path.
+
+Changed:
+- src-tauri/state_engine/src/patch.rs
+  - Added MemoryPatch.salience and MemoryPatch.retrieval_strength
+  - Applies finite clamped values to MemoryEntry
+  - Falls back to existing create_scored_memory values when omitted
+- src-tauri/state_engine/src/evaluator.rs
+  - MemoryCandidate.salience and retrieval_strength are now optional so omission is distinguishable from 0
+  - Converter preserves/clamps provided values into MemoryPatch
+  - Added requested tests
+- src-tauri/state_engine/src/consolidation.rs, memory.rs, soul.rs
+  - Updated internal MemoryEntry test fixtures with metadata defaults so state_engine tests compile/run
+
+Tests added:
+- evaluator_candidate_salience_is_preserved
+- evaluator_candidate_retrieval_strength_is_preserved
+- omitted_salience_uses_existing_fallback
+
+Verification:
+- npm.cmd run test:rust passed: 123 passed
+- npm.cmd run typecheck passed
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check passed
+- Extra: cargo test --manifest-path src-tauri/state_engine/Cargo.toml passed: 93 unit tests + 1 integration test.
+
+question: Due to the LLM being the narrator, it should make up events or decide on random or logical chance instead of assuming what user wants unless user states directly. Is this being done?
+
+* * *
+
+**You:**
+
+Aurora_Schwarz_Session-mne.mne
+íŒŒì¼
+Dose this tell you what you need?
+btw, i can see the dupe.... It happened every time i pressed regenerate
+
+
+* * *
+
+**You:**
+
+Aurora_Schwarz_Session-mne.mne
+íŒŒì¼
+Aurora_Schwarz_Session-mne.mne
+íŒŒì¼
+They are different sessions. For some reason, exporting a session replaces the existing exported session. with the same char
+
+
+* * *
+
+**You:**
+
+Aurora_Schwarz_Session-mne1.mne
+íŒŒì¼
+Aurora_Schwarz_Session-mne2.mne
+íŒŒì¼
+
+* * *
+
+**You:**
+
+Aurora_Schwarz_Session-mne1.mne
+íŒŒì¼
+Aurora_Schwarz_Session-mne2.mne
+íŒŒì¼
+Here.
+
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-5f139f33-3f4b-42a2-a603-fc4bb53754f0-9c97a323-4c80-4844-8540-bdf83fc6-visible-chat-log-1779430459.md
+íŒŒì¼
+Aurora_Schwarz_Session_session_checkpoint_1779430449_5f139f33.mne
+íŒŒì¼
+mnemosyne-local-mock-5f139f33-3f4b-42a2-a603-fc4bb53754f0-9c97a323-4c80-4844-8540-bdf83fc6-llm-payload-history-1779430460.md
+íŒŒì¼
+scene fixer might be regenerating too aggressively. I get a glimpse of a good chat and it gets replaced imidately by a lame one
+
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-5f139f33-3f4b-42a2-a603-fc4bb53754f0-9c97a323-4c80-4844-8540-bdf83fc6-visible-chat-log-1779430459.md
+íŒŒì¼
+Aurora_Schwarz_Session_session_checkpoint_1779430449_5f139f33.mne
+íŒŒì¼
+mnemosyne-local-mock-5f139f33-3f4b-42a2-a603-fc4bb53754f0-9c97a323-4c80-4844-8540-bdf83fc6-llm-payload-history-1779430460.md
+íŒŒì¼
+scene fixer might be regenerating too aggressively. I get a glimpse of a good chat and it gets replaced imidately by a lame one
+
+I made a few fixes to the prompt and code
+
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-810e0845-1054-4cc3-8596-8becec208f8b-6732e353-96bc-4b33-b284-66d9b4ba-llm-payload-history-1779436712.md
+íŒŒì¼
+mnemosyne-local-mock-810e0845-1054-4cc3-8596-8becec208f8b-6732e353-96bc-4b33-b284-66d9b4ba-visible-chat-log-1779436711.md
+íŒŒì¼
+Aurora_Schwarz_Session_session_checkpoint_1779436716_810e0845.mne
+íŒŒì¼
+mnemosyne-dev-console-1779436700758.log
+íŒŒì¼
+I didn't do anyhting yet. I have no tokens
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ ë§ˆí¬ë‹¤ìš´(1).md
+íŒŒì¼
+I have successfully finalized the transition of Mnemosyne's evaluator and status tracker into a robust, non-blocking asynchronous pipeline!
+
+Key Accomplishments
+Resolved Database FOREIGN KEY Constraint Failures: Fixed the SQLite constraints in the integration tests (evaluator_cancel_marks_job_canceled, evaluator_failure_does_not_apply_empty_success_patch, and evaluator_retry_applies_patch_after_failure) by provisioning dummy conversations (async-evaluator) and active character/soul records within the unit test databases beforehand.
+Added "EVALUATOR TRACE" Rendering Support: Enhanced render_llm_payload_history inside src-tauri/src/commands.rs to detect and pretty-format "evaluator_trace". This ensures that metrics like elapsed_ms and timeout_ms are properly parsed and displayed in the LLM payload histories, making the test payload_trace_records_evaluator_elapsed_and_wait pass.
+Validated Code Formatting and Compilation:
+Automatically formatted the code changes using cargo fmt to satisfy strict style checks.
+Ran cargo test in the Tauri backend: all 171 tests now compile and pass successfully (0 failures).
+Ran npm run typecheck in the React frontend: zero TypeScript type-checking warnings/errors were found.
+Updated Artifacts:
+Checked off all items in the 
+task.md
+ checklist.
+Authored a comprehensive summary walkthrough in 
+walkthrough.md
+.# Checklist: Async Evaluator With Configurable Timeout and Next-Turn Gate V1
+
+- [x] Extend settings in ApiProviderSettings (Tauri & Frontend) and database provider_profiles table
+- [x] Implement database migrations for provider_profiles settings columns and create evaluator_background_jobs table
+- [x] Add CRUD and query helper functions for evaluator_background_jobs in src-tauri/src/db/mod.rs
+- [x] Remove the hardcoded 25s evaluator timeout in commands.rs and make it configurable
+- [x] Refactor narrator flow in send_api_turn to spawn the background evaluator asynchronously and return the response immediately
+- [x] Implement the next-turn gating check in send_api_turn with sleep/polling, bypass, or blocking based on wait/stale settings
+- [x] Expose Tauri commands cancel_evaluator_job, retry_evaluator_job, and get_latest_evaluator_job
+- [x] Update TS typings and Tauri wrapper commands in src/tauri.ts
+- [x] Implement the frontend Settings inputs for the new timeout and background configurations in src/App.tsx
+- [x] Add the real-time background status indicators (updating, waiting, failed, canceled) with cancel, retry, and proceed buttons in src/App.tsx
+- [x] Implement 11 automated Rust integration tests in commands.rs matching the success requirements
+- [x] Verify everything compiles and all tests pass (npm run test:rust, npm run typecheck, cargo fmt)
+
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1).txt
+ë¬¸ì„œ
+Aurora_Schwarz_Session_session_checkpoint_1779439872_7277b418.mne
+íŒŒì¼
+[Mnemosyne] Using Node npm: "C:\Program Files\nodejs\npm.cmd"
+[Mnemosyne] Repo root: C:\Users\T-ROBOTICS\Downloads\mnemosyne
+
+[Mnemosyne] Starting Tauri dev (npm run dev)...
+
+
+> mnemosyne@0.1.0 dev
+> tauri dev
+
+     Running BeforeDevCommand (node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 1420)
+
+  VITE v6.4.2  ready in 704 ms
+
+  âžœ  Local:   http://127.0.0.1:1420/
+     Running DevCommand (cargo  run --no-default-features --color always --)
+        Info Watching C:\Users\T-ROBOTICS\Downloads\mnemosyne\src-tauri for changes...
+   Compiling mnemosyne v0.1.0 (C:\Users\T-ROBOTICS\Downloads\mnemosyne\src-tauri)
+warning: variable does not need to be mutable
+    --> src\commands.rs:2810:32
+     |
+2810 |     let (mut visible_response, mut replay_guard, mut output_contract_warning, orig_status_repair) =
+     |                                ----^^^^^^^^^^^^
+     |                                |
+     |                                help: remove this mut
+     |
+     = note: #[warn(unused_mut)] (part of #[warn(unused)]) on by default
+
+warning: variable does not need to be mutable
+    --> src\commands.rs:2858:9
+     |
+2858 |     let mut debug_replay_detected = replay_guard.replay_detected;
+     |         ----^^^^^^^^^^^^^^^^^^^^^
+     |         |
+     |         help: remove this mut
+
+warning: value assigned to anti_replay_severity is never read
+    --> src\commands.rs:2775:36
+     |
+2775 |     let mut anti_replay_severity = ReplaySeverity::None;
+     |                                    ^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: maybe it is overwritten before being read?
+     = note: #[warn(unused_assignments)] (part of #[warn(unused)]) on by default

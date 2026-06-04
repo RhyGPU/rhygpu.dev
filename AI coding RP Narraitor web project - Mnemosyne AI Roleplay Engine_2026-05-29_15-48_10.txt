@@ -1,0 +1,524 @@
+
+I show her my phone screen
+
+But there is still a prompt weakness: the narrator should not move or control the userâ€™s phone unless the user explicitly gives it.
+
+Add a small rule:
+
+Do not make the character take, pull, angle, unlock, search, or operate the user's device unless the user explicitly offers or hands it over.
+4. The model hallucinated visual evidence too early
+
+In the visible chat, after the user says â€œcheck your bank app,â€ the narrator describes Aurora leaning toward a screen/video thumbnail even though the YouTube/news video was not shown until the next user message. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (2)
+
+That is an LLM local inference error. It probably inferred â€œcheck your appâ€ as â€œthere is a screen in front of herâ€ and filled in a visual. The backend did not explicitly tell it to do that.
+
+You can reduce this with a device/prop agency rule, but not eliminate it entirely.
+
+5. Payload history is useful now, but still hard to map to visible chat
+
+The payload history has multiple payloads, including repeated/similar payloads from retries or variants. That is okay, but the export needs metadata:
+
+message_id
+variant_id
+source: normal / regenerate / fix
+selected: true/false
+
+Without this, it is harder to tell which payload produced the currently visible narrator response.
+
+Main diagnosis
+
+The logging fix worked.
+
+The backend quality issue is now clear:
+
+Your â€œnew test sessionâ€ is not clean.
+It is inheriting stale Soul relationship and stale World Snapshot from older scenes.
+
+That is more important than memory retrieval right now.
+
+Next fix: Fresh Session / Reset Scenario State
+
+Use Codex for this:
+
+Task: Fresh Session / Reset Scenario State V1.
+
+Problem:
+New test sessions are inheriting stale Soul and World state from previous scenarios. In a new debt collector scene, the payload still had trust 130, affection 126, and location "Aurora's kitchen counter." This makes the narrator too warm and contextually wrong.
+
+Goal:
+Add a clear way to start a new conversation with either:
+1. same persistent Soul continuity, or
+2. fresh scenario state / reset volatile state.
+
+Files to inspect:
+- src-tauri/src/db/mod.rs
+- src-tauri/src/commands.rs
+- src-tauri/state_engine/src/soul.rs
+- src-tauri/state_engine/src/setting.rs
+- src-tauri/state_engine/src/context_compiler.rs
+- src/tauri.ts
+- src/App.tsx
+- src/styles.css
+
+Requirements:
+1. Add UI option when creating/starting a chat:
+   - Continue Soul continuity
+   - Start fresh scenario state
+
+2. Fresh scenario state should reset volatile fields:
+   - world.location
+   - world.time_elapsed
+   - world.active_plots
+   - world.key_objects if scenario-specific
+   - world.recent_events
+   - recent memories if scenario-specific, or optionally keep only core/profile memories
+   - relationship toward user to neutral/default unless user chooses to preserve relationship
+
+3. Do not delete the original Soul permanently unless user explicitly chooses to.
+Preferred:
+- create a cloned temporary/session Soul state for the conversation, or
+- reset only the conversation-local state if architecture supports it.
+
+4. Add a visible warning/label:
+   - "Using persistent Soul continuity"
+   - or "Fresh scenario state"
+
+5. Add device/prop agency rule to narrator prompt:
+   "Do not make the character take, pull, angle, unlock, search, or operate the user's device unless the user explicitly offers or hands it over."
+
+6. Keep existing chats loading normally.
+7. Do not change launcher BAT files.
+8. Do not implement full branch rewind yet.
+9. Do not implement multi-character.
+
+Tests:
+- fresh scenario starts with neutral relationship toward user
+- fresh scenario does not carry old world.location
+- fresh scenario does not carry stale recent_events
+- persistent continuity mode keeps old state
+- prompt contains device/prop agency rule
+- existing chat tests still pass
+
+Run:
+- npm.cmd run test:rust
+- npm.cmd run typecheck
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Manual test:
+1. Start romantic test, build trust.
+2. Start new debt collector test with fresh scenario state.
+3. Export payload.
+4. Confirm trust/affection are neutral or low.
+5. Confirm location is not kitchen counter unless the new scenario says so.
+6. Confirm character is appropriately suspicious.
+7. Show a phone/video.
+8. Confirm Aurora does not take or operate the user's device unless explicitly allowed.
+After this
+
+Then add payload metadata:
+
+message_id
+variant_id
+selected
+source
+
+But first fix fresh-session state. That is the root of the â€œLLM feels dumbâ€ issue in this test.
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-45df40c9-9b31-43a0-9e7b-ba3fbeb921b6-5c147a09-82c2-4707-8310-87c5e995-llm-payload-history-1778201536.md
+íŒŒì¼
+mnemosyne-local-mock-45df40c9-9b31-43a0-9e7b-ba3fbeb921b6-5c147a09-82c2-4707-8310-87c5e995-visible-chat-log-1778201535.md
+íŒŒì¼
+New session again. random direction. did the fix work?
+
+* * *
+
+**ChatGPT:**
+
+Document processing confirmation
+
+Processed both uploaded files fully.
+
+File	Length detected	Headers detected	Entire file processed
+LLM payload history	894 lines, 11,789 words, 76,419 characters	# Mnemosyne LLM Payload History, ## Payload 1 through ## Payload 4, repeated ### SYSTEM MESSAGE, ### USER MESSAGE, ### CONTEXT	Yes
+Visible chat log	78 lines, 1,250 words, 6,930 characters	# Mnemosyne Chat Log, repeated ## User, ## Narrator	Yes
+Verdict
+
+Yes, the fix mostly worked.
+
+The important improvements are visible:
+
+Fresh session state is much cleaner.
+The new session starts at turn 0 with relationship values much lower than before: trust 10, affection 20, intimacy 10, passion 10, commitment 10, fear 10, desire 20. That is much better than the previous broken state where trust/affection were over 100 in a brand-new scenario. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+The device/prop agency rule is now present.
+The system prompt now includes [DEVICE AND PROP AGENCY], telling the narrator not to make the character take, angle, unlock, search, or operate the userâ€™s device unless explicitly offered. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+Payload history export works.
+The log now contains multiple payloads with system message, user message, context, provider, model, base URL, and token estimates. This part is successful. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+Visible chat export works.
+The visible chat log contains only the user/narrator transcript and no hidden-state JSON. 
+
+mnemosyne-local-mock-45df40c9-9â€¦
+
+Seen issues
+1. World snapshot is still stale/default
+
+Even in the new random session, the world snapshot starts with:
+
+Location: Aurora's kitchen counter
+Active plots: Establish the first scene...
+Key objects: Half-empty wine glass; Couch with rumpled blankets; Phone
+
+That is still the default Aurora scenario, not truly generated from the userâ€™s opening. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+This is probably why the scene immediately becomes â€œAurora in her kitchenâ€ even though the user only said they barged in. Not necessarily wrong, but it means â€œfresh scenarioâ€ is not fully fresh. It resets relationship/memory better, but it does not reset or ask for a neutral setting.
+
+2. Threat state is not scaling hard enough
+
+After the threat, trust drops to 0, good. But fear remains only 10 even though the memory says she is terrified and cornered. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+So relationship/state deltas are not emotionally aligned. If the hidden state patch says â€œthreat,â€ the engine should probably increase fear sharply and suppress affection/desire for that scene.
+
+3. Time discipline still failed
+
+The narrator says:
+
+"You're at least twenty minutes late for that."
+
+There is no established â€œtwenty minutes.â€ 
+
+mnemosyne-local-mock-45df40c9-9â€¦
+
+That is a model issue, but you can reduce it by making the rule shorter and more forceful:
+
+Never invent concrete durations. Do not say minutes/hours/days passed unless the user or World Log says so.
+4. POV/user-agency leakage still exists
+
+The narrator still uses lines like:
+
+Her eyes track yours
+why is it pointed
+
+The first is mild second-person leakage. The second assumes the gun is pointed, though the user only said they barged in with a gun. In context, it is a reasonable inference, but if you want strict agency, it should say â€œthe gunâ€ rather than deciding exact aim.
+
+5. The LLM quality issue may be model-side
+
+You are using:
+
+openrouter/owl-alpha
+
+That model may simply be weaker at strict instruction following, continuity, and nuance than a stronger reasoning/writing model. The backend is now feeding usable context. If the output still feels dumb, some of it is the model.
+
+What I would fix next
+
+Do a small Fresh Scenario V2 + State Severity pass, not another big architecture change.
+
+Use Codex:
+
+Task: Fresh Scenario V2 and Threat Severity Cleanup.
+
+Problem:
+Fresh sessions are better, but the payload still shows stale/default world state:
+- Location: Aurora's kitchen counter
+- Active plot: Establish first scene
+- Key objects: wine glass, couch, phone
+
+Also, severe threat scenes do not update relationship/state strongly enough:
+- trust drops, but fear remains too low
+- affection/desire/romance-adjacent values remain nonzero in a violent threat context
+
+Goal:
+Make fresh sessions more genuinely fresh and improve threat-state severity without adding large Scene State tracking.
+
+Requirements:
+1. Add a clearer fresh-session reset for World Snapshot:
+   - Reset location to "Unspecified opening scene" or use scenario default only if user selected default Aurora apartment.
+   - Clear stale key objects unless they belong to the selected setting.
+   - Clear stale active plots.
+   - Reset time_elapsed to "Session start" only.
+2. Add UI label showing:
+   - Persistent continuity
+   - Fresh scenario state
+3. Add threat severity handling:
+   - If hidden state tag is "threat" or memory tag is "threat":
+     - increase fear meaningfully
+     - reduce trust
+     - suppress desire/passion/affection deltas unless explicitly justified
+4. Tighten time discipline prompt:
+   Replace or add:
+   "Never invent concrete durations. Do not say minutes, hours, days, or years passed unless the user or World Log established it."
+5. Tighten POV wording:
+   Add:
+   "Avoid second-person sensory claims. Describe what the character perceives, not what the user feels or sees."
+6. Do not implement full Scene State.
+7. Do not implement object tracking.
+8. Do not change launcher BAT files.
+
+Tests:
+- fresh scenario world snapshot does not reuse stale default location unless selected
+- fresh scenario clears stale key objects
+- threat patch increases fear and reduces trust
+- threat patch does not increase affection/desire by default
+- system prompt contains stricter time rule
+- existing tests pass
+
+Run:
+- npm.cmd run test:rust
+- npm.cmd run typecheck
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Current status: the fix worked structurally, but there are still quality issues in world reset, threat severity, time discipline, and model choice.
+
+* * *
+
+**You:**
+
+Why tf would you add a device/prop agency rule. let the character do shit. i was wondering why the ai seem to be against the idea of using the character's own phone. The narrator can fill in blanks if not enough detail given. As long as it dons't steer the story on my behalf. Also, the prompt we are giving or the system we made is fucked up or smth. clean it up. Why is the same AI that sounds decent on Janitor AI look stupid af suddenly in ours
+
+
+* * *
+
+**ChatGPT:**
+
+You are right. The device/prop agency rule was an overcorrection.
+
+It should not block Aurora from using her own phone, touching her own things, checking her own app, grabbing a parcel if she chooses, etc. The real rule should only be:
+
+Do not control the userâ€™s body/actions/device unless the user gives permission or offers the object.
+
+The current payload shows the rule we added:
+
+Do not make the character take, pull, angle, unlock, search, or operate the user's device unless the user explicitly offers or hands it over.
+
+That wording is technically about the userâ€™s device, but it is too rigid and may make the model over-cautious around phones generally. The payload also labels the object only as Phone (notifications off), not Aurora's phone, so the model has unclear ownership. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+Why Janitor sounds better right now
+
+Your app is currently doing too much â€œengine instructionâ€ and not enough â€œclean narrator setup.â€
+
+Janitor-style prompts are usually simpler:
+
+Character card
+Scenario
+Personality
+Example dialogue
+User message
+
+Your current system is more like:
+
+Narrator rules
+Boundaries
+Psychology model
+Memory rules
+Status report format
+Attribution rules
+Device rules
+Time rules
+Hidden JSON patch format
+Optional arousal fields
+Character snapshot
+World snapshot
+Relevant memories
+Relationship stats
+Recent chat
+Latest exchange
+User message
+
+That can make the model sound dumber because it is juggling too many priorities. The payload confirms the system prompt is packed with engine rules before the actual scene context. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+The fix is not â€œmore rules.â€ The fix is cleaner prompt hierarchy.
+
+What should change
+
+Use Codex for this. This is a backend prompt-template cleanup.
+
+Paste this task:
+
+Task: Prompt Cleanup V1, make Mnemosyne sound less overconstrained and more like a natural RP narrator.
+
+Problem:
+The current system prompt is too bloated and overconstrained. The model sounds worse than the same/similar model in Janitor-style RP because Mnemosyne is feeding too many mechanical instructions before the scene.
+
+Specific issue:
+The DEVICE AND PROP AGENCY rule was an overcorrection. It may discourage the character from using phones/objects naturally. We only need to prevent the narrator from controlling the user's body/actions/device, not prevent the character from using her own belongings.
+
+Files to inspect:
+- src-tauri/src/providers/api.rs
+- src/tauri.ts
+- src-tauri/state_engine/src/context_compiler.rs
+- src-tauri/state_engine/src/soul.rs
+- src-tauri/state_engine/src/setting.rs
+- src-tauri/src/commands.rs
+
+Goals:
+1. Simplify the narrator system prompt.
+2. Remove overcorrection around devices/props.
+3. Make object ownership clear in context.
+4. Preserve hidden-state functionality.
+5. Keep the model natural and character-first.
+
+Requirements:
+
+1. Replace [DEVICE AND PROP AGENCY] with a better [AGENCY AND NATURAL INFERENCE] section.
+
+Use wording like:
+
+[AGENCY AND NATURAL INFERENCE]
+The character may naturally interact with her own body, belongings, clothing, phone, room, furniture, and environment. The narrator may fill small physical gaps when obvious. Do not control the user's body, thoughts, dialogue, device, or possessions unless the user explicitly gives, offers, or permits it.
+
+2. Clarify object ownership in World Snapshot.
+Never output generic:
+- Phone
+
+Prefer:
+- Aurora's phone
+- User's phone
+- unknown phone
+- parcel held/offered by user
+- wine glass in Aurora's hand
+
+If ownership is unknown, say unknown.
+
+3. Reduce system prompt bloat.
+Keep only these major blocks:
+- Core narrator role
+- User agency / POV
+- Continuity priority
+- Natural inference
+- Time discipline
+- Visible status format
+- Hidden state format
+
+4. Move or remove unnecessary prompt text:
+- Do not put detailed Maslow/trauma explanations in the system prompt if the Character Snapshot already carries the numeric state.
+- Keep psychology behavior as one compact rule:
+  "Emotional changes should be gradual unless the scene strongly justifies a sharper shift."
+- Do not over-explain implementation details to the LLM.
+
+5. Tighten Time Discipline:
+Replace current wording with:
+"Never invent concrete durations. Do not say minutes, hours, days, or years passed unless the user or World Log established it."
+
+6. Keep Attribution, but shorten it:
+"User facts come only from user messages. Character dialogue and narrator prose are not user statements. Never invent user actions, thoughts, motives, or dialogue."
+
+7. Keep hidden state format working.
+Do not break JSON extraction.
+Do not remove [HIDDEN STATE] format.
+
+8. Optional arousal fields:
+Keep them only if already supported, but move them to a compact line:
+"Optional module fields may be included only when directly relevant; the engine validates them."
+Do not let optional module fields dominate the prompt.
+
+9. Clean scenario seed leakage.
+If the scenario seed says "NSFW testing", do not inject that as a dominant line every turn unless user intentionally selected that scenario mode.
+Prefer a neutral label like:
+"Scenario seed: late-night apartment opening scene."
+
+10. Do not change launcher BAT files.
+11. Do not implement Scene State.
+12. Do not implement memory retrieval.
+13. Do not change branching.
+
+Tests:
+- system prompt contains [AGENCY AND NATURAL INFERENCE]
+- system prompt no longer contains [DEVICE AND PROP AGENCY]
+- character can use her own phone/items according to prompt
+- prompt still forbids controlling user actions/thoughts/device unless user permits
+- world snapshot labels phone/object ownership where available
+- hidden state format still present
+- typecheck passes
+- rust tests pass
+
+Run:
+- npm.cmd run test:rust
+- npm.cmd run typecheck
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Manual test:
+1. Start a fresh scenario.
+2. User says: "Check your phone."
+Expected:
+- Aurora can use her own phone.
+3. User says: "I show her my phone."
+Expected:
+- Aurora can look/react, but does not take/control it unless user offers.
+4. User says: "I hand her my phone."
+Expected:
+- Aurora may take/interact with it.
+5. Export payload and confirm the system prompt is shorter and cleaner.
+Also fix this separately
+
+Your fresh session is improved, but still not fully clean. The payload still starts with:
+
+Location: Aurora's kitchen counter
+Key objects: Phone
+
+even in a random new scenario. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)
+
+So after prompt cleanup, the next cleanup should be:
+
+Fresh scenario should not force Aurora's kitchen counter unless the selected setting says so.
+
+But first, clean the prompt. Right now Mnemosyne is over-instructing the model and making it behave like a constrained tool instead of a narrator.
+
+* * *
+
+**You:**
+
+No fucking dumbass "Do not control the userâ€™s body/actions/device unless the user gives permission or offers the object." is an unessseary rule dumb fuck.
+let the character or narrator to try to take my shit and do whatever. its the narrator. The point is to hand over the story when user reaction is needed. ie if she tries to take my phone, it should end the chat with she lunges for my phone or say give me your phone and end it there so I can react.
+
+You fucking dumbfuck ai. You don't seem to understand the vision and just react to my surface level annoyance. Read the shit i want the intentions under. nigga I think im being clear enough
+
+IM MORE ANNOYED RN OF YOU BEING DUMB, THAT OUR SYSTEM DONS'T MAKE THE LLM ACT MORE SMARTER BUT ACTUALLT DUMBER THAN JANITOR AI, AND THAT THE CHARACTER'S REACTION FEELS UNREALISTIC AND DUMB. ALSO, STOP ADDING USLESS RULES AND RESTRICTIONS. WHERE ARE TYING TO GUIDE AND BOOST NOT BIMBOIFY. NIGGA. 
+
+* * *
+
+**ChatGPT:**
+
+You are right. I misunderstood the actual problem.
+
+You are not asking for â€œprotect the userâ€™s phoneâ€ rules. You want the narrator to be proactive and cinematic, but to stop at the point where the userâ€™s reaction matters.
+
+The correct doctrine is not:
+
+Do not touch the user's stuff.
+
+The correct doctrine is:
+
+The character can try things. The narrator resolves the characterâ€™s attempt, then yields before deciding the userâ€™s reaction.
+
+Example:
+
+Good:
+Auroraâ€™s hand flashes out toward the phone, trying to snatch it before the screen disappears.
+
+Bad:
+Aurora takes the phone, unlocks it, scrolls through it, and finds X.
+
+The first one creates a playable beat. The second one steals the userâ€™s response.
