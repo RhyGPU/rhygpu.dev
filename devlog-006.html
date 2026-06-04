@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>006, Opening the Black Box | RhyGPU</title>
+<meta name="description" content="LLM Payload Inspector, Latest Exchange, and the tail excerpt bug in Mnemosyne." />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="/">rhygpu.dev</a>
+
+  <article>
+    <header class="post-header">
+      <p class="kicker">Mnemosyne · 006</p>
+      <h1 class="post-title">Opening the Black Box</h1>
+      <p class="post-subtitle">LLM Payload Inspector, Latest Exchange, and the tail excerpt bug.</p>
+      <p class="post-meta">May 2026 · Payload Inspector · Latest Exchange · Context debugging</p>
+    </header>
+
+    <div class="prose">
+
+      <p>Context Priority Stack looked like the right direction.</p>
+
+      <p>It gave the model a hierarchy. Latest user input mattered more than old chat. Scene state and world state were supposed to outrank stale prose. Recent chat was supposed to help tone, not override continuity.</p>
+
+      <p>But the same kind of failure still showed up.</p>
+
+      <p>The model could still continue from the wrong physical moment.</p>
+
+      <p>At first, the obvious answer looked like Scene State V1. Track current physical state, completed beats, object locations, do-not-replay lists, and time state directly in the engine.</p>
+
+      <p>That sounded clean.</p>
+
+      <p>It was also too much.</p>
+
+      <p>I did not want Mnemosyne to become a giant object tracker. I did not want to track every fork, chair, door, shirt, phone, fridge, and microwave just because the model failed one scene. That would fight the whole point of the project:</p>
+
+      <blockquote class="idea">Less tokens, better outcome.</blockquote>
+
+      <p>So I pushed back.</p>
+
+      <p>Before adding more state, I needed to know what the model was actually seeing.</p>
+
+      <div class="section-label">What changed</div>
+
+      <p>The next fix was not more memory.</p>
+
+      <p>It was inspection.</p>
+
+      <p>The context order became more intentional:</p>
+
+      <pre><code>SYSTEM RULES
+WORLD / STORY SNAPSHOT
+CHARACTER SNAPSHOT
+RELEVANT MEMORIES
+LOWER-PRIORITY RECENT CHAT
+LATEST EXCHANGE, HIGH PRIORITY
+CURRENT USER MESSAGE</code></pre>
+
+      <p>The important part was <code>LATEST EXCHANGE, HIGH PRIORITY</code>.</p>
+
+      <p>That section was supposed to sit near the end of the compiled context, right before the current user message. It should tell the model:</p>
+
+      <blockquote>Continue from the final state of the last narrator response.</blockquote>
+      <blockquote>Then respond to the latest user input.</blockquote>
+      <blockquote>If older context conflicts with this, ignore the older context.</blockquote>
+
+      <p>That was the cheaper fix.</p>
+
+      <p>Not full Scene State.</p>
+
+      <p>Not object tracking.</p>
+
+      <p>Just feed the model the most recent anchor correctly.</p>
+
+      <p>Then came the second piece: the LLM Payload Inspector.</p>
+
+      <p>I needed to see the actual text going into the API call.</p>
+
+      <p>Not a fake preview.</p>
+
+      <p>Not a simplified context panel.</p>
+
+      <p>The real payload:</p>
+
+      <pre><code>system message = narrator prompt + compiled context
+user message = current user input</code></pre>
+
+      <p>Without that, I was guessing.</p>
+
+      <div class="section-label">Why I touched this</div>
+
+      <p>The phone scene was still the test case.</p>
+
+      <p>The previous narrator response ended with the character moving past the phone reveal and turning toward the kitchen. The next user message accepted the food and added a new emotional beat.</p>
+
+      <p>The next response should have continued from that.</p>
+
+      <p>Instead, the model acted like the phone was still central.</p>
+
+      <p>That made the problem look like bad memory, but I was not convinced.</p>
+
+      <p>The model may not have been ignoring the latest exchange.</p>
+
+      <p>It may have been receiving the wrong latest exchange.</p>
+
+      <p>That distinction matters.</p>
+
+      <p>If the model is ignoring correct context, that is a model behavior problem.</p>
+
+      <p>If the app is sending the wrong anchor, that is my bug.</p>
+
+      <p>The only way to know was to open the black box.</p>
+
+      <div class="section-label">Payload Inspector</div>
+
+      <p>The inspector needed to show the exact LLM input.</p>
+
+      <p>It had to include:</p>
+
+      <ul>
+        <li>final system message text</li>
+        <li>current user message text</li>
+        <li>compiled context</li>
+        <li>estimated tokens</li>
+        <li>provider mode</li>
+        <li>model name</li>
+        <li>base URL</li>
+      </ul>
+
+      <p>It also had one hard rule:</p>
+
+      <blockquote>Never show the API key.</blockquote>
+
+      <p>This was not a fancy UI feature. It was debugging equipment.</p>
+
+      <p>If continuity breaks, I need to inspect the prompt and ask:</p>
+
+      <ul>
+        <li>Is Latest Exchange actually near the bottom?</li>
+        <li>Did the final state survive?</li>
+        <li>Is Recent Chat duplicating old material?</li>
+        <li>Is the world snapshot too vague?</li>
+        <li>Is the current user message duplicated?</li>
+        <li>Is the model being told two different things at once?</li>
+      </ul>
+
+      <p>Once I can copy the exact payload, the problem stops being mystical.</p>
+
+      <p>It becomes inspectable.</p>
+
+      <div class="section-label">The real bug</div>
+
+      <p>The inspector worked.</p>
+
+      <p>And it exposed the actual problem.</p>
+
+      <p><code>[LATEST EXCHANGE, HIGH PRIORITY]</code> was supposed to give the model the final state of the previous narrator response.</p>
+
+      <p>But it was feeding the beginning.</p>
+
+      <p>That is a brutal bug.</p>
+
+      <p>The beginning of a long narrator response often contains the dramatic setup. In the phone scene, the beginning was the phone reveal. The ending was the actual current state: the character had already reacted, moved on, and turned toward the kitchen.</p>
+
+      <p>So the app was saying:</p>
+
+      <blockquote>Continue from the final state.</blockquote>
+
+      <p>But the text it provided was:</p>
+
+      <blockquote>She is still reacting to the phone.</blockquote>
+
+      <p>That means the model was not randomly failing.</p>
+
+      <p>It was following the wrong anchor.</p>
+
+      <p>The high-priority section was high-priority garbage.</p>
+
+      <div class="section-label">Head vs tail</div>
+
+      <p>The fix was simple once the payload made the bug visible.</p>
+
+      <p>For the latest assistant response, use the tail.</p>
+
+      <p>Not the head.</p>
+
+      <p>The latest assistant excerpt should preserve the ending because the ending usually contains the current physical state.</p>
+
+      <p>The rules became:</p>
+
+      <pre><code>latest assistant excerpt = tail / end of the last assistant message
+latest user input = full if reasonable, otherwise capped
+recent chat = older messages only</code></pre>
+
+      <p>Before taking the tail, the app should strip machine noise:</p>
+
+      <ul>
+        <li>status blocks</li>
+        <li>hidden state blocks</li>
+        <li>markdown status artifacts</li>
+      </ul>
+
+      <p>Then cap safely:</p>
+
+      <ul>
+        <li>latest assistant tail around 1200 characters</li>
+        <li>latest user input around 1000 characters</li>
+        <li>UTF-8 safe truncation</li>
+        <li>prefix tail truncation with <code>...</code> so it is obvious this is the ending</li>
+      </ul>
+
+      <p>That small detail matters.</p>
+
+      <p>If the excerpt starts with <code>...</code>, I know I am reading the end of the message, not the beginning.</p>
+
+      <div class="section-label">Recent chat cleanup</div>
+
+      <p>The same bug existed in a weaker form inside lower-priority recent chat.</p>
+
+      <p>Older assistant excerpts were also taking the head of responses. That meant even the lower-priority context could keep reintroducing old physical states.</p>
+
+      <p>It did not break the output after the priority fix, but it was still noisy.</p>
+
+      <p>The rule became clearer:</p>
+
+      <blockquote>User messages should be preserved more directly.</blockquote>
+      <blockquote>Assistant messages should often preserve the final state.</blockquote>
+
+      <p>That does not mean every assistant message needs a huge tail excerpt. But for continuity, the end of the assistant response is often more important than the opening prose.</p>
+
+      <p>A narrator response can start with atmosphere and end with movement.</p>
+
+      <p>The ending is usually where the scene actually lands.</p>
+
+      <div class="section-label">Time cleanup</div>
+
+      <p>The payload also showed a smaller bug.</p>
+
+      <p>Time formatting was malformed.</p>
+
+      <p>A line like <code>Session startLate evening</code> means two time fields got glued together. That kind of malformed state gives the model permission to invent time.</p>
+
+      <p>Then it starts saying things like <code>three minutes later</code> or <code>twenty minutes ago</code> even when nothing established that.</p>
+
+      <p>The fix was not a full time engine.</p>
+
+      <p>Just clean the formatting.</p>
+
+      <p>If exact time is not known, do not invent it. If two time strings get joined, separate them properly or only show one clean value.</p>
+
+      <p>Again, small bug.</p>
+
+      <p>Expensive consequences.</p>
+
+      <div class="section-label">What got better</div>
+
+      <p>After the tail fix, the important test improved.</p>
+
+      <p>The model stopped resurrecting the phone reveal. It continued from the food, the vulnerability, and the latest user joke. That is what I wanted to see.</p>
+
+      <p>This was not a magical memory breakthrough.</p>
+
+      <p>It was simpler and more useful:</p>
+
+      <blockquote>The model finally saw the right anchor.</blockquote>
+
+      <p>The architecture was not wrong. The implementation was pointing the model at the wrong part of the previous response.</p>
+
+      <p>That is why the inspector mattered.</p>
+
+      <p>Before the inspector, I could only argue with the output.</p>
+
+      <p>After the inspector, I could inspect the input.</p>
+
+      <p>That changes the whole debugging loop.</p>
+
+      <div class="section-label">What is still rough</div>
+
+      <p>The fix worked in the important way, but the logs still showed cleanup work.</p>
+
+      <p>The payload inspector visually duplicated context. The actual model probably was not receiving duplicate context, but the debug display made it look confusing.</p>
+
+      <p>The current user input also appeared inside <code>LATEST EXCHANGE</code>, then again as the actual user message. That is not fatal, but it wastes tokens and muddies priority.</p>
+
+      <p>Lower-priority recent chat could still include stale assistant head excerpts.</p>
+
+      <p>Relevant memories were also getting polluted by generic filler. Things like <code>neutral exchange added texture</code> are not memories. They are debug-flavored garbage. They cost tokens and teach the model nothing.</p>
+
+      <p>So the next cleanup pressure is clear:</p>
+
+      <ul>
+        <li>make payload display labels clearer</li>
+        <li>stop duplicating current user input</li>
+        <li>use better assistant excerpts in recent chat</li>
+        <li>filter generic memory filler</li>
+        <li>keep the payload lean</li>
+      </ul>
+
+      <section class="covered">
+        <h2>Covered commits</h2>
+        <ol>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/7985475596fcbcb1f7f2e22dbb7e809539745113"><code>7985475</code></a> Clean up LLM payload context and latest exchange</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/a543e1c8651dbb9149716081fddfc1c0bc18ca65"><code>a543e1c</code></a> Improve chat navigation and payload copy feedback</li>
+        </ol>
+      </section>
+
+      <div class="section-label">Next</div>
+
+      <p>Next is cleanup, not a new grand architecture.</p>
+
+      <p>The payload is now visible.</p>
+
+      <p>The latest exchange is closer to correct.</p>
+
+      <p>The model can continue from the right anchor when the right anchor is actually fed to it.</p>
+
+      <p>Now the problem moves to hygiene:</p>
+
+      <pre><code>do not duplicate the current user message
+do not let stale assistant heads pollute recent chat
+do not store generic debug filler as memory
+do not let the debug UI misrepresent the actual API payload</code></pre>
+
+      <p>That is the next layer.</p>
+
+      <p>Not more magic.</p>
+
+      <p>Better plumbing.</p>
+
+      <p class="closing">Next: payload hygiene, memory filler cleanup, and keeping the debug view honest.</p>
+
+    </div>
+  </article>
+
+  <footer>
+    <span class="footer-status">
+      <span class="status-dot"></span>
+      rhygpu.dev is live
+    </span>
+    <nav class="footer-links">
+      <a href="/">Index</a>
+      <a href="https://github.com/RhyGPU/rhygpu.dev">GitHub</a>
+    </nav>
+  </footer>
+
+</div>
+</body>
+</html>
