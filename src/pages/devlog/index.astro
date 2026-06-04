@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const posts = (await getCollection('devlogs'))
+  .filter((post) => post.data.status === 'published')
+  .sort((a, b) => Number(b.data.number) - Number(a.data.number));
+---
+<BaseLayout title="Mnemosyne Devlogs | RhyGPU" description="Mnemosyne devlog archive.">
+  <div class="wrap">
+    <a class="back" href="/">rhygpu.dev</a>
+
+    <header class="post-header">
+      <p class="kicker">Archive</p>
+      <h1 class="post-title">Mnemosyne Devlogs</h1>
+      <p class="post-subtitle">A structured record of the engine, its failures, and the fixes that followed.</p>
+      <p class="post-meta">Auto-generated from Markdown content.</p>
+    </header>
+
+    <ul class="devlog-list">
+      {posts.map((post) => (
+        <PostCard
+          href={`/devlog/${post.data.slug}/`}
+          number={post.data.number}
+          title={post.data.title}
+          summary={post.data.summary}
+        />
+      ))}
+    </ul>
+
+    <SiteFooter />
+  </div>
+</BaseLayout>
