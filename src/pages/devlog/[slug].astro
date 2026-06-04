@@ -1,0 +1,48 @@
+---
+import { getCollection, render } from 'astro:content';
+import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('devlogs'))
+    .filter((post) => post.data.status === 'published')
+    .sort((a, b) => Number(a.data.number) - Number(b.data.number));
+
+  return posts.map((post, index) => {
+    const previous = posts[index - 1];
+    const next = posts[index + 1];
+
+    return {
+      params: { slug: post.data.slug },
+      props: {
+        post,
+        previous: previous ? {
+          href: `/devlog/${previous.data.slug}/`,
+          label: previous.data.number,
+          title: previous.data.title
+        } : undefined,
+        next: next ? {
+          href: `/devlog/${next.data.slug}/`,
+          label: next.data.number,
+          title: next.data.title
+        } : undefined
+      }
+    };
+  });
+}
+
+const { post, previous, next } = Astro.props;
+const { Content } = await render(post);
+---
+<BlogPostLayout
+  number={post.data.number}
+  title={post.data.title}
+  subtitle={post.data.subtitle}
+  description={post.data.summary}
+  project={post.data.project}
+  date={post.data.date}
+  commits={post.data.commits}
+  previous={previous}
+  next={next}
+>
+  <Content />
+</BlogPostLayout>
