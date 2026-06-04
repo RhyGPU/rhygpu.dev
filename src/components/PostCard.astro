@@ -1,0 +1,20 @@
+---
+interface Props {
+  href: string;
+  number: string;
+  title: string;
+  summary: string;
+}
+
+const { href, number, title, summary } = Astro.props;
+---
+<li class="devlog-item">
+  <a href={href} class="devlog-link">
+    <span class="devlog-num">{number}</span>
+    <span>
+      <span class="devlog-title">{title}</span>
+      <span class="devlog-sub">{summary}</span>
+    </span>
+    <span class="devlog-chevron">→</span>
+  </a>
+</li>
