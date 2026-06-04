@@ -1,0 +1,149 @@
+Mnemosyne Devlog Template
+# 00X, [What changed this time]
+
+## [Feature / problem / system axis]
+
+[Opening, 2 short paragraphs]
+
+Start with the actual thing you touched.
+Name the feature, bug, file, flow, commit, UI panel, or test result immediately.
+
+Do not explain the devlog.
+Do not start with philosophy.
+Do not say what this entry is “not.”
+Just say what changed and why it mattered right now.
+
+### What changed
+
+- [Concrete change 1]
+- [Concrete change 2]
+- [Concrete change 3]
+
+Keep this section factual.
+Use feature names, files, flows, UI panels, parser names, commit names, or test behavior.
+
+### Why I touched this
+
+[Explain the pressure that forced this work.]
+
+This should come from the project, not from abstract theory.
+
+Good sources:
+- a bad model output
+- a broken turn flow
+- a payload problem
+- a stale memory
+- a bad parser result
+- a UI/debugging limitation
+- a commit that made the next issue obvious
+
+### How it works now
+
+[Explain the current flow.]
+
+Use direct engineering language.
+
+Example:
+
+```txt
+Soul / World / recent messages
+→ Context Compiler
+→ provider payload
+→ model response
+→ visible narration
+→ hidden state
+→ parser
+→ patch
+→ updated state
+
+Add one screenshot, debug panel, flowchart, or before/after here if possible.
+
+What got better
+
+[Describe the improvement from the user/dev perspective.]
+
+Do not oversell.
+Use observable effects.
+
+Examples:
+
+the model starts with cleaner state
+hidden blocks stop leaking
+payloads are easier to inspect
+memory updates become traceable
+state survives the next turn
+debugging has an actual place to look
+What is still rough
+
+[Only list real current rough edges.]
+
+This is not a self-own section.
+It is a “next engineering pressure” section.
+
+Bad:
+
+This was not the final relevance engine.
+
+Good:
+
+The next problem is patch tracking. Once state is compiled every turn, I need to know exactly what changed and where it came from.
+Covered commits
+[hash] — [commit title]
+[hash] — [commit title]
+[hash] — [commit title]
+
+Add one sentence after the list:
+
+These commits cover [scope], not [future scope].
+
+Only use that if it prevents confusion. Do not make it sound defensive.
+
+Next
+
+[One concrete next constraint.]
+
+End with the next pressure, not a grand conclusion.
+
+Example:
+
+Next is patch protocol. If the app is going to compile state every turn, state changes need a source trail instead of just appearing in the database.
+
+# Voice Rules for Your Devlog
+
+Use this as the writing filter before publishing.
+
+```txt
+1. First 3-5 lines must contain a real artifact:
+   feature name, commit, UI, file, bug, test result, parser, payload, screenshot.
+
+2. No “this devlog is not...” sentences.
+
+3. No repeated sentence skeletons.
+   If two lines start the same way, the third one must change structure.
+
+4. Do not make yourself look like you discovered obvious things late.
+   Frame it as: I built X, testing exposed Y, so I changed Z.
+
+5. Keep philosophy after evidence.
+   Concrete thing first, interpretation second.
+
+6. One section = one job.
+   Do not mix what changed, why, how, and next steps in the same block.
+
+7. End with the next engineering constraint.
+   Not a motivational quote.
+Best Title Format
+
+Use this format:
+
+# 004, [Concrete change]
+## [System names / feature names / problem axis]
+
+Examples:
+
+# 004, 전체 채팅 대신 세션 패킷
+## Context Compiler V2, input payloads, and state injection
+# 005, 상태 변경을 패치로 남기기
+## Patch Protocol V1, ledger traces, and correction safety
+# 006, 내레이터가 유저 행동을 훔치지 않게 하기
+## Attribution guard, response integrity, and agency checks
