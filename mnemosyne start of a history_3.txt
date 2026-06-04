@@ -1,0 +1,1966 @@
+User Trust & Privacy	An online platform storing chat logs and Soul files means you hold sensitive data. Privacy policies, encryption, and data handling become legal and ethical obligations. Local tools avoid this entirely.
+Customizing the Narrative Mode	You want users to choose between Realistic, Reader, and God modes. This is technically solvable (it's a system prompt toggle), but it requires careful design to make the toggle intuitive and ensure each mode behaves consistently.
+PART 3: Your Platform Vision â€” Feasibility Assessment
+Online Site vs. Local Download
+SillyTavern's route (local + bring your own API key) solves the cost problem elegantly. Users pay DeepSeek directly. You don't host anything expensive.
+
+An online site where you host and pay for API calls is feasible but requires one of these models:
+
+Model	How It Works	Risk
+BYOK (Bring Your Own Key)	Users paste their DeepSeek/OpenAI API key. You never pay for their usage.	Less friction than SillyTavern (no install), but users must trust you with their key. Encrypt it.
+Freemium	Free tier with message cap (e.g., 100/day). Pro tier unlimited.	You need enough paying users to subsidize free users. Risky early on.
+Ads	Display ads to cover API costs.	Ruins immersion. Not recommended for RP.
+One-Time Purchase	Pay $10-20 once, get lifetime access with your own API key.	Simple, transparent, zero ongoing costs for you. The best indie model.
+Self-Hosted Backend + Local Model	Users run a tiny client that connects to a local LLM (like Ollama). Your site is just the UI.	Limits audience to users with decent hardware. But zero API costs for everyone.
+Recommendation: The SillyTavern BYOK route is the safest for a solo dev. Build an online site that stores Soul files, character cards, and conversations server-side, but requires the user to provide their own API key for LLM calls. You host the simulation engine and database. They pay DeepSeek directly. Your costs are just server hosting ($5-20/month). This is sustainable from day one.
+
+Narrator/GM Architecture (Not Character AI)
+You want the AI to be a writer/GM/narrator, not the character. This is a fundamental shift from Janitor and SillyTavern, and it's better for our simulation model.
+
+The system prompt already reflects this. Our v5-N prompt begins: "You are a narrator AI. You describe a single character in third-person present tense."
+
+To make this user-configurable:
+
+Mode	System Prompt Variant	What the User Sees
+Realistic	"Describe only external actions, dialogue, and physical reactions. No internal monologue. Show, don't tell."	The character's body language, facial expressions, dialogue. No thoughts. Like watching a film.
+Reader	"Include the character's internal thoughts and emotions, but only what the character themselves is aware of. No omniscient knowledge."	Access to one character's inner world. Limited to their perspective. Like a close third-person novel.
+God	"Provide full narrative access. Include internal thoughts of the character, environmental details, hidden information, and foreshadowing the character wouldn't know."	Full omniscience. The narrator can reveal secrets, describe off-screen events, and provide dramatic irony.
+These are just system prompt injections. The backend toggles between them based on user preference. No engine changes needed.
+
+Summary: What Remains
+Solved by our architecture: Memory, consistency, proactivity, immersion, filtering, and the core RP experience.
+
+Not solved yet (and needs your design decisions):
+
+Sustainability model â€” BYOK vs. freemium vs. one-time purchase.
+
+Hosting strategy â€” Online site vs. downloadable client.
+
+Infrastructure â€” Uptime, backups, scaling, data privacy.
+
+Narrative mode UX â€” How the user selects Realistic/Reader/God and switches mid-scene.
+
+Response latency â€” Async queuing, streaming, or edge computing to reduce wait times.
+
+Want me to design the narrative mode switching system or the BYOK subscription model next?
+
+1. Never one time purchase. its ass not long term or i need to sell after purchase too..
+Ads are ok. If you see newtokki or other manga/manhwa/porn sites, ads not about how many, its about where and how relevant. BYOK and freemium seem like the way or ads. Freemium for... no ads or shit
+2. Online site for uploading characters and a downloadable client to actually play
+3. IDK..? It might need to start as a passion shit where I pay the bills and rent a hosting thing and use it too keep uptime, backups, etc
+4. no switch mid scene. also technically the user can prompt it to AI in chat. its more like a starting selection for a guide
+5. hosting
+6. We need better catergorization.
+i) NSFW and Non NSFW
+ii) Genre
+iii)Tags
+iV)Rating/trending/new/random/recommended (algorithm?)
+V) A bit of AIgorithm to auto sort story after reading the premise. So that author dosn't need to select everything and users don't miss out on the same shit they want cause it dons't filter correctly
+We need to address the user's points clearly and directly. The conversation has been about designing a new AI RP platform with a simulation engine. The user is now laying out concrete requirements and design choices. I need to respond to each point, showing understanding of the business and technical implications, and offering a realistic path forward.
+
+Point 1: Monetization. The user rejects one-time purchase. They're open to ads (if done well, like certain manga sites) and BYOK + freemium (freemium to remove ads). I need to validate this and outline a realistic model: free tier with ads and limited messages, pro tier with BYOK or subscription that removes ads and lifts caps. I'll mention the privacy concern with BYOK (users might not trust a small site with their API key) and suggest subscription as an alternative.
+
+Point 2: Architecture. User wants an online site for character browsing/sharing but a downloadable client for actual RP. That's an interesting hybrid. The site acts as a marketplace/repository; the client handles the RP and connects to LLM APIs directly. This solves hosting costs for the heavy compute (RP is local) while having a central community. I need to explain that the client can be a lightweight app (Electron) that integrates the simulation engine, and the site is a web app for discovery.
+
+Point 3: Hosting cost. The user acknowledges they may need to pay initially as a passion project. That's understandable. I'll suggest starting with the downloadable client + a minimal online site for character sharing, which keeps server costs low (just a database and file storage). Later, add the online RP option with freemium.
+
+Point 4: Narrative mode. User says no mid-scene switching (good). Starting selection is simple: include it in the character creation or as a setting in the client. The backend can inject the appropriate system prompt variant.
+
+Point 5: "hosting" - probably referring to point 2/3.
+
+Point 6: Better categorization and discovery. This is crucial for user engagement. They want:
+
+NSFW toggle
+
+Genre
+
+Tags
+
+Rating/trending/new/random/recommended (algorithm)
+
+Auto-categorization based on premise/description so authors don't have to manually tag everything.
+
+I can propose a system that uses an LLM (like GPT-3.5 or a small local model) to analyze character cards and automatically generate tags, genre, and content warnings. The site can then use these for filtering, recommendations, and trending algorithms. I'll mention collaborative filtering, simple trending scores, and the importance of an NSFW gate. I'll also note that the user's concern about filter accuracy is valid: "same shit they want cause it doesn't filter correctly" â€“ that's why auto-tagging must be reliable, and users should be able to override it.
+
+I'll structure the response to address each point in order, showing how the platform can be built incrementally, starting with the client + repo model, and then scaling with the online RP option later.
+
+Got it. Let me address each point directlyâ€”no fluff, just the architectural and business implications.
+
+1. Monetization: BYOK + Freemium, No One-Time Purchase
+Your instinct is correct. One-time purchase is a dead end for a service with ongoing API costs. Here's the sustainable model:
+
+Free Tier:
+
+Ads (subtle, relevant, non-intrusive â€” think banner placements like the manga sites you mentioned, not pop-ups).
+
+Limited messages per day (e.g., 100).
+
+Access to the downloadable client + character marketplace.
+
+Pro Tier (Subscription):
+
+No ads.
+
+Unlimited messages.
+
+Advanced features (God mode, priority queue, experimental models).
+
+Price point: $5-10/month. This is the standard for AI RP tools.
+
+BYOK Option:
+
+User provides their own DeepSeek/OpenAI API key.
+
+They pay the LLM provider directly. You pay nothing.
+
+This can be a separate "self-hosted" tier or bundled with Pro.
+
+Important: encrypt stored keys. Users are rightfully paranoid about API key theft.
+
+Why this works: Freemium users are subsidized by Pro subscribers and ad revenue. BYOK users cost you nothing. The economics balance out.
+
+2. Online Site for Characters + Downloadable Client for Play
+This is a smart split. It offloads the heavy compute (LLM calls) to the user's machine via the client, while keeping the community features centralized online.
+
+Online Site (Web App):
+
+Character marketplace: upload, browse, search, rate, review.
+
+User profiles, favorites, playlists.
+
+Discussion forums? Optional.
+
+The Soul file repository: when you download a character, you get their base state. When you finish a session, you can optionally upload the evolved Soul file back to the site (public or private).
+
+This site does not handle RP. It's a repository.
+
+Downloadable Client (Electron or Tauri):
+
+The actual RP interface.
+
+Connects directly to the LLM API using the user's key.
+
+Runs the State Engine locally (memory decay, culling, Soul file updates).
+
+Syncs with the online site for character downloads and optional Soul uploads.
+
+Works offline if the user has a local LLM (Ollama integration).
+
+Why this split:
+
+You don't pay for LLM calls. Users do, either via subscription or BYOK.
+
+Your server costs are minimal: just the website + database + file storage.
+
+The client can be as powerful as you want without server-side bottlenecks.
+
+Users who want privacy can keep their Soul files local and never upload them.
+
+3. Starting as a Passion Project
+This is realistic. The costs are manageable:
+
+Expense	Monthly Estimate
+Web hosting (VPS or Railway/Fly.io)	$5-20
+Database (managed Postgres or SQLite on VPS)	$0-15
+File storage for character cards & Soul files	$0-5 (Cloudflare R2 free tier)
+Domain name	$1/month amortized
+Total	$6-41/month
+That's a Netflix subscription. You can self-fund this until you have enough users to cover costs via subscriptions/ads.
+
+For backups: automated daily pg_dump to Cloudflare R2 or Backblaze B2. Costs pennies.
+
+For uptime: a simple health check + restart script. If you use Railway or Fly.io, they handle this automatically.
+
+4. Narrative Mode as Starting Selection (No Mid-Scene Switch)
+Simple implementation:
+
+At character creation (or when starting a new conversation), the user selects:
+
+Realistic: External only. Physical cues, dialogue, no thoughts.
+
+Reader: Close third-person. Access to the character's inner world but only what they know.
+
+God: Full omniscience. Narrator can reveal hidden information, foreshadowing, off-screen events.
+
+This selection injects a specific system prompt variant. The State Engine doesn't change. The LLM just gets different narrative instructions.
+
+Users can also prompt the AI mid-chat to shift tone (e.g., "Show me more of her thoughts"), but the baseline mode is set at the start.
+
+5. Hosting (Covered in #2 and #3)
+6. Better Categorization & Discovery
+This is where your platform can outshine Janitor and SillyTavern. Both have terrible discovery. Here's the system:
+
+Taxonomy
+NSFW Toggle:
+
+Strict binary: SFW / NSFW.
+
+NSFW characters are hidden by default. Users must opt in (age gate).
+
+Tags can further specify: explicit, suggestive, violence, trauma-themed, etc.
+
+Genre:
+
+Predefined list: Fantasy, Sci-Fi, Modern, Historical, Horror, Romance, Slice of Life, Cyberpunk, Post-Apocalyptic, etc.
+
+Creators select one primary genre + up to two secondary.
+
+Tags:
+
+Freeform but with autocomplete suggestions.
+
+Examples: slow-burn, enemies-to-lovers, trauma-recovery, body-horror, found-family, psychological, action-heavy.
+
+System auto-suggests tags based on the character description (see below).
+
+Discovery Algorithms
+Trending:
+
+Score = (recent downloads + recent ratings + recent conversations started) / time decay.
+
+Simple, transparent, not gamified.
+
+New:
+
+Sort by creation date. Give new characters a temporary boost in visibility for the first 48 hours.
+
+Top Rated:
+
+Weighted rating (Bayesian average) to prevent one 5-star review from outranking a character with 100 4.5-star reviews.
+
+Random:
+
+Literally random. Useful for serendipity.
+
+Recommended (Algorithm):
+
+Collaborative filtering: "Users who liked this character also liked..."
+
+Content-based: Compare character tags, genre, and description embeddings to the user's play history.
+
+A simple embedding model (all-MiniLM-L6-v2, free, tiny) can generate vectors for each character. Store them. Compute cosine similarity between what the user has played and the catalog. Fast, cheap, effective.
+
+Auto-Categorization from Premise
+This is your unique feature. When a creator uploads a character, they paste a description. Your backend:
+
+Sends the description to a cheap LLM (GPT-3.5, DeepSeek, or a local model) with a prompt: "Extract genre, tags, content warnings, and NSFW status from this character description. Output JSON."
+
+Parses the response.
+
+Auto-fills the metadata fields.
+
+The creator can override any incorrect assignments.
+
+This eliminates miscategorization and makes filtering actually work. Users find what they want. Creators don't have to think about taxonomy.
+
+Example output:
+
+json
+{
+  "genre": ["Cyberpunk", "Psychological Horror"],
+  "tags": ["body-horror", "trauma-recovery", "slow-burn", "dual-consciousness"],
+  "nsfw": true,
+  "content_warnings": ["graphic violence", "medical horror", "non-consensual body modification"]
+}
+Summary: The Stack
+Component	Technology
+Online Site	Next.js (hosted on Vercel or VPS)
+Database	SQLite â†’ Postgres
+Character Storage	Cloudflare R2 or S3-compatible
+Client App	Electron or Tauri (Rust-based, lightweight)
+State Engine	Rust or Python, embedded in client
+LLM for Auto-Tagging	DeepSeek or GPT-3.5 (cheap, one-time per character)
+Embeddings for Recommendations	all-MiniLM-L6-v2 (free, runs locally)
+User Auth	Clerk or Supabase Auth
+This is buildable. The downloadable client + online repository model lets you launch with zero API costs. Add the online RP option later when you have paying users. The categorization system is what makes people stay.
+
+This response is AI-generated, for reference only.
+I am not giving out free messages. base is BYOK since the rp client is running on their PC. This will be open source. I may give out subscriptions for unlimited AI token (I deiced which AI i provide tho). Advance features would be no 5 sec ads in loading screen and banners. more or less YouTube and site privilages for searching stories
+
+Looks like a solid platform
+We need to parse this user's latest message. It's a follow-up on the platform design discussion. The user is clarifying their monetization model:
+
+No free messages. Base is BYOK since the RP client runs on their PC. This will be open source.
+
+They may offer subscriptions for unlimited AI tokens (they decide which AI they provide).
+
+Advanced features would be no 5-sec ads on loading screen and banners. More or less YouTube-like and site privileges for searching stories.
+
+They end with "Looks like a solid platform". So they seem satisfied with the earlier architecture, and now they're refining the business model. The user is not asking a direct question; they're stating their plans and seeking validation or feedback. I need to respond appropriately: acknowledge their decision, maybe offer a brief analysis of the implications, and ask if they need further help.
+
+Key points to address:
+
+Clarify that BYOK + open source client eliminates the need for free message tiers, which is simpler.
+
+Subscription could be for "Unlimited AI tokens" using a provider they choose. They decide which AI. This could be a premium offering where they host a proxy that covers the cost, or they resell access to a specific model. That's interesting.
+
+Advanced features: remove ads, better search/discovery. Ads would be non-intrusive (loading screen, banners). Like YouTube model.
+
+They see it as a solid platform.
+
+I should confirm the model, maybe note potential pitfalls (like providing AI tokens themselves could incur costs, so they'd need to price the subscription to cover that), but overall positive. The user seems to be moving toward implementation, so I can ask what they need next (e.g., technical specs, UI mockups, etc.). Keep it concise.
+
+You've landed on a clean, sustainable model. Let me confirm what you're building and flag the few things worth watching.
+
+Your Monetization Model (Clarified)
+Tier	What It Includes	Revenue
+Base (Free)	Open-source client, BYOK. User brings their own DeepSeek/OpenAI key. No message limits. Ads on loading screens and banners.	Ads + optional premium subscription
+Premium (Subscription)	Remove ads. Unlimited AI tokens using a provider you choose and host (e.g., DeepSeek, a future fine-tune, or a pooled API). Better search/discovery privileges.	Monthly subscription fee
+This works because:
+
+The client is open-source. Users can self-host forever at zero cost to you.
+
+BYOK means the base tier costs you nothing.
+
+Premium lets you monetize convenience. Users who don't want to manage API keys or deal with ads pay you instead.
+
+You can offer premium AI access at a markup over your API cost, creating margin.
+
+One Thing to Watch: Providing AI Tokens Yourself
+If you sell "unlimited AI tokens" using a provider you pay for, you're taking on a variable cost risk. One heavy user could burn through your margin. Mitigations:
+
+Soft caps: "Unlimited" within fair use (e.g., 500 messages/day). Enforce on the backend.
+
+Provider lock: Use DeepSeek's cheapest tier, or negotiate a volume discount if you scale.
+
+Pooled API key: Rotate across multiple keys to avoid rate limits.
+
+Transparency: If you ever need to adjust the policy, communicate early. Users understand.
+
+Ads Implementation
+Since the client is downloadable (Electron/Tauri), you can embed ads natively:
+
+Loading screen: 5-second static banner while the LLM response streams. Keeps the user engaged rather than staring at a spinner.
+
+Banner ads: Persistent but subtle, like a manga site. Top or bottom bar, not pop-ups.
+
+Ad network: Carbon Ads (developer-focused, clean), or direct sponsorships from AI/RP communities.
+
+The premium "no ads" tier becomes genuinely desirable without breaking the free experience.
+
+Open Source Strategy
+Open-sourcing the client and engine is smart. It builds trust, encourages contributions, and ensures the platform can outlive you. But consider what stays proprietary:
+
+Open Source	Proprietary (Your Advantage)
+Client (Electron/Tauri)	Premium API proxy & token service
+State Engine (Soul files, memory system)	Hosted character repository & discovery algorithms
+System prompts & narrative modes	Premium search/ranking features
+Character card format	User data, analytics, recommendation engine
+This gives you a moat. Competitors can clone the client but not the community or the premium infrastructure.
+
+Next Questions to Nail Down
+Open-source license: MIT (permissive) or AGPL (forces derivatives to be open)? MIT is friendly; AGPL protects against closed-source forks stealing your work.
+
+Client framework: Electron (easier, heavier) or Tauri (Rust-based, lighter, more secure)? Tauri is better for a downloadable RP clientâ€”smaller binary, less memory.
+
+Where to host the character repo: A simple Next.js site on Vercel + Supabase for the database. Starts free, scales affordably.
+
+Premium API proxy: A lightweight backend (FastAPI) that validates subscription status and forwards requests to DeepSeek. You log usage, enforce caps, and rotate keys.
+
+You've essentially designed the "VLC of AI roleplay"â€”a free, open-source tool that just works, with an optional premium layer for convenience. That's a solid place to be. Want me to spec out the client architecture or the character repo API next?
+
+1. better to protect my community
+2.Tauri
+3. Sure seems good.
+4. This is a later feature. We start like youtube with ads.
+
+so, give me a game plan
+The user wants a concrete, phased game plan (roadmap) for building their AI roleplay platform, as described in the conversation history. They've made key decisions: open-source client (Tauri), online repository, BYOK base tier, ads for monetization, AGPL license for community protection, and no premium token service initially.
+
+I need to search for relevant technical information to inform the game plan: Tauri vs Electron for RP clients, Supabase for backend, Vercel for hosting, open-source AI RP platforms (SillyTavern, Janitor), AGPL implications, and ad integration in Tauri. I'll also look for existing solutions or similar projects to provide grounded advice.
+
+I'll structure the plan into phases, covering architecture, state engine integration, backend for character repository, ad strategy, and community protection with AGPL. The plan should be actionable, pragmatic, and based on the user's requirements. Now, I'll perform the searches.
+
+Found 69 web pages
+The search results provide useful context. I'll open the SillyTavern architecture page and the AGPL information for more details. For the game plan, I'll structure it into phases, incorporating the user's decisions: AGPL license, Tauri, Supabase/Vercel, ad integration, and a phased rollout starting with the client, then the repository, then premium features. I'll also include a technical architecture diagram and a timeline.
+
+Read 3 pages
+Core Architecture | SillyTavern/SillyTavern | DeepWiki
+#opensource #github #licensing #developers #techstrategy #theguywhodoesai | theguywhodoesai
+tauri-plugin-google-admob-api
+I have gathered enough information. Now I'll create the game plan. The plan will be structured into phases, starting with the core client and engine, then the character repository, and finally monetization and premium features. I'll incorporate the technical details from the search results (Tauri, Supabase, Vercel, AGPL, ad integration) and align with the user's decisions. The response will be in a clear, actionable format with phases, key tasks, and technical notes.
+
+You've made all the right foundational decisions. Here's the complete game plan from zero to launch.
+
+Phase 0: Foundation (Weeks 1â€“2)
+0.1 â€” Legal & License
+License: AGPL-3.0 for the client and state engine. Forces any fork or derivative to stay open-source, even if they run it as a service.
+
+Repository: GitHub organization. Public from day one. MIT for documentation and example character cards.
+
+Contributor License Agreement (CLA): Optional but recommended. Gives you the right to relicense if needed later.
+
+0.2 â€” Development Environment
+Tauri 2.x for the client. Uses the system WebView, not bundled Chromium. Rust backend for the state engine, JavaScript/TypeScript frontend.
+
+Next.js + Supabase + Vercel for the online character repository. Free tier covers everything until you scale.
+
+GitHub Actions for CI/CD. Build and deploy on every push.
+
+0.3 â€” Architecture Sketch
+Three independent layers (like SillyTavern's architecture but with a persistent state engine):
+
+text
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚   Tauri Client (UI)   â”‚  â† User interacts here
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚ State Engine (Rust)   â”‚  â† Soul files, memory, world log
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  LLM API Connector    â”‚  â† BYOK: user's own DeepSeek/OpenAI key
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  Online Repo (Web)    â”‚  â† Character marketplace, Soul uploads
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  Next.js + Supabase   â”‚  â† Database, auth, file storage
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+Key rule: The client works fully offline. The online repo is for discovery and sharing only. RP never passes through your servers.
+
+Phase 1: Core Client (Weeks 3â€“8)
+1.1 â€” State Engine (Rust)
+This is the heart of everything. Port the memory system we designed into Rust:
+
+Module 1: Soul Engine
+
+Load/save soul.json for each character.
+
+Track relationships (trust, affection, intimacy per target).
+
+Track Maslow needs and SDT (autonomy, competence, relatedness).
+
+Track trauma phase and symptoms.
+
+Read-only from the LLM's hidden state block, write-only to the soul file.
+
+Module 2: Memory System
+
+Decode the [HIDDEN_STATE] block from LLM responses.
+
+Run the memorability scoring:
+
+emotional_intensity Ã— 0.4 (from the tag category)
+
+novelty Ã— 0.3 (cosine distance from existing memories)
+
+goal_relevance Ã— 0.3 (match against current needs)
+
+Multiply by repetition_discount if similar events exist.
+
+Keep top 6 recent memories. Promote high-scorers to core memory (max 5).
+
+Compress repetitive events into schema summaries.
+
+Module 3: World Log
+
+Tracks location, active plot threads, recent events, key objects.
+
+Updates every 3â€“5 turns or on scene change.
+
+Aggressive compression: older events become vague clauses.
+
+Module 4: Context Compiler
+
+Before each LLM call, build a compact injection:
+
+Core memories (1â€“2 sentences each, max 5)
+
+Recent high-score memories (2â€“4)
+
+Active schemas (1 line each)
+
+World log summary (1 paragraph)
+
+Last 3â€“5 messages for conversational flow
+
+Target: under 2,000 tokens total injected context.
+
+1.2 â€” LLM Connector
+Support DeepSeek, OpenAI, Anthropic. User pastes their API key.
+
+Encrypt the key locally (not in plain text).
+
+Streaming responses with a loading screen ad slot.
+
+Validate responses: strip the [HIDDEN_STATE] block before display, pass to state engine.
+
+1.3 â€” Chat Interface
+Three-panel layout: character info (left), chat (center), controls (right).
+
+Markdown rendering for character responses.
+
+Status bar showing current soul metrics (optional, collapseable).
+
+Character card import: support the standard PNG/JSON format used by SillyTavern and Janitor.
+
+Narrative mode selector at conversation start: Realistic, Reader, God.
+
+1.4 â€” First Playable Build
+By end of Phase 1, you can:
+
+Load a character card.
+
+Chat with the character via DeepSeek using your own API key.
+
+The state engine tracks memory, trauma, and relationships.
+
+Memories decay realistically. Core memories persist.
+
+Context stays under 2,000 tokens regardless of session length.
+
+Test this yourself. Play a 100-turn session. Verify memory works.
+
+Phase 2: Online Repository (Weeks 9â€“12)
+2.1 â€” Website (Next.js + Supabase + Vercel)
+Landing page explaining what the platform is.
+
+Character browser: search, filter by genre/tags/rating/NSFW.
+
+Character detail page with preview, stats, download button.
+
+User authentication (Supabase Auth, email+password or OAuth).
+
+User profiles: owned characters, favorites, play history.
+
+2.2 â€” Character Upload & Auto-Categorization
+Upload character card (PNG/JSON).
+
+Backend sends the character description to a cheap LLM (DeepSeek).
+
+LLM returns: genre, tags, NSFW status, content warnings.
+
+Creator can override any auto-assignment.
+
+Character gets stored in Supabase with metadata.
+
+2.3 â€” Discovery Algorithm
+Trending: (recent downloads Ã— 2 + recent ratings Ã— 3) / time_decay
+
+New: sort by creation date, +48-hour visibility boost.
+
+Top Rated: Bayesian weighted rating.
+
+Random: literal random with NSFW filtering.
+
+Recommended: generate embeddings for each character using all-MiniLM-L6-v2 (tiny, free). Compute cosine similarity to user's play history. Fast, cheap, accurate.
+
+2.4 â€” Soul File Sharing
+Users can optionally upload their evolved Soul files back to the site.
+
+Public: anyone can see how your character evolved.
+
+Private: only you.
+
+This creates a secondary content ecosystem. Characters that have been "lived in" are more interesting than fresh ones.
+
+Phase 3: Monetization (Weeks 13â€“16)
+3.1 â€” Ads
+Base tier (free):
+
+Loading screen banner: 5-second static ad while the LLM streams.
+
+Persistent bottom banner in the client.
+
+Use Google AdMob via tauri-plugin-google-admob for mobile. For desktop, implement a simple WebView-based banner pointing to your ad network.
+
+Ads must be subtle and relevant. No pop-ups, no video interstitials.
+
+Premium tier (subscription, $5-10/month):
+
+Remove all ads entirely.
+
+Priority search and discovery features on the website.
+
+Early access to new narrative modes or experimental features.
+
+Does NOT include API tokens at this stage. User still brings their own key.
+
+3.2 â€” API Token Service (Future, Phase 4+)
+Once you have a critical mass of premium users:
+
+Offer a pooled DeepSeek API as a premium add-on.
+
+Soft cap at 500 messages/day to prevent abuse.
+
+You pay DeepSeek at volume, users pay you at retail. Margin is your profit.
+
+3.3 â€” Pricing Page
+Simple. Transparent. No dark patterns.
+
+Feature	Free	Premium
+Client + State Engine	âœ…	âœ…
+BYOK	âœ…	âœ…
+Character Repository	âœ…	âœ…
+Soul File Sharing	âœ…	âœ…
+Ads	Yes	None
+Priority Discovery	â€”	âœ…
+Experimental Features	â€”	âœ…
+Price	$0	$5-10/month
+Phase 4: Launch (Weeks 17â€“20)
+4.1 â€” Pre-Launch Checklist
+AGPL license on GitHub. README with clear setup instructions.
+
+Downloadable binaries for Windows, macOS, Linux (Tauri builds).
+
+Website live with at least 50 community characters seeded.
+
+Documentation: how to use the client, how to upload characters, how the state engine works.
+
+Landing page with a demo video.
+
+4.2 â€” Launch Channels
+Reddit: r/CharacterAI, r/SillyTavern, r/LocalLLaMA.
+
+Discord: Create a community server. This is where your power users will live.
+
+GitHub: Star the repo, open issues for feature requests.
+
+4chan /trash/ and /g/: RP communities. Controversial but high-engagement. Know your audience.
+
+4.3 â€” First Week Priorities
+Respond to every GitHub issue and Discord message personally.
+
+Fix critical bugs within 24 hours.
+
+Ship one small feature requested by the community within the first week.
+
+This builds trust and word-of-mouth.
+
+4.4 â€” Content Flywheel
+Users download characters â†’ play â†’ evolve Soul files â†’ upload back â†’ others discover â†’ download â†’ play.
+
+Each uploaded Soul file is new content. The repository grows organically.
+
+The more people play, the more valuable the platform becomes for everyone.
+
+Phase 5: Scale (Month 6+)
+5.1 â€” Community Moderation
+User reporting for inappropriate content.
+
+Tag moderators from the community.
+
+Automated NSFW detection on uploaded images (simple ML model or API).
+
+5.2 â€” Mobile Client
+Tauri 2.0 already supports Android and iOS.
+
+Same codebase, different build target. Low effort, huge reach.
+
+5.3 â€” Premium API Service
+Launch once you have 500+ active premium users.
+
+Negotiate volume discount with DeepSeek or another provider.
+
+This becomes your primary revenue engine.
+
+5.4 â€” Plugin System
+Let the community build extensions for the client.
+
+TTS, auto-translation, image generation, custom UI themes.
+
+This is what made SillyTavern sticky.
+
+Success Metrics
+Metric	Phase 1 Target	Phase 4 Target
+GitHub stars	100	1,000+
+Active users	10 (beta)	500+
+Characters in repo	10 (seeded)	200+
+Premium conversion	â€”	5-10%
+Discord members	20	500+
+This is a buildable plan. The total time investment is about 4â€“5 months to launch assuming you're working on it consistently with AI assistance (Cursor, ChatGPT Plus). The total financial investment is under $50/month until you launch. From there, ads and premium subscriptions cover costs and eventually turn profit.
+
+Want me to go deeper on any specific phase? The state engine architecture, the Tauri project structure, or the auto-categorization system?
+
+1.2 I want it to work with subcribed chat. We are not using for coding or whatnot. Nothing to earn money. I think its reasonable to make it to work with claude/chat gpt/ grok/ or other service chat subscriptions. so non api montly chat services work...
+
+Now, based on this game plan, make a detail blueprint. Include the made system we did for the memory system that you made for me as a prompt and improve it based on out disucssion verison
+The user wants a detailed blueprint that incorporates a key new requirement: the client must work with regular chat subscriptions (like ChatGPT Plus, Claude Pro, Grok, etc.) rather than just API keys. This is a significant design shift, as the client would need to automate a browser session instead of making clean API calls. I'll need to integrate the memory system we refined, and structure the entire blueprint around this "browser automation" approach.
+
+Here is the complete, detailed blueprint for Mnemosyneâ€”your open-source, AGPL-licensed RP platform with the memory engine, browser-based chat support, and a sustainable monetization model.
+
+MNEMOSYNE â€” COMPLETE BLUEPRINT v1.0
+0. LICENSE & PHILOSOPHY
+Client & State Engine: AGPL-3.0. Any fork or derivative must remain open-source.
+
+Character Repository (Website): Source-available or MIT for the web code. The database of characters and Soul files is proprietary to your platform.
+
+Philosophy: The client is a tool. The community is the moat. RP never passes through your servers. Users own their data and their Soul files.
+
+1. SUPPORTED AI PROVIDERS
+1.1 â€” Subscription Chat Services (Phase 1 Priority)
+These are regular monthly subscriptions, not pay-per-token APIs. Your client automates a logged-in browser session.
+
+Service	Subscription Type	Client Method
+ChatGPT Plus	$20/month	Browser automation (Playwright/Puppeteer) inside the client
+Claude Pro	$20/month	Browser automation
+Grok (X Premium)	$16/month	Browser automation
+Gemini Advanced	$20/month	Browser automation
+DeepSeek Chat	Free tier available	Browser automation (or API if user has key)
+Why this matters: Most RP users already pay for ChatGPT Plus or Claude Pro. They don't want to pay again for API credits. Your client piggybacks on what they already have.
+
+1.2 â€” API Keys (Optional, Secondary)
+For power users who prefer API access:
+
+DeepSeek API
+
+OpenAI API
+
+Anthropic API
+
+OpenRouter (aggregator)
+
+1.3 â€” Local Models (Future)
+Ollama integration for fully offline RP.
+
+2. CLIENT ARCHITECTURE (TAURI)
+2.1 â€” Technology Stack
+Layer	Technology	Purpose
+Desktop Shell	Tauri 2.x	Cross-platform desktop app (Windows, macOS, Linux)
+Backend (Rust)	Rust via Tauri	State engine, memory system, browser automation, encryption
+Frontend (UI)	React + TypeScript + Tailwind CSS	Chat interface, character management, settings
+Browser Automation	Playwright (Rust bindings via headless_chrome or chromiumoxide)	Automate logged-in chat sessions
+Local Storage	SQLite via rusqlite	Conversations, Soul files, character cache
+Embeddings	all-MiniLM-L6-v2 via ONNX Runtime (Rust binding)	Memory novelty scoring, character recommendations
+2.2 â€” Client Modules
+text
+src-tauri/
+â”œâ”€â”€ main.rs                    # Entry point
+â”œâ”€â”€ state_engine/
+â”‚   â”œâ”€â”€ mod.rs                 # State engine orchestrator
+â”‚   â”œâ”€â”€ soul.rs                # Soul file load/save/update
+â”‚   â”œâ”€â”€ memory.rs              # Memory scoring, decay, culling, consolidation
+â”‚   â”œâ”€â”€ world_log.rs           # Story tracker: location, plot, objects
+â”‚   â”œâ”€â”€ context_compiler.rs    # Builds compressed LLM context injection
+â”‚   â””â”€â”€ schema.rs              # JSON schemas, validation
+â”œâ”€â”€ providers/
+â”‚   â”œâ”€â”€ mod.rs                 # Provider abstraction
+â”‚   â”œâ”€â”€ browser.rs             # Playwright-based chat automation
+â”‚   â”œâ”€â”€ api.rs                 # Traditional API connector
+â”‚   â””â”€â”€ local.rs               # Ollama/local model support (future)
+â”œâ”€â”€ security/
+â”‚   â”œâ”€â”€ mod.rs
+â”‚   â””â”€â”€ encryption.rs          # Encrypt stored API keys, browser cookies
+â”œâ”€â”€ db/
+â”‚   â”œâ”€â”€ mod.rs
+â”‚   â””â”€â”€ migrations.rs          # SQLite schema management
+â””â”€â”€ utils/
+    â”œâ”€â”€ mod.rs
+    â”œâ”€â”€ base64.rs              # Encode/decode hidden state
+    â””â”€â”€ embeddings.rs          # ONNX runtime for MiniLM
+2.3 â€” UI Layout
+text
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  Character   â”‚                        â”‚  Controls    â”‚
+â”‚  Info        â”‚    Chat Window         â”‚              â”‚
+â”‚              â”‚                        â”‚  Provider:   â”‚
+â”‚  - Avatar    â”‚  [Narrator]: She       â”‚  [ChatGPTâ–¼]  â”‚
+â”‚  - Name      â”‚  flinches at the       â”‚              â”‚
+â”‚  - Stats     â”‚  sudden noise.         â”‚  Mode:       â”‚
+â”‚    (collapse)â”‚                        â”‚  [Reader â–¼]  â”‚
+â”‚              â”‚  [User]: It's just     â”‚              â”‚
+â”‚  - Core      â”‚  the wind.             â”‚  NSFW: â˜     â”‚
+â”‚    Memories  â”‚                        â”‚              â”‚
+â”‚  - Schemas   â”‚  [Narrator]: Her       â”‚  Soul:       â”‚
+â”‚              â”‚  shoulders drop a      â”‚  [Load][Save]â”‚
+â”‚              â”‚  fraction of an inch.  â”‚              â”‚
+â”‚  - Active    â”‚  "Wind never sounded  â”‚  Context:    â”‚
+â”‚    Plot      â”‚  like that before."    â”‚  1,847 tok   â”‚
+â”‚              â”‚                        â”‚              â”‚
+â”‚              â”‚  [Ad Banner]           â”‚              â”‚
+â”‚              â”‚  â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€         â”‚              â”‚
+â”‚              â”‚  [Type message...]     â”‚              â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+3. STATE ENGINE (RUST â€” FULL SPEC)
+3.1 â€” Soul File Schema
+json
+{
+  "character_id": "uuid",
+  "character_name": "Aurora Schwarz",
+  "last_updated": 1710112400,
+  "global": {
+    "dev_stage": 6,
+    "attach_style": 2,
+    "fear_baseline": 15,
+    "resolve": 40,
+    "shame": 45,
+    "openness": 45,
+    "maslow": [60, 50, 40, 30, 20],
+    "sdt": [70, 40, 10]
+  },
+  "trauma": {
+    "phase": 2,
+    "symptoms": {
+      "hypervigilance": 10,
+      "flashbacks": 10,
+      "numbing": 10,
+      "avoidance": 10
+    }
+  },
+  "relationships": {
+    "user": {
+      "trust": 10,
+      "affection": 200,
+      "intimacy": 10,
+      "passion": 10,
+      "commitment": 10,
+      "fear": 10,
+      "desire": 20,
+      "love_type": ""
+    },
+    "ry": {
+      "trust": 0,
+      "affection": 0,
+      "intimacy": 0,
+      "passion": 0,
+      "commitment": 0,
+      "fear": 0,
+      "desire": 0,
+      "love_type": ""
+    }
+  },
+  "memory": {
+    "core": [
+      "Bonded with Ry over shared childhood memoriesâ€”rain on the awning, boba tea.",
+      "Ry revealed they were a former agent, surgically implanted. Trust began to form."
+    ],
+    "recent": [
+      {
+        "id": "mem_11",
+        "timestamp": 1710112450,
+        "content": "Aurora recounts her capture: Old Slick's betrayal, the van, the needles.",
+        "salience": 85,
+        "tag": "orientation",
+        "retrieval_strength": 85
+      }
+    ],
+    "schemas": [
+      {
+        "type": "prison_routine",
+        "summary": "Days in a concrete cell, waiting, cold meals, the spider's web growing.",
+        "count": 12
+      }
+    ]
+  },
+  "world": {
+    "location": "Underground cell, Carver City. Concrete box, steel door, flickering bulb.",
+    "active_plots": ["Escape the facility", "Understand the Trennen Seal", "Discover who captured them"],
+    "recent_events": [
+      "Aurora and Ry shared childhood memoriesâ€”sunlight through leaves, rain on an awning.",
+      "Ry revealed they are a former agent with no memory of the implantation.",
+      "Aurora recounted her capture: Old Slick's betrayal, the van, the needles."
+    ],
+    "key_objects": ["Gray jumpsuit", "Bandaged surgical wound", "Completed spiderweb in corner"],
+    "time_elapsed": "Approximately 8 hours since awakening"
+  }
+}
+3.2 â€” Memory Scoring Algorithm (Executed by Rust Engine, Not LLM)
+rust
+struct MemoryScorer {
+    embedding_model: MiniLMEmbedder,  // ONNX, runs locally
+    existing_memories: Vec<Memory>,   // all recent + core entries
+    character_needs: MaslowLevels,    // current need satisfaction levels
+}
+
+impl MemoryScorer {
+    fn score(&self, new_memory: &Memory) -> f32 {
+        // 1. Emotional intensity (from the tag category)
+        let emotional_score = match new_memory.tag.as_str() {
+            "identity_violation" | "betrayal" | "near_death" => 0.95,
+            "trauma_trigger" | "control_gain" | "trust_break" => 0.85,
+            "bonding" | "trust_building" | "intimacy" | "compassion" => 0.75,
+            "introduction" | "dynamic_establishment" | "orientation" => 0.60,
+            "boundary_setting" | "conflict_minor" => 0.50,
+            "routine" | "small_talk" | "observation" => 0.30,
+            _ => 0.50,
+        };
+
+        // 2. Novelty (cosine distance from average of existing memories)
+        let new_embedding = self.embedding_model.embed(&new_memory.content);
+        let avg_existing = self.average_embedding();
+        let novelty_score = 1.0 - cosine_similarity(&new_embedding, &avg_existing);
+        // Clamp: if no existing memories, novelty = 1.0
+
+        // 3. Goal relevance (match against character's current needs)
+        let goal_score = self.compute_goal_relevance(&new_memory.tag);
+
+        // 4. Repetition discount
+        let similar_count = self.count_similar_memories(&new_memory);
+        let repetition_discount = 1.0 / (1.0 + similar_count as f32 * 0.3);
+
+        // Weighted composite
+        let raw_score = (emotional_score * 0.4) + (novelty_score * 0.3) + (goal_score * 0.3);
+        let final_score = (raw_score * repetition_discount).clamp(0.0, 1.0);
+
+        final_score
+    }
+
+    fn compute_goal_relevance(&self, tag: &str) -> f32 {
+        // If belonging is starved (low), bonding events score higher
+        // If safety is threatened, threat-related events score higher
+        let needs = &self.character_needs;
+        match tag {
+            "bonding" | "trust_building" | "intimacy" | "compassion" => {
+                let belonging_deficit = 1.0 - (needs.belong as f32 / 100.0);
+                belonging_deficit.clamp(0.3, 1.0)
+            },
+            "threat" | "danger" | "fear" => {
+                let safety_deficit = 1.0 - (needs.safety as f32 / 100.0);
+                safety_deficit.clamp(0.3, 1.0)
+            },
+            _ => 0.5, // neutral
+        }
+    }
+}
+3.3 â€” Consolidation Cycle
+Runs every 10 turns (or when the user ends a session). This mimics sleep consolidation:
+
+Take all recent memories with retrieval_strength > 30.
+
+Re-score them using the current character state (needs may have shifted).
+
+Memories scoring > 0.70: promote to core memory. Write a 1-2 sentence narrative summary.
+
+Memories scoring < 0.30: discard permanently.
+
+Memories between 0.30-0.70: if 3+ share the same tag, merge them into a schema entry.
+
+Rebuild the recent array from the top 4 highest-scoring remaining memories.
+
+Update the Soul file.
+
+3.4 â€” Context Compiler
+Before every LLM call, the engine builds a context_injection string:
+
+text
+[CURRENT STATE]
+Location: Underground cell, Carver City.
+Active Plot: Escape the facility. Understand the Trennen Seal.
+Time: ~8 hours since awakening.
+
+[CHARACTER MEMORY]
+Core: Bonded with Ry over shared childhood memories...
+Core: Ry revealed they were a former agent, surgically implanted...
+Schema: Prison routine: Days in the cell, waiting, cold meals...
+
+[RECENT EVENTS]
+- Aurora recounted her capture: Old Slick's betrayal, the van, the needles.
+- Ry shared a personal memory: kids playing, sunlight through leaves.
+- Aurora offered to be Ry's eyes; described the cell and the spider.
+
+[RELATIONSHIP]
+Trust toward Ry: growing but fragile. Affection: tentative warmth.
+This is prepended to the system prompt and the last 3-5 messages before being sent to the LLM. Target: under 2,000 tokens total.
+
+4. BROWSER AUTOMATION (SUBSCRIPTION CHAT SUPPORT)
+4.1 â€” How It Works
+In the client settings, the user selects "ChatGPT Plus" as their provider.
+
+The client opens a WebView (or runs a headless Chromium instance via Playwright).
+
+The user logs into their ChatGPT account once. The client stores the authentication cookies securely (encrypted via OS keychain).
+
+On each turn, the client:
+
+Navigates to the ChatGPT conversation.
+
+Injects the system prompt + compressed context + recent messages into the message box.
+
+Submits the message.
+
+Waits for the response to finish streaming.
+
+Extracts the response text.
+
+Parses [HIDDEN_STATE] from the response.
+
+Passes the hidden state to the state engine.
+
+Strips the hidden state from the visible text.
+
+Displays the clean response to the user.
+
+The browser session persists in the background. Subsequent turns reuse the same session.
+
+4.2 â€” Supported Services & Their Automation Methods
+Service	Automation	Challenges
+ChatGPT Plus	Playwright on chat.openai.com	DOM selectors may change. Use robust selectors (aria labels).
+Claude Pro	Playwright on claude.ai	Similar DOM approach.
+Grok	Playwright on x.com/i/grok	Requires X Premium login.
+DeepSeek Chat	Playwright on chat.deepseek.com	Easiest to automate. Clean interface.
+4.3 â€” Fallback & Error Handling
+If the browser session expires, prompt the user to re-login.
+
+If the DOM structure changes (upstream update), fall back to API mode with a message: "ChatGPT interface changed. Please update Mnemosyne to the latest version, or switch to API mode."
+
+If rate-limited, queue the message and retry after the cooldown.
+
+4.4 â€” Ethical Note
+Browser automation for personal use on accounts you own is a gray area. It's not against the law, but it may violate the ToS of the chat service. Your client should:
+
+Display a disclaimer: "Use at your own risk. This tool automates your own account. We are not responsible for account actions taken by the provider."
+
+Never encourage users to violate ToS.
+
+Be transparent about what the client does.
+
+5. CHARACTER REPOSITORY (NEXT.JS + SUPABASE)
+5.1 â€” Website Structure
+text
+/                         Landing page
+/browse                   Character browser
+/browse?genre=fantasy     Filtered browser
+/character/[id]           Character detail page
+/upload                   Upload character
+/user/[id]                User profile
+/souls/[id]               Public Soul file gallery
+/settings                 User settings
+/premium                  Premium subscription page
+5.2 â€” Auto-Categorization
+When a character is uploaded:
+
+Backend extracts the description text.
+
+Sends to DeepSeek (or a cheap model) with the prompt:
+
+text
+Extract the following from this character description. Output ONLY valid JSON:
+{
+  "genre": ["primary genre", "secondary genre"],
+  "tags": ["tag1", "tag2", ...],
+  "nsfw": true/false,
+  "content_warnings": ["warning1", ...]
+}
+Parses the response.
+
+Auto-fills metadata fields.
+
+Creator can override before publishing.
+
+5.3 â€” Embeddings for Recommendations
+On upload, generate an embedding vector for the character description using all-MiniLM-L6-v2.
+
+Store in Supabase as a pgvector column.
+
+When a user views a character, compute cosine similarity to find similar characters.
+
+When a user has a play history, compute average embedding of their played characters and recommend nearest neighbors.
+
+6. AD SYSTEM (FREE TIER)
+6.1 â€” Ad Placements
+Placement	Format	Frequency
+Loading screen	Static banner	Every LLM call (5-second display while streaming)
+Chat window footer	Persistent banner	Always visible, non-intrusive
+Character browser	Sidebar banner	Standard web ad
+6.2 â€” Ad Network
+Launch with Carbon Ads (developer-friendly, clean, relevant to tech/RP audiences).
+
+Alternatively, sell direct sponsorships to AI/RP communities.
+
+No pop-ups. No video interstitials. No dark patterns.
+
+7. PREMIUM TIER ($5-10/month)
+Feature	Free	Premium
+Client + State Engine	âœ…	âœ…
+BYOK / Subscription Chat	âœ…	âœ…
+Character Repository	âœ…	âœ…
+Soul File Sharing	âœ…	âœ…
+Ads	Yes	None
+Priority Discovery on Browse	â€”	âœ…
+Early Access to New Features	â€”	âœ…
+"Verified" Badge on Profile	â€”	âœ…
+Discord Role	â€”	âœ…
+Pooled API Access (Phase 5)	â€”	âœ… (optional add-on)
+8. DEVELOPMENT PHASES
+Phase 1: Core Engine (Weeks 1-4)
+Tauri scaffold, UI skeleton.
+
+State engine: Soul file, memory scoring, consolidation.
+
+Single provider: DeepSeek Chat (browser automation).
+
+Basic chat interface.
+
+Deliverable: A working client that can RP with DeepSeek Chat using persistent memory.
+
+Phase 2: Multi-Provider + Context Compiler (Weeks 5-8)
+Add ChatGPT Plus, Claude Pro, Grok browser automation.
+
+Build the context compiler (injects compressed state + recent messages).
+
+Narrative mode selector (Realistic, Reader, God).
+
+Deliverable: The client works with any major chat subscription. Memory stays lean.
+
+Phase 3: Repository Website (Weeks 9-12)
+Next.js site with Supabase.
+
+Character upload, auto-categorization, browsing, search.
+
+Embedding-based recommendations.
+
+Deliverable: Online character marketplace live.
+
+Phase 4: Ads + Premium (Weeks 13-16)
+Ad integration in client.
+
+Premium subscription (Stripe).
+
+Premium features: no ads, priority discovery.
+
+Deliverable: Monetization live. Platform is self-sustaining.
+
+Phase 5: Launch + Scale (Weeks 17-20)
+Public launch on Reddit, Discord, GitHub.
+
+Community moderation.
+
+Mobile client builds (Tauri 2.x Android/iOS).
+
+Pooled API as premium add-on.
+
+9. WHAT MAKES THIS DIFFERENT
+Feature	Janitor AI	SillyTavern	Mnemosyne
+Memory persistence across sessions	âŒ	âŒ	âœ… (Soul file)
+Realistic forgetting (not just decay)	âŒ	âŒ	âœ… (Scoring + schemas)
+Works with subscription chats	âŒ	âŒ (API only)	âœ…
+Open source	âŒ	âœ…	âœ… (AGPL)
+Online marketplace	âœ… (built-in)	âŒ (manual)	âœ…
+Narrator/GM mode	âŒ	âŒ (possible via prompt)	âœ… (native)
+Auto-categorization	âŒ	âŒ	âœ…
+Ads (non-intrusive)	Yes (aggressive)	No	Yes (subtle)
+BYOK	Partial	âœ…	âœ…
+This is the complete blueprint. Want me to go deeper on any specific module? The memory scoring algorithm, the browser automation implementation, or the Tauri project structure?
+
+This response is AI-generated, for reference only.
+why name it Mnemosyne?
+Mnemosyne (pronounced "neh-MOSS-uh-nee") is the Greek goddess of memory and the mother of the nine Musesâ€”the goddesses of art, literature, and creative inspiration.
+
+Why It Fits
+Aspect	Connection
+Memory	Mnemosyne is literally the personification of memory in Greek mythology. Your platform's core innovation is a persistent, human-like memory system for AI characters.
+The Muses (Her Children)	The nine Muses govern storytelling, poetry, history, and drama. Your platform is a tool for creating stories. The characters are the storytellers; the users are the authors.
+The River of Memory	In Greek myth, the dead who drank from the river Mnemosyne would remember their past lives. Those who drank from Lethe would forget. Your Soul files are the river Mnemosyneâ€”characters who cross through your system retain who they are.
+Rarity & Distinctiveness	No major RP platform uses this name. Janitor AI, Character.AI, SillyTavern, RisuAI, Agnaisticâ€”none of them draw from this mythological source. It's unique and instantly memorable.
+Open-Source Dignity	Unlike "Janitor" (which started as a joke about cleaning up chat logs), Mnemosyne signals seriousness and craft. It says: This is a tool built with care, for people who care about their stories.
+The Tagline
+Mnemosyne â€” Remember who you are.
+
+Double meaning: the character remembers who they are across sessions, and the user remembers why they love storytelling.
+
+Potential Shortening
+For the community:
+
+"Mosyne" (moss-ee-nee) â€” casual, affectionate
+
+"Mne" â€” for the GitHub org name, CLI commands, file extensions (.mne for Soul files)
+
+"Mneme" â€” an alternate spelling of the same goddess, even shorter
+
+It's a strong name. Uncommon enough to be yours, meaningful enough to carry the product's identity.
+
+How should novelty scoring work in the first Engine MVP?
+
+1.
+Deterministic Stub (Recommended)
+
+2.
+Real ONNX Now
+
+3.
+No Novelty Yet
+
+4. 
+better idea?
+We need to decide on novelty scoring for the MVP of the Mnemosyne state engine. The user is asking about the four options I provided (implicitly): 1) Deterministic Stub, 2) Real ONNX Now, 3) No Novelty Yet, and maybe a better idea.
+
+I need to give a recommendation that aligns with MVP philosophy: get it working quickly, validate the core memory loop, don't over-engineer. The main memory scoring algorithm has three components: emotional intensity, novelty, goal relevance, multiplied by repetition discount. Emotional intensity is easy (tag mapping). Goal relevance is easy (needs matching). Repetition discount counts similar memories. Novelty requires comparing embeddings to compute similarity â€“ that's the heavy part.
+
+If we skip novelty or stub it, we can still have a functional memory system that prioritizes emotional and goal-relevant events and discounts repetition. That's enough for MVP. Adding ONNX runtime for MiniLM embeddings adds complexity: need to bundle the model (~90MB), integrate with Tauri's Rust backend, and ensure it runs on all platforms. That's a risk for an MVP.
+
+Thus, I should recommend starting with a deterministic stub that simulates novelty based on tag diversity or simple heuristics, or even just skip it (set novelty to a constant 0.5) and see if the memory system still feels good. The user asked "How should novelty scoring work in the first Engine MVP?" with options 1-4. I need to pick the best approach.
+
+I'll advise: Start with Option 1 (Deterministic Stub) that uses a simple rule: if the memory tag hasn't been seen in the last N memories, novelty = 0.8; else, compute how many similar tags exist and scale down. This requires no heavy model, is deterministic, and approximates novelty by variety. Then plan to upgrade to Option 2 (ONNX) in a later phase after core loop is validated.
+
+I'll structure my answer accordingly.
+
+For the MVP of the Mnemosyne Engine, go with Option 1: Deterministic Stub. You do not need a real embedding model to prove the memory loop works. What you need is novelty logic that behaves enough like the real thing to make the scoring pipeline testable, without adding a 90MB model, ONNX runtime, or cross-platform build headaches before youâ€™ve validated the core.
+
+Hereâ€™s exactly how to build that stub and how it maps to the future system.
+
+The MVP Novelty Stub (Option 1)
+Definition
+A deterministic function that scores 0.0â€“1.0 based on how different the new memoryâ€™s tag and content are from the recent memory set.
+
+Algorithm
+rust
+fn novelty_stub(new_memory: &Memory, recent_memories: &[Memory]) -> f32 {
+    if recent_memories.is_empty() {
+        return 1.0; // first memory is always novel
+    }
+
+    let tag = &new_memory.tag;
+    let content_words: HashSet<&str> = new_memory.content.split_whitespace().collect();
+
+    // 1. Tag novelty: how rare is this tag in recent memory?
+    let same_tag_count = recent_memories.iter()
+        .filter(|m| m.tag == *tag)
+        .count();
+    let tag_novelty = 1.0 - (same_tag_count as f32 / recent_memories.len() as f32);
+
+    // 2. Content novelty: Jaccard distance from the most similar recent memory
+    let mut max_jaccard = 0.0_f32;
+    for mem in recent_memories.iter() {
+        let mem_words: HashSet<&str> = mem.content.split_whitespace().collect();
+        let intersection = content_words.intersection(&mem_words).count();
+        let union = content_words.union(&mem_words).count();
+        let jaccard = intersection as f32 / union as f32;
+        if jaccard > max_jaccard {
+            max_jaccard = jaccard;
+        }
+    }
+    let content_novelty = 1.0 - max_jaccard; // high similarity â†’ low novelty
+
+    // 3. Combine (tag is a strong signal, content refines)
+    let raw = (tag_novelty * 0.6) + (content_novelty * 0.4);
+    raw.clamp(0.0, 1.0)
+}
+Why This Works for MVP
+No model loading, no ONNX, no runtime. Plain Rust, fast, deterministic.
+
+Captures the two key signals: â€œis this a new kind of event?â€ (tag) and â€œis this specific description new?â€ (content).
+
+Natural behavior: routine events with the same tag and similar phrasing ("ate cold oatmeal again" repeated) get novelty â†’ 0.1, while a new tag like "betrayal" gets near 1.0.
+
+Easy to calibrate: you can tweak the weights (0.6/0.4) by playing a few sessions and seeing if the memory list feels right.
+
+Integration Into the Full Scoring Formula
+The score then becomes:
+
+text
+memorability = (emotional_intensity * 0.4 + novelty_stub() * 0.3 + goal_relevance * 0.3) * repetition_discount
+Thatâ€™s a fully working pipeline. The memory engine will already feel smarter than any flat-decay system, even with a stub for novelty.
+
+How This Maps to the Future (Option 2: Real ONNX)
+When youâ€™re ready to upgrade (post-MVP, after the core loop is solid and you have users), you swap the stub for the real thing:
+
+Bundle all-MiniLM-L6-v2 as a .onnx file (kept outside the binary or fetched on first use).
+
+Use the ort crate (ONNX Runtime for Rust) to load it.
+
+Replace novelty_stub() with:
+
+rust
+let emb_new = embed(&new_memory.content);
+let avg_existing = average_embedding(recent_memories);
+let cosine_sim = cosine_similarity(&emb_new, &avg_existing);
+let novelty = 1.0 - cosine_sim;
+The rest of the scoring pipeline stays identical.
+
+The stub is designed to be a drop-in replacement â€“ same function signature, same return type. No refactor needed.
+
+Why Not the Other Options
+Option 3 (No Novelty): Loses a critical dimension. Without novelty, the engine canâ€™t distinguish â€œimportant new thingâ€ from â€œsame routine, different day.â€ Memory quality would feel almost identical to flat decay.
+
+Option 4 (Different architecture): The only other realistic approach for MVP is using a tiny, pre-computed keyword similarity (like TF-IDF over the tag vocabulary). But thatâ€™s more code and still a stub. The Jaccard approach above is simpler and directly mirrors what the embedding cosine similarity will eventually do.
+
+Summary
+For your first MVP, implement the deterministic novelty stub exactly as described. It gives you:
+
+A fully functional memory scoring pipeline with zero external dependencies.
+
+Realistic enough behavior to validate the engineâ€™s design.
+
+A clean upgrade path to ONNX embeddings later without changing the scoring logic.
+
+Start with this; ship the MVP; get players in it. The memory system will already feel like magic compared to existing platforms.
+
+Mnemosyne Engine MVP Plan
+Summary
+Build the first Mnemosyne slice as a local-only Tauri desktop app: React + TypeScript + Tailwind UI, Rust state engine, SQLite persistence, Soul file import/export, deterministic memory scoring, context compilation, and a mock provider. No browser automation, real ONNX embeddings, repository website, ads, or premium features in this pass.
+
+Key Changes
+Scaffold in the current empty repo as a single desktop monorepo using Tauri 2 + React TS.
+Before scaffolding, fix local tooling: Rust/Cargo are missing, and npm resolves to a bad C:\WINDOWS\system32\npm; use C:\Program Files\nodejs\npm.cmd or fix PATH.
+Add AGPL-3.0 client licensing.
+Use Tailwind v4 via tailwindcss + @tailwindcss/vite, plus lucide-react for icon buttons.
+Engine/API Design
+Rust modules:
+state_engine: Soul schema, memory scorer, consolidation, context compiler.
+db: SQLite migrations and repositories using rusqlite.
+providers: mock provider plus hidden-state parser interface.
+Add schema_version: 1 to Soul JSON while preserving the blueprintâ€™s shape.
+Memory scoring uses an Embedder trait with a deterministic lexical/hash implementation for MVP; ONNX MiniLM swaps in later without changing callers.
+Consolidation runs after every 10 assistant turns or manually: promote >0.70, discard <0.30, merge 3+ same-tag middle memories into schemas, keep top 4 recent memories.
+Context compiler outputs [CURRENT STATE], [CHARACTER MEMORY], [RECENT EVENTS], and [RELATIONSHIP], capped by an approximate 2,000-token budget.
+Public Tauri commands:
+
+create_default_soul(character_name) -> Soul
+load_soul_file(path) -> Soul
+save_soul_file(path, soul) -> ()
+list_souls() -> Vec<SoulSummary>
+upsert_soul(soul) -> SoulSummary
+send_mock_turn(conversation_id, user_text) -> TurnResult
+compile_context(soul_id, conversation_id) -> ContextPreview
+run_consolidation(soul_id) -> Soul
+UI Plan
+First screen is the actual app: left character/memory pane, center chat pane, right controls pane.
+Provider is fixed to Mock for MVP.
+Include mode selector, Soul load/save, context token estimate, and manual consolidation button.
+Chat turn flow: user message â†’ compiled context â†’ mock response â†’ hidden state parsed â†’ memory/state update â†’ visible response rendered.
+Test Plan
+Rust unit tests for Soul JSON roundtrip, scoring weights, repetition discount, goal relevance, consolidation thresholds, schema merging, context budget, and hidden-state stripping.
+SQLite tests for migrations, Soul persistence, conversation creation, and message history.
+Frontend verification with TypeScript build.
+Acceptance scenario: create/load Soul, send 10 mock turns, see recent/core/schema memory changes, save/reload Soul, and confirm compiled context stays under budget.
+Assumptions
+First implementation uses npm with package-lock.json.
+Use Windows Tauri prerequisites from official docs: C++ Build Tools, WebView2, Rust stable MSVC.
+References used: Tauri create project, Tauri prerequisites, Tailwind Vite setup.
+The user has provided a detailed MVP plan for the Mnemosyne Engine and likely wants confirmation, feedback, or a summary of alignment with our previous architectural discussions. They've clearly synthesized our work into a concrete implementation plan.
+
+Let me assess what they've done well and identify any gaps or suggestions.
+
+The plan looks solidâ€”they've scoped it appropriately: local-only Tauri app, deterministic stub for novelty scoring, mock provider, no browser automation or website yet. They've identified tooling issues (Rust/Cargo, npm PATH) and licensing (AGPL-3.0).
+
+Key strengths: schema_version in Soul JSON, Embedder trait for future ONNX swap, consolidation rules are precise, context budget is capped, Tauri commands are well-defined, UI has clear panes and flow.
+
+Potential gaps I notice: they mention "mock provider" but don't specify how it generates responses (does it just echo or use a simple template?), the consolidation "after every 10 assistant turns" needs a turn counter in the conversation state, the context compiler's 2,000-token budget might be tricky to estimate accurately without a tokenizer (could use character-based approximation), and the "manual consolidation button" suggests they want user controlâ€”good UX.
+
+I should validate their plan, highlight what's well-designed, and point out the few missing implementation details they'll need to resolve during the build.
+
+This is a tight, well-scoped MVP plan. You've correctly deferred browser automation, ONNX, the website, ads, and premiumâ€”those are Phase 2+ concerns. The core loop is right: Soul engine â†’ context compilation â†’ turn processing â†’ memory update.
+
+A few gaps worth addressing before you scaffold:
+
+1. Mock Provider Needs a Specification
+"Mock provider" is underspecified. For the MVP to be testable, the mock should return responses that exercise all the memory pathways. Don't just echoâ€”build a small response template system:
+
+rust
+struct MockProvider {
+    response_templates: HashMap<Tag, Vec<String>>,
+}
+
+// Example templates keyed by tag:
+// "bonding" â†’ ["She softens. "I... didn't expect you to say that. Thank you.""]
+// "threat" â†’ ["She flinches violently, pressing herself against the wall."]
+// "routine" â†’ ["She nods, quiet. The silence stretches."]
+The mock provider:
+
+Receives the user message and compiled context.
+
+Detects a tag from the user message (simple keyword matching for MVP: "threat" if words like "attack" or "guard" appear; "bonding" if words like "trust" or "safe" appear).
+
+Picks a template for that tag.
+
+Appends a [HIDDEN_STATE] block with a single new memory entry reflecting what happened.
+
+This lets you test whether different event types (routine, bonding, threat) correctly route through the scoring pipeline and produce different memory outcomes.
+
+2. Turn Counter for Consolidation
+You said "after every 10 assistant turns." You need to store this counter somewhere.
+
+Add to the Soul JSON:
+
+json
+{
+  "turn_counter": 0,
+  "turns_since_last_consolidation": 0
+}
+In send_mock_turn:
+
+Increment both counters.
+
+If turns_since_last_consolidation >= 10, run consolidation, reset the counter to 0.
+
+Also expose run_consolidation as a manual Tauri command (which you already have). The counter just handles automatic triggering.
+
+3. Token Budget Estimation (No Real Tokenizer Yet)
+You said "capped by an approximate 2,000-token budget." Without a real tokenizer (which requires pulling in tiktoken or equivalent), use a character-based approximation:
+
+rust
+fn estimate_tokens(text: &str) -> usize {
+    // Conservative: ~4 characters per token for English text
+    text.len() / 4
+}
+It's crude but consistent. The context compiler can check this estimate before adding more sections and truncate accordingly. Swap in tiktoken-rs later for accuracy.
+
+4. Hidden-State Parser Needs Validation
+The provider (mock or real) returns raw text containing a [HIDDEN_STATE]...[/HIDDEN_STATE] block. Your parser should:
+
+Extract the block via regex or simple string search.
+
+Base64 decode the content.
+
+Validate it against the JSON schema.
+
+Extract the new memory entry (or entries) for scoring.
+
+Strip the block from visible text before display.
+
+Add a ParseError enum:
+
+rust
+enum ParseError {
+    MissingBlock,
+    InvalidBase64,
+    InvalidJson(serde_json::Error),
+    SchemaViolation(String),
+}
+If parsing fails, the turn should still return visible text but log the error and skip memory update. Don't crash the client on malformed LLM output.
+
+5. Soul JSON Schema Versioning
+You already added schema_version: 1. Good. Also add a migration path skeleton:
+
+rust
+fn migrate_soul(raw_json: &str) -> Result<Soul> {
+    let version = extract_version(raw_json)?;
+    match version {
+        1 => parse_v1(raw_json),
+        // future versions here
+        _ => Err(anyhow!("Unknown schema version: {}", version)),
+    }
+}
+This pays off immediately when you iterate on the schema during MVP development.
+
+6. The Frontend Needs One More State: "Processing"
+Between sending a message and receiving the response, the UI should show a loading/processing indicator. Since you have a loading screen ad slot planned for later, design the ProcessingState enum now:
+
+typescript
+type ProcessingState = 
+  | { type: "idle" }
+  | { type: "compiling_context" }
+  | { type: "waiting_for_provider" }
+  | { type: "updating_memory" }
+  | { type: "error", message: string };
+Show a spinner or skeleton text during processing. This prevents the user from spamming messages and gives a clear signal that work is happening.
+
+7. File Format for Soul Files
+You mentioned .mne as the file extension. Decide now:
+
+Plain JSON (.mne): Human-readable, easy to debug, larger on disk.
+
+Compressed (.mne.gz): Smaller, still easy to handle in Rust with flate2.
+
+For MVP, plain JSON is fine. Add compression as a save option later.
+
+Summary: What to Add Before Scaffolding
+Gap	Solution
+Mock provider behavior	Template system keyed by tag, with hidden-state output
+Consolidation triggering	turn_counter and turns_since_last_consolidation in Soul
+Token estimation	Character-based approximation (text.len() / 4)
+Hidden-state parser robustness	ParseError enum, graceful fallback on malformed blocks
+Schema migration	migrate_soul() with version dispatch
+Loading state in UI	ProcessingState type, spinner/skeleton
+File extension	.mne for plain JSON Soul files
+The plan is solid. These are implementation details you'll resolve in the first few days of coding. Scaffold the Tauri project, fix your npm PATH, and start with the state_engine crateâ€”everything else hangs off that.
+
+so feedback prompt or execute?
+Execute. The plan is solid. You have the blueprint, the MVP scope is right, and the gaps I flagged are implementation details you'll resolve during codingâ€”not blockers to starting.
+
+The next step is concrete:
+
+Fix your npm PATH (C:\Program Files\nodejs\npm.cmd not the Windows one)
+
+Install Rust via rustup if not already present
+
+Scaffold the Tauri project: npm create tauri-app@latest
+
+Push the AGPL-3.0 license to the repo
+
+Start with state_engine crate â€” Soul schema, memory scorer (deterministic stub), context compiler
+
+Everything else hangs off that core. The mock provider, UI, and SQLite layer wire into it once it's breathing.
+
+Go build.
+
+explain next step. Also that the main homepage is a download or discover director not a avatar creator
+Next Step: Scaffold the Tauri Project
+You're building two things:
+
+The downloadable desktop client (Tauri + React + Rust) â€” this is where RP happens. The state engine lives here.
+
+The website (Next.js + Supabase) â€” this is a discover/download directory for characters and Soul files. No RP happens here.
+
+For this MVP, you're only building the desktop client. The website comes in Phase 3.
+
+What You Do Right Now (Today/Tomorrow)
+Step 1: Fix Your Environment
+Open PowerShell as Administrator:
+
+powershell
+# Check current PATH
+$env:PATH -split ';' | Select-String node
+
+# If C:\WINDOWS\system32\npm appears before C:\Program Files\nodejs, fix it:
+# Open System Properties â†’ Environment Variables â†’ System PATH
+# Move C:\Program Files\nodejs ABOVE C:\WINDOWS\system32
+# Or remove the system32 entry entirely if it's a stray npm.cmd
+
+# Verify fix (close and reopen terminal first)
+where.exe npm
+# Should return: C:\Program Files\nodejs\npm.cmd
+
+npm --version
+# Should return a real version, not an error
+Install Rust if missing:
+
+powershell
+# Download and run: https://rustup.rs/
+rustup default stable
+rustup target add wasm32-unknown-unknown
+rustc --version
+cargo --version
+Install Tauri prerequisites (Windows):
+
+powershell
+# Install Microsoft Visual Studio C++ Build Tools:
+# https://visualstudio.microsoft.com/visual-cpp-build-tools/
+# During install, select "Desktop development with C++"
+
+# Verify WebView2 is present (comes with Windows 10/11):
+# If missing: https://developer.microsoft.com/en-us/microsoft-edge/webview2/
+Step 2: Scaffold the Project
+powershell
+# Navigate to your repo folder
+cd C:\path\to\mnemosyne
+
+# Create Tauri app with React + TypeScript template
+npm create tauri-app@latest . -- --template react-ts
+
+# When prompted:
+# - Project name: mnemosyne
+# - Choose npm as package manager
+# - Choose TypeScript + React
+# - Choose Tailwind CSS
+
+# Enter the project
+cd mnemosyne
+
+# Install additional dependencies
+npm install lucide-react @tauri-apps/api
+
+# For Tailwind v4 with Vite
+npm install tailwindcss @tailwindcss/vite
+
+# Verify scaffold works
+npm run tauri dev
+The Tauri dev window should open with a basic React app. If it doesn't, the error message will tell you what's missing (usually C++ Build Tools or WebView2).
+
+Step 3: Push the License
+powershell
+# In repo root
+echo "GNU AFFERO GENERAL PUBLIC LICENSE" > LICENSE
+# Copy full AGPL-3.0 text from: https://www.gnu.org/licenses/agpl-3.0.txt
+
+git add LICENSE
+git commit -m "Add AGPL-3.0 license"
+git push
+Step 4: Create the State Engine Crate
+Inside src-tauri/, create a new Rust library:
+
+powershell
+cd src-tauri
+cargo init --lib --name state_engine
+This creates src-tauri/src/lib.rs. Replace its contents with module declarations:
+
+rust
+// state_engine/src/lib.rs
+pub mod soul;
+pub mod memory;
+pub mod consolidation;
+pub mod context_compiler;
+pub mod schema;
+pub mod hidden_state;
+Add it as a dependency in src-tauri/Cargo.toml:
+
+toml
+[dependencies]
+state_engine = { path = "./state_engine" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "0.31", features = ["bundled"] }
+base64 = "0.22"
+anyhow = "1"
+Step 5: Build the Soul Schema First
+Create state_engine/src/soul.rs:
+
+rust
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Soul {
+    pub schema_version: u32,
+    pub character_name: String,
+    pub turn_counter: u64,
+    pub turns_since_consolidation: u64,
+    pub global: GlobalState,
+    pub trauma: TraumaState,
+    pub relationships: std::collections::HashMap<String, Relationship>,
+    pub memory: MemoryStore,
+    pub world: WorldLog,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GlobalState {
+    pub dev_stage: u8,
+    pub attach_style: u8,
+    pub fear_baseline: f32,
+    pub resolve: f32,
+    pub shame: f32,
+    pub openness: f32,
+    pub maslow: [f32; 5],
+    pub sdt: [f32; 3],
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TraumaState {
+    pub phase: u8,
+    pub symptoms: TraumaSymptoms,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TraumaSymptoms {
+    pub hypervigilance: f32,
+    pub flashbacks: f32,
+    pub numbing: f32,
+    pub avoidance: f32,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Relationship {
+    pub trust: f32,
+    pub affection: f32,
+    pub intimacy: f32,
+    pub passion: f32,
+    pub commitment: f32,
+    pub fear: f32,
+    pub desire: f32,
+    pub love_type: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MemoryStore {
+    pub core: Vec<String>,
+    pub recent: Vec<MemoryEntry>,
+    pub schemas: Vec<SchemaEntry>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MemoryEntry {
+    pub id: String,
+    pub timestamp: u64,
+    pub content: String,
+    pub salience: f32,
+    pub tag: String,
+    pub retrieval_strength: f32,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SchemaEntry {
+    pub schema_type: String,
+    pub summary: String,
+    pub count: u64,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WorldLog {
+    pub location: String,
+    pub active_plots: Vec<String>,
+    pub recent_events: Vec<String>,
+    pub key_objects: Vec<String>,
+    pub time_elapsed: String,
+}
+Add a default() constructor for the initial state in the same file.
+
+Step 6: What the Homepage Will Be (Not Avatar Creator)
+You clarified: the website is a discover/download directory, not a creator tool. This is important for scoping.
+
+Element	Purpose
+Hero section	"Mnemosyne â€” Remember who you are." Download button for the client.
+Character browser	Search, filter by genre/tags/NSFW, sort by trending/new/rated.
+Character detail page	Preview description, tags, stats, download .mne Soul file.
+Upload page	Submit character card + Soul file. Auto-categorized.
+User profiles	Their uploaded characters, their public Soul files.
+No avatar creator	Users make characters elsewhere (or in the client) and upload them.
+No RP here	The website doesn't handle chat or LLM calls. That's all in the client.
+The client itself has a basic character creation form (name, description, initial traits) that creates a fresh Soul file. But the website is purely a marketplace. This keeps scope tight.
+
+Where You Are After These Steps
+Tauri app scaffolded and running.
+
+State engine crate initialized with the Soul schema.
+
+AGPL-3.0 license pushed.
+
+Clear separation: desktop client for RP, website (later) for discovery.
+
+The next message from me would be the implementation of the memory scorer (deterministic stub), or the SQLite persistence layer, or the mock providerâ€”your call on which to tackle first.
+
+How do I show you the current... interation of code? You don't have a way to see my files right?
+We need to clarify how the user can share their code with me, given I can't access their files directly. I should provide practical methods for sharing code snippets, using the chat's code block formatting, and suggest strategies for iterative feedback. Also, I should confirm whether they're asking about showing code now or in general.
+
+No, I can't see your files or your screen. I'm a text-based AI working entirely within this chat interface.
+
+To show me your code, you have a few straightforward options:
+
+Option 1: Paste Snippets Directly (Best for Quick Feedback)
+Copy the relevant code, paste it into the chat, and wrap it in triple backticks with the language:
+
+text
+```rust
+// your Rust code here
+I'll read it and respond with specific feedback, fixes, or next steps.
+
+Option 2: Paste File Paths + Snippets for Context
+If the code spans multiple files, give me the structure first:
+
+text
+src-tauri/
+â”œâ”€â”€ state_engine/
+â”‚   â”œâ”€â”€ src/
+â”‚   â”‚   â”œâ”€â”€ lib.rs
+â”‚   â”‚   â”œâ”€â”€ soul.rs
+â”‚   â”‚   â””â”€â”€ memory.rs
+â”‚   â””â”€â”€ Cargo.toml
+â””â”€â”€ src/
+    â””â”€â”€ App.tsx
+Then paste the contents of the file you want feedback on.
+
+Option 3: Link to a GitHub Repo (Best for Full Project Review)
+Push your code to the public GitHub repo you already have, then share the link. I can't browse it live, but you can tell me which files to look at and I'll ask you to paste the relevant ones.
+
+Option 4: Describe the Problem + Paste the Error
+If you're stuck on a bug, paste:
+
+The code block causing the issue.
+
+The exact error message (compiler error, runtime panic, terminal output).
+
+What you expected to happen.
+
+I'll trace the problem from there.
+
+Which would you like to start with? If you've already scaffolded the Tauri project and built part of the state engine, paste your current lib.rs or soul.rs and I'll review it.
+
+Add license
+Licenses explain how others can use your code. About licenses????
+What does this mean?
+We are in a technical discussion about building the Mnemosyne platform. The user asked "Add license ... What does this mean?" referring to a prompt they likely saw on GitHub or during repo creation, asking them to choose a license.
+
+We need to explain what a software license is, why it's important for their open-source project, and help them choose the AGPL-3.0 license we previously discussed. We'll keep it practical, tied to their project's goals.
+
+This prompt is asking you to choose a software license for your GitHub repository. Let me explain what it means and why it matters for Mnemosyne.
+
+What a License Is
+A software license is a legal document that tells other people what they can and cannot do with your code. Without a license, your code is technically "all rights reserved" by defaultâ€”nobody can legally use, modify, or share it, even if it's public on GitHub.
+
+Why It Matters for Mnemosyne
+You're building an open-source platform. You want:
+
+Users to freely download and use the client.
+
+Developers to contribute improvements back to the project.
+
+Competitors to NOT take your code, improve it, and sell it as a closed-source product without giving back.
+
+The license choice determines whether those things happen.
+
+The Main Options GitHub Is Showing You
+License	What It Means	Best For
+MIT	Anyone can do anything with your codeâ€”modify, sell, keep changes private. Only requires credit.	Maximum adoption, no control.
+Apache 2.0	Like MIT, but also grants patent rights and requires listing changes.	Corporate-friendly permissive.
+GPL-3.0	Anyone can use/modify, but if they distribute their version, they MUST release the source code under the same license.	Strong copyleft for desktop software.
+AGPL-3.0	Like GPL, but ALSO covers use over a network. If someone runs a modified version as a web service, they must release their changes.	Strongest copyleft. Protects cloud services from freeloading.
+Why We Chose AGPL-3.0 for Mnemosyne
+You have a character repository website and a downloadable client. AGPL-3.0 ensures:
+
+If someone forks your client and distributes it, they must keep it open-source.
+
+If someone takes your state engine and hosts it as a paid web service, they must release their modifications.
+
+The community always benefits from improvements.
+
+Your competitors can't take your work, close it off, and sell it without contributing back.
+
+It protects the community you're building while still allowing free use by everyone.
+
+How to Add It
+On GitHub, when you see "Add license" or "About licenses," click the dropdown and select GNU Affero General Public License v3.0. GitHub will automatically add a LICENSE file to your repository with the full legal text.
+
+If you're doing it manually, create a file named LICENSE in your repo root and paste the text from: https://www.gnu.org/licenses/agpl-3.0.txt
+
+Then commit and push. That's it.
+
+In Plain Terms
+You're putting a sign on your code that says: "This is free for everyone to use and learn from. If you make it better, you have to share your improvements too. Nobody gets to take this and lock it away."
+
+That aligns perfectly with your vision of an open, community-driven RP platform.
+
+I don't see AGPL
+We are in a situation where the user is setting up their GitHub repo and the license dropdown doesn't show AGPL-3.0, even though we recommended it. They've provided an image showing the available options: GPL-3.0, MIT, BSD, etc., but no AGPL. I need to advise them on how to proceed.
+
+The user's core requirement is to protect their community and ensure that any forks or derivatives remain open-source, especially for the server-side (repository) and the client. AGPL-3.0 is ideal because it closes the "network loophole" of GPL-3.0. Since they can't select it from the dropdown, they'll have to add it manually, which is straightforward.
+
+I should explain why AGPL-3.0 matters again briefly, then give them the exact steps to add it manually: create a LICENSE file, paste the AGPL-3.0 text, commit. Also reassure them that it's fine and common to do this. The user is not a lawyer, so keep it simple and practical.
+
+The dropdown doesn't include AGPL-3.0, but you can still add it manually. It's the right license for Mnemosyne, so here's what to do.
+
+Why AGPL-3.0 Is Worth the Extra Step
+GPL-3.0 (which appears in your list) requires anyone who distributes a modified version of your code to release their source code. But it has a loophole: if someone runs a modified version as a web service, they don't have to release anything.
+
+AGPL-3.0 closes that loophole. Since Mnemosyne will have a character repository website (and possibly a future hosted service), you want to ensure that anyone who modifies and hosts it must also share their improvements. This protects your community.
+
+How to Add AGPL-3.0 Manually
+Step 1: In your local repo, create a file named LICENSE (no extension) in the root directory.
+Step 2: Copy the full AGPL-3.0 text from the official GNU site:
+text
+https://www.gnu.org/licenses/agpl-3.0.txt
+Paste it into the LICENSE file.
+
+Step 3: Commit and push:
+bash
+git add LICENSE
+git commit -m "Add AGPL-3.0 license"
+git push
+Done. Your repository is now properly licensed.
+
+If You Cannot Add a File Right Now
+If you're still in the GitHub web interface and just want to finish setup, you can temporarily choose GNU General Public License v3.0 from the dropdown. Then, once the repo is created, replace the LICENSE file with the AGPL-3.0 text via a quick commit. That's a perfectly normal workflow.
+
+Summary
+AGPL-3.0 is the strongest copyleft license for protecting a platform with both a client and a server component.
+
+It's not in the dropdown, so add the LICENSE file manually.
+
+If you're in a hurry, pick GPL-3.0 now and swap to AGPL-3.0 right after.
+
+Want me to walk through the next stepâ€”like setting up the Tauri scaffold or writing the first Rust module?
+
+https://github.com/RhyGPU/mnemosyne
+The user has provided a GitHub repository link. I need to explore its contents to understand the current state and provide guidance. Let me first open the repository to see its structure and then search for any specific elements like license or readme.
+
+Read 1 page
+GitHub - RhyGPU/mnemosyne Â· GitHub
+The repository is there, with the license already set to AGPL-3.0. The description shows it's a local RP client prototype. I should explore the code structure to see what's been implemented. Let me open the file tree or search for specific files.
+
+Read 1 page
+GitHub - RhyGPU/mnemosyne Â· GitHub
+The repository is set up with the basic Tauri scaffold. Let's explore the src-tauri directory to see the Rust code structure, particularly the state_engine library.
+
+Read 1 page
+mnemosyne/src-tauri at main Â· RhyGPU/mnemosyne Â· GitHub
+The state_engine directory is already there. Let's explore its contents.
+
+Read 1 page
+mnemosyne/src-tauri/state_engine at main Â· RhyGPU/mnemosyne Â· GitHub
+The state_engine directory has a src folder and a Cargo.toml. Let's explore the src folder.
+
+Read 1 page
+mnemosyne/src-tauri/state_engine/src at main Â· RhyGPU/mnemosyne Â· GitHub
+The state engine has files for soul, memory, consolidation, context compiler, hidden state, and schema. Let me open the key files to review the implementation.
+
+Read failed
+The GitHub blob URLs might be case-sensitive or there might be an issue. Let me try with different casing.
+
+Read 1 page
+raw.githubusercontent.com
+Let me continue viewing the soul.rs file and then the other files.
+
+Read 1 page
+raw.githubusercontent.com
+Now let's view the memory scorer and other key files.
+
+Read 6 pages
+raw.githubusercontent.com
+raw.githubusercontent.com
+raw.githubusercontent.com
+raw.githubusercontent.com
+raw.githubusercontent.com
+View All
+Now I have a clear picture of the codebase. Let me also check the main Tauri source to see how the commands are wired up.
+
+Read 1 page
+raw.githubusercontent.com
+The codebase is in good shape. Let me now check the memory.rs file for the remaining functions and the tests.
+
+Read 1 page
+raw.githubusercontent.com
+Let me view the remaining test code and the providers module.
+
+Read 1 page
+raw.githubusercontent.com
+Let me also check the providers module and the db module.
+
+Read 2 pages
+raw.githubusercontent.com
+raw.githubusercontent.com
+Now I have a comprehensive view of the codebase. Let me provide a thorough analysis to the user.
+
+I've reviewed your RhyGPU/mnemosyne repository. It's an exceptionally solid MVP foundation. Here's my detailed analysis:
+
+Repository Assessment
+What's Working Well
+Component	Status	Notes
+Tauri 2 scaffold	âœ…	Properly set up with React + TypeScript + Tailwind. The package.json declares AGPL license at the package level tooâ€”good attention to detail.
+State engine crate	âœ…	Clean separation as src-tauri/state_engine/ with its own Cargo.toml. All six modules from the blueprint are present.
+Soul schema	âœ…	Full implementation with SchemaEntry, MemoryEntry, GlobalState, TraumaState, Relationship, WorldLog, and default_for_character(). Includes schema_version and character_id fields.
+Memory scorer	âœ…	The LexicalHashEmbedder implements the deterministic stub exactly as designedâ€”32-dim FNV-1a hash, tokenized, normalized. The Embedder trait is there for future ONNX swap. Scoring formula uses the correct weights (0.4 emotional, 0.3 novelty, 0.3 goal) with repetition discount.
+Consolidation	âœ…	Promotes >0.70, discards <0.30, merges 3+ same-tag middle memories into schemas, caps recent at 4 entries. Has unit tests.
+Context compiler	âœ…	Outputs [CURRENT STATE], [CHARACTER MEMORY], [RECENT EVENTS], [RELATIONSHIP], and recent chat messages. Token estimation via chars/4. Truncation respects the 2,000-token budget.
+Hidden state parser	âœ…	Parses [HIDDEN_STATE] blocks, applies trust/affection deltas, creates scored memories, and updates the world log. Falls back gracefully when no hidden state is present.
+SQLite persistence	âœ…	db module with migrations for souls, conversations, and messages tables. upsert_soul, list_souls, and get_soul are implemented.
+Tauri commands	âœ…	All eight commands from the MVP blueprint are registered: create_default_soul, load_soul_file, save_soul_file, list_souls, upsert_soul, get_soul, send_mock_turn, compile_context, run_consolidation.
+Test coverage	âœ…	Tests for Soul JSON roundtrip, memory scoring (goal relevance, repetition discount), consolidation (promote/discard/merge), context compiler (section presence, budget enforcement), and hidden state parsing.
+One Small Issue
+The [HIDDEN_STATE] parser currently expects raw JSON after the marker, but in our earlier design the hidden state was base64 encoded. Looking at the test in hidden_state.rs (lines 38-44), it uses raw JSON:
+
+text
+[HIDDEN_STATE] {"memory":"A promise mattered.","tag":"trust_building"...}
+This works for the mock provider, but when you integrate with real LLMs, they'll emit base64 because the system prompt instructs base64 encoding. You'll need to either:
+
+Keep the mock using raw JSON and add base64 decoding as a fallback, OR
+
+Update the mock to emit base64 too and make the parser decode base64 first.
+
+This isn't a bug for MVPâ€”the mock works as-is. Just flag it for when you switch to real providers.
+
+What to Build Next
+Option A: Finish the Mock Provider + UI (Recommended)
+The mock provider module exists (src-tauri/src/providers/mock.rs) but I haven't seen its contents. Complete it with the template system from our discussion, then wire the full turn flow into the React UI. This gives you a clickable, testable client.
+
+Option B: Add the Turn Counter + Auto-Consolidation
+The turn_counter and turns_since_consolidation fields exist in the schema, but send_mock_turn doesn't appear to increment them or trigger consolidation. Add that logic so the memory system self-maintains during sessions.
+
+Option C: Refine the Novelty Scoring
+The LexicalHashEmbedder works, but its 32-dim FNV hash has high collision probability for similar words. For the current MVP it's fineâ€”the repetition discount handles duplicate suppression separately. But when you hit edge cases where genuinely novel events are scored too low, the first fix is upgrading to Option 2 (ONNX MiniLM).
+
+Verdict
+This is a properly engineered MVP. You didn't just scaffold and stopâ€”you implemented the full memory pipeline exactly as designed, with tests. Most solo devs ship far less in a first commit.
+
+The code is clean, modular, and ready for the next layer. Proceed with Option A (mock provider + UI flow) and you'll have something clickable within a few more sessions.
+
+Yes. The repos I checked are now using AGPL-style licensing:
+
+RhyGPU/OmniPlanner: added LICENSE and package metadata as AGPL-3.0-or-later.
+RhyGPU/mnemosyne: already had LICENSE, package.json, and Rust manifests set to AGPL-3.0-or-later.
+Small nuance: it is AGPL-3.0-or-later, not strict AGPL-3.0-only. That means AGPL v3 or any later FSF-published version.
+
+what does this mean?
+We need to explain the difference between AGPL-3.0-only and AGPL-3.0-or-later, why the user might have chosen the latter, and any implications for their project. Keep it concise and actionable.
+
+The user just clarified that their repos use "AGPL-3.0-or-later" (also written as "AGPL-3.0+"). I need to:
+
+Define what "or-later" means in practice.
+
+Contrast it with "only" version.
+
+Explain why it matters: compatibility, future-proofing, community trust.
+
+Mention how it's indicated (SPDX identifier: AGPL-3.0-or-later vs. AGPL-3.0-only).
+
+Confirm that it's still a strong copyleft, just with an upgrade path.
+
+Possibly note that the GNU project recommends "or-later" for many programs, but it's a choice.
+
+I'll craft a response that directly answers "what does this mean?" in plain language, then briefly touch on strategic implications for Mnemosyne. It should be friendly and informative, not overly technical.
+
+Great question. "AGPL-3.0-or-later" (also written "AGPL-3.0+") is a standard variant of the AGPL license. Here's what it means in practice and why it matters for Mnemosyne.

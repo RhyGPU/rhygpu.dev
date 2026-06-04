@@ -1,0 +1,523 @@
+Ok before this shit, i made a new session and sent a new message and nothing shows up on the narrator's dialogue box. I don't even know if it my software issue or the llm's or the openrouter API
+
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-7f8bc06c-6ea5-43ad-84c7-0b90b6f3-llm-payload-history-1778746856.md
+íŒŒì¼
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-7f8bc06c-6ea5-43ad-84c7-0b90b6f3-visible-chat-log-1778746855.md
+íŒŒì¼
+it takes forever to load the chat sometimes. I quit and relaunched the app and then see the repsonse once. IDK why
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-af4db743-57c6-4077-ba47-b57e14a7-llm-payload-history-1778805495.md
+íŒŒì¼
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-af4db743-57c6-4077-ba47-b57e14a7-visible-chat-log-1778805495.md
+íŒŒì¼
+Works... nice. 1 thing i want. I want a side terminal like what devs use. Smthing that shows logs and codes executing real time and get error logs and shit for this software.
+
+
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-af4db743-57c6-4077-ba47-b57e14a7-llm-payload-history-1778821603.md
+íŒŒì¼
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-af4db743-57c6-4077-ba47-b57e14a7-visible-chat-log-1778821602.md
+íŒŒì¼
+Well.... did a longer test run to see if our system is working as planned. Thoughts?
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-71c76893-79e7-437e-8125-a38d39f1-visible-chat-log-1778829347.md
+íŒŒì¼
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-71c76893-79e7-437e-8125-a38d39f1-llm-payload-history-1778829348.md
+íŒŒì¼
+Hmm?
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-70716a1b-279c-42f3-9225-6749f901-llm-payload-history-1778853284.md
+íŒŒì¼
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-70716a1b-279c-42f3-9225-6749f901-visible-chat-log-1778853283.md
+íŒŒì¼
+Fuckkk i shouldn't have deleted chats... I didn't think id promise her smth. Anyhow, how is the sofware progress going?
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-e934b969-50d3-4c10-8a7b-861d8b26-llm-payload-history-1779091575.md
+íŒŒì¼
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-e934b969-50d3-4c10-8a7b-861d8b26-visible-chat-log-1779091575.md
+íŒŒì¼
+I did a very interesting experiment... Is this actually working?
+
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-e934b969-50d3-4c10-8a7b-861d8b26-llm-payload-history-1779093055.md
+íŒŒì¼
+mnemosyne-local-mock-c0b05c6c-df9c-4ef8-afbe-d27044fcadb0-e934b969-50d3-4c10-8a7b-861d8b26-visible-chat-log-1779093055.md
+íŒŒì¼
+It seems like it was a narrative fiction...
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-441f8d35-0a5b-47c7-b30b-8c919f307238-f6e52189-c03a-4570-83bc-9089348a-visible-chat-log-1779242032.md
+íŒŒì¼
+mnemosyne-local-mock-441f8d35-0a5b-47c7-b30b-8c919f307238-f6e52189-c03a-4570-83bc-9089348a-llm-payload-history-1779242032.md
+íŒŒì¼
+Implemented both parts.
+
+SessionWorld routing is now explicit:
+- Added EnginePatch::apply_to_session(soul, session_world).
+- world_patch mutates SessionWorld when present.
+- soul.world only mutates through legacy fallback.
+- API and mock turn pipelines now use the session apply path.
+- Dev logs include world_patch_applied_to_session_world, plus session-world/context source logs.
+- Added tests proving world_patch changes SessionWorld and does not touch soul.world when a SessionWorld exists.
+
+Added .mne V1 bundle foundation:
+- .mne is a ZIP archive with required manifest.json.
+- Added export commands for:
+  - character Soul .mne
+  - world/setting .mne
+  - scenario bundle .mne
+  - current session checkpoint .mne
+- Added import_mne_bundle(file_path) with manifest validation, path traversal rejection, version/type validation, and ID conflict remapping.
+- Imported character Souls become savepoints unless the bundle is a session checkpoint.
+- Imported worlds become Setting savepoints.
+- Added minimal UI buttons for Soul .mne, World .mne, Scenario .mne, Session .mne, and Import .mne by path.
+
+Verification passed:
+- npm.cmd run typecheck
+- npm.cmd run test:rust - 87 passed
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Note: image assets are not bundled yet in V1, but the manifest has contents.images ready for the next layer.
+
+* * *
+
+**You:**
+
+Echo-0-mne.mne
+íŒŒì¼
+Echo-0_Session-mne.mne
+íŒŒì¼
+mnemosyne-local-mock-441f8d35-0a5b-47c7-b30b-8c919f307238-f6e52189-c03a-4570-83bc-9089348a-llm-payload-history-1779242032.md
+íŒŒì¼
+mnemosyne-local-mock-441f8d35-0a5b-47c7-b30b-8c919f307238-f6e52189-c03a-4570-83bc-9089348a-visible-chat-log-1779242032.md
+íŒŒì¼
+mnemosyne-local-mock-9662aa85-50e9-499a-977d-c656099ab13a-b2b7e867-9266-4146-9f64-380ed140-llm-payload-history-1779253205.md
+íŒŒì¼
+mnemosyne-local-mock-9662aa85-50e9-499a-977d-c656099ab13a-b2b7e867-9266-4146-9f64-380ed140-visible-chat-log-1779253204.md
+íŒŒì¼
+Echo-0_testing_room-mne.mne
+íŒŒì¼
+DId it work?
+
+* * *
+
+**You:**
+
+Implemented Memory Retrieval Slots + Plot Lifecycle V1.
+
+What changed:
+- [context_compiler.rs](C:/Users/T-ROBOTICS/Downloads/mnemosyne/src-tauri/state_engine/src/context_compiler.rs): replaced flat [RELEVANT MEMORIES] with structured slots:
+  [RELATIONSHIP MEMORY], [CURRENT PLOT MEMORY], [CHARACTER IDENTITY MEMORY], [UNRESOLVED TENSION], [WORLD / LOCATION MEMORY], [RECENT EMOTIONAL STATE].
+- Added slot-specific scoring for salience, recency, entity/target match, plot/world match, source/truth weighting, and low-value memory filtering.
+- Added memory-slot debug traces into context/payload data and Dev Console memory_slot_selected logs.
+- Added plot lifecycle display support in world context: dominant, background/stale, resolved.
+- [tauri.ts](C:/Users/T-ROBOTICS/Downloads/mnemosyne/src/tauri.ts) and [App.tsx](C:/Users/T-ROBOTICS/Downloads/mnemosyne/src/App.tsx): updated preview/types and Payload Inspector memory slot debug output.
+- [patch.rs](C:/Users/T-ROBOTICS/Downloads/mnemosyne/src-tauri/state_engine/src/patch.rs): imported-log memories now avoid over-aggressive duplicate merging so capped summaries can actually preserve multiple distinct imported facts.
+
+Verification:
+- npm.cmd run test:rust passed, 91 tests
+- npm.cmd run typecheck passed
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check passed
+- Extra direct crate check: cargo test --manifest-path src-tauri/state_engine/Cargo.toml passed, 72 unit tests + 1 integration test
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-cf1f5dd3-682d-44c1-afea-b00b9a6a1c9d-b39ae992-ebba-42c6-88e4-484029ce-visible-chat-log-1779262862.md
+íŒŒì¼
+mnemosyne-local-mock-cbb14a49-93a6-4038-ace9-2777073078e4-51964ae1-2809-4729-882a-f9cf3b21-llm-payload-history-1779262851.md
+íŒŒì¼
+mnemosyne-local-mock-cbb14a49-93a6-4038-ace9-2777073078e4-51964ae1-2809-4729-882a-f9cf3b21-visible-chat-log-1779262850.md
+íŒŒì¼
+mnemosyne-local-mock-cf1f5dd3-682d-44c1-afea-b00b9a6a1c9d-b39ae992-ebba-42c6-88e4-484029ce-llm-payload-history-1779262863.md
+íŒŒì¼
+?
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-efa8c5f0-b603-46aa-a9d8-20be7314a4e8-83841b63-0081-4b3c-847f-71dc15a2-llm-payload-history-1779322945.md
+íŒŒì¼
+mnemosyne-local-mock-efa8c5f0-b603-46aa-a9d8-20be7314a4e8-83841b63-0081-4b3c-847f-71dc15a2-visible-chat-log-1779322945.md
+íŒŒì¼
+.....? WTF IS THIS DUMBNESS?
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-10bd2703-3d75-4339-ba25-e90d8edd8371-eaaf8e62-7a64-430e-aaf7-06124e12-visible-chat-log-1779325539.md
+íŒŒì¼
+mnemosyne-local-mock-10bd2703-3d75-4339-ba25-e90d8edd8371-eaaf8e62-7a64-430e-aaf7-06124e12-llm-payload-history-1779325538.md
+íŒŒì¼
+I also tested emotional scenes...or at least try to. Till... AI perfomance if seemingly fucked. Im either 1: feeding it too much regulations or 2. The tracker is stupid af and cannot update correctly.
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-3738e793-8618-4872-bd37-8fa9900171ac-42c7ba3e-d319-45f9-baf1-1687b53e-visible-chat-log-1779329816.md
+íŒŒì¼
+mnemosyne-local-mock-3738e793-8618-4872-bd37-8fa9900171ac-42c7ba3e-d319-45f9-baf1-1687b53e-llm-payload-history-1779329818.md
+íŒŒì¼
+Well Well Well.... we got an issue
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ ë§ˆí¬ë‹¤ìš´(1).md
+íŒŒì¼
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-d3984300-8e2d-4c31-86fa-f24a905e294b-bc66b056-1618-473e-a594-028a56cc-llm-payload-history-1779341867.md
+íŒŒì¼
+mnemosyne-local-mock-d3984300-8e2d-4c31-86fa-f24a905e294b-bc66b056-1618-473e-a594-028a56cc-visible-chat-log-1779341866.md
+íŒŒì¼
+mnemosyne-local-mock-5e83a6ed-6a24-403d-a62f-c8c151488ee1-e6976e18-62ff-4558-851e-a5b9c2ad-llm-payload-history-1779344045.md
+íŒŒì¼
+mnemosyne-local-mock-5e83a6ed-6a24-403d-a62f-c8c151488ee1-e6976e18-62ff-4558-851e-a5b9c2ad-visible-chat-log-1779344044.md
+íŒŒì¼
+So, I did 2 sessions. One is more... intense and longer than the other to... test emotional thing that we were trying to test before diverging
+
+
+* * *
+
+**ChatGPT:**
+
+Document processing confirmation
+File	Length / structure detected	Headers in order	Entire file processed
+Session A payload history	1,962 lines, 11 payloads	# Mnemosyne LLM Payload History, ## Payload 1 through ## Payload 11	Yes
+Session A visible chat	101 lines, 5 user turns, 5 narrator turns	# Mnemosyne Chat Log, alternating ## User / ## Narrator	Yes
+Session B payload history	4,488 lines, 22 payloads	# Mnemosyne LLM Payload History, ## Payload 1 through ## Payload 22	Yes
+Session B visible chat	186 lines, 8 user turns, 8 narrator turns	# Mnemosyne Chat Log, alternating ## User / ## Narrator	Yes
+Game-Plan-1.txt	Roadmap note	Main sections: token savings conclusion, roadmap fit, recommended feature cluster, priority order, judgment, current action	Yes
+Answer
+
+It is mostly a system issue, not an LLM intelligence issue.
+
+My split:
+
+System / architecture issue: 75%
+LLM behavior issue: 25%
+
+The LLM is not brilliant, but Session B proves it can write the emotional beat when the context is coherent. The package scene has decent emotional progression: Aurora recognizes the item, processes that the user actually got it, softens, then frames the user as either â€œbestâ€ or â€œmost dangerous.â€ Later she asks whether the user knows how to dose it and admits she would rather not be reckless alone. That is not an intelligence collapse. 
+
+mnemosyne-local-mock-5e83a6ed-6â€¦
+
+The bigger failures are coming from what the system feeds and stores.
+
+Why it is mainly system-side
+1. Active plot is ambiguous
+
+The active plot says:
+
+Aurora is alone, expecting company, or has just let someone in.
+
+That is three possible states, not one resolved scene state. So when the narrator made her cautious at the door, it was not purely stupid. The prompt allowed â€œaloneâ€ and â€œexpecting companyâ€ at the same time. The short session later shows the system itself discussing that the low relationship baseline may have biased the narrator toward stranger/caution behavior. 
+
+mnemosyne-local-mock-d3984300-8â€¦
+
+System fix: replace OR-style active plot with resolved scene state:
+
+scene_state:
+- Aurora is expecting the player.
+- She knows someone is coming.
+- Door is closed but unlocked.
+- Initial reaction should be familiar/impatient/teasing, not surprised.
+2. OOC/OCC handling is still broken
+
+The payload shows OCC being created as a user-controlled entity. That is definitely a system bug. OOC/OCC should be a meta-channel label, not a character or relationship participant. 
+
+mnemosyne-local-mock-d3984300-8â€¦
+
+System fix:
+
+OOC, OCC, GM, Narrator, //, out-of-character = meta channel
+Never create entity
+Never create relationship
+Do not write as world recent_event unless explicitly saved as debug note
+3. Memory retrieval improved, but classification is still wrong
+
+Session B shows the memory slots are working in the basic sense: relationship memory, current plot memory, world/location memory, and recent emotional state appear. But the same memory appears in multiple slots, including world/location, which should not be receiving emotional relationship facts. [UNRESOLVED TENSION] remains empty even when Aurora says she would rather not be reckless alone. 
+
+mnemosyne-local-mock-5e83a6ed-6â€¦
+
+That is not the LLM being dumb. That is classifier/scoring logic not being precise enough.
+
+System fix:
+
+- relationship vulnerability -> relationship memory
+- risk/ambivalence/trust decision -> unresolved tension
+- physical place/object movement -> world/location
+- temporary mood/softening -> recent emotional state
+4. Recent events duplicate
+
+The payload shows duplicated recent events like â€œUser knocked on apartment door...â€ appearing twice. 
+
+mnemosyne-local-mock-5e83a6ed-6â€¦
+
+That is system state hygiene, not model intelligence.
+
+System fix:
+
+Deduplicate recent_event_records by normalized content.
+Do not allow recent_event and event_operations to add the same event twice.
+5. Object schema is leaking phone fields into non-phone objects
+
+The door gets object fields like notifications/vibrate/screen wake, which makes no sense. 
+
+mnemosyne-local-mock-5e83a6ed-6â€¦
+
+System fix:
+
+object_type: phone | door | package | bottle | clothing | room_object
+
+phone fields: notification_mode, vibrate_enabled, screen_wake_enabled
+door fields: open_state, lock_state
+package fields: opened, contents_known, holder
+What is LLM-side?
+
+The LLM still has weaknesses:
+
+1. It sometimes chooses generic â€œmysterious visitorâ€ framing.
+2. It over-explains OOC instead of simply answering.
+3. It sometimes produces bad status blocks.
+4. It may make plausible-but-wrong assumptions, like â€œstood outside for five minutes.â€
+
+But those are manageable if the system gives it cleaner state and validates outputs. The fact that Session B became emotionally usable shows the model can perform when the context is not contradictory or ambiguous.
+
+About the scenario
+
+No judgment. For testing, the point was to create pressure, risk, vulnerability, consent/choice tension, and emotional ambiguity. It did expose the system well.
+
+For future testing, use intense scenarios that do not rely on drug details, for example:
+
+- She asked the user to retrieve an old sketchbook from someone she cut off.
+- The package contains a letter from a dead mentor or ex.
+- The user brings back something she claimed not to care about.
+- She asked for help deleting unfinished art, but the user saved one piece.
+- She receives proof that a client stole her work.
+
+Same emotional pressure, less noisy subject matter.
+
+Codex next task
+
+Use Codex for this next. The patch should be system-side:
+
+Task: Scene State Priority + OOC Channel + State Hygiene V1.
+
+Problems found in latest Aurora tests:
+1. Active plot is ambiguous OR-list, causing narrator to choose wrong scene branch.
+2. OOC/OCC is still resolved as a user-controlled entity.
+3. OOC replies still receive scene status blocks.
+4. Recent events duplicate.
+5. Object states use phone fields for doors/packages.
+6. Unresolved tension slot under-detects emotional risk/ambivalence.
+7. GM/OOC turns are stored too much like scene events.
+
+Implement:
+- resolved scene_state fields
+- OOC/OCC meta-channel detection
+- no status block for GM/OOC replies
+- no state updater/world event for pure OOC unless explicitly needed
+- recent_event deduplication
+- typed object state schema
+- improved unresolved tension classifier
+- prompt/context priority ordering: latest user > latest exchange > resolved scene state > active plot > personality > relationship metrics > recent events > older memories
+
+Run:
+npm.cmd run test:rust
+npm.cmd run typecheck
+cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Bottom line: the LLM is imperfect, but the current bottleneck is system architecture and state hygiene. Codex being back is good timing, because this is exactly the kind of bounded engineering fix it should handle.
+
+* * *
+
+**ChatGPT:**
+
+Document processing confirmation
+File/context	Length detected	Headers in order	Entire file processed
+Game-Plan-1.txt	Roadmap-style note	token savings conclusion â†’ roadmap fit â†’ recommended feature cluster â†’ priority order â†’ judgment â†’ current action	Yes
+Latest Aurora test logs already reviewed	Payload histories + visible chat logs	# Mnemosyne LLM Payload History, # Mnemosyne Chat Log, repeated payload/user/narrator sections	Yes for this planning question
+
+Yes, degradation is better than before, but it is a different kind of degradation.
+
+Before, the system would degrade like this:
+
+Full chat / flat memory grows
+â†’ context gets huge or truncated
+â†’ model forgets earlier things
+â†’ old details vanish or blend together
+
+Now it degrades like this:
+
+compact state survives
+â†’ wrong memory/category sometimes gets selected
+â†’ scene is still coherent, but priority or emotional meaning is slightly wrong
+
+That is a much better failure mode because it is inspectable and fixable. The roadmap already points to this: token savings are proven enough, now the risk is wrong compact context, not context size. 
+
+Game-Plan-1
+
+API settings page, yes
+
+Add it. Not too early, not too bloated, but yes.
+
+Users should be able to tune:
+
+Narrator model
+State-updater model
+temperature
+top_p
+top_k
+min_p
+frequency penalty
+presence penalty
+repetition penalty if provider supports it
+max output tokens
+timeout
+recent chat turns
+memory slot budget
+total context budget
+anti-replay sensitivity
+
+But do not expose everything as the default UI. Use:
+
+Basic:
+- Fast
+- Balanced
+- Literary
+- Long Context
+- Experimental
+
+Advanced:
+- full SillyTavern-style knobs
+
+Because yes, some users will know their best OpenRouter setup. If they can afford more tokens, longer recent chat + current memory system should improve quality.
+
+Longer recent chat, yes, but capped
+
+Longer recent chat helps because it gives the narrator actual prose continuity, not just compressed state.
+
+But if too long, it can reintroduce old problems:
+
+replay
+stale emotional tone
+contradictory old facts
+model over-weighting recent prose over structured state
+
+Recommended defaults:
+
+Recent chat default: 2-4 turns
+Balanced max: 6 turns
+Long Context mode: 8-12 turns
+Power-user max: user configurable
+
+Memory should still be categorized. Recent chat is for style and immediate continuity, not long-term truth.
+
+Memory count recommendation
+
+Use hard ceilings plus categorized compression.
+
+Default:
+
+Relationship memory: 1-3
+Current plot memory: 1-3
+Identity memory: 1-2
+Unresolved tension: 0-3
+World/location: 1-3
+Recent emotional state: 0-2
+
+Total selected memories: about 8-14
+Hard cap: 18
+
+Do not add a random relevant-memory soup.
+
+Allowed exception:
+
+Exceptional relevant memory: max 1-2
+Only if very high score, entity-correct, not duplicate, not stale
+Your â€œmemory addressâ€ idea is excellent
+
+Yes, do this.
+
+Every memory should store provenance:
+
+memory_id
+conversation_id
+branch_id
+turn_id
+user_message_id
+assistant_message_id
+assistant_variant_id
+source_role
+source_start_char
+source_end_char
+source_excerpt
+created_from_patch_id
+
+For exports, you can display it as:
+
+Log address:
+conversation abc / branch main / turn 42 / assistant message 188 / chars 320-690
+
+Line numbers are okay for human display, but internally use message IDs + character offsets, because line numbers change if formatting changes.
+
+Then add a feature:
+
+Open memory source
+Show 3-5 messages before and after
+Show exact highlighted text that produced this memory
+
+That gives you an audit trail.
+
+Even better: when a memory is selected for context, the compiler can optionally include a tiny evidence snippet:
+
+[RELATIONSHIP MEMORY]
+- Aurora softened after receiving the package.
+  Source: turn 7, assistant msg 23.
+
+And in debug mode:
+
+Show source excerpt Â±2 lines
+
+This is basically RAG over the immutable chat log, but scoped and address-based.

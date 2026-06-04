@@ -1,0 +1,9116 @@
+**You:**
+
+내가 해야할일 간단명료하게 알려줘.
+지금 바이브 코딩과 엔비디아 키드모, 언리얼 엔진, 그리고 2d 이미지 3d 모델로 만들어주는 AI를 이용해서 만들 계획이야. 지금 언리얼 깔았고 코덱스랑 커서 깔았는데 일단 커서는 아직 돈 안 넣었으니 코덱스 중심으로 할 건데 1 로드맵 부터 짜줘
+
+* * *
+
+**ChatGPT:**
+
+먼저 GDD 기준으로 현실적인 1차 개발 로드맵을 잡겠습니다. 지금은 “게임 전체”가 아니라, 코어 전투가 되는지 검증하는 프로토타입 중심으로 잘라야 합니다.
+
+* * *
+
+**You:**
+
+Phase 0 go. 완전 초심자라고 생각하고 튜토리얼/가읻드 영상이나 문서가 설명에 나을것 같을땐, 링크주고. 그냥 설명이 더 빠를땐 그냥 설명해서 한단계씩 ㄱㄱ
+
+
+* * *
+
+**ChatGPT:**
+
+좋아. Phase 0는 “코딩 시작 전 정리” 단계라서, 오늘 목표는 프로젝트 폴더, GitHub, 기준 문서 3개를 만들어서 Codex가 삽질하지 않게 만드는 겁니다.
+
+* * *
+
+**You:**
+
+다함. 다음!
+참고: 설치한 로컬 Codex app있음 커서도 앱으로 깔음
+위치: E:\UE Project\PythagoreanHarmony
+
+* * *
+
+**ChatGPT:**
+
+좋아. 다음은 Phase 0.5, Codex를 프로젝트에 제대로 붙이는 단계.
+
+지금 경로:
+
+E:\UE Project\PythagoreanHarmony
+
+공백 있는 경로라서 원래는 조금 비추천이긴 한데, 이미 Unreal이 정상 실행되면 일단 그대로 간다. 나중에 빌드/스크립트에서 경로 문제 생기면 그때 E:\UE\PythagoreanHarmony로 옮기면 됨.
+
+Codex는 프로젝트 폴더를 선택해서 그 안의 파일을 읽고, 수정하고, 실행할 수 있는 로컬 코딩 에이전트임. 공식 Quickstart도 먼저 프로젝트 폴더를 선택하고 Local로 작업하라고 설명함. 
+OpenAI 개발자
++1
+
+지금 할 일 1: AGENTS.md 만들기
+
+Codex는 작업 전 AGENTS.md를 읽을 수 있음. OpenAI 공식 문서에서도 Codex용 프로젝트 지침 파일로 AGENTS.md를 설명함. 
+OpenAI 개발자
++1
+
+프로젝트 폴더에 새 파일 만들기:
+
+E:\UE Project\PythagoreanHarmony\AGENTS.md
+
+내용은 이거 그대로 복붙:
+
+Markdown
+# AGENTS.md
+
+## Project
+
+Pythagorean Harmony is a prototype for a fantasy third-person action RPG where enemies are defeated by solving equations through combat.
+
+## Current Goal
+
+Build only the first playable prototype:
+
+Math Souls Prototype: Equation Duel
+
+The current target is a 1v1 combat prototype where:
+
+- The enemy displays an equation
+- The player inputs a number
+- The player hits the enemy with an X weapon
+- Correct answer causes instant execution
+- Wrong answer causes enemy evolution
+
+## Engine
+
+Unreal Engine 5  
+Third Person C++ Template
+
+## Development Rules
+
+Keep the project prototype-focused.
+
+Do not implement:
+
+- Multiplayer
+- Full inventory
+- Save system
+- Open world
+- Full symbolic algebra parser
+- Boss fights
+- Large-scale battles
+- DLC systems
+- Final art pipeline
+
+## Code Style
+
+Use Unreal Engine C++ conventions.
+
+Prefer:
+
+- Actor Components for reusable systems
+- Data-driven structs and enums
+- Blueprint-exposed functions where useful for testing
+- Simple logic first
+- Clear comments for beginner readability
+
+Avoid:
+
+- Overengineering
+- Complex symbolic parsing
+- Large inheritance chains
+- Unnecessary plugins
+- Marketplace dependencies
+
+## First Systems To Build
+
+Priority order:
+
+1. Equation system
+2. Number input system
+3. Enemy equation display
+4. X answer check
+5. Wrong answer evolution
+6. Operation weapon logic
+7. Basic combat connection
+
+## First Enemy
+
+Goblin
+
+Equation:
+
+x + 5 = 10
+
+True answer:
+
+5
+
+## First Success Test
+
+Player inputs 5.  
+Player hits Goblin with X weapon.  
+Goblin is executed.
+
+## First Wrong Answer Test
+
+Player inputs 4.  
+Player hits Goblin with X weapon.  
+Goblin does not die.  
+Goblin evolves to Rank 2.
+
+## Important Instruction
+
+Before writing code, summarize the files you plan to create or modify.  
+Keep changes small and explain them clearly.
+
+저장.
+
+지금 할 일 2: GitHub Desktop에서 커밋
+
+GitHub Desktop 열기.
+
+바뀐 파일에 AGENTS.md가 보일 것.
+
+Summary:
+
+Add Codex project instructions
+
+Description:
+
+Added AGENTS.md to guide Codex during prototype development.
+
+클릭:
+
+Commit to main
+
+그다음:
+
+Push origin
+지금 할 일 3: Codex 앱에서 프로젝트 열기
+
+Codex 앱 열기.
+
+프로젝트 폴더 선택:
+
+E:\UE Project\PythagoreanHarmony
+
+중요 설정:
+
+Local
+
+로 되어 있어야 함.
+
+아직 코드 수정시키지 말고, 첫 요청은 분석만 시킨다.
+
+Codex에 이거 그대로 입력:
+
+Read README.md, GDD_SUMMARY.md, PROTOTYPE_SCOPE.md, and AGENTS.md.
+
+Do not modify any files yet.
+
+Summarize the intended Unreal Engine 5 prototype architecture.
+
+Then list the first 5 C++ classes/components we should create for this prototype.
+
+For each class/component, explain:
+1. What it does
+2. Why it is needed
+3. Which file names it would use
+4. Whether it should be an Actor, ActorComponent, UObject, Struct, or Enum
+
+Keep the scope limited to the first 1v1 prototype.
+지금 할 일 4: Codex 답변 확인 기준
+
+Codex 답변에서 우리가 보고 싶은 것은 대충 이런 방향이어야 함:
+
+UEquationComponent
+UNumberInputComponent
+AMathEnemy
+UEnemyEquationWidget
+UWeaponOperationComponent
+
+또는 비슷한 이름.
+
+괜찮은 방향:
+
+EquationComponent
+NumberInputComponent
+Enemy Actor
+Weapon Component
+Combat Log Widget
+
+위험한 방향:
+
+Full algebra parser
+Multiplayer framework
+Inventory system
+Quest system
+Mass AI system
+Open world manager
+Procedural world generation
+
+이런 말 나오면 바로 범위 벗어난 거임.
+
+지금 네가 할 단계
+
+순서대로:
+
+1. AGENTS.md 만들기
+2. GitHub Desktop에서 커밋 + Push
+3. Codex 앱에서 프로젝트 폴더 열기
+4. 위 Codex 프롬프트 붙여넣기
+5. Codex 답변을 나한테 보내기
+
+그 답변 보고, 바로 첫 실제 코드 작업: UEquationComponent 생성으로 들어가면 됨.
+
+* * *
+
+**You:**
+
+Read all four docs. No files modified.
+
+**Intended Architecture**
+
+The first prototype should be a small UE5 third-person combat loop built around components, not a big RPG framework.
+
+The player remains mostly the Third Person C++ Template character. We add number input and simple weapon/action calls. The enemy is a single prototype enemy actor, initially Goblin, with an equation component that owns the current equation, answer, rank, and evolution state. UI/Blueprints can read from C++ to display the equation, current input, and combat log.
+
+The core flow should be:
+
+1. Goblin owns equation: x + 5 = 10, answer 5
+2. Player enters a number through a number input component
+3. Player hits Goblin with an X weapon
+4. Combat resolver asks enemy equation component whether input is correct
+5. Correct answer executes enemy
+6. Wrong answer increments enemy rank and swaps/hardens equation state
+7. Operation weapons later transform the equation in a simple, explicit way
+
+**First 5 C++ Classes / Components**
+
+| # | Name | Type | Files |
+|---|---|---|---|
+| 1 | FEquationDefinition | Struct | EquationTypes.h |
+| 2 | UEnemyEquationComponent | ActorComponent | EnemyEquationComponent.h/.cpp |
+| 3 | UPlayerNumberInputComponent | ActorComponent | PlayerNumberInputComponent.h/.cpp |
+| 4 | APrototypeEquationEnemy | Actor or Character | PrototypeEquationEnemy.h/.cpp |
+| 5 | UMathCombatResolverComponent | ActorComponent | MathCombatResolverComponent.h/.cpp |
+
+**1. FEquationDefinition**
+
+What it does: stores prototype equation data: display text, correct answer, rank, and optional evolved equation data.
+
+Why needed: keeps equation logic data-driven without building a symbolic parser.
+
+Files: EquationTypes.h
+
+Type: Struct
+
+**2. UEnemyEquationComponent**
+
+What it does: owns the enemy’s current equation, checks whether a submitted answer is correct, and evolves the equation/rank after wrong answers.
+
+Why needed: this is the core equation system and should be reusable on any enemy.
+
+Files: EnemyEquationComponent.h, EnemyEquationComponent.cpp
+
+Type: ActorComponent
+
+**3. UPlayerNumberInputComponent**
+
+What it does: stores the player’s current numeric input and exposes Blueprint-callable functions like SetInputNumber, ClearInputNumber, and GetInputNumber.
+
+Why needed: separates number entry from combat and character movement.
+
+Files: PlayerNumberInputComponent.h, PlayerNumberInputComponent.cpp
+
+Type: ActorComponent
+
+**4. APrototypeEquationEnemy**
+
+What it does: represents the first enemy, Goblin, and owns components like UEnemyEquationComponent. It exposes simple functions such as ExecuteEnemy and EvolveEnemy.
+
+Why needed: the prototype needs one concrete enemy target for the success and wrong-answer tests.
+
+Files: PrototypeEquationEnemy.h, PrototypeEquationEnemy.cpp
+
+Type: Actor or Character; use Character if it needs movement/animation soon, otherwise Actor is enough for the first test.
+
+**5. UMathCombatResolverComponent**
+
+What it does: handles “weapon hit happened” logic. For an X weapon hit, it reads the player input, asks the enemy equation component if it is correct, then triggers execution or evolution.
+
+Why needed: keeps combat connection separate from equation storage and player input.
+
+Files: MathCombatResolverComponent.h, MathCombatResolverComponent.cpp
+
+Type: ActorComponent
+
+* * *
+
+**ChatGPT:**
+
+좋아. Codex 답변 정상 방향임. 특히 좋은 점은 “심볼릭 대수 파서 만들지 말고 데이터 기반으로 간다”는 판단이 맞음.
+
+이제 첫 실제 코드 작업 들어간다.
+
+Phase 1-A 목표
+
+오늘은 딱 이것만 만든다:
+
+FEquationDefinition
+UEnemyEquationComponent
+
+즉, 아직 플레이어, 무기, UI 안 함.
+먼저 적이 자기 방정식을 가지고 있고, 정답 검사와 오답 진화를 할 수 있게 만든다.
+
+Codex에 입력할 프롬프트
+
+Codex 앱에 이거 그대로 붙여넣어.
+
+Create the first prototype equation system only.
+
+Modify the Unreal Engine 5 C++ project by adding:
+
+1. EquationTypes.h
+2. EnemyEquationComponent.h
+3. EnemyEquationComponent.cpp
+
+Do not create player input, weapon logic, UI, combat resolver, inventory, or AI yet.
+
+Requirements:
+
+- Create an enum EPrototypeEquationType with:
+  - Direct
+  - Add
+  - Subtract
+  - Multiply
+  - Divide
+
+- Create a USTRUCT FEquationDefinition with:
+  - EquationType
+  - A
+  - B
+  - DisplayText
+  - CorrectAnswer
+  - Rank
+
+- Create UEnemyEquationComponent as a UActorComponent.
+
+The component should:
+- Store CurrentEquation
+- Initialize as Goblin equation: x + 5 = 10, correct answer 5, rank 1
+- Expose BlueprintCallable function GetDisplayText()
+- Expose BlueprintCallable function GetCorrectAnswer()
+- Expose BlueprintCallable function GetRank()
+- Expose BlueprintCallable function IsAnswerCorrect(int32 SubmittedAnswer)
+- Expose BlueprintCallable function SubmitAnswer(int32 SubmittedAnswer)
+- If SubmitAnswer receives the correct answer, return true
+- If SubmitAnswer receives the wrong answer, evolve the equation and return false
+
+For now, wrong answer evolution should be simple:
+Rank 1:
+x + 5 = 10
+Correct answer 5
+
+Rank 2:
+x + 7 = 15
+Correct answer 8
+
+Rank 3:
+x + 9 = 20
+Correct answer 11
+
+After Rank 3, keep Rank 3.
+
+Use Unreal Engine C++ conventions.
+Make all useful properties BlueprintReadOnly or EditAnywhere where appropriate.
+Add beginner-friendly comments.
+Keep the code simple and prototype-focused.
+
+Before finalizing, explain which files were created and what each function does.
+Codex가 코드 만들고 나면 할 일
+
+Codex가 파일을 수정하면 바로 커밋하지 마.
+
+먼저 Unreal에서 빌드 확인해야 함.
+
+방법 1, Unreal Editor 안에서
+
+Unreal 열려 있으면:
+
+Tools
+→ Refresh Visual Studio Project
+
+그 다음:
+
+Compile
+
+또는 에디터 상단의 Compile 버튼.
+
+방법 2, Visual Studio에서
+
+.sln 파일 열기:
+
+E:\UE Project\PythagoreanHarmony\PythagoreanHarmony.sln
+
+상단 설정 확인:
+
+Development Editor
+Win64
+
+그리고:
+
+Build
+→ Build Solution
+성공 기준
+
+빌드 성공 후에는 코드가 실제로 작동하는지 아직 안 봐도 됨.
+이번 단계 성공 기준은 이것뿐:
+
+[ ] EquationTypes.h 생성됨
+[ ] EnemyEquationComponent.h 생성됨
+[ ] EnemyEquationComponent.cpp 생성됨
+[ ] Unreal C++ 빌드 성공
+[ ] 에러 없이 Editor 열림
+만약 빌드 에러 나면
+
+에러 전체를 보내지 말고, 우선 이 부분만 보내:
+
+첫 번째 error 줄
+그 아래 5~10줄
+Codex가 만든 EnemyEquationComponent.h
+Codex가 만든 EnemyEquationComponent.cpp
+지금 네가 할 것
+위 Codex 프롬프트 실행
+Codex가 만든 파일 내용 확인
+Unreal 또는 Visual Studio에서 빌드
+결과를 나한테 보내기
+
+정상 빌드되면 다음 단계는 APrototypeEquationEnemy 만들고, 에디터에 Goblin 더미 배치임.
+
+* * *
+
+**You:**
+
+된듯? 리컴파일도 됬고 Ctrl + Alt + F11 도 초록텍스트 뜸
+
+
+* * *
+
+**You:**
+
+된듯? 리컴파일도 됬고 Ctrl + Alt + F11 도 초록텍스트 뜸
+Created the first prototype equation system only. No player input, weapons, UI, combat resolver, inventory, or AI were added.
+
+**Files Created**
+
+[EquationTypes.h](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/EquationTypes.h>)  
+Defines EPrototypeEquationType with Direct, Add, Subtract, Multiply, Divide, plus FEquationDefinition with equation type, A, B, display text, correct answer, and rank.
+
+[EnemyEquationComponent.h](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/EnemyEquationComponent.h>)  
+Declares UEnemyEquationComponent as a UActorComponent. It stores CurrentEquation and exposes the Blueprint-callable functions requested.
+
+[EnemyEquationComponent.cpp](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/EnemyEquationComponent.cpp>)  
+Implements the Goblin equation defaults and simple wrong-answer evolution through ranks 1 to 3.
+
+**Function Behavior**
+
+GetDisplayText() returns the current equation text, starting with x + 5 = 10.
+
+GetCorrectAnswer() returns the current correct answer, starting with 5.
+
+GetRank() returns the current equation rank, starting with 1.
+
+IsAnswerCorrect(int32 SubmittedAnswer) checks the submitted number without changing state.
+
+SubmitAnswer(int32 SubmittedAnswer) returns true if the answer is correct. If wrong, it evolves the equation and returns false.
+
+InitializeGoblinEquation() sets the starting rank 1 Goblin equation.
+
+EvolveEquation() moves rank 1 to 2, rank 2 to 3, and keeps rank 3 capped.
+
+SetEquationForRank(int32 NewRank) applies the hardcoded prototype equations:
+
+
+text
+Rank 1: x + 5 = 10, answer 5
+Rank 2: x + 7 = 15, answer 8
+Rank 3: x + 9 = 20, answer 11
+
+
+Verification note: UnrealHeaderTool processed the new headers successfully. A full editor build could not complete because Live Coding is currently active in Unreal; the build stopped with Unreal’s “Unable to build while Live Coding is active” message.
+
+
+* * *
+
+**ChatGPT:**
+
+좋아, 지금 상태는 성공으로 봐도 됨. Codex가 말한 “Live Coding active 때문에 full editor build는 못 함”은 흔한 상황이고, 네가 Ctrl+Alt+F11로 초록 로그를 봤으면 현재 에디터 기준 컴파일은 통과한 상태야.
+
+* * *
+
+**You:**
+
+Live Coding succeded 초록 로그 떴고, 테스트 완. 성공적.
+
+Created the first placeable prototype enemy actor only.
+
+Files created:
+
+[PrototypeEquationEnemy.h](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PrototypeEquationEnemy.h>)  
+Declares APrototypeEquationEnemy as an AActor with Root, BodyMesh, EquationText, and EquationComponent.
+
+[PrototypeEquationEnemy.cpp](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PrototypeEquationEnemy.cpp>)  
+Implements the actor behavior. It uses a basic engine cube as the temporary body, positions the equation text above the enemy, refreshes the display on BeginPlay, submits answers to UEnemyEquationComponent, evolves on wrong answers, and executes on correct answers.
+
+Main functions:
+
+RefreshEquationDisplay() updates EquationText from the current equation.
+
+SubmitAnswerToEnemy(int32 SubmittedAnswer) sends the answer to EquationComponent. Correct answers call ExecuteEnemy(). Wrong answers refresh the evolved equation text.
+
+ExecuteEnemy() marks the actor executed, hides BodyMesh, disables collision, and changes the text to AXIOM EXECUTION.
+
+IsExecuted() returns whether execution already happened.
+
+TestCorrectAnswer() submits the current correct answer.
+
+TestWrongAnswer() submits CorrectAnswer + 1 to force evolution.
+
+How to test in the editor:
+
+1. Stop Live Coding or close/reopen the editor, then compile.
+2. Place APrototypeEquationEnemy in a level.
+3. Confirm it shows x + 5 = 10 above the cube body.
+4. Select the actor and use TestWrongAnswer in the Details panel to evolve to x + 7 = 15, then x + 9 = 20.
+5. Use TestCorrectAnswer to execute it; the cube hides, collision disables, and the text becomes AXIOM EXECUTION.
+
+Verification note: UnrealHeaderTool processed the new actor header successfully. Full C++ build is still blocked because Unreal Live Coding is active.
+
+* * *
+
+**ChatGPT:**
+
+완벽함. 지금까지는 “방정식 적”의 핵심이 이미 작동한 상태라서, 다음은 플레이어가 직접 숫자를 입력하게 만드는 단계로 간다.
+
+* * *
+
+**You:**
+
+플레이 화면 속엔 죽어도 공식이 뜨고 에디팅 모드에선 처형됨이라 뜨는 거 정상임?
+참고로 컴파일은 성공함. 문제없는거면 다음!
+
+* * *
+
+**ChatGPT:**
+
+정상임.
+
+이유는 간단함:
+
+Play 화면 = PIE 런타임 복사본
+Editor 화면 = 실제 레벨에 배치된 원본 Actor
+
+네가 TestCorrectAnswer 같은 CallInEditor 버튼을 에디터에서 눌렀으면, 레벨 원본 Actor가 AXIOM EXECUTION 상태로 바뀔 수 있음.
+근데 Play를 누르면 Unreal이 별도 런타임 복사본을 만들어서 실행하니까, Play 안에서는 다시 x + 5 = 10으로 보일 수 있음.
+
+문제 아님.
+
+다만 주의:
+
+에디터 모드에서 AXIOM EXECUTION 상태인 채로 레벨 저장하지 마.
+
+저장하면 테스트 상태가 레벨에 남을 수 있음. 제일 쉬운 해결:
+
+AXIOM EXECUTION 된 적 삭제
+→ PrototypeEquationEnemy 새로 드래그
+→ x + 5 = 10 상태 확인
+→ 그 상태에서 저장
+지금 할 일
+1. 일단 현재 성공분 커밋
+
+GitHub Desktop:
+
+Summary:
+
+Add testable equation enemy
+
+Description:
+
+Added placeable prototype enemy with equation display, wrong answer evolution, and execution test behavior.
+
+Commit + Push.
+
+다음: Phase 1-C, 플레이어 숫자 입력 연결
+
+이미 컴포넌트만 만들라고 했는데, 지금 다음으로는 실제 캐릭터에 숫자키를 연결할 거임.
+
+목표:
+
+키보드 0~9 입력 → 현재 숫자 저장
+Backspace → 한 자리 삭제
+C → 전체 삭제
+화면 로그에 현재 입력 표시
+
+아직 X 공격 안 함.
+먼저 숫자 입력이 되는지 확인한다.
+
+Codex에 넣을 프롬프트
+
+그대로 넣어.
+
+Hook the player number input component into the existing Third Person character.
+
+First inspect the project files to identify the existing character class name generated by the Third Person C++ template.
+
+Modify only what is necessary.
+
+Requirements:
+
+- Add UPlayerNumberInputComponent to the existing player character class.
+- Bind keyboard number keys 0 through 9 to AppendDigit.
+- Bind Backspace to RemoveLastDigit.
+- Bind C to ClearInput.
+- When input changes, print the current input using GEngine->AddOnScreenDebugMessage.
+- Do not create UI widgets yet.
+- Do not create weapons yet.
+- Do not create combat resolver yet.
+- Do not modify enemy logic unless absolutely necessary.
+- Keep this prototype-focused and beginner-readable.
+
+Expected behavior in Play mode:
+
+Press 1 -> screen shows Input: 1
+Press 2 -> screen shows Input: 12
+Press 3 -> screen shows Input: 123
+Press Backspace -> screen shows Input: 12
+Press C -> screen shows Input: -
+
+Before finalizing, explain:
+1. Which character class was modified
+2. Which files were changed
+3. Which keys were bound
+4. How to test in Play mode
+Codex 끝나면
+
+Unreal에서:
+
+Ctrl + Alt + F11
+
+성공하면 Play 누르고 테스트:
+
+1
+2
+3
+Backspace
+C
+
+화면 왼쪽 위나 중앙 어딘가에 디버그 메시지로:
+
+Input: 1
+Input: 12
+Input: 123
+Input: 12
+Input: -
+
+이렇게 뜨면 성공.
+
+이번 단계 성공 기준
+[ ] 숫자키 0~9 입력 가능
+[ ] Backspace로 삭제 가능
+[ ] C로 전체 삭제 가능
+[ ] 화면에 현재 입력값 표시
+[ ] Live Coding 성공
+
+이거 끝나면 다음은 숫자 입력 + 적 정답 제출, 즉 키 하나 눌러서 현재 입력값을 고블린에게 보내는 단계로 간다.
+
+* * *
+
+**You:**
+
+문제: 숫자휠 아님? 숫자 키보드 입력 아닌디?
+일단 코덱스 같은챗에(세션?) 계속 보내고 있는데 새로 파? 아님 언제 새로운 챗 가?
+
+* * *
+
+**ChatGPT:**
+
+맞음. 최종 설계는 숫자휠이 맞다.
+근데 지금 단계에서는 임시 디버그 입력으로 숫자키를 먼저 쓰는 게 맞음.
+
+이유:
+
+숫자휠 = UI/UX 시스템
+숫자 입력 컴포넌트 = 게임 로직
+
+지금 검증해야 하는 건 “휠이 예쁜가”가 아니라:
+
+플레이어가 숫자 5를 가지고 있음
+→ X 무기로 적에게 제출
+→ 적이 정답 검사
+→ 정답이면 처형
+→ 오답이면 진화
+
+이 흐름임.
+
+그래서 순서는 이렇게 가는 게 맞다:
+
+1. 키보드 숫자 입력으로 로직 검증
+2. X 제출 구현
+3. 적 처형/진화 연결
+4. 그다음 숫자휠 UI로 입력 방식을 교체
+
+즉, 숫자키는 최종 조작이 아니라 개발용 임시 입력장치임.
+
+숫자휠은 언제 만드냐?
+
+내 추천은 여기:
+
+Phase 1-C: 키보드 숫자 입력
+Phase 1-D: 입력값을 적에게 제출
+Phase 1-E: X 처형 키 연결
+Phase 1-F: 숫자휠 UI로 교체
+
+숫자휠을 너무 빨리 만들면 문제가 생김:
+
+UMG 위젯
+마우스/패드 입력
+게임 입력 모드
+카메라 락온과 마우스 충돌
+휠 선택 애니메이션
+입력 취소
+UI 포커스 문제
+
+이런 것 때문에 핵심 로직 검증이 늦어짐.
+
+그래서 지금은 그냥:
+
+1 누름 → Input: 1
+5 누름 → Input: 15
+Backspace → Input: 1
+C → Input: -
+
+이렇게 해놓고, 나중에 숫자휠이 AppendDigit()을 호출하게 만들면 됨.
+
+Codex 세션은 계속 같은 챗으로 가도 됨?
+
+지금은 같은 세션 계속 써도 됨.
+
+현재 Codex가 이미 읽은 것:
+
+README.md
+GDD_SUMMARY.md
+PROTOTYPE_SCOPE.md
+AGENTS.md
+현재 만든 코드 구조
+
+그래서 같은 세션에서 이어가는 게 효율적임.
+
+언제 새 Codex 챗 파야 하냐?
+
+이럴 때 새로 파면 됨:
+
+1. Codex가 이전 요구사항을 자꾸 헷갈릴 때
+2. 너무 많은 수정 후 답변이 산만해질 때
+3. Phase가 크게 바뀔 때
+4. 버그 디버깅 대화가 길어져서 맥락이 꼬였을 때
+5. 새 브랜치나 새 기능 단위로 완전히 분리하고 싶을 때
+
+지금은 아직:
+
+Equation system
+Prototype enemy
+Number input
+
+같은 흐름이라서 같은 세션 유지가 좋음.
+
+새 Codex 챗을 팔 때 첫 프롬프트
+
+나중에 새 챗 파면 이렇게 시작하면 됨:
+
+Read README.md, GDD_SUMMARY.md, PROTOTYPE_SCOPE.md, and AGENTS.md.
+
+Current project status:
+- UEnemyEquationComponent exists.
+- APrototypeEquationEnemy exists.
+- The enemy displays equations.
+- Wrong answer evolves the equation.
+- Correct answer executes the enemy.
+- We are building only the first 1v1 prototype.
+
+Do not modify files yet.
+Summarize the current architecture and wait for my next instruction.
+지금 결론
+
+지금은 숫자휠 만들지 말고, 키보드 숫자 입력으로 로직 먼저 뚫자.
+
+다음 작업은 그대로:
+
+UPlayerNumberInputComponent를 플레이어 캐릭터에 붙이기
+숫자키 0~9 입력
+Backspace 삭제
+C 전체 삭제
+화면 디버그 메시지 출력
+
+그 다음에:
+
+현재 입력값을 고블린에게 제출
+정답이면 AXIOM EXECUTION
+오답이면 Rank 상승
+
+여기까지 되면 숫자휠 만들 가치가 생김.
+
+* * *
+
+**You:**
+
+1. 좌상단 인풋에 숫자 뜸. 잘 먹음. 6자리 수 최대. c로 초기화
+backspace 지워짐 정상작동
+Hooked the player number input into the existing Third Person template character.
+
+Modified character class: APythagoreanHarmonyCharacter
+
+Files changed:
+
+[PythagoreanHarmonyCharacter.h](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.h>)  
+Added a UPlayerNumberInputComponent* NumberInputComponent, helper digit handlers, debug print helper, and an accessor.
+
+[PythagoreanHarmonyCharacter.cpp](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.cpp>)  
+Creates the component in the constructor, binds keys in SetupPlayerInputComponent, and prints the current input with GEngine->AddOnScreenDebugMessage.
+
+Keys bound:
+
+- 0 through 9: append that digit
+- Backspace: remove last digit
+- C: clear input
+
+How to test in Play mode:
+
+1. Disable Live Coding or press Ctrl+Alt+F11, then compile.
+2. Press Play.
+3. Press 1: screen shows Input: 1
+4. Press 2: screen shows Input: 12
+5. Press 3: screen shows Input: 123
+6. Press Backspace: screen shows Input: 12
+7. Press C: screen shows Input: -
+
+Verification note: UnrealHeaderTool processed the headers successfully, but the full build is still blocked because Live Coding is active in the Unreal editor.
+
+* * *
+
+**ChatGPT:**
+
+좋아. Phase 1-C 완료.
+지금까지 핵심 로직은 정상임.
+
+현재 구현 상태:
+
+[완료] 적 방정식 표시
+[완료] 오답 진화
+[완료] 정답 처형
+[완료] 플레이어 숫자 입력
+[완료] Backspace 삭제
+[완료] C 초기화
+[완료] 6자리 제한
+
+먼저 커밋.
+
+GitHub Desktop:
+
+Summary:
+
+Hook number input into player character
+
+Description:
+
+Added player number input component to the third-person character and bound digit, backspace, and clear keys.
+
+Commit + Push.
+
+다음: Phase 1-D, 입력값을 적에게 제출
+
+이제 할 것:
+
+플레이어가 숫자를 입력한다.
+X 키를 누른다.
+가장 가까운 PrototypeEquationEnemy에게 현재 숫자를 제출한다.
+정답이면 처형.
+오답이면 진화.
+
+아직 진짜 무기 공격 애니메이션 없음.
+지금의 X 키는 임시로 X 무기 공격 테스트 버튼 역할임.
+
+목표 테스트
+
+Play 모드에서:
+
+5 입력
+X 누름
+가까운 고블린이 AXIOM EXECUTION
+
+오답 테스트:
+
+4 입력
+X 누름
+고블린 식이 x + 7 = 15로 진화
+Codex에 넣을 프롬프트
+
+같은 Codex 세션에 그대로 넣어.
+
+Connect player number input to the prototype enemy submission flow.
+
+Modify only what is necessary.
+
+Requirements:
+
+- Use the existing APythagoreanHarmonyCharacter.
+- Add a prototype action bound to the X key.
+- When X is pressed, submit the current number input to the nearest APrototypeEquationEnemy.
+- Search for the nearest APrototypeEquationEnemy within 2000 units.
+- If there is no current input, show an on-screen debug message: "No input."
+- If no enemy is found in range, show: "No equation enemy in range."
+- If an enemy is found, call SubmitAnswerToEnemy(CurrentInput).
+- If the answer is correct, the enemy should execute using its existing ExecuteEnemy flow.
+- If the answer is wrong, the enemy should evolve using its existing equation component flow.
+- After submitting an answer, clear the player input.
+- Print useful on-screen debug messages:
+  - Submitted Answer: N
+  - Correct Answer. Axiom Execution.
+  - Wrong Answer. Enemy evolved.
+  - Current Input: -
+
+Do not create real weapons yet.
+Do not create attack animations yet.
+Do not create UI widgets yet.
+Do not create lock-on yet.
+Do not modify equation logic unless absolutely necessary.
+Do not create inventory or combat resolver yet.
+
+Keep this prototype-focused and beginner-readable.
+
+Before finalizing, explain:
+1. Which files were changed
+2. Which functions were added
+3. Which key was bound
+4. How to test correct and wrong answers in Play mode
+Codex 끝나면 할 일
+
+Unreal에서:
+
+Ctrl + Alt + F11
+
+초록색 Live Coding succeeded 확인.
+
+그다음 Play.
+
+테스트 순서
+테스트 1, 정답 처형
+레벨에 PrototypeEquationEnemy 하나 있어야 함
+Play 누름
+고블린 가까이 감
+키보드 5
+키보드 X
+
+성공 결과:
+
+Submitted Answer: 5
+Correct Answer. Axiom Execution.
+적 텍스트가 AXIOM EXECUTION으로 바뀜
+적 몸체 숨김
+Input: -
+테스트 2, 오답 진화
+
+새로 Play 시작.
+
+고블린 가까이 감
+키보드 4
+키보드 X
+
+성공 결과:
+
+Submitted Answer: 4
+Wrong Answer. Enemy evolved.
+식이 x + 7 = 15로 바뀜
+Input: -
+
+한 번 더 오답 하려면:
+
+4 입력
+X 누름
+x + 9 = 20
+이번 단계 성공 기준
+[ ] X 키로 현재 숫자 제출 가능
+[ ] 입력 없으면 No input 표시
+[ ] 적이 멀면 No equation enemy in range 표시
+[ ] 5 제출 시 AXIOM EXECUTION
+[ ] 4 제출 시 x + 7 = 15
+[ ] 제출 후 Input 초기화
+
+이거 성공하면 드디어 플레이어가 직접 방정식 적을 죽이는 첫 루프가 완성됨.
+
+* * *
+
+**You:**
+
+질문: 문제가 3개 밖에 없는데 이거 앞으로 random procedural equation 추가해서 공식과 답 천차만별 할건데, 이 시스템이 잘 진화 함? 아님 3개 eqation에... 그냥... 야매로 맞춘거?
+
+* * *
+
+**ChatGPT:**
+
+ㅇㅇ 정확히 봤음.
+
+지금 3개 equation은 야매 맞음.
+근데 나쁜 야매가 아니라, 프로토타입용 의도된 하드코딩임.
+
+현재 시스템은 이렇게 되어 있음:
+
+Rank 1: x + 5 = 10
+Rank 2: x + 7 = 15
+Rank 3: x + 9 = 20
+
+즉, 지금은 “랜덤 방정식 시스템”이 아니라:
+
+정답 검사와 진화 흐름이 되는지 확인하는 테스트용 계단
+
+임.
+
+그럼 이 구조가 나중에 진화 가능하냐?
+
+가능함.
+이유는 좋은 방향으로 분리되어 있음.
+
+현재 핵심이 여기로 분리돼 있지?
+
+UEnemyEquationComponent
+FEquationDefinition
+EPrototypeEquationType
+
+이게 중요함.
+
+나중에 하드코딩된 이 부분:
+
+SetEquationForRank(1)
+SetEquationForRank(2)
+SetEquationForRank(3)
+
+을 지우고, 이런 함수로 교체하면 됨:
+
+GenerateEquationForRank(int32 Rank)
+GenerateEquationForDifficulty(int32 Difficulty)
+GenerateEquationForSpecies(EnemySpecies, Rank)
+
+즉, 현재는 야매 데이터 3개지만, 구조 자체는 나중에 procedural로 갈 수 있음.
+
+앞으로의 진짜 방식
+
+랜덤 방정식은 “문자열을 랜덤으로 만드는 것”이 아님.
+
+잘못된 방식:
+
+랜덤으로 "x + 7 = 15" 같은 문자열 만들기
+그걸 다시 파싱해서 답 계산하기
+
+이건 초반에 절대 하지 마. 복잡해짐.
+
+좋은 방식:
+
+1. 먼저 정답 x를 고른다.
+2. 연산 타입을 고른다.
+3. a 값을 고른다.
+4. b를 계산한다.
+5. DisplayText를 만든다.
+6. CorrectAnswer는 이미 알고 있다.
+
+예시:
+
+Add equation
+정답 x = 8
+a = 7
+b = x + a = 15
+
+표시:
+x + 7 = 15
+
+정답:
+8
+Multiply equation
+정답 x = 5
+a = 6
+b = a * x = 30
+
+표시:
+6x = 30
+
+정답:
+5
+Divide equation
+정답 x = 21
+a = 3
+b = x / a = 7
+
+표시:
+x / 3 = 7
+
+정답:
+21
+
+이러면 랜덤이어도 항상 답이 깔끔하게 나옴.
+
+앞으로 시스템은 이렇게 진화해야 함
+
+현재:
+
+Hardcoded Rank 1, 2, 3
+
+다음 진화:
+
+Rank 기반 랜덤 방정식 생성
+
+그다음:
+
+Species 기반 공식 타입
+
+예:
+
+Slime: x = n
+Goblin: x + a = b, x - a = b
+Orc: ax = b
+Beastman: x / a = b
+Frok: x + a = b, 단 x는 소수
+Skeleton: x + a = b, 단 x는 음수
+
+그다음:
+
+Mathematical Armor 추가
+
+예:
+
+Base:
+x + 5 = 10
+
+Armor:
+×2
+
+Displayed:
+(x + 5) × 2 = 20
+
+True Answer:
+5
+지금 당장 바꾸면 안 되는 이유
+
+아직 이것도 안 끝났음:
+
+숫자 입력
+X 제출
+정답 처형
+오답 진화
+
+즉, 지금 procedural equation부터 만들면 핵심 전투 루프가 늦어짐.
+
+지금 순서는 이게 맞음:
+
+1. 하드코딩 3개로 전투 루프 완성
+2. X 키로 적 처형/진화 성공
+3. 그다음 하드코딩 제거
+4. Equation Generator로 교체
+5. 종족별 공식 추가
+6. Armor 추가
+결론
+
+현재 3개 equation은 야매 맞음.
+하지만 버릴 야매가 아니라, 핵심 흐름 검증용 scaffold임.
+
+중요한 건 지금 UEnemyEquationComponent 안에 방정식 로직을 모아뒀다는 점임.
+그래서 나중에 내부만 이렇게 갈아끼우면 됨:
+
+Before:
+SetEquationForRank(1/2/3)
+
+After:
+CurrentEquation = GenerateEquation(Species, Rank, Difficulty)
+
+즉, 지금 구조는 충분히 진화 가능함.
+
+다음 단계는 그대로 진행해도 됨.
+먼저 X 키로 현재 숫자를 고블린에게 제출하는 루프를 완성하자.
+
+* * *
+
+**You:**
+
+ㅇㅋ. 무한히 문제 어려워질 수 있음 됬음
+. ㅈㄴ 잘 작동함 요. I didn't do extreme tests, but a simple test shows it works. 틀리면 다음 공식, 맞음 AXIOM EXECUTION 뜸
+
+* * *
+
+**You:**
+
+ㅇㅋ. 무한히 문제 어려워질 수 있음 됬음
+. ㅈㄴ 잘 작동함 요. I didn't do extreme tests, but a simple test shows it works. 틀리면 다음 공식, 맞음 AXIOM EXECUTION 뜸
+Connected the number input to prototype enemy submission through the existing Third Person character.
+
+Changed files:
+
+[PythagoreanHarmonyCharacter.h](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.h>)  
+[PythagoreanHarmonyCharacter.cpp](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.cpp>)
+
+Functions added:
+
+SubmitInputToNearestEquationEnemy()  
+Reads the current input, finds the nearest unexecuted APrototypeEquationEnemy within 2000 units, submits the answer, prints result messages, then clears input.
+
+FindNearestPrototypeEquationEnemy(float SearchRadius) const  
+Searches the level for the nearest valid prototype equation enemy.
+
+PrintPrototypeDebugMessage(...) const  
+Small helper for on-screen prototype messages.
+
+Key bound:
+
+X submits the current number input to the nearest prototype equation enemy.
+
+How to test in Play mode:
+
+1. Place a PrototypeEquationEnemy within 2000 units of the player.
+2. Press 5, then X.
+   You should see Submitted Answer: 5, then Correct Answer. Axiom Execution., and the enemy should execute.
+3. Restart or place another enemy.
+4. Press 4, then X.
+   You should see Submitted Answer: 4, then Wrong Answer. Enemy evolved., and the enemy equation should update.
+5. Press X with no input to see No input.
+6. Move away from enemies, enter a number, press X, and you should see No equation enemy in range.
+
+Verification note: UnrealHeaderTool processed the changed header successfully. Full build is still blocked because Live Coding is active in the Unreal editor.
+
+
+* * *
+
+**ChatGPT:**
+
+좋아. Phase 1-D 완료.
+이제 게임의 제일 중요한 첫 루프가 실제로 작동함.
+
+현재 구현된 핵심:
+
+숫자 입력
+→ X 키 제출
+→ 가까운 방정식 적 탐색
+→ 정답 검사
+→ 맞으면 AXIOM EXECUTION
+→ 틀리면 다음 공식으로 진화
+
+이건 큰 진전임. 지금부터는 “야매 3개 공식”을 진짜 procedural equation generator로 갈아끼우면 됨.
+
+먼저 커밋.
+
+GitHub Desktop:
+
+Summary:
+Connect number input to enemy answer submission
+
+Description:
+Bound X key to submit the current player input to the nearest prototype equation enemy and trigger execution or evolution.
+
+Commit + Push.
+
+다음: Phase 1-E, Procedural Equation Generator v1
+
+목표:
+
+틀릴 때마다 Rank가 올라가고,
+Rank에 맞춰 새로운 방정식이 자동 생성됨.
+
+즉 현재:
+
+Rank 1: x + 5 = 10
+Rank 2: x + 7 = 15
+Rank 3: x + 9 = 20
+
+이걸 버리고:
+
+Rank 1: x + 3 = 9
+Rank 2: 4x = 28
+Rank 3: x - 12 = 5
+Rank 4: x / 5 = 7
+Rank 5: x + 48 = 91
+...
+
+이런 식으로 가게 한다.
+
+중요한 설계 원칙
+
+랜덤 식은 문자열을 먼저 만들면 안 됨.
+
+좋은 방식:
+
+1. 정답 x를 먼저 고른다.
+2. 연산 타입을 고른다.
+3. 보조 숫자 a를 고른다.
+4. b를 계산한다.
+5. DisplayText를 만든다.
+6. CorrectAnswer는 이미 알고 있다.
+
+이 방식이면 무한히 문제를 만들 수 있고, 답도 항상 확실함.
+
+Codex에 넣을 프롬프트
+
+같은 Codex 세션에 그대로 넣어.
+
+Replace the hardcoded 3-rank equation evolution with a simple procedural equation generator.
+
+Modify only the existing equation system files unless absolutely necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+
+Do not modify player input, character input binding, enemy actor display logic, UI, weapons, inventory, or AI unless required for compilation.
+
+Goal:
+Wrong answers should increase Rank and generate a new equation procedurally instead of selecting from only three hardcoded equations.
+
+Requirements:
+
+1. Keep EPrototypeEquationType:
+- Direct
+- Add
+- Subtract
+- Multiply
+- Divide
+
+2. Keep FEquationDefinition, but update it if useful.
+
+3. In UEnemyEquationComponent, add procedural generation functions:
+- GenerateEquationForRank(int32 NewRank)
+- GenerateDirectEquation(int32 NewRank)
+- GenerateAddEquation(int32 NewRank)
+- GenerateSubtractEquation(int32 NewRank)
+- GenerateMultiplyEquation(int32 NewRank)
+- GenerateDivideEquation(int32 NewRank)
+
+4. Evolution behavior:
+- On wrong answer, increase Rank by 1.
+- Generate a new equation for the new Rank.
+- Do not cap at Rank 3 anymore.
+- For safety, cap Rank at 999 for now.
+
+5. Starting behavior:
+- Begin with a deterministic beginner Goblin equation by default:
+  x + 5 = 10
+  answer 5
+  rank 1
+
+6. After the first wrong answer:
+- Generate procedural equations based on Rank.
+
+7. Difficulty scaling:
+Use Rank to increase number ranges.
+
+Suggested ranges:
+- MaxAnswer = 10 + Rank * 5
+- MaxOperand = 5 + Rank * 3
+
+Clamp both to reasonable values to avoid int overflow:
+- MaxAnswer <= 100000
+- MaxOperand <= 10000
+
+8. Equation generation rules:
+
+Direct:
+- Pick answer x
+- Display: x = answer
+- CorrectAnswer = answer
+
+Add:
+- Pick answer x
+- Pick a
+- b = x + a
+- Display: x + a = b
+- CorrectAnswer = x
+
+Subtract:
+- Pick answer x
+- Pick a
+- b = x - a
+- Display: x - a = b
+- CorrectAnswer = x
+
+Multiply:
+- Pick answer x
+- Pick a from 2 to MaxOperand
+- b = a * x
+- Display: a x = b
+- CorrectAnswer = x
+
+Divide:
+- Pick answer x
+- Pick a from 2 to MaxOperand
+- b = x / a style equations should stay integer-friendly.
+Use:
+  result = random positive integer
+  x = result * a
+  Display: x / a = result
+  CorrectAnswer = x
+
+9. Equation type selection:
+For now, choose based on Rank:
+- Rank 1 to 2: Add only
+- Rank 3 to 4: Add or Subtract
+- Rank 5 to 6: Add, Subtract, or Multiply
+- Rank 7 and above: Add, Subtract, Multiply, or Divide
+
+Do not use Direct in random evolution yet except if explicitly called.
+
+10. Add BlueprintCallable function:
+- RegenerateEquation()
+
+This should generate a new equation for the current rank.
+
+11. Add BlueprintCallable function:
+- SetRankAndGenerateEquation(int32 NewRank)
+
+This should set rank and generate an equation for that rank.
+
+12. Add useful UE_LOG messages when an equation is generated:
+- Rank
+- DisplayText
+- CorrectAnswer
+
+13. Keep beginner-friendly comments.
+
+14. Preserve existing public functions:
+- GetDisplayText()
+- GetCorrectAnswer()
+- GetRank()
+- IsAnswerCorrect()
+- SubmitAnswer()
+
+15. Update SubmitAnswer:
+- Correct answer returns true.
+- Wrong answer evolves procedurally and returns false.
+
+Before finalizing, explain:
+1. Which files were changed
+2. How procedural generation works
+3. How Rank affects difficulty
+4. How to test in Play mode
+Codex 끝나면 테스트
+
+컴파일:
+
+Ctrl + Alt + F11
+
+Play 모드 테스트:
+
+테스트 1, 초기 정답
+5 입력
+X
+
+결과:
+
+AXIOM EXECUTION
+
+초기 공식은 아직 x + 5 = 10이어야 함.
+
+테스트 2, procedural evolution
+
+새로 Play 시작.
+
+4 입력
+X
+
+결과:
+
+Wrong Answer. Enemy evolved.
+새로운 공식 표시
+
+그다음 일부러 계속 틀려:
+
+1 입력
+X
+1 입력
+X
+1 입력
+X
+
+결과:
+
+Rank 계속 상승
+공식 계속 바뀜
+숫자 점점 커짐
+Rank 5 이후 곱셈 나올 수 있음
+Rank 7 이후 나눗셈 나올 수 있음
+이번 단계 성공 기준
+[ ] 첫 공식은 여전히 x + 5 = 10
+[ ] 5 입력 + X = AXIOM EXECUTION
+[ ] 오답 시 Rank 2로 진화
+[ ] Rank 3 이상에서도 계속 새 공식 생성
+[ ] Rank 3에서 멈추지 않음
+[ ] 숫자 범위가 Rank에 따라 커짐
+[ ] 컴파일 성공
+
+이거 되면 이제 “문제 3개짜리 야매”에서 벗어나서, 진짜 게임 시스템의 기반이 생긴다.
+
+* * *
+
+**You:**
+
+잘 작동은 함... 이제 랜덤 공식에 답/오답 제대로 함. 문제: 난이도... 너무 랜덤. 뭐... 프로토타입 적이라 문제는 없고 앞으로 더 세분화 될건 알지만, just so you know, 어려운 문제에서 쉬운문제로 가는거 언젠간 막아야 함
+
+* * *
+
+**ChatGPT:**
+
+맞음. 이건 지금 시스템의 정상적인 한계임.
+
+현재 procedural generator는 대충 이런 구조라서:
+
+Rank 올라감
+→ 숫자 범위 MaxAnswer, MaxOperand 증가
+→ 그 안에서 랜덤 생성
+
+그래서 이런 문제가 생길 수 있음:
+
+Rank 8: 23x = 184
+Rank 9: x + 2 = 5
+
+즉, 최대 난이도 범위는 커지는데, 최소 난이도는 보장 안 됨.
+그래서 어려운 문제 다음에 쉬운 문제가 나오는 게 가능함.
+
+결론
+
+지금은 프로토타입이라 괜찮음.
+하지만 정식 시스템에서는 반드시 막아야 함.
+
+앞으로 필요한 건 단순 랜덤이 아니라:
+
+Rank별 난이도 하한선 + 상한선
+
+또는 더 정확히:
+
+Equation Difficulty Score
+
+임.
+
+나중에 들어갈 구조
+
+각 방정식이 생성될 때 점수를 매김:
+
+x + 5 = 10        difficulty 10
+x + 47 = 91       difficulty 35
+8x = 72           difficulty 45
+x / 13 = 9        difficulty 55
+37x = 999         difficulty 90
+
+그리고 Rank별 허용 난이도를 둠:
+
+Rank 1: 5~10
+Rank 2: 10~20
+Rank 3: 20~30
+Rank 4: 30~40
+Rank 5: 40~50
+...
+
+생성된 식이 현재 Rank의 난이도 범위보다 너무 쉬우면 버림.
+
+Generate equation
+→ Calculate difficulty score
+→ Too easy? regenerate
+→ Too hard? regenerate
+→ acceptable? use it
+
+이렇게 가야 함.
+
+지금 바로 고칠 수도 있음
+
+내 추천은 지금 바로 v1만 넣는 것임.
+왜냐면 equation generator를 방금 만든 상태라서, 지금 잡아두면 나중에 덜 꼬임.
+
+너무 복잡하게 말고, 일단 이렇게만:
+
+Rank가 올라갈수록 최소 answer도 커짐
+Rank가 올라갈수록 최소 operand도 커짐
+Rank가 올라갈수록 쉬운 연산 타입 비중 감소
+
+예:
+
+Rank 2: x + a = b
+Rank 3~4: x + a, x - a
+Rank 5~6: 작은 곱셈 추가
+Rank 7~10: 나눗셈 추가
+Rank 11+: 더 큰 숫자 사용
+
+그리고 최소값:
+
+MinAnswer = max(1, Rank * 2)
+MaxAnswer = 10 + Rank * 5
+
+MinOperand = max(1, Rank)
+MaxOperand = 5 + Rank * 3
+
+이러면 적어도 Rank 10에서 x + 1 = 2 같은 건 잘 안 나옴.
+
+지금 할 일
+
+먼저 현재 procedural generator가 잘 작동했으니 커밋.
+
+GitHub Desktop:
+
+Summary:
+Add procedural equation generation
+
+Description:
+Replaced hardcoded rank equations with procedural generation that scales by rank and supports add, subtract, multiply, and divide equations.
+
+Commit + Push.
+
+다음 작업: Phase 1-E.1, 난이도 역행 방지 v1
+
+Codex에 이거 넣어.
+
+Improve procedural equation difficulty scaling so higher ranks do not generate trivially easy equations.
+
+Modify only the equation system files unless absolutely necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+
+Do not modify player input, character input binding, enemy actor display logic, UI, weapons, inventory, or AI.
+
+Goal:
+The equation generator should still be simple, but higher ranks should not randomly produce equations that are much easier than previous lower-rank equations.
+
+Requirements:
+
+1. Add helper functions in UEnemyEquationComponent:
+- GetMinAnswerForRank(int32 Rank) const
+- GetMaxAnswerForRank(int32 Rank) const
+- GetMinOperandForRank(int32 Rank) const
+- GetMaxOperandForRank(int32 Rank) const
+
+2. Use both minimum and maximum ranges when generating values.
+
+Suggested formulas:
+- MinAnswer = FMath::Clamp(Rank * 2, 1, 90000)
+- MaxAnswer = FMath::Clamp(10 + Rank * 5, MinAnswer + 1, 100000)
+- MinOperand = FMath::Clamp(Rank, 1, 9000)
+- MaxOperand = FMath::Clamp(5 + Rank * 3, MinOperand + 1, 10000)
+
+3. For Add equations:
+- answer x should be between MinAnswer and MaxAnswer
+- a should be between MinOperand and MaxOperand
+- b = x + a
+
+4. For Subtract equations:
+- answer x should be between MinAnswer and MaxAnswer
+- a should be between MinOperand and MaxOperand
+- b = x - a
+- Negative b is allowed for now, but the correct answer should remain non-negative.
+
+5. For Multiply equations:
+- answer x should be between MinAnswer and MaxAnswer
+- a should be between max(2, MinOperand) and MaxOperand
+- b = a * x
+- Prevent int overflow safely.
+
+6. For Divide equations:
+- result should be between MinAnswer and MaxAnswer
+- a should be between max(2, MinOperand) and MaxOperand
+- correct answer x = result * a
+- Display: x / a = result
+- Prevent int overflow safely.
+
+7. Keep Rank 1 deterministic:
+- x + 5 = 10
+- answer 5
+
+8. Add optional function:
+- CalculateEquationDifficultyScore(const FEquationDefinition& Equation) const
+
+This can be simple for now. It should return a rough score based on:
+- Rank
+- Equation type
+- Answer size
+- Operand size
+
+9. Add UE_LOG output whenever an equation is generated:
+- Rank
+- MinAnswer / MaxAnswer
+- MinOperand / MaxOperand
+- DisplayText
+- CorrectAnswer
+- DifficultyScore
+
+10. Preserve existing public API:
+- GetDisplayText()
+- GetCorrectAnswer()
+- GetRank()
+- IsAnswerCorrect()
+- SubmitAnswer()
+- RegenerateEquation()
+- SetRankAndGenerateEquation()
+
+11. Keep the code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. How the new min/max difficulty ranges work
+3. Why this prevents high ranks from producing extremely easy equations
+4. How to test it in Play mode
+테스트 방법
+
+Play에서 일부러 계속 틀려.
+
+1 입력
+X
+1 입력
+X
+1 입력
+X
+...
+
+확인할 것:
+
+Rank가 올라갈수록 숫자 최소값도 같이 커지는가?
+Rank 8 이후에 x + 1 = 2 같은 너무 쉬운 문제가 안 나오는가?
+곱셈/나눗셈에서 숫자가 너무 폭발하지 않는가?
+정답 입력하면 여전히 AXIOM EXECUTION 되는가?
+
+지금 이거까지 잡으면 equation generator v1은 훨씬 건강해짐.
+
+* * *
+
+**You:**
+
+질문: 어케 난이도 설정이 작동하는거임. 너 천재같아? AI 달음? 어케 구별하게 하는겨?
+
+* * *
+
+**ChatGPT:**
+
+천재 AI처럼 “문제가 진짜 어렵다”를 이해하는 건 아님.
+지금 단계에서는 난이도를 수학적으로 채점하는 척하는 규칙 기반 시스템임.
+
+핵심은 이거야:
+
+쉬운 숫자가 나오지 못하게 최소값을 올린다.
+어려운 연산은 높은 Rank에서만 나오게 한다.
+생성된 문제에 대충 Difficulty Score를 붙인다.
+1. 현재 방식, 최소/최대 범위로 난이도 조절
+
+예를 들어 Rank가 올라가면 숫자 범위가 이렇게 커짐:
+
+Rank 1:
+MinAnswer = 2
+MaxAnswer = 15
+
+Rank 5:
+MinAnswer = 10
+MaxAnswer = 35
+
+Rank 10:
+MinAnswer = 20
+MaxAnswer = 60
+
+Rank 50:
+MinAnswer = 100
+MaxAnswer = 260
+
+그래서 Rank 10에서 이런 식이 나오는 걸 줄임:
+
+x + 1 = 2
+
+왜냐면 Rank 10이면 정답 x가 최소 20 이상이어야 하니까.
+
+대신 이런 식이 나옴:
+
+x + 14 = 49
+x = 35
+
+즉, “난이도 이해”라기보다는 낮은 숫자를 못 뽑게 막는 것임.
+
+2. 연산 타입도 Rank로 잠금 해제
+
+초반에는 쉬운 연산만 나오게 함:
+
+Rank 1~2:
+덧셈만
+
+Rank 3~4:
+덧셈, 뺄셈
+
+Rank 5~6:
+덧셈, 뺄셈, 곱셈
+
+Rank 7 이상:
+덧셈, 뺄셈, 곱셈, 나눗셈
+
+그래서 처음부터 이런 거 안 나옴:
+
+37x = 1443
+x / 28 = 19
+
+이 방식은 게임 난이도 곡선 만들 때 제일 기본적인 방식임.
+
+3. Difficulty Score는 “채점표”임
+
+예를 들어 식 하나가 만들어졌다고 하자.
+
+23x = 391
+
+이걸 보고 시스템이 대충 점수화함:
+
+기본 점수: Rank 점수
+연산 점수: 곱셈이라 +높음
+정답 크기 점수: x가 17이라 +조금
+피연산자 점수: 23이라 +조금
+
+그래서 이 문제는 점수가 꽤 높음.
+
+반대로:
+
+x + 2 = 7
+
+이건:
+
+덧셈이라 낮음
+숫자 작음
+정답 작음
+
+점수가 낮음.
+
+4. 진짜 난이도 판단은 나중에 더 정교하게 해야 함
+
+지금 방식은 단순함.
+실제로는 이런 요소도 고려해야 함:
+
+암산 쉬운 숫자인가?
+10, 20, 50, 100 같은 친숙한 수인가?
+구구단 안에 들어가는가?
+나눗셈이 깔끔한가?
+음수가 나오는가?
+자리수가 몇 개인가?
+받아올림/빌림이 필요한가?
+소수/분수/괄호가 있는가?
+플레이어가 최근에 비슷한 문제를 풀었는가?
+
+예를 들어 둘 다 Rank 10 문제여도:
+
+10x = 100
+
+이건 쉬움.
+
+근데:
+
+17x = 391
+
+이건 훨씬 어려움.
+
+둘 다 곱셈이고 숫자 범위도 비슷하지만, 암산 난이도는 다름.
+그래서 나중에는 Difficulty Score를 더 똑똑하게 만들면 됨.
+
+5. 나중에 갈 진짜 시스템
+
+최종적으로는 이렇게 갈 수 있음:
+
+Generate 20 candidate equations
+→ 각 문제 Difficulty Score 계산
+→ 현재 Rank에 맞는 난이도 범위 안의 문제만 선택
+→ 너무 쉬운 문제 버림
+→ 너무 어려운 문제도 버림
+→ 최근 나온 문제와 비슷하면 버림
+→ 최종 하나 선택
+
+예시:
+
+Rank 10 목표 난이도: 45~55
+
+후보 1: x + 2 = 23, 점수 20 → 너무 쉬움, 버림
+후보 2: 47x = 2256, 점수 80 → 너무 어려움, 버림
+후보 3: x - 19 = 34, 점수 48 → 채택
+
+이러면 난이도 곡선이 훨씬 안정됨.
+
+핵심 정리
+
+지금 난이도 시스템은 “AI가 문제를 이해하는 것”이 아니라:
+
+Rank가 높을수록
+낮은 숫자는 못 나오게 하고,
+어려운 연산을 열고,
+문제에 점수를 매겨서
+너무 쉬운 문제를 줄이는 방식
+
+임.
+
+지금은 v1으로 충분함.
+나중에 진짜 게임답게 만들려면 Difficulty Score + 후보 생성 + 필터링 구조로 가면 됨.
+
+* * *
+
+**You:**
+
+연산 타입도 Rank로 잠금 해제인건 아직 적이 하나라 그런거지? 
+우리 연산타입 Rank가 아닌 종족으로 하자고 했자나
+
+* * *
+
+**ChatGPT:**
+
+맞음. 네 말이 정확함.
+
+연산 타입을 Rank로 해금하는 건 지금 임시 야매였고, GDD 기준으로는 틀린 방향에 가까움.
+우리가 정한 설계는 이거였음:
+
+종족 = 공식 타입을 결정
+Rank = 숫자 크기와 난이도를 증가
+Armor = 기본 공식 위에 복잡성을 추가
+
+즉, 이게 맞음:
+
+Goblin Rank 1: x + 5 = 10
+Goblin Rank 5: x + 37 = 91
+Goblin Rank 20: x - 124 = 57
+
+하지만 이건 틀린 방향:
+
+Goblin Rank 1: x + 5 = 10
+Goblin Rank 5: 7x = 42
+Goblin Rank 7: x / 8 = 6
+
+왜냐면 그러면 고블린이 갑자기 오크/비스트맨 역할을 먹어버림.
+
+최종 원칙
+Slime
+x = n
+Goblin
+x + a = b
+x - a = b
+Orc
+ax = b
+Beastman / Centaur
+x / a = b
+Frok
+x + a = b
+단, x는 소수
+Skeleton
+x + a = b
+x - a = b
+단, x는 음수 가능
+Armored Goblin
+Base: x + a = b
+Armor: ×n
+Displayed: (x + a) × n = b × n
+Rank가 해야 하는 일
+
+Rank는 연산 타입을 바꾸는 게 아니라, 이런 걸 바꿔야 함:
+
+숫자 크기 증가
+operand 크기 증가
+공격성 증가
+그로기 저항 증가
+내구도 요구량 증가
+Armor 추가 확률 증가
+오답 페널티 증가
+
+예시:
+
+Goblin Rank 1:
+x + 5 = 10
+
+Goblin Rank 3:
+x - 12 = 8
+
+Goblin Rank 10:
+x + 47 = 103
+
+Goblin Rank 30:
+x - 211 = 489
+
+고블린은 계속 덧셈/뺄셈 몬스터여야 함.
+
+지금 코드에서 고쳐야 할 부분
+
+현재 Codex에게 시킨 이 부분이 임시였음:
+
+Rank 1~2: Add
+Rank 3~4: Add/Subtract
+Rank 5~6: Add/Subtract/Multiply
+Rank 7+: Add/Subtract/Multiply/Divide
+
+이걸 이렇게 바꿔야 함:
+
+EnemySpecies가 Slime이면 Direct만
+EnemySpecies가 Goblin이면 Add/Subtract만
+EnemySpecies가 Orc이면 Multiply만
+EnemySpecies가 Beastman이면 Divide만
+
+그리고 Rank는 숫자 범위만 올림.
+
+지금 바로 고치는 게 맞음
+
+이건 핵심 설계 방향이라 지금 잡는 게 좋다.
+다음 작업은 Species-based Equation Generator v1으로 가자.
+
+Codex에 이거 넣어.
+
+Refactor the procedural equation generator so equation type is determined by enemy species/formula type, not by Rank.
+
+Modify only the equation system and prototype enemy files unless absolutely necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp
+
+Do not modify player input, character input binding, UI widgets, weapons, inventory, animation, or AI.
+
+Design rule:
+Species/formula type determines what kind of equation the enemy can generate.
+Rank only scales difficulty, number ranges, and future aggression.
+Rank should not cause a Goblin to become a multiplication or division enemy.
+
+Requirements:
+
+1. Add enum EPrototypeEnemySpecies or EPrototypeFormulaFamily with:
+- Slime
+- Goblin
+- Orc
+- Beastman
+- Frok
+- Skeleton
+- ArmoredGoblin
+
+Use whichever name is cleaner, but keep it prototype-focused.
+
+2. Add a species/formula family property to UEnemyEquationComponent:
+- Default should be Goblin.
+- Make it EditAnywhere and BlueprintReadOnly or BlueprintReadWrite so it can be changed in the editor later.
+
+3. Update GenerateEquationForRank(int32 NewRank):
+It should choose equation type based on species/formula family:
+
+Slime:
+- Direct only
+- x = n
+
+Goblin:
+- Add or Subtract only
+- x + a = b
+- x - a = b
+
+Orc:
+- Multiply only
+- a x = b
+
+Beastman:
+- Divide only
+- x / a = b
+
+Frok:
+- Add only for now
+- Correct answer should be prime if practical.
+- If prime generation is too much, add a helper IsPrime(int32 Value) and GeneratePrimeAnswerForRank(int32 Rank).
+
+Skeleton:
+- Add or Subtract only for now.
+- For this prototype, keep answer non-negative unless negative input support already exists.
+- Add comments that negative answers will be added later.
+
+ArmoredGoblin:
+- For now, generate the same base equations as Goblin.
+- Do not implement Mathematical Armor yet.
+- Add comments that armor will be added later.
+
+4. Remove or stop using the current Rank-based equation type unlock logic:
+- Rank 1-2 Add only
+- Rank 3-4 Add/Subtract
+- Rank 5-6 Add/Subtract/Multiply
+- Rank 7+ Add/Subtract/Multiply/Divide
+
+That logic should no longer determine the enemy's equation family.
+
+5. Keep Rank 1 default deterministic for Goblin:
+- x + 5 = 10
+- CorrectAnswer = 5
+- Rank = 1
+
+6. After wrong answers:
+- Rank increases by 1.
+- New equation is generated according to current species/formula family.
+- For Goblin, this means Add/Subtract only, forever.
+
+7. Keep the existing difficulty range helpers:
+- GetMinAnswerForRank
+- GetMaxAnswerForRank
+- GetMinOperandForRank
+- GetMaxOperandForRank
+
+8. Update UE_LOG when generating equations:
+Print:
+- Species/formula family
+- Rank
+- DisplayText
+- CorrectAnswer
+- DifficultyScore if it exists
+
+9. Preserve existing public API:
+- GetDisplayText()
+- GetCorrectAnswer()
+- GetRank()
+- IsAnswerCorrect()
+- SubmitAnswer()
+- RegenerateEquation()
+- SetRankAndGenerateEquation()
+
+10. Keep beginner-friendly comments.
+
+Before finalizing, explain:
+1. Which files changed
+2. How species/formula family now controls equation type
+3. What Rank controls now
+4. How to test that Goblin no longer generates multiplication or division equations
+테스트 방법
+
+Play에서 고블린 상대로 계속 오답 넣어.
+
+1 입력
+X
+1 입력
+X
+1 입력
+X
+1 입력
+X
+...
+
+확인할 것:
+
+Rank는 계속 오른다.
+숫자는 점점 커진다.
+하지만 Goblin은 계속 x + a = b 또는 x - a = b만 나온다.
+곱셈 ax = b 안 나와야 함.
+나눗셈 x / a = b 안 나와야 함.
+
+이게 맞는 방향임.
+Rank는 난이도 스케일러, 종족은 수학 타입.
+
+* * *
+
+**You:**
+
+흠.... it works. Are we coming back to this or we solving this rn?
+
+* * *
+
+**ChatGPT:**
+
+Come back later.
+지금은 여기서 더 깊게 파면 안 됨.
+
+방금 해결한 건 중요한 구조 문제였음:
+
+종족 = 공식 타입
+Rank = 숫자 크기/난이도
+
+이건 지금 고친 게 맞음.
+
+근데 남은 문제:
+
+난이도 점수 정교화
+너무 쉬운 문제 필터링
+후보 여러 개 생성 후 선택
+최근 문제 반복 방지
+구구단/암산 난이도 판단
+
+이건 밸런싱/커리큘럼 시스템이라 지금 하면 너무 깊게 빠짐.
+
+지금 상태는 충분히 좋음
+
+현재 핵심 루프:
+
+플레이어 숫자 입력
+→ X 제출
+→ 적이 정답 검사
+→ 정답이면 AXIOM EXECUTION
+→ 오답이면 Rank 상승
+→ 종족 공식 타입 유지하면서 새 문제 생성
+
+이 정도면 다음 시스템으로 넘어가도 됨.
+
+지금 할 일
+
+먼저 커밋.
+
+GitHub Desktop:
+
+Summary:
+Refactor equations by enemy species
+
+Description:
+Updated procedural equation generation so enemy species controls equation type while rank controls difficulty scaling.
+
+Commit + Push.
+
+TODO로 남길 것
+
+프로젝트 루트에 TODO.md 있으면 추가. 없으면 새로 만들어도 됨.
+
+Markdown
+# TODO
+
+## Equation Difficulty
+
+- Current procedural generator works, but difficulty is still rough.
+- Species controls equation family.
+- Rank controls number ranges.
+- Later, add proper DifficultyScore filtering.
+- Later, generate multiple candidate equations and choose one within target difficulty range.
+- Prevent high-rank enemies from generating equations that are too easy.
+- Consider mental-math difficulty, digit count, multiplication table familiarity, clean divisibility, and recent repetition.
+다음 단계: Operation Weapon v0
+
+이제 진짜 GDD 핵심으로 가야 함.
+
+지금은 정답을 바로 찔러 죽이는 것만 됨.
+다음은 이걸 만들어야 함:
+
+적: x + 5 = 10
+플레이어: 5 입력
+Subtraction action 사용
+결과: x = 5
+그다음 5 입력
+X 제출
+AXIOM EXECUTION
+
+즉, 뺄셈 무기로 식을 변형하는 첫 단계.
+
+다음 Codex 프롬프트
+
+같은 세션에 넣어.
+
+Add prototype operation submission for equation transformation.
+
+Goal:
+Allow the player to apply a subtraction operation to the nearest equation enemy using the current input number.
+
+This is still prototype-only. Do not create real weapons, animations, inventory, or UI widgets yet.
+
+Modify only what is necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp if needed
+
+Requirements:
+
+1. Add a way for UEnemyEquationComponent to apply a subtraction operation to the current equation.
+
+Add BlueprintCallable function:
+- ApplySubtractionOperation(int32 Value)
+
+Behavior:
+- It should apply "- Value" to both sides of the equation where supported.
+- For the prototype, support at least Goblin Add/Subtract equations.
+
+Examples:
+
+If current equation is:
+x + 5 = 10
+
+ApplySubtractionOperation(5)
+
+Result:
+x = 5
+CorrectAnswer remains 5
+EquationType becomes Direct
+DisplayText becomes "x = 5"
+
+If current equation is:
+x + 7 = 15
+
+ApplySubtractionOperation(7)
+
+Result:
+x = 8
+
+If current equation is:
+x - 4 = 9
+
+ApplySubtractionOperation(-4) is not supported yet.
+For now, keep this simple and add comments that broader inverse-operation support comes later.
+
+2. Add a BlueprintCallable function to APrototypeEquationEnemy:
+- ApplySubtractionToEnemy(int32 Value)
+
+This should call EquationComponent->ApplySubtractionOperation(Value) and refresh the displayed equation.
+
+3. In APythagoreanHarmonyCharacter:
+- Bind a prototype key to apply subtraction to nearest equation enemy.
+- Use key Q for now.
+- Q should read the current player input.
+- If no input, show "No input."
+- If no enemy in range, show "No equation enemy in range."
+- If enemy found, call ApplySubtractionToEnemy(CurrentInput).
+- After applying the operation, clear player input.
+- Print on-screen debug messages:
+  - "Applied Subtraction: -N"
+  - "Equation transformed."
+
+4. Do not change X answer submission behavior.
+
+5. Keep code beginner-readable.
+
+6. Add UE_LOG messages when an operation is applied.
+
+Before finalizing, explain:
+1. Which files changed
+2. How subtraction operation works
+3. Which key was bound
+4. How to test in Play mode
+테스트 방법
+
+Play에서:
+
+고블린: x + 5 = 10
+5 입력
+Q 누름
+
+성공하면:
+
+x = 5
+
+그 다음:
+
+5 입력
+X 누름
+
+성공하면:
+
+AXIOM EXECUTION
+
+이거 되면 드디어 수학이 공격으로 식을 바꾸는 첫 루프가 완성됨.
+
+* * *
+
+**You:**
+
+LoginId:0b1be43d4f1e97eb0df13bb514cc791d
+EpicAccountId:66dc3235020943d7b8b91d014f3ef265
+
+Fatal error: [File:D:\build\++UE5\Sync\Engine\Source\Runtime\CoreUObject\Private\Templates\Casts.cpp] [Line: 10] 
+Cast of Object /Script/CoreUObject.Default__Object to Actor failed
+
+
+
+
+UnrealEditor_CoreUObject
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_UnrealEd
+UnrealEditor_UnrealEd
+UnrealEditor_UnrealEd
+UnrealEditor_UnrealEd
+UnrealEditor_UnrealEd
+UnrealEditor_UnrealEd
+UnrealEditor
+UnrealEditor
+UnrealEditor
+UnrealEditor
+UnrealEditor
+UnrealEditor
+kernel32
+ntdll
+
+* * *
+
+**ChatGPT:**
+
+오케이, 이건 게임 로직 문제가 아니라 C++ 코드에서 잘못된 Cast가 들어간 크래시임.
+
+핵심 에러:
+
+Cast of Object /Script/CoreUObject.Default__Object to Actor failed
+
+뜻:
+
+UObject를 AActor로 강제 캐스팅하려고 했는데,
+그 UObject가 실제 Actor가 아니라서 Unreal이 즉시 죽음.
+
+가장 가능성 높은 원인:
+
+CastChecked<AActor>(...)
+
+또는
+
+Cast<AActor>(...)
+
+를 잘못된 대상에 사용했거나, GetDefaultObject, Default__Object, UObject 같은 걸 Actor라고 착각한 코드가 들어감.
+
+지금 하지 말 것
+Unreal Editor 계속 다시 열기
+Live Coding 계속 누르기
+새 기능 계속 추가하기
+
+먼저 최근 Codex 변경을 고쳐야 함.
+
+1단계: Codex에게 “디버그만” 시키기
+
+Codex에 이거 그대로 넣어.
+
+Unreal crashed after the last changes with this error:
+
+Fatal error:
+Cast of Object /Script/CoreUObject.Default__Object to Actor failed
+
+Do not add new features.
+
+Inspect the most recent changes related to the subtraction operation and player character bindings.
+
+Find any unsafe cast from UObject to AActor or any use of CastChecked that could be causing this crash.
+
+Likely files:
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+
+Requirements:
+1. Search for CastChecked, Cast<AActor>, GetDefaultObject, Default__Object, StaticClass()->GetDefaultObject, and any place where UObject is treated as an Actor.
+2. Replace unsafe casts with safe Cast<> and null checks.
+3. Do not cast class default objects to Actor.
+4. Do not use GetDefaultObject as a world actor.
+5. Keep the existing subtraction feature if possible, but prioritize fixing the crash.
+6. If the issue is in the new subtraction operation, simplify it.
+7. Do not modify unrelated systems.
+8. Explain exactly what caused the crash and which lines were changed.
+2단계: 만약 Unreal이 안 열리면 Visual Studio에서 빌드
+
+Unreal Editor 닫고.
+
+Visual Studio에서:
+
+E:\UE Project\PythagoreanHarmony\PythagoreanHarmony.sln
+
+열기.
+
+상단 설정:
+
+Development Editor
+Win64
+
+그리고:
+
+Build → Build Solution
+
+여기서 에러가 뜨면 그 에러가 더 중요함.
+
+3단계: 그래도 계속 크래시하면 최근 변경 롤백
+
+GitHub Desktop에서 아직 커밋 안 했으면 간단함.
+
+왼쪽 변경 파일에서 최근 수정된 파일들:
+
+PythagoreanHarmonyCharacter.h
+PythagoreanHarmonyCharacter.cpp
+PrototypeEquationEnemy.h
+PrototypeEquationEnemy.cpp
+EnemyEquationComponent.h
+EnemyEquationComponent.cpp
+EquationTypes.h
+
+중에서 이번 Q/subtraction 작업으로 바뀐 것만 우클릭해서:
+
+Discard changes
+
+그러면 마지막 정상 커밋 상태로 돌아감.
+
+너는 이미 이전 단계에서 잘 작동하는 상태를 커밋했으니까, 최악의 경우에도 복구 가능함.
+
+지금 내 판단
+
+가장 의심되는 건 Codex가 Q 키 처리나 nearest enemy 찾기 쪽에서 뭔가를 이렇게 잘못 만든 경우임:
+
+C++
+AActor* Actor = CastChecked<AActor>(SomeObject);
+
+근데 SomeObject가 월드에 배치된 Actor가 아니라 Default__Object라서 터진 것.
+
+정상적인 방식은 이런 식이어야 함:
+
+C++
+APrototypeEquationEnemy* Enemy = FindNearestPrototypeEquationEnemy(2000.0f);
+
+if (!Enemy)
+{
+    PrintPrototypeDebugMessage(TEXT("No equation enemy in range."));
+    return;
+}
+
+즉, 굳이 UObject → AActor 캐스팅할 필요가 거의 없음.
+
+지금 순서
+Codex에 위 디버그 프롬프트 넣기
+수정 후 Visual Studio 또는 Live Coding 컴파일
+Unreal 열림 확인
+Play에서 기존 X 제출이 아직 되는지 확인
+그 다음 Q subtraction 테스트
+
+Codex 답변이랑 바뀐 파일 목록 보내줘. 그걸 보고 Q 기능을 살릴지, 안전하게 다시 짤지 판단하자.
+
+* * *
+
+**You:**
+
+기능 성공적
+Fixed the likely crash path without adding features.
+
+I searched the requested files for CastChecked, Cast<AActor>, GetDefaultObject, Default__Object, and StaticClass()->GetDefaultObject. There were no explicit unsafe casts in our prototype code. The crash log shows the failure happened right after Live Coding re-instanced EnemyEquationComponent / PrototypeEquationEnemy, then PIE world partition streaming began. The risky bit in our code was TActorIterator<APrototypeEquationEnemy>, because typed actor iterators can use checked casts internally during iteration.
+
+Changed only:
+
+[PythagoreanHarmonyCharacter.cpp](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.cpp:14>)
+
+Line changes:
+- Line 14: replaced EngineUtils.h with Engine/Level.h
+- Lines 281-321: rewrote FindNearestPrototypeEquationEnemy
+- Lines 293-309: removed typed actor iteration and now manually scans level actors, skips null/template/CDO actors, and uses safe Cast<APrototypeEquationEnemy> with null checks
+
+The nearest-enemy search now avoids class default objects and does not cast default objects to actors.
+
+Verification: full Unreal build succeeded this time.
+
+* * *
+
+**ChatGPT:**
+
+좋아. 크래시 픽스 + Q 기능 성공이면 Phase 1-F 완료로 처리.
+
+중요한 포인트:
+
+문제 원인:
+TActorIterator<APrototypeEquationEnemy> 쪽 typed iteration이 Live Coding/PIE reinstance 상황에서 CDO 또는 template object를 건드릴 가능성
+
+해결:
+Level actor 수동 스캔
+→ null/template/CDO skip
+→ safe Cast<APrototypeEquationEnemy>
+
+이건 좋은 수정임. 특히 Unreal 초반 개발에서 Live Coding + 새 C++ Actor/Component 조합은 이런 이상한 크래시가 종종 생김.
+
+지금 바로 커밋
+
+GitHub Desktop:
+
+Summary:
+Add prototype subtraction operation
+
+Description:
+Added Q key subtraction operation for equation transformation and fixed nearest enemy lookup to avoid unsafe actor iteration crashes.
+
+Commit + Push.
+
+현재까지 구현된 게임 루프
+
+이제 실제로 이게 됨:
+
+고블린: x + 5 = 10
+
+5 입력
+Q 누름
+→ x = 5
+
+5 입력
+X 누름
+→ AXIOM EXECUTION
+
+그리고 이것도 됨:
+
+4 입력
+X 누름
+→ 오답
+→ Rank 상승
+→ Goblin 계열 공식으로 새 문제 생성
+
+이제 진짜 “수학이 액션으로 식을 바꾸는 구조”가 생겼음.
+
+다음: Phase 1-G, Operation Result Feedback 정리
+
+지금 Q가 기능은 되는데, 앞으로 연산 무기를 늘리려면 Q = Subtraction 같은 임시 키 구조를 정리해야 함.
+
+다음 목표는 간단함:
+
+연산 결과가 성공했는지 실패했는지 반환하게 만들기
+지원 안 되는 식이면 실패 메시지 띄우기
+
+왜냐면 지금은 나중에 이런 상황이 생김:
+
+Orc: 5x = 25
+Q로 -5 적용
+
+이건 수학적으로 양변에 -5를 하면:
+
+5x - 5 = 20
+
+인데 우리 단순 시스템은 아직 이런 복합식을 지원 안 함.
+그래서 이럴 때는 실패 처리해야 함:
+
+Operation not supported yet.
+Codex에 넣을 프롬프트
+Improve the prototype subtraction operation so it reports success or failure cleanly.
+
+Modify only what is necessary.
+
+Likely files:
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp
+- PythagoreanHarmonyCharacter.cpp
+- PythagoreanHarmonyCharacter.h if needed
+
+Do not add new operation types yet.
+Do not add weapons, animations, UI widgets, inventory, or AI.
+
+Goal:
+The subtraction operation should return whether it actually transformed the equation.
+
+Requirements:
+
+1. Change or add a function in UEnemyEquationComponent:
+- bool ApplySubtractionOperation(int32 Value)
+
+It should return true only if the equation was successfully transformed.
+
+2. Supported transformation for now:
+
+If current equation is Add:
+x + a = b
+
+And Value == a:
+
+Result:
+x = CorrectAnswer
+EquationType = Direct
+DisplayText = "x = CorrectAnswer"
+Return true
+
+Example:
+x + 5 = 10
+ApplySubtractionOperation(5)
+Result: x = 5
+
+3. If current equation is already Direct:
+- Return false
+- Do not change equation
+
+4. If current equation is Subtract, Multiply, Divide, or unsupported:
+- Return false for now
+- Do not change equation
+- Add comments that broader operation algebra comes later
+
+5. In APrototypeEquationEnemy:
+- Update ApplySubtractionToEnemy(int32 Value) to return bool
+- It should call EquationComponent->ApplySubtractionOperation(Value)
+- If true, refresh the displayed equation
+- If false, do not change display except possibly refresh existing text
+
+6. In APythagoreanHarmonyCharacter:
+- When Q is pressed:
+  - If operation succeeds, show "Equation transformed."
+  - If operation fails, show "Operation not supported yet."
+- Still clear input after attempting the operation.
+- Keep existing no input and no enemy messages.
+
+7. Add UE_LOG messages:
+- Operation succeeded
+- Operation failed with reason if simple
+
+8. Preserve existing X answer submission behavior.
+
+9. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. What operation cases are supported
+3. What cases fail safely
+4. How to test success and failure in Play mode
+테스트
+성공 테스트
+Enemy: x + 5 = 10
+5 입력
+Q
+
+기대:
+
+x = 5
+Equation transformed.
+실패 테스트 1
+Enemy: x + 5 = 10
+3 입력
+Q
+
+기대:
+
+식 변화 없음
+Operation not supported yet.
+실패 테스트 2
+Enemy: x = 5 상태
+5 입력
+Q
+
+기대:
+
+식 변화 없음
+Operation not supported yet.
+
+이거 끝나면 그다음은 Division Shield, 즉 Armored Goblin 준비 단계로 갈 수 있음.
+
+* * *
+
+**You:**
+
+복합식을 지원이따 한다는거지? 그리고 시작 공식 항상 +5=10인건 일부로고?
+
+* * *
+
+**ChatGPT:**
+
+ㅇㅇ. 둘 다 맞음.
+
+1. 복합식은 나중에 지원
+
+지금 Q 뺄셈은 일부러 좁게 만들고 있음.
+
+현재 지원:
+
+x + 5 = 10
+5 입력
+Q
+→ x = 5
+
+현재 미지원:
+
+5x = 25
+5 입력
+Q
+→ 5x - 5 = 20
+
+이런 식은 수학적으로는 가능하지만, 우리 시스템이 아직 복합식을 표현 못 함. 지금 FEquationDefinition은 단순히:
+
+EquationType
+A
+B
+CorrectAnswer
+DisplayText
+
+정도라서 5x - 5 = 20 같은 다항/복합 구조를 제대로 저장하기엔 부족함.
+
+나중에 필요한 구조는 이런 쪽임:
+
+Expression Tree
+또는
+Step-based Equation State
+또는
+Base Formula + Armor Layer
+
+하지만 지금 그걸 만들면 너무 깊게 빠짐. 그래서 현재는 “지원하는 변형만 성공, 나머지는 실패”가 맞음.
+
+2. 시작 공식 x + 5 = 10은 일부러 고정
+
+이건 튜토리얼 기준 공식임.
+
+이유:
+
+플레이어가 항상 같은 첫 문제를 본다.
+5 입력 + X 처형 테스트가 안정적이다.
+5 입력 + Q 변형 테스트가 안정적이다.
+Codex/Unreal 테스트가 매번 재현 가능하다.
+버그인지 랜덤 문제 때문인지 헷갈리지 않는다.
+
+그래서 Rank 1 기본 Goblin은 고정:
+
+x + 5 = 10
+answer = 5
+
+오답 후부터 procedural로 넘어가는 게 현재 의도임.
+
+현재 철학
+
+지금은 이런 구조:
+
+Rank 1 Goblin = 고정 튜토리얼 문제
+오답 후 Rank 2+ = 종족 기반 랜덤 문제
+
+나중에 실제 게임에서는 이렇게 갈 수 있음:
+
+튜토리얼 미션 = 고정 문제
+일반 전투 = procedural 문제
+보스전 = 수동 설계 문제
+시험/도전 모드 = 난이도 기반 procedural 문제
+
+즉, 시작 공식 고정은 야매가 아니라 테스트와 튜토리얼을 위한 의도된 고정값임.
+
+* * *
+
+**You:**
+
+Operation not supported yet. 잘떠. 문졔: 원래 -123 하면 적용이 됬었는데 더이상 안되. 무조건 맞는 substraction 만 됨. 예전: x+5 에 -13 하면 x-8로 바뀌었었는데...
+Check GitHub code since we didn't push yet.
+
+* * *
+
+**ChatGPT:**
+
+문서 확인: GDD 전체 처리됨, 섹션 1~30까지 확인됨. 현재 로드맵 문서도 전체 처리됨. GDD 기준으로도 사칙연산 무기는 “양변에 같은 연산을 적용”해야 하고, 프로토타입 Phase 4도 Apply -n to both sides가 목표임. 
+
+피타고라스의 조율 만물은 수다 Gdd 바이블
+
+ 
+
+Plan till prototype
+
+결론: 지금 변경은 우리가 너무 좁게 만든 것임.
+GitHub에는 아직 push 안 했으면 최신 local code가 안 보임. 그래서 GitHub 기준으로는 못 봐. 하지만 원인은 거의 확실함.
+
+내가 이전에 시킨 프롬프트에서 이렇게 제한했음:
+
+If current equation is Add:
+x + a = b
+
+And Value == a:
+
+Result:
+x = CorrectAnswer
+Return true
+
+그래서 지금은:
+
+x + 5 = 10
+5 입력 + Q → x = 5
+
+만 되고,
+
+x + 5 = 10
+13 입력 + Q
+
+는 실패하는 게 현재 코드상 정상임.
+
+근데 네 말이 맞음. Subtraction weapon은 -n을 양변에 적용해야 하니까, 13도 적용되어야 함.
+
+예전처럼:
+
+x + 5 = 10
+-13 적용
+→ x - 8 = -3
+
+이게 맞는 방향임. 정답은 여전히 x = 5.
+
+지금 고쳐야 할 방식
+
+ApplySubtractionOperation(int32 Value)를 이렇게 바꿔야 함.
+
+지원해야 하는 케이스:
+
+x + a = b
+- n 적용
+→ x + (a-n) = b-n
+
+결과 변환:
+
+a - n > 0  → x + k = newB
+a - n = 0  → x = CorrectAnswer
+a - n < 0  → x - k = newB
+
+예시:
+
+x + 5 = 10
+Value = 13
+
+newConstant = 5 - 13 = -8
+newB = 10 - 13 = -3
+
+Result:
+x - 8 = -3
+CorrectAnswer stays 5
+
+x - a = b도 지원 가능:
+
+x - 4 = 9
+Value = 3
+
+x - 4 - 3 = 9 - 3
+→ x - 7 = 6
+CorrectAnswer stays 13
+
+Direct도 지원 가능:
+
+x = 5
+Value = 3
+
+x - 3 = 2
+CorrectAnswer stays 5
+
+아직 미지원으로 남겨도 되는 것:
+
+ax = b
+- n 적용 → ax - n = b - n
+
+이건 현재 단순 구조로는 복합식이라 보류.
+
+Codex에 바로 넣을 프롬프트
+Fix the subtraction operation behavior.
+
+The current ApplySubtractionOperation is too strict because it only works when Value exactly equals the Add equation operand. That is wrong for our design.
+
+Design rule:
+A subtraction weapon applies "-Value" to both sides of the equation.
+It should not only work when Value cancels the equation.
+
+Modify only what is necessary.
+
+Likely files:
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp if needed
+- PythagoreanHarmonyCharacter.cpp only if needed
+
+Requirements:
+
+1. Update UEnemyEquationComponent::ApplySubtractionOperation(int32 Value).
+
+2. For Add equations:
+Current form:
+x + A = B
+
+Applying subtraction Value should produce:
+x + (A - Value) = B - Value
+
+If A - Value > 0:
+- EquationType = Add
+- A = A - Value
+- B = B - Value
+- DisplayText = "x + A = B"
+
+If A - Value == 0:
+- EquationType = Direct
+- A = 0
+- B = CorrectAnswer
+- DisplayText = "x = CorrectAnswer"
+
+If A - Value < 0:
+- EquationType = Subtract
+- A = absolute value of (A - Value)
+- B = B - Value
+- DisplayText = "x - A = B"
+
+CorrectAnswer must remain unchanged.
+
+Example:
+x + 5 = 10
+ApplySubtractionOperation(13)
+Result:
+x - 8 = -3
+CorrectAnswer remains 5
+
+3. For Subtract equations:
+Current form:
+x - A = B
+
+Applying subtraction Value should produce:
+x - (A + Value) = B - Value
+
+- EquationType remains Subtract
+- A = A + Value
+- B = B - Value
+- CorrectAnswer unchanged
+- DisplayText updated
+
+Example:
+x - 4 = 9
+ApplySubtractionOperation(3)
+Result:
+x - 7 = 6
+CorrectAnswer remains 13
+
+4. For Direct equations:
+Current form:
+x = B
+
+Applying subtraction Value should produce:
+x - Value = B - Value
+
+- EquationType = Subtract
+- A = Value
+- B = CorrectAnswer - Value
+- CorrectAnswer unchanged
+- DisplayText updated
+
+Example:
+x = 5
+ApplySubtractionOperation(3)
+Result:
+x - 3 = 2
+CorrectAnswer remains 5
+
+5. If Value is 0:
+- Return false for now or leave unchanged with a clear log message.
+
+6. For Multiply and Divide equations:
+- Return false for now.
+- Do not change the equation.
+- Log that subtraction on Multiply/Divide would create a compound expression and is not supported yet.
+
+7. Preserve existing X answer submission behavior.
+
+8. Add UE_LOG messages showing:
+- old equation
+- operation applied
+- new equation
+- correct answer
+
+9. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. Why the old behavior was too strict
+3. Which subtraction transformations are now supported
+4. Which cases are still unsupported
+5. How to test:
+   - x + 5 = 10, input 5, Q -> x = 5
+   - x + 5 = 10, input 13, Q -> x - 8 = -3
+   - then input 5, X -> AXIOM EXECUTION
+테스트
+
+수정 후 Play에서:
+
+x + 5 = 10
+13 입력
+Q
+
+기대:
+
+x - 8 = -3
+
+그 다음:
+
+5 입력
+X
+
+기대:
+
+AXIOM EXECUTION
+
+이게 되면 “정확히 취소하는 뺄셈”이 아니라, 진짜로 양변에 -n 적용하는 무기로 돌아간 거임.
+
+* * *
+
+**You:**
+
+그냥... 사칙연산 시스템을 정확히 코딩하는게 장기적으로 낮지 않나?
+앞으로 여러 복잡한 방정식도 구현해야 하는데 x + (A - Value) = B - Value 이건 너무... 얕고 temproary 자나 실질적으로
+
+ax^n + bx^(n-1)+cx^(n-1)+....+z = answer로 하고 a~z랑 n값은 랜덤으로 하고 0 잘 뜨게(사라지도록? 하지만 한 개 이상의 a~z값이 1 이상이도록) 그리고 랭크/종족에 맞춰서 n값을 제한하는 거지. ???~ 슬라임은 n이 무조건 1이다.  그럼 이따 제곱수 적도 포함시킬수 있게. 멀리봐 멀리. xyz정도는 다 보여주고 싶거든. (특수 장비로 z,y값을 맞춰서 무언가의 보호막이나 장비를 파괴해야 본래 공식 x공식 뜨는 보스도 추가할 예정이라)
+
+이러면 x의 검, y의 검, z의 검도 추가할수있고
+
+
+* * *
+
+**ChatGPT:**
+
+문서 확인: GDD 전체 처리됨. 섹션 1~30 전체 확인됨. 로드맵 문서도 전체 처리됨. GDD는 사칙연산 무기가 “양변에 같은 연산을 적용”한다고 정의하고, 동시에 초기 프로토타입에서는 “완전한 심볼릭 대수 파서”를 하지 말라고 제한함. 즉, 장기적으로는 정확한 수식 시스템이 맞지만, 지금은 무제한 symbolic parser가 아니라 작고 확장 가능한 수식 엔진으로 가는 게 맞음. 
+
+피타고라스의 조율 만물은 수다 Gdd 바이블
+
+ 
+
+피타고라스의 조율 만물은 수다 Gdd 바이블
+
+결론부터: 네 말이 맞음. 지금 x + (A - Value) 패치로 계속 가면 장기적으로 똥됨.
+지금 멈추고 “사칙연산 가능한 식 표현 구조”로 리팩터하는 게 장기적으로 맞다.
+
+다만, 바로 ax^n + bx^(n-1) + ... + z = answer 전체를 완성하려고 하면 너무 커짐. 그래서 이렇게 가야 함:
+
+지금 당장:
+단일 변수 polynomial equation system v1
+
+나중:
+다변수 x/y/z equation system
+보호막/장비/봉인 변수
+보스용 다중 공식
+핵심 설계 변경
+
+현재 방식:
+
+EquationType = Add/Subtract/Multiply/Divide
+A
+B
+CorrectAnswer
+DisplayText
+
+이건 너무 얕음.
+
+바꿀 방향:
+
+Equation = Polynomial Left Side = Right Side
+
+예:
+
+x + 5 = 10
+
+은 내부적으로:
+
+LeftTerms:
+1*x^1
+5*x^0
+
+RightValue:
+10
+3x^2 + 2x + 7 = 52
+
+은 내부적으로:
+
+LeftTerms:
+3*x^2
+2*x^1
+7*x^0
+
+RightValue:
+52
+
+이러면 뺄셈 무기 -13은 그냥:
+
+constant term -= 13
+RightValue -= 13
+
+즉:
+
+x + 5 = 10
+-13 적용
+→ x - 8 = -3
+
+이 자연스럽게 됨.
+
+중요한 점: 텍스트 파서 만들지 마
+
+나쁜 방향:
+
+"x + 5 = 10" 문자열 생성
+→ 문자열 분석해서 수식 계산
+→ 다시 문자열로 변환
+
+이건 지금 하면 망함.
+
+좋은 방향:
+
+수식 데이터를 구조체로 저장
+→ 연산은 구조체 숫자값을 바꿈
+→ DisplayText는 구조체에서 생성
+
+즉, parser가 아니라 expression data model을 만드는 것.
+
+Polynomial v1 구조
+
+Codex에게 만들게 할 핵심 구조는 이거.
+
+C++
+FPolynomialTerm
+{
+    int32 Coefficient;
+    int32 Power;
+}
+
+예:
+
+3x^2
+Coefficient = 3
+Power = 2
+
+그리고:
+
+C++
+FPolynomialEquation
+{
+    TArray<FPolynomialTerm> LeftTerms;
+    int32 RightValue;
+    int32 TrueX;
+    int32 Rank;
+}
+
+이러면:
+
+x + 5 = 10
+
+은:
+
+LeftTerms:
+{Coefficient: 1, Power: 1}
+{Coefficient: 5, Power: 0}
+
+RightValue:
+10
+
+TrueX:
+5
+사칙연산 적용 방식
+Subtraction weapon
+양변에 -n
+
+내부 처리:
+
+Left constant term -= n
+RightValue -= n
+Addition weapon
+양변에 +n
+
+내부 처리:
+
+Left constant term += n
+RightValue += n
+Multiplication weapon
+양변에 ×n
+
+내부 처리:
+
+모든 LeftTerm coefficient *= n
+RightValue *= n
+Division weapon
+양변에 ÷n
+
+내부 처리:
+
+모든 LeftTerm coefficient /= n
+RightValue /= n
+
+단, division은 나중에 까다로움:
+
+정수로 나누어떨어지는 경우만 허용
+안 나누어떨어지면 fraction system 전까지 실패
+0으로 나누기 금지
+정답 검사 방식
+
+방정식은 이렇게 검사하면 됨:
+
+SubmittedX를 LeftTerms에 대입해서 계산
+결과가 RightValue와 같으면 정답
+
+예:
+
+3x^2 + 2x + 7 = 52
+x = 3
+
+Left:
+3*9 + 2*3 + 7 = 34
+
+34 != 52
+오답
+
+x = 4:
+
+3*16 + 2*4 + 7 = 63
+
+63 != 52
+오답
+
+만약 식을 생성할 때 TrueX를 먼저 고르고 RHS를 계산하면 됨:
+
+TrueX = 5
+Left = 3x^2 + 2x + 7
+RightValue = 3*25 + 2*5 + 7 = 92
+
+최종:
+3x^2 + 2x + 7 = 92
+정답 x = 5
+주의: 다항식은 답이 여러 개일 수 있음
+
+이건 중요함.
+
+x^2 = 4
+
+정답은:
+
+x = 2
+x = -2
+
+둘 다 가능함.
+
+그래서 지금은 정책을 정해야 함.
+
+초기 추천:
+
+자연수 영역만 허용
+계수는 양수 위주
+TrueX는 양수
+x 입력도 비음수
+
+그러면 대체로 단조증가라 답이 하나처럼 작동함.
+
+즉, 초반에는:
+
+x >= 0
+coefficients >= 0
+powers >= 0
+
+을 유지.
+
+음수, 복수해, 분수는 나중에 컨셉 해금으로 넣자.
+
+종족과 n값 제한
+
+이 방향 좋음.
+
+예:
+
+Slime:
+max degree 1
+거의 x = n
+
+Goblin:
+max degree 1
+x + a = b
+x - a = b
+
+Orc:
+max degree 1
+ax = b
+
+Quadratic Beast / Square Golem:
+max degree 2
+ax^2 + bx + c = answer
+
+Cubic Entity:
+max degree 3
+
+Abstract Entity:
+higher degree / function
+
+Rank는 이렇게:
+
+계수 범위 증가
+상수 범위 증가
+TrueX 범위 증가
+degree 해금 조건에는 영향 가능
+하지만 종족의 identity를 깨지는 않음
+
+즉:
+
+Slime은 Rank 999여도 degree 1
+Quadratic enemy는 Rank 낮아도 degree 2 가능
+
+이게 좋음.
+
+y, z 검 아이디어
+
+가능함. 근데 이건 다변수 식으로 넘어가는 순간 난이도가 확 올라감.
+
+예:
+
+2x + 3y + z = 20
+
+이거 하나만 있으면 x, y, z는 무한히 많은 해가 있음.
+
+그래서 y/z를 넣으려면 이렇게 해야 함:
+
+방법 A, hidden true values
+
+내부적으로:
+
+TrueX = 5
+TrueY = 2
+TrueZ = 4
+
+그리고 식 생성:
+
+2x + 3y + z = 20
+
+X검은 x값을 검사, Y검은 y값을 검사, Z검은 z값을 검사.
+
+게임적으로는 가능하지만, 수학적으로는 단일 식만 보고는 x/y/z를 유일하게 못 구함. 그래서 힌트, 장비, 보호막, 추가 식이 필요함.
+
+방법 B, 보스 보호막
+
+이건 네 아이디어랑 잘 맞음.
+
+예:
+
+Main Formula:
+x + 5 = 10
+
+Y Shield:
+y + 3 = 7
+
+Z Shield:
+z - 2 = 4
+
+플레이어는:
+
+Y검으로 y = 4 맞춤
+Z검으로 z = 6 맞춤
+보호막 제거
+본체 x 공식 노출
+X검으로 x = 5 처형
+
+이게 더 게임적으로 좋음.
+
+방법 C, 다중 방정식 시스템
+x + y = 10
+y + z = 8
+z = 3
+
+이건 연립방정식이라 후반/DLC급.
+
+초기에는 하지 마.
+
+지금 결정
+
+나는 지금 방향을 이렇게 추천함:
+
+현재 얕은 EquationType 시스템을 버리고,
+PolynomialEquation v1로 리팩터한다.
+
+하지만 범위는 제한:
+
+단일 변수 x만
+정수 계수만
+정수 RHS만
+자연수/비음수 x만
+degree는 일단 1만 실제 생성
+degree 2 구조는 지원만 해둠
+
+즉, 지금 코드는 미래를 위해:
+
+x^2, x^3도 표현 가능
+
+하게 만들되, 실제 프로토타입 적은 아직:
+
+x + 5 = 10
+x - a = b
+ax = b
+
+정도만 생성.
+
+이게 가장 안전함.
+
+Codex에 넣을 프롬프트
+
+이건 큰 리팩터라서, 먼저 수정 계획만 받자. 바로 코드 쓰게 하지 마.
+
+We need to refactor the equation system toward a real polynomial equation model.
+
+Do not modify files yet.
+
+Read the current equation-related code and propose a refactor plan.
+
+Context:
+The current EquationType/A/B model is too shallow. We need operation weapons to apply mathematically to both sides of an equation, not just special-case x + A = B.
+
+Long-term direction:
+Represent equations as polynomial data, not parsed strings.
+
+Example:
+x + 5 = 10 should be represented as:
+LeftTerms:
+- coefficient 1, power 1
+- coefficient 5, power 0
+RightValue:
+10
+
+Then applying subtraction 13 means:
+Left constant term -= 13
+RightValue -= 13
+Result:
+x - 8 = -3
+
+Requirements for the plan:
+1. Keep the prototype working.
+2. Do not build a text parser.
+3. Use data structures, not string parsing.
+4. Support a single variable x for now.
+5. Support integer coefficients and integer right side.
+6. Support powers in the data model, at least power 0, 1, and 2.
+7. Generated enemies may still use degree 1 for now.
+8. X answer check should evaluate the polynomial at SubmittedX and compare to RightValue.
+9. Addition operation should add a constant to both sides.
+10. Subtraction operation should subtract a constant from both sides.
+11. Multiplication operation should multiply all left coefficients and right side.
+12. Division operation should divide all left coefficients and right side only if clean integer division is possible.
+13. Preserve existing gameplay behavior:
+- x + 5 = 10 still starts as the tutorial Goblin equation.
+- Input 5 + X still executes.
+- Input 13 + Q on x + 5 = 10 should produce x - 8 = -3.
+- Input 5 + X after that should still execute.
+14. Explain which existing files would change.
+15. Explain what new structs/classes would be introduced.
+16. Explain migration risk and testing plan.
+
+Do not implement yet. Only provide the plan.
+이 계획을 받은 다음
+
+Codex 답변 보내줘.
+그다음 내가 보고:
+
+괜찮으면 구현 프롬프트 1단계
+
+로 쪼개서 갈게.
+
+한 번에 전체 리팩터 맡기면 위험함.
+순서는 이렇게 쪼개야 함:
+
+1. Polynomial structs 추가
+2. DisplayText 생성 함수 추가
+3. Evaluate 함수 추가
+4. 기존 Goblin을 polynomial로 마이그레이션
+5. X 정답 검사 연결
+6. Add/Subtract operation 연결
+7. Multiply/Divide operation 추가
+8. 기존 EquationType 제거 또는 compatibility 유지
+
+이 방향이 진짜 장기적으로 맞다.
+
+* * *
+
+**You:**
+
+I read the current equation-related code. The clean refactor is to make FEquationDefinition stop being the math model and become either a compatibility wrapper or a thin display/debug container around a real polynomial equation struct.
+
+**Refactor Direction**
+Introduce polynomial data in EquationTypes.h:
+
+
+cpp
+FPolynomialTerm
+- Coefficient: int32
+- Power: int32
+
+FPolynomialEquation
+- LeftTerms: TArray<FPolynomialTerm>
+- RightValue: int32
+- Rank: int32
+- CachedDisplayText: FText
+
+
+Example tutorial Goblin:
+
+
+text
+LeftTerms:
+  1x^1
+  5x^0
+RightValue:
+  10
+
+
+This keeps us data-driven and avoids parsing strings. Display text should be generated from the data, never used as source of truth.
+
+**Existing Files That Would Change**
+- EquationTypes.h
+  - Add FPolynomialTerm.
+  - Add FPolynomialEquation.
+  - Possibly keep EPrototypeEquationType temporarily for enemy generation/debug, but it should no longer drive operation logic.
+  - Either update FEquationDefinition to contain FPolynomialEquation, or replace its current A/B/CorrectAnswer role gradually.
+
+- EnemyEquationComponent.h/.cpp
+  - Store CurrentEquation as polynomial data.
+  - Add helpers like:
+    - EvaluateLeftSideAtX(int32 X) const
+    - RefreshDisplayText()
+    - NormalizeEquation()
+    - AddConstantToBothSides(int32 Value)
+    - SubtractConstantFromBothSides(int32 Value)
+    - MultiplyBothSides(int32 Value)
+    - DivideBothSidesIfClean(int32 Value)
+  - Change IsAnswerCorrect() to evaluate the polynomial at SubmittedX and compare against RightValue.
+  - Keep GetDisplayText(), GetCorrectAnswer(), GetRank(), SubmitAnswer(), RegenerateEquation(), and SetRankAndGenerateEquation() so the prototype actor and character continue working.
+
+- PrototypeEquationEnemy.h/.cpp
+  - Likely only light changes.
+  - RefreshEquationDisplay() can keep calling EquationComponent->GetDisplayText().
+  - ApplySubtractionToEnemy() can keep returning bool.
+
+- PythagoreanHarmonyCharacter.cpp
+  - Minimal change at first.
+  - Q can still call subtraction.
+  - X can still submit the current input.
+  - Later, addition/multiplication/division keys or weapons can call matching component functions.
+
+**Operation Behavior**
+The component should mutate polynomial data directly:
+
+- Addition operation +N:
+  - Add N to the left constant term.
+  - Add N to RightValue.
+
+- Subtraction operation -N:
+  - Subtract N from the left constant term.
+  - Subtract N from RightValue.
+
+- Multiplication operation *N:
+  - Multiply every left coefficient by N.
+  - Multiply RightValue by N.
+
+- Division operation /N:
+  - Only succeeds if every left coefficient and RightValue divide cleanly by N.
+  - Otherwise returns false and leaves equation unchanged.
+
+So x + 5 = 10, then input 13 + Q becomes:
+
+
+text
+Left: 1x + -8
+Right: -3
+Display: x - 8 = -3
+
+
+Then input 5 + X still executes because evaluating left side gives 5 - 8 = -3.
+
+**Generated Enemies**
+For now, generation can still create degree-1 equations only:
+
+- Goblin Add: x + a = b
+- Goblin Subtract: x - a = b
+- Slime Direct: x = n
+- Orc Multiply can become a*x = b
+- Beastman Divide can become x = result * a or later model fractional/division form separately
+
+Even though generation stays simple, the model should support powers 0, 1, and 2 now so quadratic enemies can arrive later without another rewrite.
+
+**Migration Plan**
+1. Add polynomial structs and helpers while preserving current public APIs.
+2. Convert tutorial Goblin generation to produce polynomial data for x + 5 = 10.
+3. Replace answer checking with evaluation: EvaluateLeftSideAtX(SubmittedX) == RightValue.
+4. Replace subtraction special case with true polynomial constant subtraction.
+5. Regenerate display text from polynomial data after every mutation.
+6. Convert procedural equation generators one by one to fill polynomial terms instead of A/B.
+7. Keep CorrectAnswer temporarily for editor testing and debug logs, but stop relying on it for truth.
+
+**Risk**
+Main risk is display formatting and preserving existing tests. The math itself is straightforward, but the current code assumes EquationType/A/B/CorrectAnswer everywhere inside generation and difficulty scoring. The safest path is a compatibility phase where those fields remain briefly while polynomial evaluation becomes authoritative.
+
+**Testing Plan**
+- Start PIE with default Goblin: verify display is x + 5 = 10.
+- Input 5, press X: enemy executes.
+- Restart or place another enemy.
+- Input 13, press Q: display becomes x - 8 = -3.
+- Input 5, press X: enemy executes.
+- Try division operation later with non-clean values: verify it fails and equation does not change.
+- Wrong answer with X: verify rank evolution still generates a new enemy equation.
+
+* * *
+
+**ChatGPT:**
+
+좋아. Codex 계획 방향 맞음.
+이제 바로 전체 리팩터를 한 번에 시키면 위험함. 쪼개서 가야 함.
+
+현재 GDD 기준으로도 사칙연산은 양변에 같은 연산을 적용하는 시스템이고, 초기 프로토타입에서는 완전한 심볼릭 파서는 피하라고 되어 있음. 그래서 “문자열 파서”가 아니라 Polynomial data model로 가는 게 맞음. 
+
+피타고라스의 조율 만물은 수다 Gdd 바이블
+
+먼저 할 일: 안전 저장
+
+지금 기능이 작동하는 상태니까, 리팩터 전에 반드시 저장해.
+
+GitHub Desktop에서:
+
+Summary:
+Save working equation prototype before polynomial refactor
+
+Description:
+Current prototype supports number input, X execution, wrong-answer evolution, species-based equation generation, and prototype subtraction behavior.
+
+그리고:
+
+Commit to main
+Push origin
+
+그다음 새 브랜치 만들기 추천:
+
+polynomial-equation-refactor
+
+GitHub Desktop:
+
+Branch
+→ New Branch
+→ polynomial-equation-refactor
+
+이렇게 해두면 리팩터 망해도 main으로 돌아가면 됨.
+
+구현 전략
+
+한 번에 다 하지 말고 3단계로 가자.
+
+Step 1: Polynomial structs 추가 + display/evaluate helper만 추가
+Step 2: EnemyEquationComponent를 polynomial 기반으로 마이그레이션
+Step 3: 사칙연산 함수 연결
+
+지금 바로 할 것은 Step 1 + Step 2 일부.
+
+목표는 이것:
+
+x + 5 = 10이 polynomial data로 저장됨
+5 + X 하면 evaluation으로 정답 판정됨
+13 + Q 하면 x - 8 = -3으로 바뀜
+5 + X 하면 여전히 처형됨
+중요한 설계 결정
+1. DisplayText는 진실이 아님
+
+좋음:
+
+LeftTerms + RightValue
+→ DisplayText 생성
+
+나쁨:
+
+DisplayText 파싱
+→ 수식 계산
+
+우리는 파서 안 만듦.
+
+2. CorrectAnswer는 당장은 유지
+
+Codex가 말한 것처럼 CorrectAnswer는 당분간 유지해도 됨.
+
+하지만 정답 판정의 진짜 기준은 이거로 바꿔야 함:
+
+EvaluateLeftSideAtX(SubmittedX) == RightValue
+
+즉:
+
+x - 8 = -3
+x = 5
+
+5 - 8 = -3
+정답
+
+이게 핵심.
+
+3. 다항식은 다중해 문제가 있음
+
+나중에:
+
+x^2 = 4
+
+는 x = 2, x = -2 둘 다 정답임.
+
+초반엔 안전하게:
+
+x >= 0
+계수는 대부분 양수
+degree 1 위주 생성
+degree 2는 구조만 지원
+
+으로 가면 됨.
+
+Codex 구현 프롬프트 1
+
+같은 Codex 세션에 넣어.
+
+Implement polynomial equation model v1 in small, safe steps.
+
+We are on the polynomial-equation-refactor branch.
+
+Modify only what is necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+
+Avoid modifying:
+- PythagoreanHarmonyCharacter unless absolutely necessary
+- PrototypeEquationEnemy unless absolutely necessary
+- UI
+- weapons
+- inventory
+- animation
+- AI
+
+Goal:
+Replace the shallow EquationType/A/B math model with a polynomial data model while preserving the existing prototype behavior.
+
+Important:
+Do not build a text parser.
+Do not parse DisplayText.
+DisplayText must be generated from equation data.
+
+Requirements:
+
+1. In EquationTypes.h, add:
+
+FPolynomialTerm:
+- int32 Coefficient
+- int32 Power
+
+FPolynomialEquation:
+- TArray<FPolynomialTerm> LeftTerms
+- int32 RightValue
+- int32 Rank
+- FText CachedDisplayText
+
+2. Keep EPrototypeEquationType and FEquationDefinition temporarily if needed for compatibility, generation, logs, or difficulty scoring.
+
+3. In UEnemyEquationComponent, add a new property:
+- FPolynomialEquation CurrentPolynomialEquation
+
+4. Add helper functions to UEnemyEquationComponent:
+
+- int64 EvaluatePolynomialLeftSideAtX(int32 X) const
+- FText BuildPolynomialDisplayText() const
+- void RefreshPolynomialDisplayText()
+- void NormalizePolynomialTerms()
+- void SetPolynomialConstantTerm(int32 NewConstant)
+- int32 GetPolynomialConstantTerm() const
+- void AddToPolynomialConstantTerm(int32 Delta)
+
+5. BuildPolynomialDisplayText should format:
+- x + 5 = 10
+- x - 8 = -3
+- 3x = 15
+- 2x^2 + 3x + 5 = 50
+- x = 5
+
+Formatting does not need to be perfect, but it must be readable.
+
+Rules:
+- Hide coefficient 1 for x terms, so show x not 1x.
+- Show x^2 for power 2.
+- Show x for power 1.
+- Show constants normally.
+- Use + and - signs cleanly.
+- Remove zero coefficient terms, except make sure the equation never has an empty left side.
+
+6. Update the default tutorial Goblin equation so it creates polynomial data:
+LeftTerms:
+- coefficient 1, power 1
+- coefficient 5, power 0
+RightValue:
+10
+Rank:
+1
+Display:
+x + 5 = 10
+
+7. Preserve existing public API:
+- GetDisplayText()
+- GetCorrectAnswer()
+- GetRank()
+- IsAnswerCorrect()
+- SubmitAnswer()
+- RegenerateEquation()
+- SetRankAndGenerateEquation()
+- ApplySubtractionOperation()
+
+8. Update GetDisplayText() so it returns the polynomial display text.
+
+9. Update IsAnswerCorrect(int32 SubmittedAnswer):
+It should now use:
+EvaluatePolynomialLeftSideAtX(SubmittedAnswer) == CurrentPolynomialEquation.RightValue
+
+Do not rely on CorrectAnswer for truth anymore, but keep CorrectAnswer for debug and tutorial generation if currently needed.
+
+10. Update ApplySubtractionOperation(int32 Value):
+It should apply "-Value" to both sides:
+- Add -Value to the polynomial constant term
+- Subtract Value from RightValue
+- Normalize terms
+- Refresh display
+- Return true unless Value is 0
+
+Examples:
+x + 5 = 10
+ApplySubtractionOperation(13)
+Result:
+x - 8 = -3
+
+Then SubmittedAnswer 5 should still be correct.
+
+x + 5 = 10
+ApplySubtractionOperation(5)
+Result:
+x = 5
+
+11. For now, do not implement addition, multiplication, or division operations yet.
+
+12. Keep procedural generation working if possible.
+If full migration of procedural generation is too large, at minimum make Goblin Add/Subtract generation fill CurrentPolynomialEquation correctly.
+
+13. Add UE_LOG messages for:
+- Generated polynomial equation
+- Evaluated answer check
+- Applied subtraction operation
+
+14. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. What new structs were added
+3. How answer checking now works
+4. How subtraction now works
+5. What compatibility fields remain
+6. How to test in Play mode
+테스트 순서
+
+수정 후 컴파일:
+
+Ctrl + Alt + F11
+
+테스트 1:
+
+5 입력
+X
+
+기대:
+
+AXIOM EXECUTION
+
+테스트 2:
+
+새로 Play
+13 입력
+Q
+
+기대:
+
+x - 8 = -3
+
+그다음:
+
+5 입력
+X
+
+기대:
+
+AXIOM EXECUTION
+
+테스트 3:
+
+새로 Play
+5 입력
+Q
+
+기대:
+
+x = 5
+
+그다음:
+
+5 입력
+X
+
+기대:
+
+AXIOM EXECUTION
+
+테스트 4:
+
+새로 Play
+오답 계속 입력
+
+기대:
+
+Rank 상승
+새 equation 표시
+정답 입력하면 처형
+지금 판단
+
+이 리팩터는 맞다.
+
+다만 지금 당장 x, y, z까지 가지 마.
+지금은:
+
+단일 변수 x polynomial engine
+
+까지만.
+
+나중에 확장:
+
+FPolynomialTerm에 Variable 추가
+Variable = X, Y, Z
+
+예:
+
+C++
+Coefficient = 3
+Variable = Y
+Power = 1
+
+그러면:
+
+3y
+2x^2
+z
+
+까지 확장 가능함.
+
+지금은 기초 수식 엔진부터 안정화하자.
+
+* * *
+
+**You:**
+
+작동 잘함. 테스트 함요
+
+Implemented polynomial equation model v1 without touching character, enemy actor, UI, weapons, inventory, animation, or AI.
+
+Changed files:
+- [EquationTypes.h](<E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/EquationTypes.h:40>)
+- [EnemyEquationComponent.h](<E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/EnemyEquationComponent.h:36>)
+- [EnemyEquationComponent.cpp](<E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/EnemyEquationComponent.cpp:46>)
+
+New structs added:
+- FPolynomialTerm: Coefficient, Power
+- FPolynomialEquation: LeftTerms, RightValue, Rank, CachedDisplayText
+
+What changed:
+- UEnemyEquationComponent now stores CurrentPolynomialEquation.
+- GetDisplayText() returns generated polynomial display text.
+- IsAnswerCorrect() now evaluates the polynomial left side at the submitted x and compares it to RightValue.
+- ApplySubtractionOperation(Value) now applies real equation transformation:
+  - left constant term -= Value
+  - right side -= Value
+  - display is regenerated from data
+
+So:
+- x + 5 = 10
+- input 13, press Q
+- becomes x - 8 = -3
+- input 5, press X
+- still executes, because 5 - 8 == -3
+
+Compatibility fields that remain:
+- EPrototypeEquationType
+- FEquationDefinition
+- CurrentEquation
+- CorrectAnswer, A, B
+
+They are still used for procedural generation, logs, difficulty scoring, and editor/debug compatibility. They are no longer the source of truth for answer checking or display.
+
+Verification:
+- git diff --check passed.
+- UnrealHeaderTool passed and processed the reflected structs/properties.
+- Full C++ build is still blocked by active Live Coding: close the editor or press Ctrl+Alt+F11, then rebuild.
+
+Play test:
+1. Start with default Goblin: should show x + 5 = 10.
+2. Press 5, then X: enemy executes.
+3. Restart/place another Goblin.
+4. Press 13, then Q: equation should become x - 8 = -3.
+5. Press 5, then X: enemy should execute.
+
+* * *
+
+**ChatGPT:**
+
+좋아. Polynomial Equation v1 성공.
+이제 진짜 장기 구조로 넘어온 거임.
+
+현재 중요한 변화:
+
+이전:
+x + A = B 같은 얕은 타입 기반
+
+현재:
+LeftTerms + RightValue 기반 polynomial equation
+
+그래서 이제 이런 변형이 자연스럽게 됨:
+
+x + 5 = 10
+13 입력 + Q
+→ x - 8 = -3
+
+5 입력 + X
+→ 5 - 8 = -3
+→ AXIOM EXECUTION
+
+이건 매우 좋음.
+
+지금 바로 커밋
+
+GitHub Desktop에서:
+
+Summary:
+Add polynomial equation model v1
+
+Description:
+Added polynomial equation data structures and migrated answer checking and subtraction operation to evaluate equation data instead of relying on shallow A/B fields.
+
+Commit + Push.
+
+만약 지금 polynomial-equation-refactor 브랜치에 있다면 그 브랜치에 push하면 됨.
+
+다음 목표: 사칙연산 Operation v1
+
+이제 할 일은 명확함.
+
+현재는:
+
+Q = Subtraction only
+
+다음은 polynomial model 위에 진짜 사칙연산을 붙이는 것:
+
+Addition:      양변에 +n
+Subtraction:   양변에 -n
+Multiplication: 양변에 ×n
+Division:      양변에 ÷n, 단 정수로 나누어떨어질 때만
+
+아직 무기, 애니메이션, 인벤토리는 만들지 않음.
+키보드 임시 입력으로 기능만 검증.
+
+임시 키 배치
+
+추천:
+
+E = Addition operation
+Q = Subtraction operation
+R = Multiplication operation
+F = Division operation
+X = X answer submission
+
+예시:
+
+x + 5 = 10
+
+3 입력 + E
+→ x + 8 = 13
+
+2 입력 + R
+→ 2x + 16 = 26
+
+2 입력 + F
+→ x + 8 = 13
+
+8 입력 + Q
+→ x = 5
+
+5 입력 + X
+→ AXIOM EXECUTION
+Codex에 넣을 프롬프트
+Add prototype arithmetic operations on top of the polynomial equation model.
+
+Modify only what is necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+
+Do not add real weapons, animations, UI widgets, inventory, AI, lock-on, or save systems yet.
+
+Goal:
+Support prototype addition, subtraction, multiplication, and division operations that apply to both sides of the current polynomial equation.
+
+Requirements:
+
+1. Add enum EPrototypeOperationType if useful:
+- Add
+- Subtract
+- Multiply
+- Divide
+
+2. In UEnemyEquationComponent, add BlueprintCallable function:
+- bool ApplyOperationToBothSides(EPrototypeOperationType OperationType, int32 Value)
+
+3. Keep existing ApplySubtractionOperation(int32 Value), but make it call ApplyOperationToBothSides(Subtract, Value) internally.
+
+4. Operation behavior:
+
+Addition:
+- If Value == 0, return false for now.
+- Add Value to the polynomial constant term.
+- Add Value to RightValue.
+- Normalize terms.
+- Refresh display.
+- Return true.
+
+Subtraction:
+- If Value == 0, return false for now.
+- Subtract Value from the polynomial constant term.
+- Subtract Value from RightValue.
+- Normalize terms.
+- Refresh display.
+- Return true.
+
+Multiplication:
+- If Value == 0, return false for now.
+- Multiply every left-side coefficient by Value.
+- Multiply RightValue by Value.
+- Use int64 during calculation.
+- If any result would overflow int32, return false and leave the equation unchanged.
+- Normalize terms.
+- Refresh display.
+- Return true.
+
+Division:
+- If Value == 0, return false.
+- Only succeed if every left-side coefficient and RightValue divides cleanly by Value.
+- If not cleanly divisible, return false and leave the equation unchanged.
+- Divide every left-side coefficient by Value.
+- Divide RightValue by Value.
+- Normalize terms.
+- Refresh display.
+- Return true.
+
+5. Add helper functions if useful:
+- bool CanMultiplyEquationBy(int32 Value) const
+- bool CanDivideEquationByCleanly(int32 Value) const
+
+6. In APrototypeEquationEnemy, add BlueprintCallable functions:
+- bool ApplyAdditionToEnemy(int32 Value)
+- bool ApplySubtractionToEnemy(int32 Value)
+- bool ApplyMultiplicationToEnemy(int32 Value)
+- bool ApplyDivisionToEnemy(int32 Value)
+- bool ApplyOperationToEnemy(EPrototypeOperationType OperationType, int32 Value)
+
+Each should call the equation component and refresh display only when successful.
+
+7. In APythagoreanHarmonyCharacter, bind temporary prototype keys:
+- E = apply addition to nearest equation enemy using current input
+- Q = apply subtraction to nearest equation enemy using current input
+- R = apply multiplication to nearest equation enemy using current input
+- F = apply division to nearest equation enemy using current input
+- X behavior should remain answer submission
+
+8. Reuse existing nearest enemy lookup.
+
+9. If no input, show:
+"No input."
+
+10. If no enemy is in range, show:
+"No equation enemy in range."
+
+11. On operation success, show:
+"Applied Addition: +N"
+"Applied Subtraction: -N"
+"Applied Multiplication: xN"
+"Applied Division: /N"
+
+12. On operation failure, show:
+"Operation failed."
+
+13. Clear input after attempting an operation.
+
+14. Add UE_LOG messages:
+- Old equation
+- Operation applied
+- New equation
+- Failure reason for multiplication overflow, division by zero, or non-clean division
+
+15. Preserve existing behavior:
+- Default Goblin starts as x + 5 = 10
+- 5 + X executes
+- 13 + Q transforms to x - 8 = -3
+- 5 + X after that executes
+- Wrong answer still evolves enemy
+
+16. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. Which operation keys were bound
+3. How each operation mutates the polynomial equation
+4. How division failure works
+5. How to test in Play mode
+테스트 세트
+
+수정 후 컴파일:
+
+Ctrl + Alt + F11
+Test A, 기존 기능 보존
+5 입력
+X
+
+기대:
+
+AXIOM EXECUTION
+Test B, Subtraction
+새 Play
+13 입력
+Q
+
+기대:
+
+x - 8 = -3
+
+그 다음:
+
+5 입력
+X
+
+기대:
+
+AXIOM EXECUTION
+Test C, Addition
+새 Play
+3 입력
+E
+
+기대:
+
+x + 8 = 13
+
+그 다음:
+
+5 입력
+X
+
+기대:
+
+AXIOM EXECUTION
+Test D, Multiplication
+새 Play
+2 입력
+R
+
+기대:
+
+2x + 10 = 20
+
+그 다음:
+
+5 입력
+X
+
+기대:
+
+AXIOM EXECUTION
+Test E, Clean Division
+
+먼저:
+
+2 입력
+R
+
+보통:
+
+2x + 10 = 20
+
+그 다음:
+
+2 입력
+F
+
+기대:
+
+x + 5 = 10
+Test F, Non-clean Division 실패
+
+기본 상태에서:
+
+2 입력
+F
+
+기대:
+
+Operation failed.
+식 그대로 x + 5 = 10
+
+이유:
+
+x coefficient 1이 2로 안 나누어떨어짐
+
+이거 성공하면 드디어 사칙연산 무기 시스템의 수학 코어가 생김.
+그 다음은 “키 입력”을 “임시 무기 슬롯”으로 바꾸고, 그 뒤에 Division Shield와 Armored Goblin으로 가면 됨.
+
+* * *
+
+**You:**
+
+성공적
+
+* * *
+
+**ChatGPT:**
+
+좋아. 사칙연산 Operation v1 성공.
+이제 수학 코어는 꽤 강해졌음.
+
+현재 가능한 핵심:
+
+x + 5 = 10
+
+E: +n 양변 적용
+Q: -n 양변 적용
+R: ×n 양변 적용
+F: ÷n 양변 적용, 정수로 깔끔하게 나눠질 때만
+X: 현재 입력값으로 정답 제출
+
+이제 바로 커밋.
+
+Summary:
+Add polynomial arithmetic operations
+
+Description:
+Added prototype addition, subtraction, multiplication, and clean division operations that apply to both sides of polynomial equations.
+
+Commit + Push.
+
+다음으로 할 일
+
+이제 수학 코어는 충분하니까, 다음은 임시 키 시스템을 무기 시스템처럼 정리해야 함.
+
+지금은:
+
+E = Addition
+Q = Subtraction
+R = Multiplication
+F = Division
+X = Answer Submit
+
+이건 개발 테스트용이고, 다음 단계에서는 이걸 이렇게 바꿔야 함:
+
+현재 선택된 Operation Weapon
+현재 입력 숫자
+Attack/Use key
+→ 해당 operation 적용
+
+하지만 바로 무기 인벤토리 만들지 말고, Prototype Weapon Slot v0만 만들면 됨.
+
+다음 Phase: Prototype Weapon Slot v0
+
+목표:
+
+1번 키: Addition weapon 선택
+2번 키: Subtraction weapon 선택
+3번 키: Multiplication weapon 선택
+4번 키: Division weapon 선택
+5번 키: X weapon 선택
+
+Left Mouse 또는 Space 같은 임시 사용키:
+현재 선택 무기 사용
+
+예:
+
+2 누름
+현재 무기: Subtraction
+
+13 입력
+Left Mouse
+→ x - 8 = -3
+
+5 누름
+현재 무기: X
+
+5 입력
+Left Mouse
+→ AXIOM EXECUTION
+
+이렇게 해야 나중에 실제 무기/애니메이션/내구도 붙이기 쉬움.
+
+Codex에 넣을 다음 프롬프트
+Add a prototype weapon selection layer over the existing operation keys.
+
+Modify only what is necessary.
+
+Likely files:
+- EquationTypes.h if enum placement is useful
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+
+Do not add real weapon actors, animations, inventory, UI widgets, meshes, AI, lock-on, or save systems yet.
+
+Goal:
+Replace direct operation hotkeys with a simple selected prototype weapon mode.
+
+Current temporary behavior:
+- E applies addition directly
+- Q applies subtraction directly
+- R applies multiplication directly
+- F applies division directly
+- X submits answer directly
+
+New behavior:
+- Number keys still append digits as before.
+- Add weapon selection keys:
+  - Alpha1 selects Addition weapon
+  - Alpha2 selects Subtraction weapon
+  - Alpha3 selects Multiplication weapon
+  - Alpha4 selects Division weapon
+  - Alpha5 selects X weapon
+- Add one use key:
+  - Left Mouse Button applies the currently selected weapon/action using current input.
+
+Weapon behavior:
+- Addition weapon: apply addition operation to nearest equation enemy.
+- Subtraction weapon: apply subtraction operation to nearest equation enemy.
+- Multiplication weapon: apply multiplication operation to nearest equation enemy.
+- Division weapon: apply division operation to nearest equation enemy.
+- X weapon: submit current input as answer to nearest equation enemy.
+
+Requirements:
+
+1. Add enum EPrototypeWeaponMode if useful:
+- Addition
+- Subtraction
+- Multiplication
+- Division
+- XAnswer
+
+2. Store current selected weapon mode on APythagoreanHarmonyCharacter.
+
+3. Default selected weapon should be XAnswer or Subtraction. Use XAnswer unless there is a reason not to.
+
+4. Bind weapon selection keys:
+- 1, 2, 3, 4, 5 would conflict with digit input.
+Important:
+Do not break digit input.
+
+Because number keys are currently used for digit input, use function keys for weapon selection for now:
+- F1 = Addition
+- F2 = Subtraction
+- F3 = Multiplication
+- F4 = Division
+- F5 = XAnswer
+
+5. Bind Left Mouse Button to UseSelectedPrototypeWeapon().
+
+6. Keep existing direct operation keys E/Q/R/F/X working for now as debug shortcuts if they do not cause conflicts, but mark them as temporary in comments.
+
+7. UseSelectedPrototypeWeapon should:
+- Check current input.
+- If no input, show "No input."
+- Find nearest equation enemy.
+- If no enemy, show "No equation enemy in range."
+- If selected weapon is XAnswer, submit answer.
+- If selected weapon is operation type, apply operation.
+- Clear input after attempt.
+- Print debug messages showing selected weapon and result.
+
+8. Add debug message when switching weapon:
+- "Selected Weapon: Addition"
+- "Selected Weapon: Subtraction"
+- "Selected Weapon: Multiplication"
+- "Selected Weapon: Division"
+- "Selected Weapon: X"
+
+9. Preserve existing behavior:
+- Digit input still works.
+- Backspace still works.
+- C still clears input.
+- Direct debug keys E/Q/R/F/X still work if possible.
+- 5 + X still executes using old debug shortcut.
+- F2, 13, Left Mouse should apply subtraction.
+- F5, 5, Left Mouse should execute.
+
+10. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. Which keys are now weapon selection keys
+3. Which key uses the selected weapon
+4. What old debug keys still exist
+5. How to test in Play mode
+테스트
+기존 방식 유지 확인
+5 입력
+X
+
+기대:
+
+AXIOM EXECUTION
+새 무기 방식 확인
+F2 누름
+13 입력
+Left Mouse
+
+기대:
+
+x - 8 = -3
+
+그다음:
+
+F5 누름
+5 입력
+Left Mouse
+
+기대:
+
+AXIOM EXECUTION
+다른 무기 테스트
+F1
+3 입력
+Left Mouse
+→ x + 8 = 13
+
+F3
+2 입력
+Left Mouse
+→ 2x + 16 = 26
+
+F4
+2 입력
+Left Mouse
+→ x + 8 = 13, clean division이면 성공
+
+이거 되면 다음은 내구도 소모로 가면 됨.
+
+* * *
+
+**You:**
+
+질문: 이따가면 숫자 휠로 바꿀건데.. 무기는 어케할지 미정이거든? 솔직히 슬롯 ㅈㄴ 많잖아. 무게땜에 캐릭터가 다 낄수 있는가는 별개지만 장착 가능한 슬롯이 많은데 이건 인벤속 템이 아닌 캐릭터 몸에 달린 무기들이거든. 그래서 손의 장비랑 퀵 스왑 가능해야 하는데 방법을 모르겠어
+
+
+* * *
+
+**ChatGPT:**
+
+ㅇㅇ, 이거 지금 정해야 함.
+결론부터 말하면 무기 시스템은 “인벤토리”가 아니라 “몸에 장착된 무기 배열 + 손에 든 활성 무기”로 설계해야 함. GDD에도 장비 슬롯과 신체 부위별 슬롯 개념이 들어가 있고, 프로토타입은 단순화하되 나중에 무기 크기별 슬롯 점유량을 고려한다고 되어 있음. 
+
+피타고라스의 조율 만물은 수다 Gdd 바이블
+
+핵심 구조
+
+무기를 이렇게 3단으로 나누면 됨.
+
+1. Inventory
+소유 중인 모든 아이템
+지금은 만들지 않음
+
+2. Body Loadout
+캐릭터 몸에 실제로 장착된 무기들
+허리, 등, 어깨, 다리, 방패 위치 등
+
+3. Active Hands
+지금 손에 들고 있는 무기
+실제로 공격에 쓰이는 무기
+
+즉, 플레이어가 무기를 “가지고 있다”와 “몸에 매달고 있다”와 “손에 들고 있다”는 완전히 다른 상태임.
+
+추천 설계
+1. 몸 장착 슬롯
+
+예시:
+
+Back Slot
+Right Shoulder Slot
+Left Shoulder Slot
+Right Waist Slot
+Left Waist Slot
+Right Hip Slot
+Left Hip Slot
+Shield Back Slot
+Small Tool Slot 1
+Small Tool Slot 2
+
+각 슬롯에는 무기 하나가 붙음.
+
+예:
+
+Back Slot: Multiplication Greatsword
+Right Waist Slot: X Straight Sword
+Left Waist Slot: Subtraction Rapier
+Left Arm Slot: Division Shield
+Small Tool Slot: Addition Dagger
+
+이 무기들은 모두 캐릭터 몸에 보이는 상태로 장착되어 있음.
+
+2. 손 슬롯
+
+손은 별도임.
+
+Main Hand
+Off Hand
+
+예:
+
+Main Hand: Subtraction Rapier
+Off Hand: Division Shield
+
+손에 든 무기는 공격 가능.
+몸에만 달린 무기는 아직 공격 불가, 하지만 빠르게 뽑을 수 있음.
+
+3. Quick Swap
+
+Quick Swap은 인벤토리에서 꺼내는 게 아니라, 몸에 달린 무기 중 하나를 손으로 가져오는 동작임.
+
+예:
+
+F2 누름
+Subtraction Rapier 선택
+캐릭터 허리에서 레이피어를 뽑음
+Main Hand = Subtraction Rapier
+F5 누름
+X Sword 선택
+현재 손 무기를 허리에 넣음
+X Sword를 뽑음
+Main Hand = X Sword
+
+나중에 애니메이션 붙이면 이 구조가 자연스러움.
+
+숫자 휠과 무기 스왑은 분리해야 함
+
+숫자 휠은 이거만 담당:
+
+현재 입력 숫자 설정
+
+무기 스왑은 별도:
+
+현재 사용할 무기 선택
+
+절대 숫자 휠 안에 무기를 섞지 마.
+나중에 컨트롤 꼬임.
+
+좋은 구조:
+
+숫자 휠:
+0~9 숫자 입력, 삭제, 확정
+
+무기 스왑:
+몸에 장착한 무기 중 하나를 손으로 전환
+
+공격 버튼:
+현재 손 무기 + 현재 숫자 입력값 사용
+
+예:
+
+숫자 휠로 13 입력
+Subtraction Rapier 장착
+공격
+→ -13 적용
+
+숫자 휠로 5 입력
+X Sword 장착
+공격
+→ x = 5 판정
+실제 게임 조작 추천
+
+키보드 기준:
+
+Tab 길게 누름: Weapon Radial 열기
+마우스 방향: 몸에 장착된 무기 선택
+Tab 뗌: 해당 무기를 손에 듦
+
+숫자 휠 키 길게 누름: Number Wheel 열기
+마우스 방향/키 입력: 숫자 입력
+뗌: 숫자 장전
+
+Left Mouse: 현재 무기 사용
+Right Mouse: 방어/보조
+
+패드 기준:
+
+D-pad: quick swap
+LB/L1 길게: weapon wheel
+RB/R1: attack
+LT/L2: block or aim
+Number wheel은 별도 버튼 홀드
+Unreal 코드 구조는 이렇게 가면 됨
+
+나중에 만들 컴포넌트:
+
+UEquipmentComponent
+
+역할:
+
+몸에 장착된 무기 목록 관리
+현재 손에 든 무기 관리
+무기 스왑 처리
+소켓에 무기 붙이기
+
+데이터 구조 예시:
+
+FEquippedWeaponSlot
+- SlotName
+- SocketName
+- WeaponData
+- WeaponActor
+- bIsActiveInHand
+
+무기 데이터:
+
+UWeaponDataAsset
+- WeaponName
+- OperationType
+- WeaponFamily
+- Durability
+- Weight
+- BodySocket
+- HandSocket
+- SlotSize
+- Mesh
+
+예:
+
+Subtraction Rapier
+OperationType: Subtract
+WeaponFamily: Rapier
+BodySocket: Waist_R
+HandSocket: Hand_R
+Weight: Light
+SlotSize: 1
+
+X Sword:
+
+OperationType: XAnswer
+WeaponFamily: StraightSword
+BodySocket: Waist_L
+HandSocket: Hand_R
+
+Division Shield:
+
+OperationType: Divide
+WeaponFamily: Shield
+BodySocket: Back_Shield
+HandSocket: Hand_L
+현재 프로토타입에서는 단순하게
+
+지금 당장 full equipment system 만들 필요 없음.
+
+다음 단계는 이렇게 하면 됨:
+
+CurrentPrototypeWeaponMode
+
+이걸 “무기처럼” 취급.
+
+임시:
+
+F1: Addition Sword 선택
+F2: Subtraction Rapier 선택
+F3: Multiplication Greatsword 선택
+F4: Division Shield 선택
+F5: X Sword 선택
+Left Mouse: 현재 무기 사용
+
+하지만 내부 이름은 벌써 무기처럼 해둬야 함.
+
+나쁜 이름:
+
+CurrentOperationMode
+
+좋은 이름:
+
+CurrentPrototypeWeapon
+CurrentEquippedWeaponMode
+SelectedWeaponMode
+
+이유: 나중에 진짜 무기 시스템으로 갈 때 덜 갈아엎음.
+
+장기적으로 제일 좋은 구조
+
+최종 구조는 이거임.
+
+Owned Inventory
+↓
+Equipped Body Loadout
+↓
+Active Hand Weapon
+↓
+Attack uses Current Number Input
+↓
+Equation Operation Applied
+
+예시 흐름:
+
+플레이어 몸에 무기 6개 장착
+
+허리: X Sword
+허리: Subtraction Rapier
+등: Multiplication Greatsword
+왼팔: Division Shield
+다리: Addition Dagger
+어깨: X Greatsword
+
+플레이어가 Weapon Wheel로 Subtraction Rapier 선택
+숫자 휠로 13 입력
+공격
+→ x + 5 = 10 becomes x - 8 = -3
+
+Weapon Wheel로 X Sword 선택
+숫자 휠로 5 입력
+공격
+→ AXIOM EXECUTION
+지금 결론
+
+지금은 이렇게 가자:
+
+1. Prototype Weapon Mode 만들기
+2. F1~F5로 무기 선택
+3. Left Mouse로 현재 무기 사용
+4. 기존 E/Q/R/F/X는 debug shortcut으로 잠시 유지
+5. 나중에 Weapon Wheel로 F1~F5를 대체
+6. 그 다음 Body Slot + Hand Slot + Socket attachment 구현
+
+즉, 지금은 무기 선택 레이어만 만들고, 실제 장착 슬롯/소켓/애니메이션은 나중.
+하지만 설계는 이미 “몸에 장착된 무기를 손으로 뽑는다” 기준으로 잡으면 됨.
+
+* * *
+
+**You:**
+
+작동 잘함
+이슈: 계속 모드 유지됨. 공식 공격 하면 평타로 자동 회귀해야하고, 캔슬 방도 있긴 해야할템데...?
+
+* * *
+
+**ChatGPT:**
+
+맞음. 지금 계속 모드 유지되는 건 장기적으로 안 좋음.
+지금 구조는 “무기 선택 모드”처럼 되어 있는데, 실제 게임에서는 이렇게 나눠야 함:
+
+장착 무기 = 계속 유지됨
+공식 공격 모드 = 1회성으로 발동 후 해제됨
+평타 상태 = 기본 상태
+
+즉, Subtraction Rapier를 손에 들고 있어도, 항상 -n 공격만 나가는 게 아니라:
+
+평상시 LMB = 평타
+숫자 장전 + 공식공격 입력 = -n 적용
+공식공격 끝나면 다시 평타
+
+이게 맞음.
+
+추천 구조
+
+현재:
+
+F2 선택
+13 입력
+LMB
+→ 계속 Subtraction 모드 유지
+
+바꿀 방향:
+
+F2 선택
+13 입력
+LMB
+→ Subtraction 공식 공격 1회 사용
+→ 입력값 clear
+→ Action Mode는 Normal로 복귀
+→ 장착 무기는 Subtraction Rapier 그대로
+
+핵심은 이거임:
+
+Selected Weapon은 유지
+Equation Attack Armed 상태는 해제
+상태를 2개로 나눠야 함
+1. Current Equipped Weapon
+
+이건 계속 유지됨.
+
+Subtraction Rapier
+X Sword
+Division Shield
+2. Current Action State
+
+이건 일시적임.
+
+NormalCombat
+EquationAttackArmed
+
+예시:
+
+CurrentEquippedWeapon = Subtraction Rapier
+CurrentActionState = NormalCombat
+
+숫자 13 입력
+UseSelectedWeapon
+→ EquationAttackArmed처럼 처리
+→ -13 적용
+→ CurrentActionState = NormalCombat
+→ Input cleared
+
+나중에 애니메이션 들어가면:
+
+NormalCombat
+DrawingWeapon
+EquationAttackWindup
+EquationAttackRecover
+NormalCombat
+
+이렇게 확장 가능.
+
+캔슬도 필요함
+
+맞음. 취소키 있어야 함.
+
+추천:
+
+Right Mouse Button = cancel current input / equation attack preparation
+또는
+Esc = cancel input
+또는
+C = clear number input, 현재 이미 있음
+
+지금은 C가 숫자 clear니까, 추가로 이렇게 하자:
+
+Right Mouse Button:
+- 숫자 입력 있으면 clear
+- 공식 공격 준비 상태면 cancel
+- 메시지: Equation input canceled.
+
+나중에는 우클릭이 방어라면 C나 Mouse Thumb Button으로 바꾸면 됨. 지금은 프로토타입이라 RMB 써도 됨.
+
+지금 구현할 정확한 변경
+
+현재 F1~F5는 무기 선택으로 유지.
+
+F1 Addition weapon
+F2 Subtraction weapon
+F3 Multiplication weapon
+F4 Division weapon
+F5 X weapon
+
+LMB는 현재 무기 사용.
+
+사용 후:
+
+input clear
+action state reset
+debug message:
+Returned to normal attack.
+
+그리고 취소:
+
+RMB or C:
+input clear
+action state reset
+debug message:
+Equation input canceled.
+
+단, C는 이미 clear라서, 먼저 C를 cancel로 확장하는 게 제일 안전함.
+
+Codex에 넣을 프롬프트
+Improve the prototype weapon/action mode so equation attacks are one-shot and return to normal combat after use.
+
+Modify only what is necessary.
+
+Likely files:
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+
+Do not add real weapon actors, animations, UI widgets, inventory, AI, lock-on, or save systems yet.
+
+Current behavior:
+- F1/F2/F3/F4/F5 selects a prototype weapon mode.
+- Left Mouse uses the selected weapon with the current input.
+- The selected mode persists forever.
+
+Problem:
+This feels wrong. In the final design, the equipped weapon can remain selected, but an equation attack should be a one-shot action. After a formula/operation/X attack is used, the character should return to normal combat behavior.
+
+Requirements:
+
+1. Keep the selected prototype weapon mode.
+This represents the currently equipped/selected weapon and should NOT automatically change after use.
+
+2. Add a simple action state if useful:
+- NormalCombat
+- EquationActionArmed
+
+But keep it simple. If an explicit enum is overkill, use a boolean such as bEquationActionArmed.
+
+3. Left Mouse behavior:
+- If there is a valid current input and a nearest enemy is found, use the selected prototype weapon once.
+- After the attempt, always:
+  - Clear player input
+  - Return action state to NormalCombat
+  - Print "Returned to normal attack."
+- The selected weapon should remain the same.
+
+4. If there is no input:
+- Show "No input."
+- Return to NormalCombat.
+
+5. If there is no enemy in range:
+- Show "No equation enemy in range."
+- Clear input if there was input.
+- Return to NormalCombat.
+
+6. Add or update cancel behavior:
+- C already clears input.
+- Extend C so it also cancels equation action preparation and returns to NormalCombat.
+- Print "Equation input canceled." when C is pressed and there was input or an armed equation action.
+- Backspace should still only remove one digit and should not cancel the whole action unless input becomes empty.
+
+7. Optional:
+- Bind Right Mouse Button to CancelEquationInput if it does not conflict with existing template behavior.
+- If Right Mouse is already used or risky, skip it for now.
+
+8. Keep existing debug shortcuts E/Q/R/F/X working if possible.
+For those shortcuts too, after operation/submission attempt:
+- Clear input
+- Return to NormalCombat
+- Print "Returned to normal attack."
+
+9. Debug messages when using selected weapon:
+- "Using Weapon: Addition"
+- "Using Weapon: Subtraction"
+- "Using Weapon: Multiplication"
+- "Using Weapon: Division"
+- "Using Weapon: X"
+Then result message.
+Then "Returned to normal attack."
+
+10. Preserve existing behavior:
+- Digit input works.
+- Backspace works.
+- C clears/cancels.
+- F1-F5 weapon selection works.
+- LMB uses selected weapon once.
+- Selected weapon remains selected after use.
+- 13 + F2 + LMB transforms x + 5 = 10 into x - 8 = -3.
+- After that, LMB with no input shows "No input" instead of repeating -13.
+- F5 + 5 + LMB executes.
+
+11. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. What state was added
+3. What resets after an equation attack
+4. What remains selected after an equation attack
+5. How cancel works
+6. How to test in Play mode
+테스트
+테스트 1, 자동 평타 복귀
+F2
+13 입력
+LMB
+
+기대:
+
+x - 8 = -3
+Returned to normal attack.
+Input cleared.
+
+그 상태에서 바로 다시 LMB:
+
+No input.
+
+즉, -13이 반복되면 안 됨.
+
+테스트 2, 무기 선택은 유지
+
+위 테스트 후 다시:
+
+3 입력
+LMB
+
+기대:
+
+현재 선택 무기가 여전히 Subtraction이면
+x - 11 = -6
+
+즉, 무기는 유지되지만 입력/공식공격 상태만 초기화되는 게 맞음.
+
+테스트 3, 캔슬
+13 입력
+C
+
+기대:
+
+Equation input canceled.
+Input: -
+
+그 다음 LMB:
+
+No input.
+
+이렇게 하면 구조가 좋아짐.
+나중에 실제 평타가 생기면 NormalCombat 상태에서 LMB는 기본 공격, NumberInput + selected weapon use 상태에서만 공식 공격으로 분기하면 됨.
+
+* * *
+
+**You:**
+
+우리 프로토타입 까지 가는 계획 문서 읽고 지금 페이지 몇인지 얼마나 왔는지점
+
+* * *
+
+**ChatGPT:**
+
+문서 처리 확인: Plan till prototype.docx 전체 처리됨.
+감지 길이: 245개 문단, 비어 있지 않은 문단 228개, 약 4,990자. 렌더 기준 총 12페이지, 단 12페이지는 빈 페이지라 실내용은 11페이지임. 전체 문서 처리 완료.
+
+섹션 헤더 순서:
+
+1차 로드맵
+Phase 0, 오늘 할 일: 개발 폴더와 목표 고정
+Phase 1, 1주차: 회색 박스 전투장 만들기
+Phase 2, 2주차: 수학 생명 시스템
+Phase 3, 3주차: X 무기와 숫자 입력
+Phase 4, 4주차: 사칙연산 무기
+Phase 5, 5주차: Mathematical Armor
+Phase 6, 6주차: 전투 맛 추가
+Phase 7, 7주차: UI와 피드백
+Phase 8, 8주차: AI 에셋 사용
+1차 완성 기준, Vertical Slice
+지금 당장 너의 작업 순서
+
+로드맵 문서상 Phase 4는 “사칙연산 무기” 단계이고, 처음 구현할 연산으로 Apply -n to both sides, Apply /n to both sides, Check X answer가 잡혀 있음. 
+
+Plan till prototype
+
+지금 위치
+
+현재 우리는 문서 기준 Page 6~7쯤, Phase 4에 있음.
+
+정확히 말하면:
+
+문서 전체 실내용 11페이지 중
+현재 위치: 6~7페이지
+진행률: 약 55~60%
+
+다만 기능 기준으로 보면 조금 다름.
+
+완료된 것
+Phase 0: 완료
+프로젝트 생성, GitHub, Codex 문서 세팅 완료
+
+Phase 1: 부분 완료
+Third-person 이동, 더미 적, 적 방정식 표시 완료
+단, lock-on은 아직 안 함
+
+Phase 2: 완료 + 초과 달성
+수학 생명 시스템 완료
+EquationComponent 완료
+방정식 표시, 정답 검사, 오답 진화 완료
+심지어 polynomial equation model v1까지 들어감
+
+Phase 3: 완료
+숫자 입력 완료
+X 제출 완료
+정답이면 AXIOM EXECUTION 완료
+오답이면 진화 완료
+
+Phase 4: 진행 중, 거의 핵심 수학 코어는 완료
+사칙연산 +, -, ×, ÷ 양변 적용 완료
+Division은 clean integer division 조건으로 작동
+Prototype weapon mode도 작동
+Left Mouse로 현재 무기 사용까지 됨
+아직 안 된 것
+Phase 1의 lock-on
+진짜 무기 actor/mesh/animation
+무기 내구도
+실제 공격 판정
+Armored Goblin
+Mathematical Armor
+Equation Break Stagger
+스태미나
+적 공격 AI
+그로기
+기본 HUD/전투 로그 UI
+AI 3D 에셋
+내 판단
+
+우리는 로드맵 순서상으로는 Phase 4 중후반임.
+근데 수학 코어만 보면 Phase 4를 넘어서 장기 구조까지 일부 선행했음.
+
+특히 원래 Phase 4 목표는:
+
+Enemy: x + 5 = 10
+Player inputs 5
+Subtraction Rapier hits
+Equation becomes x = 5
+Player inputs 5
+X Sword hits
+Enemy dies
+
+였는데, 지금은 이것보다 더 됨:
+
+x + 5 = 10
+13 입력 + Subtraction
+→ x - 8 = -3
+
+5 입력 + X
+→ AXIOM EXECUTION
+
+Addition, Subtraction, Multiplication, Division 모두 polynomial 기반으로 작동
+
+즉, Phase 4의 수학 엔진은 목표 초과 달성임.
+
+다음 진짜 목표
+
+이제 문서상 다음 큰 단계는:
+
+Phase 5: Mathematical Armor
+
+즉:
+
+Armored Goblin
+(x + 5) × 2 = 20
+
+2 입력
+Division Shield
+→ x + 5 = 10
+
+5 입력
+X Sword
+→ AXIOM EXECUTION
+
+그 전에 방금 말한 공식 공격 후 평타 복귀 / cancel 처리만 정리하고 가면 됨.
+
+요약하면:
+
+현재 위치: Page 6~7 / 실내용 11페이지
+현재 Phase: Phase 4, 사칙연산 무기
+진행률: 로드맵 기준 약 55~60%
+수학 코어 기준: Phase 4 목표 초과 달성
+다음 핵심: Action mode 정리 후 Phase 5 Mathematical Armor
+
+* * *
+
+**You:**
+
+응.. 안됨.
+1. f1 f2 f3 f4 누름 ue 창의 화면이 좀 바뀜. 이거 오바임. 다른 단축키로 바꿔야함. 
+2.  F2
+13 입력
+LMB
+x - 8 = -3
+Returned to normal attack.
+Input cleared.
+라고 떠 놓고 숫자 아무거나 넣고 클릭하면 또 그 숫자를 뺌. 무기가 평타모드 돌아가는게 아니라 no input이라 뜨던, 숫자있음 그걸 또 빼던 함. 평타 개념이 없어 그른가?
+
+* * *
+
+**ChatGPT:**
+
+맞음. 지금 문제의 본질은 이거임.
+
+현재 코드:
+Selected Weapon = Subtraction
+숫자 입력 있음
+LMB
+→ 무조건 Subtraction 공식 공격 실행
+
+문제:
+Normal Attack 상태가 없음
+Equation Attack Armed 상태도 없음
+그래서 숫자만 있으면 계속 공식 공격으로 처리됨
+
+즉, 네 말대로 평타 개념이 없어서 생긴 문제임.
+
+고쳐야 하는 최종 구조
+
+이렇게 3개로 나눠야 함.
+
+1. Equipped Weapon
+현재 손에 들고 있는 무기
+예: Subtraction Rapier
+
+2. Number Input
+현재 장전한 숫자
+예: 13
+
+3. Action State
+NormalCombat 또는 EquationActionArmed
+
+중요한 규칙:
+
+무기는 유지된다.
+하지만 공식 공격 상태는 1회 사용 후 꺼진다.
+LMB는 기본적으로 평타다.
+공식 공격은 "장전/armed" 상태일 때만 나간다.
+조작도 바꾸자
+
+F1~F5는 Unreal Editor랑 충돌 가능성이 큼.
+그래서 지금 당장 바꾸는 게 맞음.
+
+추천 임시 키:
+
+Z = Addition weapon 선택
+V = Subtraction weapon 선택
+B = Multiplication weapon 선택
+N = Division weapon 선택
+M = X weapon 선택
+
+Enter = 현재 숫자를 공식 공격으로 장전
+LMB = 공격
+C = 입력/장전 취소
+
+흐름:
+
+V 누름
+→ Subtraction Rapier 선택
+
+13 입력
+Enter
+→ Equation Action Armed
+
+LMB
+→ -13 적용
+→ x - 8 = -3
+→ Returned to normal attack
+
+아무 숫자 입력하고 LMB
+→ 평타 debug message만 나와야 함
+→ 더 이상 subtraction 반복되면 안 됨
+
+X 처형도 똑같이:
+
+M 누름
+5 입력
+Enter
+LMB
+→ AXIOM EXECUTION
+→ Returned to normal attack
+왜 Enter가 필요하냐
+
+지금은 “숫자 입력이 있음 = 공식 공격 준비됨”처럼 되어 있음.
+
+근데 이러면:
+
+그냥 숫자 입력해둔 상태
+LMB 평타 치고 싶음
+근데 공식 공격 나감
+
+이 문제가 생김.
+
+그래서 Enter가 임시로 “숫자 장전 확인” 역할을 해야 함.
+나중에 숫자 휠에서는:
+
+숫자 휠 열기
+숫자 선택
+휠 닫기
+→ Equation Action Armed
+
+으로 대체하면 됨.
+
+Codex에 넣을 프롬프트
+Fix the prototype weapon/action flow.
+
+Current problems:
+1. F1-F5 conflict with Unreal Editor behavior, so they should not be used.
+2. Left Mouse currently applies the selected equation weapon whenever there is numeric input.
+3. There is no real Normal Combat state, so after returning to normal, typing another number and clicking still repeats the selected equation operation.
+
+We need a clearer prototype action state.
+
+Modify only what is necessary.
+
+Likely files:
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+
+Do not add real weapon actors, animations, UI widgets, inventory, AI, lock-on, or save systems yet.
+
+Design:
+Separate equipped weapon from equation attack state.
+
+The selected/equipped prototype weapon should persist.
+The equation attack armed state should be one-shot and should reset after use.
+
+Controls:
+- Z selects Addition weapon
+- V selects Subtraction weapon
+- B selects Multiplication weapon
+- N selects Division weapon
+- M selects X weapon
+- Enter arms the current numeric input as an equation action
+- Left Mouse uses the current action
+- C cancels input and any armed equation action
+- Backspace only removes one digit
+
+Remove or stop using F1-F5 weapon selection bindings.
+
+Important behavior:
+- Left Mouse in NormalCombat should NOT apply equation operations, even if there is numeric input.
+- Left Mouse in NormalCombat should print:
+  "Basic attack."
+- Left Mouse should only apply equation operation or X answer when EquationActionArmed is true.
+- After an equation action attempt, always:
+  - clear input
+  - set EquationActionArmed false
+  - return to NormalCombat
+  - print "Returned to normal attack."
+
+Requirements:
+
+1. Add an action state enum or boolean:
+- NormalCombat
+- EquationActionArmed
+
+Use whichever is cleaner, but make the code beginner-readable.
+
+2. Add function:
+- ArmEquationAction()
+
+Behavior:
+- If there is no input, print "No input."
+- Otherwise set EquationActionArmed true
+- Print "Equation action armed."
+
+3. Update Left Mouse behavior:
+If EquationActionArmed is false:
+- Print "Basic attack."
+- Do not apply any equation operation.
+- Do not submit X answer.
+- Do not clear input unless you think it is necessary. Prefer not clearing it.
+
+If EquationActionArmed is true:
+- Find nearest equation enemy.
+- If no enemy, print "No equation enemy in range."
+- If selected weapon is Addition, apply addition.
+- If selected weapon is Subtraction, apply subtraction.
+- If selected weapon is Multiplication, apply multiplication.
+- If selected weapon is Division, apply division.
+- If selected weapon is X, submit answer.
+- Clear input.
+- Set EquationActionArmed false.
+- Print "Returned to normal attack."
+
+4. Update C behavior:
+- Clear input.
+- Set EquationActionArmed false.
+- Print "Equation input canceled."
+
+5. Weapon selection behavior:
+- Z/V/B/N/M should only change selected weapon.
+- They should not automatically apply operations.
+- They should not automatically arm equation action.
+- Print selected weapon messages:
+  "Selected Weapon: Addition"
+  "Selected Weapon: Subtraction"
+  "Selected Weapon: Multiplication"
+  "Selected Weapon: Division"
+  "Selected Weapon: X"
+
+6. Keep old debug direct operation shortcuts E/Q/R/F/X only if they do not interfere.
+But if they make this confusing, comment them out or remove their bindings.
+Priority is the new flow.
+
+7. Preserve digit input:
+- 0-9 still append digits
+- Backspace removes one digit
+- C cancels/clears
+
+8. Test expectations:
+- Press V, type 13, press Enter, press LMB:
+  x + 5 = 10 becomes x - 8 = -3
+  input clears
+  action returns to normal
+
+- Then type 3 and press LMB without pressing Enter:
+  should print "Basic attack."
+  should NOT subtract 3
+
+- Press M, type 5, press Enter, press LMB:
+  enemy executes
+
+- Press Z/V/B/N/M should not change the Unreal Editor viewport or mode like F1-F5 did.
+
+Before finalizing, explain:
+1. Which files changed
+2. Which keys were removed
+3. Which keys were added
+4. What state was added
+5. What LMB does in NormalCombat
+6. What LMB does in EquationActionArmed
+7. How to test the bug is fixed
+테스트는 이렇게
+테스트 1, F키 문제 해결
+Z V B N M 누르기
+
+기대:
+
+Unreal 화면/뷰모드 안 바뀜
+Selected Weapon 메시지만 뜸
+테스트 2, 공식 공격 1회성
+V
+13
+Enter
+LMB
+
+기대:
+
+x - 8 = -3
+Returned to normal attack.
+
+그다음 바로:
+
+3
+LMB
+
+기대:
+
+Basic attack.
+
+중요:
+
+x - 11 = -6 으로 바뀌면 실패
+테스트 3, X 무기
+M
+5
+Enter
+LMB
+
+기대:
+
+AXIOM EXECUTION
+Returned to normal attack.
+
+이게 맞는 방향임.
+정리하면, 무기 선택은 유지, 공식 공격 장전은 1회성, LMB 기본값은 평타로 바꿔야 함.
+
+* * *
+
+**You:**
+
+Works well!
+
+* * *
+
+**ChatGPT:**
+
+좋아. Prototype Weapon Action Flow 수정 완료로 보면 됨.
+
+현재 상태:
+
+Z = Addition weapon 선택
+V = Subtraction weapon 선택
+B = Multiplication weapon 선택
+N = Division weapon 선택
+M = X weapon 선택
+
+숫자 입력
+Enter = 공식 공격 장전
+LMB = 장전된 공식 공격 사용
+
+장전 안 된 상태에서 LMB = Basic attack
+C = 입력/공식공격 취소
+
+이제 구조가 훨씬 맞음:
+
+무기 선택은 유지됨
+공식 공격은 1회성
+사용 후 평타 상태로 복귀
+숫자만 입력하고 LMB 눌러도 공식 공격 안 나감
+
+바로 커밋해.
+
+Summary:
+Fix prototype weapon action flow
+
+Description:
+Separated selected weapon state from one-shot equation action state, replaced F-key weapon selection with Z/V/B/N/M, and made Left Mouse perform basic attack unless an equation action is armed.
+
+Commit + Push.
+
+다음은 Phase 5: Mathematical Armor / Armored Goblin으로 가면 됨.
+
+* * *
+
+**You:**
+
+ㄱㄱ. 푸쉬함. 참고로, Mathematical Armor / Armored Goblin면, Base Formula: x + 5 = 10 Armor: ×2 Displayed: (x + 5) × 2 = 20 랑 Base Formula: x + 5 = 10 Armor: ×2 Helmet: +2 Displayed: (x + 5)×2 + 2 = 22도 되야함
+
+
+* * *
+
+**ChatGPT:**
+
+좋아. Phase 5: Mathematical Armor / Armored Goblin 들어가자.
+
+핵심 설계는 이거임:
+
+Base Formula:
+x + 5 = 10
+
+Layer 1, Armor:
+×2
+
+Displayed:
+(x + 5) × 2 = 20
+
+Layer 2, Helmet:
++2
+
+Displayed:
+(x + 5) × 2 + 2 = 22
+
+즉, 이건 단순 polynomial expansion이 아니라 수식 위에 덧씌워진 layer stack으로 가야 함.
+
+중요한 설계 결정
+1. Base Formula는 유지
+
+내부 기본식:
+
+x + 5 = 10
+2. Mathematical Armor는 Layer로 저장
+
+예:
+
+Layer 1: Multiply 2, source = Armor
+Layer 2: Add 2, source = Helmet
+3. Display는 Layer를 적용해서 보여줌
+Base:
+x + 5 = 10
+
+Armor ×2:
+(x + 5) × 2 = 20
+
+Helmet +2:
+(x + 5) × 2 + 2 = 22
+4. 제거는 바깥 layer부터
+
+(x + 5) × 2 + 2 = 22 상태에서:
+
+2 입력
+Subtraction weapon
+→ Helmet +2 제거
+→ (x + 5) × 2 = 20
+
+그 다음:
+
+2 입력
+Division weapon
+→ Armor ×2 제거
+→ x + 5 = 10
+
+그 다음:
+
+5 입력
+Subtraction weapon
+→ x = 5
+
+그 다음:
+
+5 입력
+X weapon
+→ AXIOM EXECUTION
+
+이게 제일 게임적으로 좋음.
+
+지금 만들 기능
+
+이번 단계는 Mathematical Layer v1만 만든다.
+
+구현할 것:
+
+ArmoredGoblin
+Base: x + 5 = 10
+Armor Layer: ×2
+Displayed: (x + 5) × 2 = 20
+
+ArmoredGoblinWithHelmet
+Base: x + 5 = 10
+Armor Layer: ×2
+Helmet Layer: +2
+Displayed: (x + 5) × 2 + 2 = 22
+
+아직 방어구 mesh, 진짜 helmet actor, 장비 파괴 이펙트는 안 함.
+
+Codex에 넣을 프롬프트
+Add Mathematical Armor layer stack v1 for Armored Goblin.
+
+We already have a polynomial equation model. Do not replace it. Add a wrapper/layer system on top of the base polynomial equation.
+
+Modify only what is necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp if needed
+
+Avoid modifying:
+- PythagoreanHarmonyCharacter unless absolutely necessary
+- UI widgets
+- real weapons
+- inventory
+- animation
+- AI
+- save systems
+
+Goal:
+Support displayed equations such as:
+
+Base Formula:
+x + 5 = 10
+
+Armor Layer:
+×2
+
+Displayed:
+(x + 5) × 2 = 20
+
+And:
+
+Base Formula:
+x + 5 = 10
+
+Armor Layer:
+×2
+
+Helmet Layer:
++2
+
+Displayed:
+(x + 5) × 2 + 2 = 22
+
+Design:
+The base polynomial equation remains the source formula.
+Mathematical armor layers wrap the base formula visually and mathematically.
+Layers should be removed from outside to inside using inverse operations.
+
+Requirements:
+
+1. In EquationTypes.h, add enum EEquationLayerOperation:
+- Add
+- Subtract
+- Multiply
+- Divide
+
+2. In EquationTypes.h, add enum EEquationLayerSource:
+- None
+- Armor
+- Helmet
+- ChestArmor
+- Gauntlets
+- LegArmor
+- Cloak
+- Other
+
+3. In EquationTypes.h, add USTRUCT FEquationLayer:
+- EEquationLayerOperation Operation
+- int32 Value
+- EEquationLayerSource Source
+- FText DisplayName
+- bool bCanBeRemoved
+
+4. In UEnemyEquationComponent, add:
+- TArray<FEquationLayer> EquationLayers
+
+Layer order:
+- index 0 is closest to the base formula
+- last index is outermost layer
+
+Example:
+EquationLayers[0] = Multiply 2, Armor
+EquationLayers[1] = Add 2, Helmet
+
+Display:
+(x + 5) × 2 + 2 = 22
+
+5. Add helper functions:
+- bool HasEquationLayers() const
+- FText BuildLayeredEquationDisplayText() const
+- int64 EvaluateLayeredLeftSideAtX(int32 X) const
+- int64 EvaluateLayeredRightSide() const
+- bool TryRemoveTopLayerWithOperation(EPrototypeOperationType OperationType, int32 Value)
+- void ClearEquationLayers()
+- void AddEquationLayer(const FEquationLayer& Layer)
+
+6. Display behavior:
+GetDisplayText() should return layered display if there are layers.
+Otherwise return the normal polynomial display.
+
+Examples:
+No layers:
+x + 5 = 10
+
+Multiply 2 layer:
+(x + 5) × 2 = 20
+
+Multiply 2, then Add 2:
+(x + 5) × 2 + 2 = 22
+
+Use readable symbols:
++ 2
+- 2
+× 2
+/ 2
+
+If symbol formatting is risky, use:
+* 2
+/ 2
+but prefer × for display text.
+
+7. Answer checking:
+Update IsAnswerCorrect(int32 SubmittedAnswer) so it evaluates the layered equation:
+EvaluateLayeredLeftSideAtX(SubmittedAnswer) == EvaluateLayeredRightSide()
+
+This should still make x = 5 correct for:
+x + 5 = 10
+(x + 5) × 2 = 20
+(x + 5) × 2 + 2 = 22
+
+8. Operation behavior with layers:
+If EquationLayers is not empty:
+- ApplyOperationToBothSides should first try to remove the outermost layer.
+- Only remove the top layer if the operation is the inverse operation and the Value matches.
+
+Inverse rules:
+- Top layer Add N is removed by Subtract N
+- Top layer Subtract N is removed by Add N
+- Top layer Multiply N is removed by Divide N
+- Top layer Divide N is removed by Multiply N
+
+Example:
+Displayed:
+(x + 5) × 2 + 2 = 22
+Top layer:
+Add 2, Helmet
+
+Input 2 + Subtraction weapon:
+remove Helmet layer
+Displayed:
+(x + 5) × 2 = 20
+
+Then input 2 + Division weapon:
+remove Armor layer
+Displayed:
+x + 5 = 10
+
+If the operation does not match the top layer:
+- Return false
+- Do not mutate the base equation
+- Log "Operation blocked by mathematical armor layer."
+
+If there are no layers:
+- Existing polynomial Add/Subtract/Multiply/Divide behavior should work as it does now.
+
+9. Add setup functions in UEnemyEquationComponent:
+- InitializeArmoredGoblinEquation()
+Creates:
+Base polynomial: x + 5 = 10
+Layer: Multiply 2, Source Armor
+Displayed: (x + 5) × 2 = 20
+Rank 1
+CorrectAnswer 5 for debug compatibility
+
+- InitializeArmoredGoblinWithHelmetEquation()
+Creates:
+Base polynomial: x + 5 = 10
+Layer 1: Multiply 2, Source Armor
+Layer 2: Add 2, Source Helmet
+Displayed: (x + 5) × 2 + 2 = 22
+Rank 1
+CorrectAnswer 5 for debug compatibility
+
+Make both BlueprintCallable or CallInEditor if useful for testing.
+
+10. If EPrototypeEnemySpecies already has ArmoredGoblin:
+Use it.
+If not, add ArmoredGoblin and ArmoredGoblinWithHelmet or a simple test mode if appropriate.
+
+11. In APrototypeEquationEnemy, add CallInEditor test functions if useful:
+- TestSetArmoredGoblin()
+- TestSetArmoredGoblinWithHelmet()
+
+These should call the component setup functions and refresh display.
+
+12. Preserve existing behavior:
+- Normal Goblin still starts as x + 5 = 10
+- 5 + X still executes normal Goblin
+- 13 + Subtraction still transforms normal Goblin to x - 8 = -3
+- Addition/Subtraction/Multiplication/Clean Division still work on equations with no layers
+- Wrong answer evolution should still work. It is acceptable if evolved procedural equations have no armor for now.
+
+13. Add UE_LOG messages for:
+- Layer added
+- Top layer removed
+- Operation blocked by top layer
+- Layered display built
+- Layered answer evaluation
+
+14. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. What structs/enums were added
+3. How layer order works
+4. How display is built
+5. How answer checking works with layers
+6. How inverse operation removal works
+7. How to test Armored Goblin
+8. How to test Armored Goblin with Helmet
+테스트 방법
+Test 1, 일반 Goblin 보존
+기본 Goblin:
+x + 5 = 10
+
+M 선택
+5 입력
+Enter
+LMB
+
+기대:
+
+AXIOM EXECUTION
+Test 2, Armored Goblin
+
+에디터에서 적 선택 후:
+
+TestSetArmoredGoblin
+
+표시 기대:
+
+(x + 5) × 2 = 20
+
+그 다음 Play:
+
+N 선택, Division weapon
+2 입력
+Enter
+LMB
+
+기대:
+
+x + 5 = 10
+
+그 다음:
+
+M 선택, X weapon
+5 입력
+Enter
+LMB
+
+기대:
+
+AXIOM EXECUTION
+Test 3, Helmet + Armor
+
+에디터에서:
+
+TestSetArmoredGoblinWithHelmet
+
+표시 기대:
+
+(x + 5) × 2 + 2 = 22
+
+Play에서:
+
+V 선택, Subtraction weapon
+2 입력
+Enter
+LMB
+
+기대:
+
+(x + 5) × 2 = 20
+
+그 다음:
+
+N 선택, Division weapon
+2 입력
+Enter
+LMB
+
+기대:
+
+x + 5 = 10
+
+그 다음:
+
+M 선택, X weapon
+5 입력
+Enter
+LMB
+
+기대:
+
+AXIOM EXECUTION
+Test 4, 틀린 제거 시도
+
+Helmet 상태:
+
+(x + 5) × 2 + 2 = 22
+
+여기서 바로:
+
+N 선택, Division weapon
+2 입력
+Enter
+LMB
+
+기대:
+
+Operation failed.
+Operation blocked by mathematical armor layer.
+식 그대로: (x + 5) × 2 + 2 = 22
+
+이게 중요함. 바깥 layer부터 제거해야 하니까.
+
+지금 판단
+
+이 구조로 가면 나중에 장비 부위랑 자연스럽게 연결됨.
+
+예:
+
+Helmet: +2
+ChestArmor: ×2
+Cloak: -3
+Gauntlets: ×5
+
+그리고 플레이어가 역연산으로 장비를 벗겨냄:
+
++2 Helmet → -2로 제거
+×2 Armor → /2로 제거
+-3 Cloak → +3으로 제거
+×5 Gauntlets → /5로 제거
+
+이게 바로 네가 말한 “장비/보호막을 파괴해야 본래 공식이 보이는 보스”의 기초 구조임.
+
+* * *
+
+**You:**
+
+흠... 2(x+5)+2=22인데 유저가 /2 하면, (x+5)+1= 11 떠야할까 아님 x+6=11 이 떠야할까? 괄호 없애는 선탣을 어케 유저가 하게 함? 아님 유저가 선택 못하게 함?
+
+솔직히 갑옷 파괴 의무화 원하지 않아. 세상 어떤 전투가 아머 브레이킹을 기본으로 깔고 가냐? 선택이지. 근데 그렇다고 자동 정리하면, 유저가 갑바 부쉬는 선택지를 없애자나... 머리가 아프다. x+6=11면 갑바가 있는데도 못보는거자나 아머 브레이크.... 예를들어, 유저가 레벨이 낮아서 1밖에 못써서 /2 템을 써서 (x+5)+1= 11를 해서 -1공격으로 아머파괴 후 계속할 생각임 어캄?
+
+
+* * *
+
+**ChatGPT:**
+
+문서 기준 확인: GDD 전체 처리됨, 섹션 1~30 확인됨. Plan 문서도 전체 처리됨, Phase 5 목표가 Armored Goblin / Mathematical Armor임. GDD는 Mathematical Armor를 “Base Formula 위에 덧씌워진 방어막”으로 정의하고, 역연산으로 제거 가능하다고 잡고 있음. 동시에 X 처형은 정답이면 즉시 가능하다는 철학도 있음. 
+
+피타고라스의 조율 만물은 수다 Gdd 바이블
+
+ 
+
+Plan till prototype
+
+결론부터:
+
+갑옷 파괴는 의무가 아니어야 함.
+그리고 /2를 썼을 때 기본 표시는 (x + 5) + 1 = 11 쪽이 맞음.
+x + 6 = 11은 자동으로 가면 안 됨. 그건 “Simplify / Flatten” 선택지로 따로 둬야 함.
+
+정답 구조
+
+예시:
+
+2(x + 5) + 2 = 22
+
+유저가 /2를 쓰면 수학적으로:
+
+(2(x + 5) + 2) / 2 = 11
+
+정리하면:
+
+(x + 5) + 1 = 11
+
+더 정리하면:
+
+x + 6 = 11
+
+둘 다 맞음.
+하지만 게임 디자인상 기본은:
+
+(x + 5) + 1 = 11
+
+이어야 함.
+
+이유:
+
+x + 6 = 11
+
+로 자동 정리하면, 플레이어가 “아, 원래 Armor 구조가 있었구나”를 못 봄. 네 말대로 갑옷/헬멧/보호막을 파괴하는 선택지가 흐려짐.
+
+핵심 규칙 3개로 나누자
+1. Solve Operation, 일반 수식 조작
+
+이건 그냥 양변에 연산을 적용함.
+
+예:
+
+2(x + 5) + 2 = 22
+
+/2 사용
+
+(x + 5) + 1 = 11
+
+이건 갑옷 파괴 아님.
+그냥 수식 조작임.
+
+플레이어가 레벨 낮거나 큰 숫자를 못 쓰면 이런 식으로 우회 가능해야 함.
+
+예:
+
+2(x + 5) + 2 = 22
+/2
+→ (x + 5) + 1 = 11
+
+-1
+→ x + 5 = 10
+
+-5
+→ x = 5
+
+이 루트는 허용해야 함. 이게 재밌음.
+
+2. Armor Break, 장비/보호막 파괴
+
+이건 별도 액션이어야 함.
+
+예:
+
+2(x + 5) + 2 = 22
+
+여기서 바깥 Helmet이 +2면:
+
+-2 Armor Break
+→ 2(x + 5) = 20
+
+그다음 Armor가 ×2면:
+
+/2 Armor Break
+→ x + 5 = 10
+
+이건 그냥 수식 조작이 아니라 장비 파괴 판정임.
+
+보상:
+
+Equation Break Stagger
+갑옷/헬멧 비주얼 파괴
+적 방어력 감소
+전투 로그: Helmet broken
+3. Simplify / Flatten, 괄호 없애기
+
+이건 자동이 아니라 선택지로 둬야 함.
+
+예:
+
+(x + 5) + 1 = 11
+
+유저가 Simplify를 선택하면:
+
+x + 6 = 11
+
+하지만 이건 정보를 숨기는 행동이기도 함.
+그래서 기본 자동 정리는 하면 안 됨.
+
+나중에 가능:
+
+Tactician NPC가 식을 정리해줌
+Insight 스탯 높으면 Simplify View 가능
+특정 키로 Structured View / Simplified View 전환
+그래서 조작은 이렇게 가야 함
+
+현재 무기 선택 + Enter 장전 구조 기준으로:
+
+LMB = 일반 수식 공격 / Solve Operation
+Shift + LMB = Armor Break 시도
+T = Simplify View 토글, 나중
+
+프로토타입에서는 Shift까지 귀찮으면:
+
+LMB = Solve Operation
+G = Armor Break Operation
+
+이렇게 해도 됨.
+
+중요한 디자인 결론
+정답 X 처형은 Armor 있어도 가능해야 함
+
+예:
+
+2(x + 5) + 2 = 22
+
+정답은 여전히:
+
+x = 5
+
+플레이어가 5를 알고 X 무기로 찌르면:
+
+2(5 + 5) + 2 = 22
+20 + 2 = 22
+
+맞으니까 즉시 처형 가능이어야 함.
+
+갑옷 제거는 필수 조건이 아니라:
+
+식 보기 쉽게 만들기
+적을 그로기시키기
+방어 장비 파괴하기
+낮은 레벨 숫자로 우회하기
+
+이런 선택지여야 함.
+
+구현 방향
+
+지금 layer stack을 이렇게 바꾸면 됨.
+
+Equation Expression = 실제 현재 수식
+Armor Tags = 그 수식 안에 붙어 있는 장비 태그
+
+즉, 갑옷은 수학식을 막는 벽이 아니라, 식 구조에 붙은 태그 달린 노드임.
+
+예:
+
+Base: x + 5
+Armor node: ×2
+Helmet node: +2
+Right: 22
+
+일반 /2는 수식을 조작함:
+
+2(x + 5) + 2 = 22
+→ (x + 5) + 1 = 11
+
+Armor Break /2는 특정 armor node를 제거함:
+
+2(x + 5) = 20
+→ x + 5 = 10
+
+이 두 개를 분리해야 머리가 안 아픔.
+
+지금 결정해야 할 규칙
+
+나는 이걸 추천함:
+
+Rule 1:
+Armor Break는 절대 자동 발동하지 않는다.
+
+Rule 2:
+일반 연산은 항상 양변에 적용되고, 구조 보존 display를 우선한다.
+
+Rule 3:
+자동으로 x + 6 = 11처럼 flatten하지 않는다.
+
+Rule 4:
+Flatten/Simplify는 나중에 별도 액션 또는 UI 토글로 둔다.
+
+Rule 5:
+X 처형은 Armor 상태와 무관하게 식 전체에 대입해서 맞으면 성공한다.
+
+이러면 네가 원하는 게 다 살아남음.
+
+암산 잘하는 사람:
+5 바로 X 처형
+
+갑옷 부수고 싶은 사람:
+-2로 Helmet break, /2로 Armor break
+
+낮은 숫자만 쓰는 사람:
+일반 /2, 일반 -1로 우회
+
+정리하고 싶은 사람:
+나중에 Simplify View 사용
+지금 Codex에는 바로 구현시키지 말고 먼저 설계 수정 프롬프트
+
+다음은 “layer를 강제 제거 구조로 만들지 말고, 일반 연산과 Armor Break를 분리하라”는 계획부터 받는 게 안전함.
+
+Do not modify files yet.
+
+We need to revise the Mathematical Armor design before implementation.
+
+Current concern:
+Armor breaking should not be mandatory.
+A player should be able to solve through armor, break armor intentionally, or simplify the equation later.
+
+Design decision:
+Separate three concepts:
+
+1. Solve Operation:
+Applies an operation to both sides of the entire displayed equation.
+Example:
+2(x + 5) + 2 = 22
+Divide by 2:
+(x + 5) + 1 = 11
+This does not count as armor breaking.
+
+2. Armor Break Operation:
+Targets a tagged armor layer using the correct inverse operation.
+Example:
+Helmet +2 is removed by -2.
+Armor ×2 is removed by /2.
+This triggers armor break feedback and Equation Break Stagger later.
+
+3. Simplify / Flatten:
+Optional display/action later.
+Example:
+(x + 5) + 1 = 11
+can become:
+x + 6 = 11
+But this should not happen automatically.
+
+Rules:
+- Do not automatically flatten parentheses.
+- Do not automatically break armor during normal solve operations.
+- X answer checking should evaluate the whole current expression, so correct x can execute even through armor.
+- Armor break gives tactical rewards but is not required.
+
+Read the current polynomial and planned layer code.
+Propose a safe implementation plan for this design.
+Do not implement yet.
+Explain:
+1. What structs need to exist
+2. How normal operations differ from armor break operations
+3. How display should work
+4. How answer checking should work
+5. How we can support:
+   2(x + 5) + 2 = 22
+   /2 normal operation -> (x + 5) + 1 = 11
+   -1 normal operation -> x + 5 = 10
+6. How armor break would separately remove Helmet +2 and Armor ×2
+
+이 설계로 가면 됨.
+지금 핵심은 Armor = 필수 관문이 아니라 전술적 선택지로 만드는 거임.
+
+* * *
+
+**You:**
+
+그럼... 아머브레이크 키를 따로 하자는거야, 아님 조건 충족되면 알아서 뜨는거야? 참고로 각 아머마다 아머브레이크 이득은 있어야 할듯. 헬멧 파괴 먼전지 갑바 파괴 먼전지는 유저 선택이니까.
+2(x + 5) + 2 = 22 에서 /2는 체스트 아머 파괴. -2는 헬멧 파괴인지 선택케 해야지. 그래야 유저가 상황보고 헬멧 파괴해야 머리(약점 노릴만 하면) 때려서 그로기 추가 많이 할건지 아님 흉갑 파괴해서 때리기 힘든 약점말고 전반적 방어력 줄일건지 정하지
+
+* * *
+
+**ChatGPT:**
+
+맞음. 아머브레이크는 자동이면 안 됨.
+조건이 충족되면 “가능하다”고 보여주되, 실행은 유저가 명시적으로 선택해야 함.
+
+지금부터 규칙을 이렇게 잡는 게 제일 좋음.
+
+LMB = 일반 수식 공격 / Solve Operation
+Armor Break input = 장비 파괴 시도
+
+즉:
+
+/2를 썼다고 무조건 Chest Armor가 깨지는 게 아님.
+-2를 썼다고 무조건 Helmet이 깨지는 게 아님.
+
+유저가 "이건 수식 조작으로 쓸 건지"
+아니면 "장비 파괴로 쓸 건지" 선택해야 함.
+핵심 예시
+
+적 상태:
+
+Base Formula:
+x + 5 = 10
+
+Chest Armor:
+×2
+
+Helmet:
++2
+
+Displayed:
+2(x + 5) + 2 = 22
+선택지 A, 일반 수식 조작
+
+유저가 /2를 일반 공격으로 사용:
+
+2(x + 5) + 2 = 22
+÷2
+→ (x + 5) + 1 = 11
+
+이 경우:
+
+Chest Armor 안 깨짐
+Helmet 안 깨짐
+그냥 수식만 변형됨
+선택지 B, Chest Armor Break
+
+유저가 /2를 Armor Break로 사용하고 Chest를 타겟:
+
+2(x + 5) + 2 = 22
+Chest Armor ×2 제거
+→ (x + 5) + 2 = 12
+
+이 경우:
+
+Chest Armor 파괴됨
+전반적 방어력 감소
+몸통 피격/그로기 보상 증가
+Helmet은 아직 남아 있음
+선택지 C, Helmet Break
+
+유저가 -2를 Armor Break로 사용하고 Helmet을 타겟:
+
+2(x + 5) + 2 = 22
+Helmet +2 제거
+→ 2(x + 5) = 20
+
+이 경우:
+
+Helmet 파괴됨
+머리 약점 노출
+헤드 히트/치명타/그로기 보상 증가
+Chest Armor는 아직 남아 있음
+
+이게 네가 말한 선택지를 살림.
+
+중요한 결론
+
+기존에 내가 말한 “바깥 레이어부터 제거”는 너무 제한적임.
+그건 퍼즐게임식이고, 네 게임에는 안 맞음.
+
+수정된 규칙은 이거임:
+
+Armor layer는 수식 레이어이면서 동시에 장비 부위다.
+Armor Break는 바깥 레이어 순서가 아니라, 유저가 선택한 장비 부위를 대상으로 한다.
+
+즉:
+
+Helmet 먼저 깨도 됨.
+Chest 먼저 깨도 됨.
+둘 다 안 깨고 그냥 식 풀어도 됨.
+정답 알면 바로 X 처형해도 됨.
+
+이게 액션 RPG답다.
+
+조작 방식 추천
+
+프로토타입에서는 이렇게 가자.
+
+Enter = Equation Action Armed
+LMB = 일반 수식 공격
+G = Armor Break 공격
+C = 취소
+
+예:
+
+N 선택, Division weapon
+2 입력
+Enter
+LMB
+→ 일반 /2
+→ (x + 5) + 1 = 11
+N 선택, Division weapon
+2 입력
+Enter
+G
+→ Chest Armor Break
+→ (x + 5) + 2 = 12
+V 선택, Subtraction weapon
+2 입력
+Enter
+G
+→ Helmet Break
+→ 2(x + 5) = 20
+
+나중에는 G 대신:
+
+Shift + LMB
+또는
+Right Mouse special attack
+또는
+무기 강공격
+
+으로 바꾸면 됨.
+
+여러 갑옷이 동시에 조건 충족하면?
+
+예를 들어 Helmet도 +2, Ring도 +2라면 -2 Armor Break가 둘 다 가능함.
+
+이럴 때는 자동 선택 금지.
+
+프로토타입에서는 간단히:
+
+가능한 Armor Break target이 여러 개면
+"Multiple armor targets. Select target."
+
+나중에 UI:
+
+Armor target radial
+머리 / 흉갑 / 팔 / 다리 선택
+락온 부위 선택
+마우스로 약점 조준
+
+최종적으로는 부위 타격이 가장 좋음.
+
+머리 쪽을 보고 Armor Break → Helmet
+몸통을 보고 Armor Break → Chest Armor
+팔을 보고 Armor Break → Gauntlet
+Armor Break 보상 설계
+
+각 장비마다 이득이 달라야 함. 이건 매우 좋음.
+
+Helmet Break
+- 머리 약점 노출
+- 헤드샷/머리 공격 그로기 증가
+- Tactician 분석 보너스
+- 일부 적의 시야/명중률 감소
+
+Chest Armor Break
+- 전체 방어력 감소
+- 모든 공격의 메인 그로기 증가
+- 몸통 타격 안전성 증가
+- 큰 무기/둔기 보상 증가
+
+Gauntlet Break
+- 적 공격력 감소
+- 무기 패턴 약화
+- 패링 성공 보상 증가
+
+Leg Armor Break
+- 이동속도 감소
+- 회피/돌진 패턴 약화
+- 다운/스태거 시간 증가
+
+Cloak / Magic Mantle Break
+- 속성 저항 감소
+- 회피/은신/마법 방어 제거
+
+이러면 Armor Break가 “필수 과정”이 아니라 전술 선택이 됨.
+
+수학 시스템 관점
+
+중요한 건 두 액션을 분리하는 것.
+
+일반 Solve Operation
+
+현재 표시된 식 전체에 연산 적용:
+
+2(x + 5) + 2 = 22
+/2
+→ (x + 5) + 1 = 11
+Armor Break Operation
+
+선택한 장비 레이어를 제거하고, 남은 장비 레이어로 식을 다시 표시:
+
+2(x + 5) + 2 = 22
+Chest ×2 제거
+→ (x + 5) + 2 = 12
+2(x + 5) + 2 = 22
+Helmet +2 제거
+→ 2(x + 5) = 20
+
+둘 다 정답 x = 5는 유지됨.
+
+구현 구조
+
+장비 레이어는 이렇게 가야 함.
+
+FEquationArmorLayer
+- Operation: Add / Subtract / Multiply / Divide
+- Value: 2
+- Source: Helmet / ChestArmor / Gauntlet / LegArmor
+- BodyPart: Head / Chest / Arm / Leg
+- BreakRewardType
+- bBroken
+
+그리고 함수는 두 개로 나눔.
+
+ApplyOperationToBothSides()
+일반 수식 조작
+
+TryArmorBreak()
+장비 파괴 시도
+
+이 두 개를 절대 섞으면 안 됨.
+
+최종 규칙 정리
+1. Armor Break는 자동 발동하지 않는다.
+2. 조건이 맞으면 UI/로그로 가능하다고 알려준다.
+3. 유저가 Armor Break input을 눌러야 깨진다.
+4. 유저가 어떤 장비를 깰지 선택할 수 있어야 한다.
+5. 일반 수식 조작은 갑옷을 깨지 않는다.
+6. X 처형은 갑옷이 있어도 정답이면 가능하다.
+7. 갑옷 파괴는 선택 보상이다.
+
+이 방향이 맞음.
+
+다음 구현은 바로 이 구조로 가야 함. 기존 “top layer만 제거” 방식은 하지 말자.
+
+* * *
+
+**You:**
+
+나중에 UI:
+
+Armor target radial
+머리 / 흉갑 / 팔 / 다리 선택
+락온 부위 선택
+마우스로 약점 조준
+
+최종적으로는 부위 타격이 가장 좋음.
+
+머리 쪽을 보고 Armor Break → Helmet
+몸통을 보고 Armor Break → Chest Armor
+팔을 보고 Armor Break → Gauntlet
+
+보다는 이미 수식상 의미 없어진 갑바들이 아머 브레이크 공격시 동시 파괴가 나은듯. 즉, 조건 충족된 모든 갑바는 비주얼상 금이 가고, 아머 브레이크 공격시 동사파괴
+그리고 각 갑바가 어느수인지 보이게 UI를 해야해. 락온된 적 한정해서
+
+* * *
+
+**ChatGPT:**
+
+맞음. 이 방향이 더 좋음. Target radial은 과함.
+
+정리하면:
+
+유저가 아머 부위를 직접 고르는 게 아니라,
+수식 조작으로 특정 아머를 “수학적으로 무력화”시키고,
+Armor Break 공격을 쓰면 무력화된 모든 아머가 동시에 파괴됨.
+
+이게 제일 깔끔함.
+
+GDD 기준으로도 Armor는 Base Formula 위에 덧씌워진 방어막이고, 제거는 역연산으로 가능해야 함. 동시에 X 처형은 정답이면 가능하므로, Armor Break는 필수 과정이 아니라 전술적 선택지로 두는 게 맞음. 
+
+피타고라스의 조율 만물은 수다 Gdd 바이블
+
+새 규칙: Cracked Armor System
+
+아머 상태를 이렇게 나눔.
+
+Active
+아직 수학적으로 의미 있음
+
+Cracked
+수학적으로 항등값이 되어 의미가 없어짐
+비주얼상 금이 감
+아직 물리적으로 붙어 있음
+
+Broken
+Armor Break 공격으로 실제 파괴됨
+보상 발동
+
+항등값 기준:
+
++ armor: 값이 0이면 Cracked
+- armor: 값이 0이면 Cracked
+× armor: 값이 1이면 Cracked
+÷ armor: 값이 1이면 Cracked
+예시
+
+초기 상태:
+
+Displayed:
+2(x + 5) + 2 = 22
+
+Armor UI:
+Helmet: +2 Active
+Chest Armor: ×2 Active
+선택 1, Helmet 먼저 무력화
+
+유저가 -2를 일반 수식 공격으로 사용:
+
+2(x + 5) + 2 = 22
+-2
+→ 2(x + 5) = 20
+
+UI:
+
+Helmet: +0 Cracked
+Chest Armor: ×2 Active
+
+그다음 Armor Break 공격:
+
+Helmet destroyed.
+Head weak point exposed.
+
+Chest는 안 깨짐.
+
+선택 2, Chest 먼저 무력화
+
+유저가 /2를 일반 수식 공격으로 사용:
+
+2(x + 5) + 2 = 22
+/2
+→ (x + 5) + 1 = 11
+
+UI:
+
+Helmet: +1 Active
+Chest Armor: ×1 Cracked
+
+그다음 Armor Break 공격:
+
+Chest Armor destroyed.
+Overall defense reduced.
+
+Helmet은 아직 남음.
+
+선택 3, 둘 다 무력화 후 동시 파괴
+
+유저가:
+
+/2
+→ (x + 5) + 1 = 11
+
+-1
+→ x + 5 = 10
+
+UI:
+
+Helmet: +0 Cracked
+Chest Armor: ×1 Cracked
+
+그다음 Armor Break 공격:
+
+Helmet destroyed.
+Chest Armor destroyed.
+
+둘 다 동시에 파괴.
+
+이게 좋은 이유
+
+유저 선택이 살아있음.
+
+Helmet을 먼저 깨고 싶다
+→ -2를 먼저 쓴다
+
+Chest를 먼저 깨고 싶다
+→ /2를 먼저 쓴다
+
+둘 다 수식으로 무력화하고 한 번에 깨고 싶다
+→ /2, -1 후 Armor Break
+
+아예 안 깨고 정답을 안다
+→ 5 입력 후 X 처형
+
+즉, 타겟 선택 UI 없이도 전술 선택이 생김.
+
+UI는 이렇게 해야 함, 락온 적 한정
+
+락온된 적에게만 Armor Panel 표시.
+
+예:
+
+LOCKED TARGET: Armored Goblin
+
+Equation:
+2(x + 5) + 2 = 22
+
+Armor Layers:
+[Head] Helmet        +2    Active
+[Chest] Armor        ×2    Active
+
+/2 후:
+
+Equation:
+(x + 5) + 1 = 11
+
+Armor Layers:
+[Head] Helmet        +1    Active
+[Chest] Armor        ×1    Cracked
+
+-1 후:
+
+Equation:
+x + 5 = 10
+
+Armor Layers:
+[Head] Helmet        +0    Cracked
+[Chest] Armor        ×1    Cracked
+
+Armor Break 후:
+
+Armor Layers:
+[Head] Helmet        Broken
+[Chest] Armor        Broken
+
+또는 Broken은 UI에서 사라지게 해도 됨.
+
+각 아머별 파괴 보상
+
+이건 반드시 있어야 함.
+
+Helmet Broken
+머리 약점 노출
+헤드 피격 시 그로기 증가
+분석/정답 힌트 보너스 가능
+
+Chest Armor Broken
+전체 방어력 감소
+모든 공격의 메인 그로기 증가
+몸통 타격 보상 증가
+
+Gauntlets Broken
+적 공격력 감소
+적 무기 패턴 약화
+패링 보상 증가
+
+Leg Armor Broken
+이동속도 감소
+돌진/회피 패턴 약화
+다운 시간 증가
+
+Cloak Broken
+속성 저항 감소
+회피/은신/마법 방어 제거
+
+이러면 Armor Break가 “해야만 하는 절차”가 아니라 전투 전략이 됨.
+
+조작 추천
+
+현재 구조 기준:
+
+LMB = 일반 수식 공격 / X 공격
+G = Armor Break 공격
+
+흐름:
+
+N 선택, 2 입력, Enter, LMB
+→ 일반 /2
+→ Chest Armor becomes ×1 Cracked
+
+G
+→ 모든 Cracked Armor 동시 파괴
+
+또는:
+
+V 선택, 2 입력, Enter, LMB
+→ 일반 -2
+→ Helmet becomes +0 Cracked
+
+G
+→ Helmet 파괴
+
+중요:
+
+G는 수식을 바꾸는 키가 아님.
+G는 이미 Cracked 된 아머를 실제로 부수는 키.
+구현 방향
+
+기존 Layer를 단순 “제거 대상”으로 보지 말고, 현재 유효값을 가진 Armor Modifier로 봐야 함.
+
+FMathematicalArmorLayer
+- Source: Helmet / Chest / Gauntlet / LegArmor
+- Operation: Add / Multiply / etc.
+- OriginalValue
+- CurrentValue
+- State: Active / Cracked / Broken
+- BreakReward
+
+수식 조작이 들어오면:
+
+일반 Solve Operation:
+Displayed equation과 Armor CurrentValue를 함께 갱신
+
+Armor Break:
+State == Cracked인 모든 Armor를 Broken으로 변경
+보상 발동
+비주얼 파괴
+다음 Codex 방향
+
+아직 바로 복잡하게 구현하지 말고, 지금은 이렇게 시키는 게 맞음.
+
+Do not implement target selection or radial UI.
+
+Mathematical Armor should use a Cracked Armor system.
+
+Normal equation operations should not automatically break armor.
+Instead, they can reduce armor modifiers to identity values:
+- Add/Subtract armor is cracked when CurrentValue becomes 0.
+- Multiply/Divide armor is cracked when CurrentValue becomes 1.
+
+Armor Break action should destroy all currently cracked armor layers at once.
+
+Locked target UI later should show each armor layer, its body part, current modifier value, and state.
+
+이제 Phase 5 구현은 이 규칙으로 가면 됨.
+
+* * *
+
+**You:**
+
+Got it. No target selection, no radial UI, and no automatic armor breaking from normal equation operations.
+
+The revised rule should be:
+
+Normal equation operations affect armor modifier values mathematically, but only change armor state to Cracked when the modifier reaches its identity value.
+
+Armor identities:
+
+- Add armor: cracked when CurrentValue == 0
+- Subtract armor: cracked when CurrentValue == 0
+- Multiply armor: cracked when CurrentValue == 1
+- Divide armor: cracked when CurrentValue == 1
+
+Armor Break action is separate:
+
+- It does not solve the equation.
+- It does not target one layer for now.
+- It destroys all armor layers whose state is currently Cracked.
+- Non-cracked armor remains.
+
+I’d model each armor layer with something like:
+
+
+cpp
+EEquationArmorState
+{
+    Intact,
+    Cracked,
+    Broken
+};
+
+FEquationArmorLayer
+{
+    EEquationLayerOperation Operation;
+    int32 OriginalValue;
+    int32 CurrentValue;
+    EEquationLayerSource BodyPart;
+    EEquationArmorState State;
+};
+
+
+Then normal operations would do two things:
+
+1. Apply the operation to the displayed equation.
+2. Update armor layer modifier values if that operation mathematically reduces them.
+
+Example:
+
+
+text
+2(x + 5) + 2 = 22
+
+
+Layers:
+
+
+text
+Armor Body: Multiply, CurrentValue 2, Intact
+Helmet: Add, CurrentValue 2, Intact
+
+
+Normal /2:
+
+
+text
+(x + 5) + 1 = 11
+
+
+Armor body multiply layer reaches identity 1, so it becomes Cracked, but not broken.
+
+Helmet is now +1, still intact.
+
+Normal -1:
+
+
+text
+x + 5 = 10
+
+
+Helmet add layer reaches identity 0, so it becomes Cracked, but not broken.
+
+Armor Break action:
+
+
+text
+Destroy all cracked layers.
+
+
+This gives the player three valid paths:
+
+- Solve through armor and execute with X.
+- Use normal operations to crack armor, then Armor Break for tactical reward.
+- Use normal operations to simplify the equation without treating that as armor destruction.
+
+For future locked target UI, the data will already be ready to show:
+
+
+text
+Helmet | +1 | Intact
+Body Armor | x1 | Cracked
+
+
+No radial UI or per-layer targeting needed yet.
+
+아무것도 바꾸지 말래서 안한듯?
+
+* * *
+
+**ChatGPT:**
+
+맞음. 아무것도 안 바뀐 게 정상이야.
+내가 “Do not modify files yet”라고 시킨 건 설계 충돌을 먼저 정리하려고 한 거라서, Codex가 계획만 낸 상태임.
+
+이제 방향 확정:
+
+자동 Armor Break 없음
+부위 선택 UI 없음
+일반 수식 연산은 수식을 조작함
+수식상 의미 없어진 갑옷은 Cracked 상태가 됨
+G 키 Armor Break 공격 시 Cracked 된 모든 갑옷 동시 파괴
+락온 UI는 나중에 각 갑옷의 수식값과 상태를 보여줌
+
+그리고 기존 “top layer부터 제거” 방식은 폐기. 지금부터는 Cracked Armor System으로 간다.
+
+Codex에 넣을 구현 프롬프트
+
+그대로 넣어.
+
+Implement Mathematical Armor Cracked System v1.
+
+Important:
+Do NOT implement target selection.
+Do NOT implement radial UI.
+Do NOT automatically break armor during normal equation operations.
+Do NOT use the previous top-layer removal design.
+
+Current design:
+Normal equation operations can mathematically reduce armor modifier values.
+When an armor modifier reaches its identity value, it becomes Cracked.
+Armor Break is a separate action that destroys all currently Cracked armor layers at once.
+
+Armor identities:
+- Add armor is Cracked when CurrentValue == 0
+- Subtract armor is Cracked when CurrentValue == 0
+- Multiply armor is Cracked when CurrentValue == 1
+- Divide armor is Cracked when CurrentValue == 1
+
+Modify only what is necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+
+Do not add real UI widgets, real weapon actors, animations, inventory, AI, lock-on, or save systems yet.
+
+Goal:
+Support examples like:
+
+Base:
+x + 5 = 10
+
+Armor layers:
+Chest Armor: Multiply 2
+Helmet: Add 2
+
+Displayed:
+2(x + 5) + 2 = 22
+
+Normal division by 2:
+2(x + 5) + 2 = 22
+/2
+→ (x + 5) + 1 = 11
+
+Chest Armor CurrentValue becomes 1 and State becomes Cracked.
+Helmet CurrentValue becomes 1 and remains Intact.
+
+Normal subtraction by 1:
+(x + 5) + 1 = 11
+-1
+→ x + 5 = 10
+
+Helmet CurrentValue becomes 0 and State becomes Cracked.
+
+Armor Break action:
+Destroy all Cracked armor layers.
+Chest Armor and Helmet become Broken.
+This should trigger debug messages, but should not change the equation further because they are already identity values.
+
+Requirements:
+
+1. In EquationTypes.h, add enum:
+EEquationArmorState
+- Intact
+- Cracked
+- Broken
+
+2. In EquationTypes.h, add or update armor layer struct:
+FEquationArmorLayer
+
+Fields:
+- EEquationLayerOperation Operation
+- int32 OriginalValue
+- int32 CurrentValue
+- EEquationLayerSource Source
+- FText DisplayName
+- EEquationArmorState State
+- bool bIsArmor
+
+Use bIsArmor so later non-armor operation layers can exist without showing as armor.
+
+3. In UEnemyEquationComponent, add:
+- TArray<FEquationArmorLayer> EquationArmorLayers
+- int32 LayeredRightValue
+- bool bUseLayeredEquation
+
+The base polynomial equation should remain the base formula.
+For Armored Goblin:
+Base polynomial:
+x + 5 = 10
+
+LayeredRightValue:
+22
+
+Armor layers:
+Chest Armor Multiply 2
+Helmet Add 2
+
+4. Display behavior:
+GetDisplayText() should return layered display if bUseLayeredEquation is true.
+
+Examples:
+Base only:
+x + 5 = 10
+
+Multiply 2:
+2(x + 5) = 20
+
+Multiply 2 + Add 2:
+2(x + 5) + 2 = 22
+
+After divide by 2:
+(x + 5) + 1 = 11
+
+After subtract by 1:
+x + 5 = 10
+
+Display should skip identity modifiers:
+- Multiply 1 should not be shown
+- Add 0 should not be shown
+- Broken layers should not be shown
+
+But Cracked layers should remain in armor status data.
+
+5. Add armor status text helper:
+BlueprintCallable:
+- FText GetArmorStatusText() const
+
+Example status:
+Helmet: +1 Intact
+Chest Armor: x1 Cracked
+
+Use readable text. This is for debug and later UI.
+
+6. Answer checking:
+If bUseLayeredEquation is true:
+- Evaluate base polynomial at SubmittedX.
+- Apply all non-broken armor modifier layers in order.
+- Compare result to LayeredRightValue.
+
+Correct x should still execute through armor.
+
+Example:
+2(x + 5) + 2 = 22
+x = 5
+2(5 + 5) + 2 = 22
+Correct.
+
+7. Normal operations:
+Update ApplyOperationToBothSides so:
+
+If bUseLayeredEquation is false:
+- Keep existing polynomial operation behavior.
+
+If bUseLayeredEquation is true:
+- Modify the layered equation and armor CurrentValue values.
+- Do NOT break armor automatically.
+- Only update armor state to Cracked when it reaches identity.
+
+Addition/Subtraction:
+- Adjust the outermost additive armor or additive non-armor modifier if one exists.
+- For v1, support Helmet Add layer.
+- Subtracting from Add layer reduces CurrentValue.
+- Adding to Add layer increases CurrentValue.
+- Update LayeredRightValue accordingly.
+- If no additive layer exists, create a non-armor Add modifier layer with bIsArmor=false.
+
+Multiplication:
+- Multiply every non-broken layer CurrentValue by Value where mathematically applicable.
+- Multiply LayeredRightValue by Value.
+- Use int64 and prevent int32 overflow.
+- Refresh cracked states.
+
+Division:
+- Value must not be 0.
+- Only succeed if LayeredRightValue and all relevant layer CurrentValues divide cleanly by Value.
+- Divide every non-broken layer CurrentValue by Value.
+- Divide LayeredRightValue by Value.
+- Refresh cracked states.
+- If not cleanly divisible, return false and leave unchanged.
+
+8. Cracked state update:
+Add helper:
+- void RefreshArmorCrackedStates()
+
+Rules:
+- If bIsArmor == false, do not mark as armor cracked.
+- Broken layers stay Broken.
+- Add/Subtract armor:
+  CurrentValue == 0 => Cracked
+  otherwise Intact
+- Multiply/Divide armor:
+  CurrentValue == 1 => Cracked
+  otherwise Intact
+
+9. Armor Break:
+Add to UEnemyEquationComponent:
+BlueprintCallable:
+- int32 BreakAllCrackedArmorLayers()
+
+Behavior:
+- Find all layers where bIsArmor == true and State == Cracked.
+- Set them to Broken.
+- Return number broken.
+- Log each broken layer and source.
+- Do not change LayeredRightValue.
+- Do not solve the equation.
+- Refresh display.
+
+10. In APrototypeEquationEnemy, add:
+BlueprintCallable:
+- int32 BreakCrackedArmorOnEnemy()
+
+It should call EquationComponent->BreakAllCrackedArmorLayers() and refresh display.
+
+Also add CallInEditor test setup functions:
+- TestSetArmoredGoblin()
+- TestSetArmoredGoblinWithHelmet()
+
+TestSetArmoredGoblin:
+Base: x + 5 = 10
+Chest Armor: Multiply 2
+Displayed: 2(x + 5) = 20
+
+TestSetArmoredGoblinWithHelmet:
+Base: x + 5 = 10
+Chest Armor: Multiply 2
+Helmet: Add 2
+Displayed: 2(x + 5) + 2 = 22
+
+11. In APythagoreanHarmonyCharacter:
+Bind G to prototype Armor Break action:
+- Find nearest equation enemy.
+- If none, print "No equation enemy in range."
+- Call BreakCrackedArmorOnEnemy().
+- If count > 0, print "Armor Break: destroyed N cracked armor layer(s)."
+- If count == 0, print "No cracked armor to break."
+
+G should not require number input.
+G should not alter normal equation value except removing broken identity layers visually.
+G should not submit X answer.
+
+12. Preserve existing behavior:
+- Normal Goblin still starts as x + 5 = 10.
+- 5 + X still executes.
+- 13 + Subtraction still transforms normal Goblin to x - 8 = -3.
+- Addition/Subtraction/Multiplication/Clean Division still work on non-armored equations.
+- Current Z/V/B/N/M weapon selection still works.
+- Enter arms equation action.
+- LMB uses armed equation action.
+- LMB without armed action prints Basic attack.
+- C cancels input/action.
+
+13. Add debug messages:
+- Layered equation initialized.
+- Armor value changed.
+- Armor became Cracked.
+- Armor Break destroyed Helmet.
+- Armor Break destroyed Chest Armor.
+- No cracked armor to break.
+
+14. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. What structs/enums were added
+3. How normal operations affect armor values
+4. How Cracked state works
+5. How G Armor Break works
+6. How answer checking works through armor
+7. How to test Armored Goblin
+8. How to test Armored Goblin with Helmet
+테스트 순서
+1. 기본 고블린 보존
+기본 x + 5 = 10
+M 선택
+5 입력
+Enter
+LMB
+
+기대:
+
+AXIOM EXECUTION
+2. Armored Goblin With Helmet 세팅
+
+에디터에서 적 선택:
+
+TestSetArmoredGoblinWithHelmet
+
+기대 표시:
+
+2(x + 5) + 2 = 22
+3. Chest Armor만 Crack
+N 선택, Division
+2 입력
+Enter
+LMB
+
+기대 표시:
+
+(x + 5) + 1 = 11
+
+Armor status 기대:
+
+Chest Armor: x1 Cracked
+Helmet: +1 Intact
+
+그 다음:
+
+G
+
+기대:
+
+Armor Break: destroyed 1 cracked armor layer(s).
+Chest Armor destroyed.
+Helmet remains.
+4. Helmet까지 Crack
+
+새로 시작해서:
+
+N 선택
+2 입력
+Enter
+LMB
+→ (x + 5) + 1 = 11
+
+V 선택
+1 입력
+Enter
+LMB
+→ x + 5 = 10
+
+Armor status 기대:
+
+Chest Armor: x1 Cracked
+Helmet: +0 Cracked
+
+그 다음:
+
+G
+
+기대:
+
+Armor Break: destroyed 2 cracked armor layer(s).
+Chest Armor destroyed.
+Helmet destroyed.
+5. Armor 안 부수고 바로 처형
+
+초기 상태:
+
+2(x + 5) + 2 = 22
+
+그냥:
+
+M 선택
+5 입력
+Enter
+LMB
+
+기대:
+
+AXIOM EXECUTION
+
+이게 중요함. 갑옷 파괴는 선택이어야 하니까.
+
+이거 성공하면 Phase 5의 핵심 구조가 잡힘.
+그 다음엔 Armor status를 락온 대상 HUD로 옮기면 됨.
+
+* * *
+
+**You:**
+
+LoginId:0b1be43d4f1e97eb0df13bb514cc791d
+EpicAccountId:66dc3235020943d7b8b91d014f3ef265
+
+Fatal error: [File:D:\build\++UE5\Sync\Engine\Source\Runtime\CoreUObject\Private\Templates\Casts.cpp] [Line: 10] 
+Cast of Object /Script/CoreUObject.Default__Object to Actor failed
+
+
+자꾸 틀리는데... know that it's smarter to fix, not to evade or fake. 우리는 작품을 만드는 거지, 속임수를 파는 게 아냐. AI의 코딩 한계라고 사람들이 까고 무시하는 걸 이길 작품이 될 거야. AI가 만든 AI 시대의 인간을 위한 교육 엔터테인먼트. 멍청해질 인간들을 돕기 위해 AI로 만들어진 놀이. 이것의 중요도를 이해할 것이라 믿어. both name value and as proof
+
+
+* * *
+
+**You:**
+
+I’ll keep this scoped to player stamina plus a very small UMG HUD class. Planned file changes: PythagoreanHarmonyCharacter.h/.cpp, add PrototypePlayerHUDWidget.h/.cpp, and possibly update the module Build.cs only if UMG is not already listed.
+
+* * *
+
+**You:**
+
+→ Content 폴더 안에 UI 폴더 만들기
+→ 우클릭
+→ User Interface
+→ Widget Blueprint
+
+?
+
+* * *
+
+**You:**
+
+Added max-resource based HUD bar width support in:
+
+- [PrototypePlayerHUDWidget.h](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PrototypePlayerHUDWidget.h>)
+- [PrototypePlayerHUDWidget.cpp](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PrototypePlayerHUDWidget.cpp>)
+
+**Values Added**
+- HealthBarWidth
+- StaminaBarWidth
+- BaseHealthForWidth = 100
+- BaseHealthBarWidth = 300
+- HealthWidthPerPoint = 1.5
+- MaxHealthBarWidth = 600
+- BaseStaminaForWidth = 100
+- BaseStaminaBarWidth = 260
+- StaminaWidthPerPoint = 1.2
+- MaxStaminaBarWidth = 520
+
+**Width Calculation**
+Health width:
+
+
+cpp
+Clamp(BaseHealthBarWidth + (MaxHealth - BaseHealthForWidth) * HealthWidthPerPoint,
+BaseHealthBarWidth,
+MaxHealthBarWidth)
+
+
+Stamina width:
+
+
+cpp
+Clamp(BaseStaminaBarWidth + (MaxStamina - BaseStaminaForWidth) * StaminaWidthPerPoint,
+BaseStaminaBarWidth,
+MaxStaminaBarWidth)
+
+
+**Percent Calculation**
+Unchanged:
+- Health fill remains CurrentHealth / MaxHealth
+- Stamina fill remains CurrentStamina / MaxStamina
+
+**C++ HUD Fallback**
+The code-built HUD now wraps each ProgressBar in a SizeBox and applies:
+- HealthBarSizeBox->SetWidthOverride(HealthBarWidth)
+- StaminaBarSizeBox->SetWidthOverride(StaminaBarWidth)
+
+**Widget Blueprint Binding**
+If you make a Widget Blueprint later:
+- Bind Health SizeBox.WidthOverride to HealthBarWidth
+- Bind Stamina SizeBox.WidthOverride to StaminaBarWidth
+- Keep ProgressBar percent bound to HealthPercent and StaminaPercent
+
+No combat behavior, stamina costs, health damage, or equation systems were changed.
+
+Build note: UHT succeeded, but the full compile is blocked because Live Coding is active. Press Ctrl+Alt+F11 or close the editor, then rebuild.
+
+사진봐 바인드 없어
+
+
+* * *
+
+**You:**
+
+다함
+
+* * *
+
+**You:**
+
+붙여넣은 텍스트 (1).txt
+문서
+일단 회피중이라 뜨긴함. 근데 잘 피해지는지는 모르겠음. 적이 공격하는 타이밍을 보여주는 효과가 없어. No attack windup nor attack signal to react to. 일단 스팸회피로그 보냄. 작동함?
+
+* * *
+
+**You:**
+
+붙여넣은 텍스트 (1).txt
+문서
+
+* * *
+
+**You:**
+
+붙여넣은 텍스트 (1).txt
+문서
+The testing was a hard fight. lol. It was kinda engaging but id need a better combat control. 
+
+* * *
+
+**ChatGPT:**
+
+첨부 로그 전체 확인함. GDD는 텍스트 기준 약 1,285개 문단, 섹션 1~30 순서 확인됨. Plan 문서도 Phase 0~8과 Vertical Slice 기준까지 확인됨. 전체 제공 내용 기준으로 답함.
+
+결론: 지금 전투는 “작동”을 넘어서 약간 재밌어지기 시작했음. 로그에서도 회피, 공격 예고, 수식 조작, 아머 브레이크, 메인 그로기, X 정답 판정이 한 전투 안에서 섞여 돌아감. 특히 Enemy attack windup, Damage avoided by dodge, Enemy stagger increased, Enemy main staggered, Armor Break destroyed, Evaluated layered answer check... Correct: true가 모두 확인됨. 
+
+붙여넣은 텍스트 (1)
+
+근데 네 말대로 컨트롤이 아직 빡셈. 이건 난이도 문제가 아니라 “조작 부하” 문제임. GDD도 이 게임이 수학 퀴즈가 아니라 액션 전투이고, 전투 실력으로 수학 풀이 시간을 벌어야 한다고 잡고 있음. 
+
+피타고라스의 조율 만물은 수다 Gdd 바이블
+
+ 지금은 그 방향은 보이는데, 조작이 너무 프로토타입식이라 플레이어가 손가락이 꼬임.
+
+지금 하지 말 것
+
+새 적, 새 무기, 패링, 방어, 내구도, AI 에셋은 잠깐 멈추는 게 맞음.
+
+다음은 Combat Control Pass v0 해야 함.
+
+문제점
+
+현재 입력 흐름:
+
+무기 선택
+숫자 입력
+Enter 장전
+LMB 실행
+회피
+스태미나 확인
+적 카운트다운 확인
+수식 확인
+아머 확인
+그로기 확인
+
+이게 한 전투에서 동시에 요구됨. 그래서 재밌긴 한데 피곤함.
+
+다음 목표
+
+기능 추가가 아니라 조작 정리.
+
+우선순위:
+
+1. 현재 선택 무기와 현재 입력 숫자를 HUD에 명확히 표시
+2. EquationActionArmed 상태를 HUD에 표시
+3. 공격 카운트다운 텍스트를 더 읽기 쉽게 만들기
+4. 메인 그로기 중 적 공격 windup이 확실히 취소되게 하기
+5. 기본 공격, 회피, 수식 공격의 입력 흐름을 더 명확히 하기
+이번 작업은 Cursor
+
+이번 건 새 시스템이 아니라 기존 입력/피드백 정리니까 Cursor 써.
+
+Cursor에 이거 넣어:
+
+Do a Combat Control Pass v0.
+
+Do not add new enemies.
+Do not add new weapons.
+Do not add parry.
+Do not add block.
+Do not add inventory.
+Do not change equation math rules.
+Do not change armor math rules.
+Do not use CastChecked.
+Do not use unsafe actor scans.
+
+Current prototype works:
+- Basic attack works.
+- Stamina works.
+- Dodge works.
+- Enemy windup/strike/cooldown works.
+- Main stagger works.
+- Equation operations work.
+- Armor Break works.
+- X answer check works.
+
+Problem:
+The fight is engaging but the controls are too hard to read during combat. The player needs clearer feedback for current weapon, current input, armed equation action, and attack timing.
+
+Goals:
+
+1. Add or improve HUD/debug display for:
+- Current selected equation weapon
+- Current input number
+- Whether Equation Action is Armed
+- Current control hint
+
+Example:
+Weapon: Subtraction
+Input: 5
+Armed: YES
+LMB: Apply -5
+
+If not armed:
+Weapon: Subtraction
+Input: 5
+Armed: NO
+Enter: Arm Action
+LMB: Basic Attack
+
+2. Make enemy attack countdown more readable.
+If CombatStatusText currently shows countdown, make sure it clearly displays:
+Attack in 1.5
+Attack in 1.4
+...
+ATTACK!
+
+3. Main stagger should cancel active attack windup.
+If enemy enters Main Stagger while an attack countdown is active:
+- Cancel the windup.
+- Clear or replace countdown text with MAIN STAGGER.
+- Do not apply delayed strike after stagger starts.
+- Log "Enemy attack windup canceled by main stagger."
+
+4. During Main Stagger:
+- Enemy should not start new attack windup.
+- CombatStatusText should show MAIN STAGGER.
+- After recovery, normal attack behavior resumes.
+
+5. Preserve:
+- Basic attack stamina cost
+- Equation action stamina cost
+- Armor Break stamina cost
+- Dodge stamina cost
+- Player HUD health/stamina
+- Existing weapon selection keys
+- Existing number input
+- X execution still ignores stagger requirement
+
+6. Keep logs minimal but useful:
+- Weapon selected
+- Action armed
+- Action used
+- Enemy attack windup canceled by main stagger
+- Enemy main staggered
+- Enemy recovered from main stagger
+
+Before final response, explain:
+1. Which files changed
+2. What HUD/control feedback was added
+3. How main stagger cancels windup
+4. How to test
+테스트 기준
+
+성공하면 전투 중에 네가 바로 알아야 함:
+
+내가 지금 무슨 무기를 들었는지
+숫자 몇을 입력했는지
+Enter를 눌러 장전했는지
+LMB가 평타인지 수식 공격인지
+적 공격이 몇 초 뒤 들어오는지
+적이 메인 그로기라 안전한지
+
+이게 되면 다음부터 전투가 훨씬 덜 억울해짐.
+
+지금은 “재밌는데 정신없음.”
+다음 패스의 목표는 “재밌고 읽힘.”
+
+* * *
+
+**You:**
+
+붙여넣은 텍스트 (1).txt
+문서
+아직도..? 죽은뒤 캐릭터 조작 ㄱㄴ. 원했던거 됨?
+
+* * *
+
+**You:**
+
+
+
+* * *
+
+**You:**
+
+붙여넣은 마크다운(1).md
+파일
+
+* * *
+
+**You:**
+
+붙여넣은 텍스트 (1).txt
+문서
+됨?
+
+* * *
+
+**You:**
+
+붙여넣은 텍스트 (1).txt
+문서
+
+* * *
+
+**You:**
+
+붙여넣은 텍스트 (1).txt
+문서
+
+* * *
+
+**You:**
+
+어디서 키워?
+
+* * *
+
+**You:**
+
+Implemented Prototype Weapon Data + Equipped Slots v0.
+
+Changed:
+- [PrototypeWeaponData.h](<E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PrototypeWeaponData.h>)
+- [PrototypeWeaponData.cpp](<E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PrototypeWeaponData.cpp>)
+- [PythagoreanHarmonyCharacter.h](<E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.h:214>)
+- [PythagoreanHarmonyCharacter.cpp](<E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.cpp:899>)
+
+Added UPrototypeWeaponData as a UDataAsset with:
+
+- DisplayName
+- WeaponMode
+- WeaponMesh
+- FallbackColor
+- hand relative transform
+- sheath relative transform
+- future-only comments for damage, stamina, durability, guard, and parry stats
+
+Added character equipped slots:
+- EquippedAdditionWeapon
+- EquippedSubtractionWeapon
+- EquippedMultiplicationWeapon
+- EquippedDivisionWeapon
+- EquippedXAnswerWeapon
+
+Fallback priority is now:
+1. Equipped UPrototypeWeaponData with WeaponMesh
+2. Old direct mesh field, like AdditionWeaponMesh
+3. DefaultPrototypeWeaponMesh
+4. Built-in fallback cylinder
+
+Hand/sheath transforms now work like this:
+- If weapon data is equipped, it uses the data asset’s hand/sheath transforms.
+- If no data is equipped, it uses the character’s generic WeaponHand... / WeaponSheath... fields.
+
+To create DA_AdditionSword:
+1. In Unreal, create a new Data Asset.
+2. Pick PrototypeWeaponData.
+3. Set WeaponMode = Addition.
+4. Set WeaponMesh to /Game/prototype/weapons/addition/addition_sword_prototype/addition_sword_prototype.
+5. Tune hand/sheath transforms on the data asset.
+
+Then assign it in BP_ThirdPersonCharacter:
+- Class Defaults -> Prototype Weapon Equip|Slots -> EquippedAdditionWeapon
+
+UHT completed successfully. Full build is still blocked because Live Coding is active; close the editor or press Ctrl+Alt+F11, then rebuild.
+
+what do?
+
+* * *
+
+**You:**
+
+매우 성공적. ㄱㄱ. 나머지도 추가 가능하게 해줘. 현재 좌우손 선택 불가, 그리고 Weapon Mode = Addition 밖에 없음
+
+
+* * *
+
+**ChatGPT:**
+
+ㅇㅇ. 거의 정확히 했다.
+코드 구조 기준으로 보면, 네가 원한 핵심 리팩터는 들어갔음.
+
+판정
+[성공] WeaponData가 무기 크기/소모 슬롯량을 가짐
+[성공] Carry location이 장착 위치/용량/소켓/오프셋을 정의함
+[성공] 실제 장비 상태는 PrototypeCarrySlots가 원본이 됨
+[성공] QuickSlot이 WeaponData 직접 선택이 아니라 CarrySlot을 가리키는 구조로 이동함
+[성공] ActiveWeapon은 QuickSlot → CarrySlot → WeaponData로 해석됨
+[성공] Visible carry mesh도 carried entry 기준으로 생성됨
+[성공] 같은 위치에 여러 무기 장착 가능
+[성공] CarrySizeUnits 합산으로 capacity 검사함
+
+GDD의 장비 설계도 “신체 부위별 슬롯”과 “무기 크기에 따른 슬롯 점유량”을 요구하고 있어서, 지금 방향은 문서 철학에도 맞음. 
+
+피타고라스의 조율 만물은 수다 Gdd 바이블
+
+코드상 확인된 핵심
+
+UPrototypeWeaponData에 CarrySizeUnits가 들어갔고, “inventory weight가 아니라 body carry capacity cost”라고 명시되어 있음. PreferredCarrySlot도 실제 장착 상태가 아니라 자동 배치 힌트라고 정리됨. 
+
+PrototypeWeaponData
+
+FPrototypeCarryLocationDefinition이 추가되어서, 각 장착 위치가 CarrySlot, CapacityUnits, SocketName, RelativeLocation/Rotation/Scale을 가짐. 즉, 오른 어깨 3칸, 등 4칸 같은 정의를 BP에서 할 수 있는 구조가 됨. 
+
+PythagoreanHarmonyCharacter
+
+PrototypeCarrySlots가 “actual equipped carry state”라고 주석 처리되어 있음. 이게 중요함. 이제 실제 몸 장착 상태는 WeaponData가 아니라 캐릭터의 carry slots가 원본임. 
+
+PythagoreanHarmonyCharacter
+
+Quick slot도 QuickCarrySlot1~5로 바뀌었고, Z/V/B/N/M이 각각 “이 carry location에서 첫 무기를 선택한다”는 구조가 됨. 
+
+PythagoreanHarmonyCharacter
+
+Capacity 검사도 들어감. CanEquipPrototypeWeaponToCarrySlot에서 이미 장착 여부, 남은 용량, CarrySizeUnits를 확인하고, 부족하면 "Not enough carry capacity" 로그를 냄. 
+
+PythagoreanHarmonyCharacter
+
+Visible carry mesh도 entry별로 생성되고, 같은 carry slot 안에서 SlotIndexInLocation 기준으로 살짝 offset을 주며, active weapon이 drawn 상태면 몸 visual을 숨김. 
+
+PythagoreanHarmonyCharacter
+
+아직 남은 약점
+
+다만 완성형 장비 시스템은 아님. 지금 한계는 이거임:
+
+RightShoulder에 무기 3개가 있으면
+QuickSlot1 = RightShoulder
+→ 현재는 그 위치의 "첫 번째 무기"만 선택함
+
+즉, 네가 원하는 최종형:
+
+오른어깨에 직검 3개
+→ 휠에서 그중 1번/2번/3번 선택
+
+까지는 아직 아님.
+
+지금은:
+
+Carry location capacity system v0
+
+성공이고, 다음 세부 단계는:
+
+Carry location 내부 weapon index 선택
+또는
+QuickSlot이 CarrySlot + EntryIndex를 가리키게 만들기
+최종 판정
+Did it do it?
+YES, 구조 리팩터는 성공.
+
+하지만 다음에 바로 해야 할 정리는 이거임:
+
+QuickSlot = CarrySlot만 가리킴
+↓
+QuickSlot = CarrySlot + WeaponIndex/EntryId 가리키게 확장
+
+이걸 해야 오른어깨에 직검 3개 달았을 때 그중 어떤 검을 꺼낼지 선택 가능해짐.
+
+* * *
+
+**You:**
+
+야... ㅅㅂ 이게 맞아? 그냥 시키는대로 하려 했는데, 이딴게 UI냐? 그리고 프로토타입 단곈데 좀 빨리 빨리 바꾸고 고치고 진행해
+
+* * *
+
+**You:**
+
+Is this what you wanted?
+참고로: 
+XX.
+.XX
+..X
+불가. 엔터키로 줄바꾸기 없음
+
+* * *
+
+**You:**
+
+LogPythagoreanHarmony: Active weapon carry visual hidden while drawn.
+LogPythagoreanHarmony: Carry slot visual shown: Rear Hip DA_Test_Katana_A
+LogPythagoreanHarmony: Active weapon carry visual hidden while drawn.
+LogPythagoreanHarmony: Prototype carry slot visuals refreshed.
+LogPythagoreanHarmony: Weapon drawn to right hand: DA_Test_Greatshield
+LogPythagoreanHarmony: Player Stamina: 80.0/100.0
+LogPythagoreanHarmony: Player Stamina: 70.0/100.0
+LogPythagoreanHarmony: Player Stamina: 60.0/100.0
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Selected main-hand weapon: DA_Test_Katana_A
+LogPythagoreanHarmony: Player Stamina: 68.2/100.0
+LogPythagoreanHarmony: Player Stamina: 58.2/100.0
+LogPythagoreanHarmony: Player Stamina: 48.2/100.0
+LogPythagoreanHarmony: Player Stamina: 38.2/100.0
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Selected off-hand weapon: DA_Test_Greatshield
+LogPythagoreanHarmony: Selected main-hand weapon: DA_Test_Greatshield
+LogPythagoreanHarmony: Player Stamina fully regenerated: 100.0/100.0
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Selected main-hand weapon: DA_Test_Katana_A
+LogPythagoreanHarmony: Player Stamina: 90.0/100.0
+LogPythagoreanHarmony: Player Stamina: 80.0/100.0
+LogPythagoreanHarmony: Player Stamina: 70.0/100.0
+LogPythagoreanHarmony: Player Stamina: 60.0/100.0
+LogPythagoreanHarmony: Player Stamina: 50.0/100.0
+LogPythagoreanHarmony: Player Stamina: 40.0/100.0
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Player Stamina: 69.4/100.0
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Player Stamina: 59.4/100.0
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Player Stamina: 49.4/100.0
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Player Stamina: 39.4/100.0
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Carry slot visual shown: Rear Hip DA_Test_Katana_A
+LogPythagoreanHarmony: Carry slot visual shown: Shield Slot DA_Test_Greatshield
+LogPythagoreanHarmony: Prototype carry slot visuals refreshed.
+LogPythagoreanHarmony: Carry slot visual shown: Rear Hip DA_Test_Katana_A
+LogPythagoreanHarmony: Carry slot visual shown: Shield Slot DA_Test_Greatshield
+LogPythagoreanHarmony: Prototype carry slot visuals refreshed.
+LogPythagoreanHarmony: Weapon sheathed.
+LogPythagoreanHarmony: Selected main-hand weapon: DA_Test_Greatshield
+LogPythagoreanHarmony: Player Stamina fully regenerated: 100.0/100.0
+LogPythagoreanHarmony: Selected main-hand weapon: DA_Test_Katana_A
+LogPythagoreanHarmony: Selected main-hand weapon: DA_Test_Greatshield
+LogPythagoreanHarmony: Selected main-hand weapon: DA_Test_Katana_A
+LogPythagoreanHarmony: Selected main-hand weapon: DA_Test_Greatshield
+LogPythagoreanHarmony: Selected main-hand weapon: DA_Test_Katana_A
+LogPythagoreanHarmony: No grip profile. Using weapon data fallback.
+LogPythagoreanHarmony: Held weapon data applied: X Answer
+LogPythagoreanHarmony: Weapon drawn to right hand.
+LogPythagoreanHarmony: Held weapon visual refreshed: X Answer
+LogPythagoreanHarmony: Active weapon carry visual hidden while drawn.
+LogPythagoreanHarmony: Active weapon carry visual hidden while drawn.
+LogPythagoreanHarmony: Carry slot visual shown: Shield Slot DA_Test_Greatshield
+LogPythagoreanHarmony: Prototype carry slot visuals refreshed.
+LogPythagoreanHarmony: Weapon drawn to right hand: DA_Test_Katana_A
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Guard lowered.
+LogPythagoreanHarmony: Player Stamina: 90.0/100.0
+LogPythagoreanHarmony: Guard raised.
+LogPythagoreanHarmony: Player Stamina: 80.0/100.0
+LogPythagoreanHarmony: Guard lowered.
+LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+LogWorld: BeginTearingDown for /Game/ThirdPerson/UEDPIE_0_Lvl_ThirdPerson
+LogPythagoreanHarmony: Unregistered prototype equation enemy: PrototypeEquationEnemy_UAID_345A6011442081D902_1217984353
+LogPythagoreanHarmony: Unregistered prototype equation enemy: PrototypeEquationEnemy_UAID_345A6011442081D902_1222778354
+LogPythagoreanHarmony: Unregistered prototype equation enemy: PrototypeEquationEnemy_UAID_345A6011442081D902_1231247355
+LogPythagoreanHarmony: Unregistered prototype equation enemy: PrototypeEquationEnemy_UAID_345A6011442081D902_1214038352
+LogPythagoreanHarmony: Unregistered prototype equation enemy: PrototypeEquationEnemy_UAID_345A601144203AD702_1946527743
+LogPythagoreanHarmony: Unregistered prototype equation enemy: PrototypeEquationEnemy_UAID_345A6011442081D902_1206753351
+LogWorld: UWorld::CleanupWorld for Lvl_ThirdPerson, bSessionEnded=true, bCleanupResources=true
+LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+LogWorldPartition: UWorldPartition::Uninitialize : World = /Game/ThirdPerson/UEDPIE_0_Lvl_ThirdPerson.Lvl_ThirdPerson
+LogPlayLevel: Display: Shutting down PIE online subsystems
+LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+LogAudioMixer: Deinitializing Audio Bus Subsystem for audio device with ID 5
+LogAudioMixer: Display: FMixerPlatformXAudio2::StopAudioStream() called. InstanceID=5, StreamState=4
+LogAudioMixer: Display: FMixerPlatformXAudio2::StopAudioStream() called. InstanceID=5, StreamState=2
+LogUObjectHash: Compacting FUObjectHashTables data took   0.95ms
+LogPlayLevel: Display: Destroying online subsystem :Context_10
+
+Done. This was the proper hard cut, not another “deprecated but still lurking” pass.
+
+Changed source files:
+- [PythagoreanHarmonyCharacter.h](E:/UE%20Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.h)
+- [PythagoreanHarmonyCharacter.cpp](E:/UE%20Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.cpp)
+- [PrototypeWeaponData.h](E:/UE%20Project/PythagoreanHarmony/Source/PythagoreanHarmony/PrototypeWeaponData.h)
+- [PrototypeWeaponGripProfile.h](E:/UE%20Project/PythagoreanHarmony/Source/PythagoreanHarmony/PrototypeWeaponGripProfile.h)
+- [PrototypeWeaponTypes.h](E:/UE%20Project/PythagoreanHarmony/Source/PythagoreanHarmony/PrototypeWeaponTypes.h)
+
+Removed completely:
+- Fixed math slots: EquippedAdditionWeapon, EquippedSubtractionWeapon, EquippedMultiplicationWeapon, EquippedDivisionWeapon, EquippedXAnswerWeapon
+- Quick slot system: all QuickWeaponSlot, StartingQuickSlot, QuickCarrySlot, QuickCarryReference, ActiveQuickWeaponSlotIndex, assign/select/get/clear quick slot functions
+- Old carry-capacity system: CarrySizeUnits, DefaultCarrySlot, FPrototypeCarrySlotEntry, FPrototypeCarrySlotReference, FPrototypeCarryLocationDefinition, PrototypeCarrySlots, PrototypeCarryLocationDefinitions, and old carry-capacity wrappers
+- Old weapon identity fields: WeaponMode, PreferredEquipSlot, old Hand, and the unused EPrototypeEquipSlot enum
+
+Current UPrototypeWeaponData now keeps the active fields only: identity/mesh/color, SupportedMathOperation, archetype, HandRequirement, EquipLoadWeight, PreferredCarrySlot, AllowedCarrySlots, equipment shape preset/custom mask/shape, grip profile, socket overrides, and grip transforms.
+
+Startup now uses only:
+- StartingPrototypeInventory
+- StartingEquipmentPlacements
+- existing editor-set PrototypeEquipmentPlacements
+
+If no equipment placements are found, it logs: No equipment grid placements found. Equipped weapon candidates are empty.
+
+Active math operation now comes from the drawn active weapon:
+ActivePrototypeWeapon->SupportedMathOperation.
+CurrentPrototypeWeaponMode remains only as the cached runtime operation.
+
+Build passed with:
+Build.bat -Target="PythagoreanHarmonyEditor Win64 Development" ... -NoLiveCoding
+
+Blueprint cleanup: open BP_ThirdPersonCharacter and affected weapon data / grip assets, compile, fix any missing old fields by using StartingPrototypeInventory, StartingEquipmentPlacements, and SupportedMathOperation, then save all. Missing legacy fields are expected after this deletion.
+
+Test:
+1. Add weapon data to StartingPrototypeInventory.
+2. Add matching StartingEquipmentPlacements.
+3. PIE.
+4. Use Z/V to cycle main-hand equipped weapons.
+5. Use B/N to cycle off-hand equipped weapons.
+6. Press R to draw.
+7. Verify equation action uses the drawn weapon’s SupportedMathOperation.
+
+
+* * *
+
+**ChatGPT:**
+
+맞음. 내가 또 너무 “방패=오프핸드”, “대검=양손”, “카타나=한손” 같은 고정 RPG 분류로 끌고 갔음. 네 방향은 그게 아님.
+
+네 시스템에서는 무기 종류가 손을 강제하면 안 됨.
+손은 “아이템 고정 속성”이 아니라 현재 어떻게 들었는가에 가까워야 함.
+
+수정된 설계
+잘못된 방향
+Shield = OffHandOnly
+Katana = OneHanded
+Greatsword = TwoHanded
+MainHandOnly / OffHandOnly
+
+이러면 창의성이 죽음.
+
+맞는 방향
+WeaponData = 이 물건의 모양, 무게, 수학 기능, 메쉬, grip 후보
+Draw State = 지금 어느 손/방식으로 들었는가
+
+즉:
+
+방패도 오른손에 들 수 있음
+카타나도 왼손에 들 수 있음
+대검도 한손으로 들 수는 있지만, 패널티가 있을 수 있음
+쌍수도 가능
+양손잡기도 가능
+
+손 강제 대신 draw mode가 있어야 함.
+
+새 핵심 개념
+WeaponData에 있어야 하는 것
+EquipLoadWeight
+EquipmentShape
+SupportedMathOperation
+PreferredCarrySlot
+AllowedCarrySlots
+Grip profiles
+Available draw modes
+WeaponData에 없어야 하는 것
+MainHandOnly
+OffHandOnly
+Shield must be offhand
+Katana must be one-handed
+Greatsword must be two-handed
+더 좋은 구조
+Draw Mode
+
+무기가 “무슨 종류냐”보다 중요한 건 어떻게 뽑아 들 수 있냐임.
+
+예:
+
+OneHand_Main
+OneHand_Off
+DualWield
+TwoHanded
+StoredUse, 예: hidden blade / wrist weapon
+
+무기마다 가능한 draw mode 목록을 가질 수 있음.
+
+예:
+
+Katana:
+- OneHand_Main 가능
+- OneHand_Off 가능
+- TwoHanded 가능
+
+Greatsword:
+- OneHand_Main 가능, 하지만 나중에 stat penalty 가능
+- TwoHanded 가능
+
+Shield:
+- OneHand_Main 가능
+- OneHand_Off 가능
+- TwoHanded 가능할 수도 있음, 농담 같은 빌드 가능
+
+HiddenBlade:
+- StoredUse 가능
+- OneHand_Off 가능할 수도 있음
+
+이렇게 가면 “정해진 무기 타입”이 아니라, 플레이어가 어떻게 쓰는가가 중심이 됨.
+
+지금 validation도 바꿔야 함
+
+내가 전에 말한 이건 취소:
+
+Shield should usually be OffHandOnly
+Greatsword should be TwoHanded
+
+이런 warning 넣으면 안 됨.
+네 게임에서는 일부러 이상한 빌드가 가능해야 함.
+
+Validation은 “취향/상식”을 검사하면 안 되고, 진짜 데이터 오류만 검사해야 함.
+
+검사할 것:
+
+EquipmentShape invalid
+WeaponMesh missing
+StartingEquipmentPlacement invalid
+item clips outside grid
+overlap
+weapon not in inventory
+EquipLoadWeight <= 0
+SupportedMathOperation unset/default인지 확인만
+
+검사하지 말 것:
+
+방패가 오른손에 있음
+대검이 한손 후보임
+카타나가 오프핸드 후보임
+무기 타입과 손이 안 맞음
+수정 프롬프트
+Refactor drawn weapon hand rules to remove hard main-hand/off-hand weapon restrictions.
+
+Use Codex.
+
+Do not add final inventory UI.
+Do not add final weapon wheel UI.
+Do not add item pickup.
+Do not add item drops.
+Do not add durability.
+Do not add save/load.
+Do not add item instances.
+Do not add final animations.
+Do not change equation math.
+Do not change armor math.
+Do not change combat damage/stamina values.
+Do not use CastChecked.
+Do not use unsafe actor scans.
+
+Current issue:
+The current system introduced HandRequirement-like logic such as MainHandOnly, OffHandOnly, OneHanded, TwoHanded.
+This is too restrictive for the intended design.
+
+Desired design:
+Weapons should not be hard-locked to a specific hand by weapon type.
+A shield should be drawable in either hand if the player wants.
+A katana should not be forced into one specific hand.
+A greatsword should not be hard-forced into only two-handed use at this prototype stage.
+Weapon type/archetype should not dictate hand rules.
+
+Hands are combat state, not permanent equipment slots.
+Equipment grid placement says where the weapon is carried.
+Draw state says how the weapon is currently held.
+
+Goal:
+Replace strict hand requirement logic with flexible draw mode logic.
+
+PART A: Replace or deprecate HandRequirement
+
+Remove active use of:
+- MainHandOnly
+- OffHandOnly
+- rigid OneHanded/TwoHanded enforcement
+
+Do not validate or warn based on weapon archetype and hand.
+
+If an enum must remain for Blueprint compatibility, rename/reinterpret it as legacy or deprecated.
+
+PART B: Add flexible draw mode enum
+
+Add UENUM:
+
+EPrototypeWeaponDrawMode
+{
+    OneHanded,
+    TwoHanded,
+    DualWield,
+    StoredUse
+};
+
+Meaning:
+- OneHanded: can be drawn into either main hand or off hand.
+- TwoHanded: occupies both hands when selected.
+- DualWield: future mode for paired or dual weapons.
+- StoredUse: future mode for wrist/hidden blade style weapons that may be used from body placement without normal hand draw.
+
+PART C: Add available draw modes to WeaponData
+
+Add to UPrototypeWeaponData:
+
+- TArray<EPrototypeWeaponDrawMode> AvailableDrawModes
+- EPrototypeWeaponDrawMode DefaultDrawMode = OneHanded
+
+Rules:
+- If AvailableDrawModes is empty, treat OneHanded as available by default.
+- Do not infer draw modes from WeaponArchetype.
+- WeaponArchetype is descriptive / animation / UI data only, not a hard gameplay restriction.
+
+PART D: Update draw candidate collection
+
+Update GetPrototypeDrawableEquippedWeapons(EPrototypeWeaponHand TargetHand):
+
+Rules:
+- For main hand and off hand, include any equipped weapon that has OneHanded draw mode available.
+- Include TwoHanded weapons in main-hand cycling by default.
+- Optionally include TwoHanded weapons in a general weapon wheel list, but for now main-hand cycling is acceptable.
+- Do not exclude shields from main hand just because they are shields.
+- Do not exclude katanas from off hand.
+- Do not use old MainHandOnly/OffHandOnly logic.
+
+PART E: Update draw behavior
+
+Update DrawPrototypeWeaponFromEquipment or equivalent:
+
+If selected draw mode is OneHanded:
+- Draw into requested hand.
+- That hand becomes occupied.
+- If the weapon was already drawn in the other hand, prevent duplicate or move it cleanly.
+
+If selected draw mode is TwoHanded:
+- Sheathe/clear both hands first.
+- Draw weapon as active two-handed weapon.
+- bActiveWeaponUsesBothHands = true.
+
+If selected draw mode is StoredUse:
+- For now, log:
+  "StoredUse draw mode not implemented yet."
+- Do not crash.
+
+Default behavior:
+- If weapon supports OneHanded, draw one-handed into requested hand.
+- Else if it supports TwoHanded, draw two-handed.
+- Else log no valid draw mode.
+
+PART F: Update selected weapon state
+
+Keep:
+- SelectedMainHandWeapon
+- SelectedOffHandWeapon
+- DrawnMainHandWeapon
+- DrawnOffHandWeapon
+- ActivePrototypeWeapon
+- ActivePrototypeWeaponHand
+- bActiveWeaponUsesBothHands
+
+But do not treat weapon archetype as hand restriction.
+
+PART G: Update validation
+
+If validation tools exist or are being added, do not add warnings like:
+- Shield should usually be OffHandOnly
+- Greatsword should usually be TwoHanded
+- Dagger should not be TwoHanded
+
+Remove any such validation if already added.
+
+Validation should only detect real setup errors:
+- invalid EquipmentShape
+- missing WeaponMesh
+- invalid placement
+- overlap
+- clipping
+- null WeaponData
+- weapon not in inventory
+- invalid container
+- equip load <= 0
+- SupportedMathOperation default warning only as a soft warning
+
+PART H: Update comments and logs
+
+Use wording:
+- AvailableDrawModes
+- DefaultDrawMode
+- Drawn main hand
+- Drawn off hand
+- Active weapon
+- Two-handed draw state
+
+Do not say:
+- offhand-only shield
+- main-hand-only weapon
+- weapon type forces hand
+
+PART I: Preserve behavior
+
+Do not break:
+- StartingPrototypeInventory
+- StartingEquipmentPlacements
+- EquipmentShapePreset
+- custom mask editing
+- equipment grid placement
+- equipment grid debug tools
+- visible equipped weapon meshes
+- weapon cycle selection
+- draw/sheathe
+- active body visual hiding while drawn
+- active weapon math operation
+- lock-on
+- basic attack
+- heavy attack
+- guard / perfect guard / parry
+- dodge
+- death / reset
+- equation actions
+- armor break
+- X execution
+
+PART J: Final response
+
+Before final response, explain:
+1. Which files changed
+2. Whether rigid HandRequirement logic was removed from active path
+3. What AvailableDrawModes does
+4. How one-handed drawing works in either hand
+5. How two-handed drawing works
+6. Whether shields/katanas/greatswords are no longer hand-forced
+7. What validation assumptions were removed
+8. How to test:
+   - Greatshield can appear in main-hand cycle if OneHanded draw mode is available
+   - Greatshield can also appear in off-hand cycle
+   - Katana can be drawn in either hand
+   - Greatsword can be drawn one-handed if OneHanded mode is available
+   - Greatsword can occupy both hands if TwoHanded mode is selected
+지금 네 로그 기준
+
+Selected main-hand weapon: DA_Test_Greatshield 이건 문제가 아닐 수 있음.
+네 비전 기준이면 방패도 오른손에 들 수 있으니까 정상임.
+
+문제는 오직 이거임:
+
+그 방패가 main-hand 후보가 되는 걸 네가 허용했는가?
+
+허용이면 정상.
+
+그러면 DataAsset에서 이렇게 가면 됨:
+
+DA_Test_Greatshield
+AvailableDrawModes = OneHanded
+
+또는 방패를 양손으로도 들고 싶으면:
+
+AvailableDrawModes = OneHanded, TwoHanded
+
+카타나도:
+
+AvailableDrawModes = OneHanded, TwoHanded
+
+대검도:
+
+AvailableDrawModes = OneHanded, TwoHanded
+
+나중에 스탯 부족하면:
+
+One-handed greatsword possible, but slower / stamina cost higher / guard timing worse
+
+이런 식으로 밸런스 잡으면 됨.
+
+결론
+
+네 말이 맞음.
+무기 종류가 손을 강제하면 안 됨.
+지금은 HandRequirement 고정 사고를 버리고, AvailableDrawModes로 가는 게 맞음.
+
+* * *
+
+**You:**
+
+ㄴㄴ. AvailableDrawModes = OneHanded, TwoHanded 도 무기 제한 없음. 다크소울 그딴거 없음
+
+* * *
+
+**ChatGPT:**
+
+ㅇㅋ. 완전히 이해함.
+
+네 비전은 이거네:
+
+무기 데이터가 "이 무기는 한손 가능 / 양손 가능 / 오프핸드 가능"을 정하지 않음.
+
+모든 무기는 원칙적으로:
+- 오른손에 들 수 있음
+- 왼손에 들 수 있음
+- 양손으로 들 수 있음
+
+단, 나중에 스탯, 무게, 크기, 애니메이션, 숙련도, 전투 효율이 패널티를 줄 수는 있음.
+하지만 "불가능"으로 막지는 않음.
+
+즉, HandRequirement도 틀렸고, AvailableDrawModes도 틀렸음.
+
+진짜 구조는:
+
+WeaponData
+= 이 물건이 무엇인가
+= 모양, 무게, 메쉬, 수학 기능, 장착 grid shape
+
+Character Draw State
+= 지금 이 물건을 어떻게 들고 있는가
+= RightHand / LeftHand / TwoHanded
+
+무기 종류는 손 제한을 걸면 안 됨.
+
+올바른 설계
+WeaponData에 남을 것
+DisplayName
+WeaponMesh
+SupportedMathOperation
+WeaponArchetype, 설명/분류용만
+EquipLoadWeight
+PreferredCarrySlot
+AllowedCarrySlots, 몸에 어디에 찰 수 있는지 제한용
+EquipmentShapePreset
+EquipmentShape
+GripProfile
+WeaponData에서 제거할 것
+HandRequirement
+AvailableDrawModes
+DefaultDrawMode
+MainHandOnly
+OffHandOnly
+TwoHandedOnly
+Character에 있어야 할 것
+SelectedMainHandWeapon
+SelectedOffHandWeapon
+SelectedTwoHandWeapon, optional
+
+DrawnMainHandWeapon
+DrawnOffHandWeapon
+ActivePrototypeWeapon
+ActivePrototypeWeaponHand
+bActiveWeaponUsesBothHands
+
+근데 핵심은:
+
+어떤 무기도 어떤 손/자세로든 시도 가능
+
+나중에 밸런스는 이렇게:
+
+무거운 대검을 한손으로 듦
+→ 가능
+→ 공격 느림
+→ 스태미나 더 먹음
+→ 가드/패링 타이밍 불리
+→ 힘 스탯 낮으면 경직/반동 큼
+
+하지만 지금은 막지 않음.
+
+수정 Codex 프롬프트
+Remove all weapon-based hand/draw restrictions and make draw mode a character action state only.
+
+Use Codex.
+
+Do not add final inventory UI.
+Do not add final weapon wheel UI.
+Do not add item pickup.
+Do not add item drops.
+Do not add durability.
+Do not add save/load.
+Do not add item instances.
+Do not add final animations.
+Do not change equation math.
+Do not change armor math.
+Do not change combat damage/stamina values.
+Do not use CastChecked.
+Do not use unsafe actor scans.
+
+Current problem:
+The current prototype still has or recently discussed restrictive hand/draw concepts such as:
+- HandRequirement
+- AvailableDrawModes
+- DefaultDrawMode
+- MainHandOnly
+- OffHandOnly
+- TwoHanded
+
+This is not the intended design.
+
+Correct design:
+Weapon data must not decide whether a weapon can be used in the main hand, off hand, or two-handed.
+No weapon type should hard-block hand usage.
+A shield can be used in the right hand.
+A katana can be used in the left hand.
+A greatsword can be used one-handed.
+A dagger can be used two-handed if the player wants.
+The game may later apply stat, weight, stamina, speed, animation, or control penalties, but it should not hard-restrict the draw state by weapon type.
+
+Equipment grid placement determines where the weapon is carried.
+Draw state determines how the currently selected weapon is being held.
+
+PART A: Remove hand restriction fields from active design
+
+Remove or fully stop using:
+- HandRequirement
+- AvailableDrawModes
+- DefaultDrawMode
+- MainHandOnly
+- OffHandOnly
+- TwoHandedOnly
+- Any logic where WeaponArchetype determines whether a weapon can be drawn in a hand
+
+If any of these fields still exist in UPrototypeWeaponData, delete them if safe.
+If deleting causes asset breakage, move them to a deprecated category and make sure no active code reads them.
+
+Preferred:
+Hard delete them.
+
+PART B: Keep WeaponArchetype descriptive only
+
+WeaponArchetype may remain for:
+- UI labeling
+- animation selection later
+- grip profile suggestions
+- organization
+- search/filtering
+
+But WeaponArchetype must not block:
+- main-hand draw
+- off-hand draw
+- two-handed draw
+- weapon cycle candidates
+
+No validation warnings should say:
+- Shield should be OffHandOnly
+- Greatsword should be TwoHanded
+- Dagger should not be TwoHanded
+- Katana should be OneHanded
+
+Remove all such assumptions.
+
+PART C: Add universal draw stance enum
+
+Add or use an enum on the character side, not weapon data:
+
+EPrototypeDrawStance
+{
+    RightHand,
+    LeftHand,
+    TwoHanded
+};
+
+Meaning:
+- RightHand draws the selected weapon into the right/main hand.
+- LeftHand draws the selected weapon into the left/off hand.
+- TwoHanded draws the selected weapon as a two-handed active weapon and occupies both hands.
+
+This is player/action state, not weapon permission.
+
+PART D: Update candidate lists
+
+GetPrototypeDrawableEquippedWeapons should no longer filter by weapon hand permission.
+
+Replace with functions like:
+
+- GetPrototypeEquippedWeapons() const
+- GetPrototypeEquippedWeaponsForSelection() const
+
+Rules:
+- Candidate list comes from PrototypeEquipmentPlacements only.
+- Inventory-only weapons do not count.
+- Every equipped weapon is selectable for right hand, left hand, or two-handed draw.
+- Do not exclude shields from right hand.
+- Do not exclude greatswords from one-handed selection.
+- Do not exclude daggers from two-handed draw.
+
+For existing Z/V/B/N behavior:
+- Z/V can cycle selected right-hand candidate.
+- B/N can cycle selected left-hand candidate.
+- Both candidate pools can contain all equipped weapons.
+- A future weapon wheel can display all equipped weapons and then let the player choose draw stance.
+
+PART E: Update draw behavior
+
+Add or update function:
+
+bool DrawPrototypeWeaponWithStance(UPrototypeWeaponData* WeaponData, EPrototypeDrawStance DrawStance);
+
+Rules:
+1. WeaponData must be currently equipped in PrototypeEquipmentPlacements.
+2. RightHand:
+   - If the same weapon is drawn in left hand, move or reject duplicate cleanly.
+   - Sheathe/replace current right-hand weapon if needed.
+   - Set DrawnMainHandWeapon = WeaponData.
+   - Set bActiveWeaponUsesBothHands = false.
+   - Set ActivePrototypeWeapon = WeaponData.
+   - Set ActivePrototypeWeaponHand = RightHand or equivalent.
+3. LeftHand:
+   - Same logic for left/off hand.
+   - Set DrawnOffHandWeapon = WeaponData.
+   - Set active weapon if this draw should become active.
+4. TwoHanded:
+   - Sheathe or clear both hands first.
+   - Set DrawnMainHandWeapon = WeaponData.
+   - Set DrawnOffHandWeapon = nullptr or blocked by two-handed state.
+   - Set bActiveWeaponUsesBothHands = true.
+   - Set ActivePrototypeWeapon = WeaponData.
+5. Drawing hides that weapon's body equipment visual.
+6. Sheathing returns the body visual.
+
+Do not check weapon type or weapon permission.
+
+PART F: R key behavior
+
+Keep current R behavior if it works, but make the logic clear:
+
+- If any weapon is drawn, R sheathes active/drawn weapon.
+- If no weapon is drawn:
+  - Draw SelectedMainHandWeapon with RightHand stance by default.
+  - If no main selection but left selection exists, draw SelectedOffHandWeapon with LeftHand stance.
+- Future input can add explicit two-hand toggle or wheel stance choice.
+
+Do not force any weapon into a specific stance.
+
+PART G: Optional two-hand input placeholder
+
+If safe, add a function but do not require binding yet:
+
+- bool DrawSelectedPrototypeWeaponTwoHanded()
+
+Behavior:
+- Uses SelectedMainHandWeapon if valid.
+- Else uses SelectedOffHandWeapon if valid.
+- Calls DrawPrototypeWeaponWithStance(WeaponData, TwoHanded).
+
+No final key binding required unless simple.
+
+PART H: Active math operation
+
+Active math operation still comes from:
+
+ActivePrototypeWeapon->SupportedMathOperation
+
+Draw stance does not change the math operation yet.
+Later, stance can modify speed, stamina cost, guard timing, or move set.
+
+PART I: Validation cleanup
+
+If validation exists or is added:
+Validation must only detect real data/setup errors:
+- null weapon
+- invalid shape
+- missing mesh warning
+- invalid placement
+- clipping
+- overlap
+- missing container
+- equip load <= 0
+- inventory/placement mismatch
+- SupportedMathOperation default warning only as soft confirmation
+
+Validation must not warn based on:
+- weapon archetype vs hand
+- shield in right hand
+- greatsword one-handed
+- dagger two-handed
+- katana off-hand
+
+PART J: Preserve behavior
+
+Do not break:
+- StartingPrototypeInventory
+- StartingEquipmentPlacements
+- EquipmentShapePreset
+- custom mask editing
+- equipment grid placement
+- equipment grid debug tools
+- visible equipped weapon meshes
+- weapon cycle selection
+- draw/sheathe
+- active body visual hiding while drawn
+- active weapon math operation
+- lock-on
+- basic attack
+- heavy attack
+- guard / perfect guard / parry
+- dodge
+- death / reset
+- equation actions
+- armor break
+- X execution
+
+PART K: Final response
+
+Before final response, explain:
+1. Which files changed
+2. Whether HandRequirement / AvailableDrawModes / DefaultDrawMode were removed or disabled
+3. Whether WeaponArchetype is now descriptive only
+4. How right-hand draw works
+5. How left-hand draw works
+6. How two-handed draw works
+7. Whether every equipped weapon can be selected for any draw stance
+8. What validation assumptions were removed
+9. How to test:
+   - Shield can be selected and drawn right hand
+   - Shield can be selected and drawn left hand
+   - Katana can be selected and drawn either hand
+   - Greatsword can be drawn one-handed
+   - Greatsword can be drawn two-handed
+   - Active operation still comes from SupportedMathOperation
+정리
+
+네가 원하는 건:
+
+No weapon permission system.
+Only player draw state.
+
+그래서 최종 규칙은 이거임:
+
+몸에 장착되어 있으면 선택 가능.
+선택된 무기는 오른손, 왼손, 양손으로 들 수 있음.
+무기 종류는 막는 게 아니라 나중에 효율/모션/패널티에만 영향.
+
+이게 훨씬 자유롭고 네 게임에 맞음.
+
+* * *
+
+**You:**
+
+Done. The hand/draw restriction layer is now character state, not weapon data.
+
+Changed source files:
+- Source/PythagoreanHarmony/PrototypeWeaponTypes.h
+- Source/PythagoreanHarmony/PrototypeWeaponData.h
+- Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.h
+- Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.cpp
+
+What changed:
+- Removed HandRequirement, AvailableDrawModes, DefaultDrawMode, and the previous EPrototypeWeaponDrawMode path from active/source code.
+- Added EPrototypeDrawStance with RightHand, LeftHand, TwoHanded.
+- WeaponArchetype no longer affects hand draw, hand candidates, or draw stance. It remains descriptive/config data.
+- GetPrototypeDrawableEquippedWeapons now returns equipped grid weapons without hand/type filtering.
+- Added DrawPrototypeWeaponWithStance(WeaponData, DrawStance).
+- Added DrawSelectedPrototypeWeaponTwoHanded() as a BlueprintCallable/debug helper, with no key binding yet.
+
+Behavior now:
+- Right-hand draw: any equipped weapon can draw into right/main hand.
+- Left-hand draw: any equipped weapon can draw into left/off hand.
+- Two-handed draw: any equipped weapon can occupy the two-handed active state.
+- If the same weapon is already in the other hand, drawing it moves it cleanly rather than duplicating it.
+- Active operation still comes from ActivePrototypeWeapon->SupportedMathOperation.
+
+Validation assumptions removed:
+- No shield/off-hand-only checks.
+- No greatsword/two-handed-only checks.
+- No dagger/katana hand assumptions.
+- No weapon archetype hand restrictions.
+
+Verified:
+- Full C++ build passed with -NoLiveCoding.
+
+How to test:
+- Put shield, katana, greatsword in StartingEquipmentPlacements.
+- Z/V: cycle right-hand candidates. All equipped weapons should appear.
+- B/N: cycle left-hand candidates. All equipped weapons should appear.
+- R: draws selected main-hand weapon by default, or selected off-hand weapon if no main selection.
+- Call DrawSelectedPrototypeWeaponTwoHanded() from Blueprint/debug to test two-handed stance.
+- Confirm equation action uses the drawn active weapon’s SupportedMathOperation.
+
+* * *
+
+**ChatGPT:**
+
+좋음. 이건 방향 제대로 잡힘.
+
+이제 손/무기 시스템은 이렇게 정리됨:
+
+무기 데이터 = 물건의 정보
+장비 grid = 몸 어디에 차고 있는지
+선택 = 장비된 무기 중 고름
+Draw stance = 캐릭터가 지금 어떻게 들었는지
+Active weapon = 현재 전투/수식에 쓰는 무기
+
+이게 네 비전에 맞음. 무기 종류가 손을 제한하지 않고, 나중에 스탯/무게/모션/스태미나 패널티만 붙이면 됨.
+
+지금 바로 할 것
+
+일단 커밋.
+
+Remove weapon-based hand restrictions
+
+그다음 테스트:
+
+1. Shield, Katana, Greatsword를 StartingPrototypeInventory에 넣기
+2. StartingEquipmentPlacements에 실제 grid 배치
+3. Play
+4. Z/V 누르면 셋 다 main/right-hand 후보로 떠야 함
+5. B/N 누르면 셋 다 left-hand 후보로 떠야 함
+6. R 누르면 selected main weapon draw
+7. Blueprint/debug로 DrawSelectedPrototypeWeaponTwoHanded 호출해서 아무 무기나 양손 draw 가능 확인
+다음 단계
+
+이제 Draw Stance Input v0가 맞음.
+지금은 two-handed가 BlueprintCallable만 있고 키가 없으니까, 플레이 테스트가 불편함.
+
+목표:
+
+R = selected right-hand draw / sheathe
+F = selected left-hand draw / sheathe
+T = selected weapon two-handed draw / sheathe
+Z/V = right-hand selection cycle
+B/N = left-hand selection cycle
+
+키는 나중에 바꾸면 됨. 지금은 빠른 테스트용.
+
+Codex 프롬프트
+Add prototype draw stance input controls.
+
+Use Codex.
+
+Do not add final weapon wheel UI.
+Do not add final inventory UI.
+Do not add item pickup.
+Do not add item drops.
+Do not add durability.
+Do not add save/load.
+Do not add item instances.
+Do not add final animations.
+Do not change equation math.
+Do not change armor math.
+Do not change combat damage/stamina values.
+Do not reintroduce weapon hand restrictions.
+Do not use CastChecked.
+Do not use unsafe actor scans.
+
+Current state:
+- Weapon hand restrictions are removed.
+- Any equipped weapon can be selected for right hand, left hand, or two-handed draw.
+- Equipment grid placements are the source of equipped weapons.
+- Z/V cycle selected right-hand candidates.
+- B/N cycle selected left-hand candidates.
+- R currently draws selected main/right-hand weapon or sheathes if drawn.
+- DrawSelectedPrototypeWeaponTwoHanded exists as a BlueprintCallable/debug helper but has no input binding.
+
+Goal:
+Add temporary prototype input controls for draw stance testing.
+
+PART A: Add clear draw stance functions
+
+Ensure these functions exist or add them:
+
+- bool DrawSelectedPrototypeWeaponRightHand()
+- bool DrawSelectedPrototypeWeaponLeftHand()
+- bool DrawSelectedPrototypeWeaponTwoHanded()
+- bool SheatheActivePrototypeWeapon()
+- bool SheatheAllPrototypeDrawnWeapons()
+
+Behavior:
+- RightHand draw uses SelectedMainHandWeapon.
+- LeftHand draw uses SelectedOffHandWeapon.
+- TwoHanded draw uses SelectedMainHandWeapon if valid, otherwise SelectedOffHandWeapon.
+- All draw functions call DrawPrototypeWeaponWithStance.
+- Drawing updates ActivePrototypeWeapon and CurrentPrototypeWeaponMode from ActivePrototypeWeapon->SupportedMathOperation.
+- Drawing hides the body equipment visual for that weapon.
+- Sheathing returns the body equipment visual.
+- No weapon archetype or weapon type may block a draw stance.
+
+PART B: Temporary input bindings
+
+Bind temporary prototype keys:
+
+- R: If any weapon is drawn, sheathe active/drawn weapon. If no weapon is drawn, draw SelectedMainHandWeapon as RightHand.
+- F: Draw SelectedOffHandWeapon as LeftHand. If the selected off-hand weapon is already drawn in left hand, sheathe it.
+- T: Draw selected weapon as TwoHanded. If currently in two-handed state, sheathe it.
+
+Keep existing:
+- Z: previous right-hand candidate
+- V: next right-hand candidate
+- B: previous left-hand candidate
+- N: next left-hand candidate
+
+If F or T conflicts with existing project input, choose another safe key but explain.
+
+PART C: Draw state rules
+
+RightHand:
+- Sets DrawnMainHandWeapon.
+- Does not require weapon type permission.
+- If same weapon was drawn in left hand, move it cleanly to right hand.
+- bActiveWeaponUsesBothHands = false.
+
+LeftHand:
+- Sets DrawnOffHandWeapon.
+- Does not require weapon type permission.
+- If same weapon was drawn in right hand, move it cleanly to left hand.
+- bActiveWeaponUsesBothHands = false.
+
+TwoHanded:
+- Clears/sheathes both hands first.
+- Sets DrawnMainHandWeapon = selected weapon.
+- DrawnOffHandWeapon should be null or blocked by two-handed state.
+- bActiveWeaponUsesBothHands = true.
+- ActivePrototypeWeapon = selected weapon.
+
+PART D: Debug output
+
+Update BuildPrototypeWeaponSelectionDebugString to include:
+- Selected right-hand weapon
+- Selected left-hand weapon
+- Drawn right-hand weapon
+- Drawn left-hand weapon
+- Whether active weapon uses both hands
+- Active weapon
+- Active operation
+
+Add logs:
+- "Weapon drawn right hand: <name>"
+- "Weapon drawn left hand: <name>"
+- "Weapon drawn two-handed: <name>"
+- "Weapon sheathed right hand: <name>"
+- "Weapon sheathed left hand: <name>"
+- "Two-handed weapon sheathed: <name>"
+
+PART E: Preserve behavior
+
+Do not break:
+- StartingPrototypeInventory
+- StartingEquipmentPlacements
+- EquipmentShapePreset
+- custom mask editing
+- equipment grid placement
+- equipment grid debug tools
+- visible equipped weapon meshes
+- weapon cycle selection
+- draw/sheathe
+- active body visual hiding while drawn
+- active weapon math operation
+- lock-on
+- basic attack
+- heavy attack
+- guard / perfect guard / parry
+- dodge
+- death / reset
+- equation actions
+- armor break
+- X execution
+
+PART F: Final response
+
+Before final response, explain:
+1. Which files changed
+2. Which draw stance functions were added
+3. Which temporary keys are bound
+4. How R/F/T behave
+5. Whether any weapon can still be drawn in any stance
+6. How active math operation is updated
+7. How to test:
+   - select shield and draw right hand
+   - select shield and draw left hand
+   - select katana and draw two-handed
+   - select greatsword and draw one-handed
+   - confirm equation action follows active drawn weapon
+이후 순서
+
+이거 끝나면 다음은 둘 중 하나:
+
+1. Equipment validation tool
+2. Prototype weapon wheel UI
+
+내 추천은 validation 먼저. 지금 시스템은 자유도가 높아졌기 때문에, “막을 것”이 아니라 “실수만 알려줄 것”이 필요함.

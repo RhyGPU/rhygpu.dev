@@ -1,0 +1,829 @@
+
+Summary:
+Add procedural equation generation
+
+Description:
+Replaced hardcoded rank equations with procedural generation that scales by rank and supports add, subtract, multiply, and divide equations.
+
+Commit + Push.
+
+ë‹¤ìŒ ìž‘ì—…: Phase 1-E.1, ë‚œì´ë„ ì—­í–‰ ë°©ì§€ v1
+
+Codexì— ì´ê±° ë„£ì–´.
+
+Improve procedural equation difficulty scaling so higher ranks do not generate trivially easy equations.
+
+Modify only the equation system files unless absolutely necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+
+Do not modify player input, character input binding, enemy actor display logic, UI, weapons, inventory, or AI.
+
+Goal:
+The equation generator should still be simple, but higher ranks should not randomly produce equations that are much easier than previous lower-rank equations.
+
+Requirements:
+
+1. Add helper functions in UEnemyEquationComponent:
+- GetMinAnswerForRank(int32 Rank) const
+- GetMaxAnswerForRank(int32 Rank) const
+- GetMinOperandForRank(int32 Rank) const
+- GetMaxOperandForRank(int32 Rank) const
+
+2. Use both minimum and maximum ranges when generating values.
+
+Suggested formulas:
+- MinAnswer = FMath::Clamp(Rank * 2, 1, 90000)
+- MaxAnswer = FMath::Clamp(10 + Rank * 5, MinAnswer + 1, 100000)
+- MinOperand = FMath::Clamp(Rank, 1, 9000)
+- MaxOperand = FMath::Clamp(5 + Rank * 3, MinOperand + 1, 10000)
+
+3. For Add equations:
+- answer x should be between MinAnswer and MaxAnswer
+- a should be between MinOperand and MaxOperand
+- b = x + a
+
+4. For Subtract equations:
+- answer x should be between MinAnswer and MaxAnswer
+- a should be between MinOperand and MaxOperand
+- b = x - a
+- Negative b is allowed for now, but the correct answer should remain non-negative.
+
+5. For Multiply equations:
+- answer x should be between MinAnswer and MaxAnswer
+- a should be between max(2, MinOperand) and MaxOperand
+- b = a * x
+- Prevent int overflow safely.
+
+6. For Divide equations:
+- result should be between MinAnswer and MaxAnswer
+- a should be between max(2, MinOperand) and MaxOperand
+- correct answer x = result * a
+- Display: x / a = result
+- Prevent int overflow safely.
+
+7. Keep Rank 1 deterministic:
+- x + 5 = 10
+- answer 5
+
+8. Add optional function:
+- CalculateEquationDifficultyScore(const FEquationDefinition& Equation) const
+
+This can be simple for now. It should return a rough score based on:
+- Rank
+- Equation type
+- Answer size
+- Operand size
+
+9. Add UE_LOG output whenever an equation is generated:
+- Rank
+- MinAnswer / MaxAnswer
+- MinOperand / MaxOperand
+- DisplayText
+- CorrectAnswer
+- DifficultyScore
+
+10. Preserve existing public API:
+- GetDisplayText()
+- GetCorrectAnswer()
+- GetRank()
+- IsAnswerCorrect()
+- SubmitAnswer()
+- RegenerateEquation()
+- SetRankAndGenerateEquation()
+
+11. Keep the code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. How the new min/max difficulty ranges work
+3. Why this prevents high ranks from producing extremely easy equations
+4. How to test it in Play mode
+í…ŒìŠ¤íŠ¸ ë°©ë²•
+
+Playì—ì„œ ì¼ë¶€ëŸ¬ ê³„ì† í‹€ë ¤.
+
+1 ìž…ë ¥
+X
+1 ìž…ë ¥
+X
+1 ìž…ë ¥
+X
+...
+
+í™•ì¸í•  ê²ƒ:
+
+Rankê°€ ì˜¬ë¼ê°ˆìˆ˜ë¡ ìˆ«ìž ìµœì†Œê°’ë„ ê°™ì´ ì»¤ì§€ëŠ”ê°€?
+Rank 8 ì´í›„ì— x + 1 = 2 ê°™ì€ ë„ˆë¬´ ì‰¬ìš´ ë¬¸ì œê°€ ì•ˆ ë‚˜ì˜¤ëŠ”ê°€?
+ê³±ì…ˆ/ë‚˜ëˆ—ì…ˆì—ì„œ ìˆ«ìžê°€ ë„ˆë¬´ í­ë°œí•˜ì§€ ì•ŠëŠ”ê°€?
+ì •ë‹µ ìž…ë ¥í•˜ë©´ ì—¬ì „ížˆ AXIOM EXECUTION ë˜ëŠ”ê°€?
+
+ì§€ê¸ˆ ì´ê±°ê¹Œì§€ ìž¡ìœ¼ë©´ equation generator v1ì€ í›¨ì”¬ ê±´ê°•í•´ì§.
+
+* * *
+
+**You:**
+
+ì§ˆë¬¸: ì–´ì¼€ ë‚œì´ë„ ì„¤ì •ì´ ìž‘ë™í•˜ëŠ”ê±°ìž„. ë„ˆ ì²œìž¬ê°™ì•„? AI ë‹¬ìŒ? ì–´ì¼€ êµ¬ë³„í•˜ê²Œ í•˜ëŠ”ê²¨?
+
+* * *
+
+**ChatGPT:**
+
+ì²œìž¬ AIì²˜ëŸ¼ â€œë¬¸ì œê°€ ì§„ì§œ ì–´ë µë‹¤â€ë¥¼ ì´í•´í•˜ëŠ” ê±´ ì•„ë‹˜.
+ì§€ê¸ˆ ë‹¨ê³„ì—ì„œëŠ” ë‚œì´ë„ë¥¼ ìˆ˜í•™ì ìœ¼ë¡œ ì±„ì í•˜ëŠ” ì²™í•˜ëŠ” ê·œì¹™ ê¸°ë°˜ ì‹œìŠ¤í…œìž„.
+
+í•µì‹¬ì€ ì´ê±°ì•¼:
+
+ì‰¬ìš´ ìˆ«ìžê°€ ë‚˜ì˜¤ì§€ ëª»í•˜ê²Œ ìµœì†Œê°’ì„ ì˜¬ë¦°ë‹¤.
+ì–´ë ¤ìš´ ì—°ì‚°ì€ ë†’ì€ Rankì—ì„œë§Œ ë‚˜ì˜¤ê²Œ í•œë‹¤.
+ìƒì„±ëœ ë¬¸ì œì— ëŒ€ì¶© Difficulty Scoreë¥¼ ë¶™ì¸ë‹¤.
+1. í˜„ìž¬ ë°©ì‹, ìµœì†Œ/ìµœëŒ€ ë²”ìœ„ë¡œ ë‚œì´ë„ ì¡°ì ˆ
+
+ì˜ˆë¥¼ ë“¤ì–´ Rankê°€ ì˜¬ë¼ê°€ë©´ ìˆ«ìž ë²”ìœ„ê°€ ì´ë ‡ê²Œ ì»¤ì§:
+
+Rank 1:
+MinAnswer = 2
+MaxAnswer = 15
+
+Rank 5:
+MinAnswer = 10
+MaxAnswer = 35
+
+Rank 10:
+MinAnswer = 20
+MaxAnswer = 60
+
+Rank 50:
+MinAnswer = 100
+MaxAnswer = 260
+
+ê·¸ëž˜ì„œ Rank 10ì—ì„œ ì´ëŸ° ì‹ì´ ë‚˜ì˜¤ëŠ” ê±¸ ì¤„ìž„:
+
+x + 1 = 2
+
+ì™œëƒë©´ Rank 10ì´ë©´ ì •ë‹µ xê°€ ìµœì†Œ 20 ì´ìƒì´ì–´ì•¼ í•˜ë‹ˆê¹Œ.
+
+ëŒ€ì‹  ì´ëŸ° ì‹ì´ ë‚˜ì˜´:
+
+x + 14 = 49
+x = 35
+
+ì¦‰, â€œë‚œì´ë„ ì´í•´â€ë¼ê¸°ë³´ë‹¤ëŠ” ë‚®ì€ ìˆ«ìžë¥¼ ëª» ë½‘ê²Œ ë§‰ëŠ” ê²ƒìž„.
+
+2. ì—°ì‚° íƒ€ìž…ë„ Rankë¡œ ìž ê¸ˆ í•´ì œ
+
+ì´ˆë°˜ì—ëŠ” ì‰¬ìš´ ì—°ì‚°ë§Œ ë‚˜ì˜¤ê²Œ í•¨:
+
+Rank 1~2:
+ë§ì…ˆë§Œ
+
+Rank 3~4:
+ë§ì…ˆ, ëº„ì…ˆ
+
+Rank 5~6:
+ë§ì…ˆ, ëº„ì…ˆ, ê³±ì…ˆ
+
+Rank 7 ì´ìƒ:
+ë§ì…ˆ, ëº„ì…ˆ, ê³±ì…ˆ, ë‚˜ëˆ—ì…ˆ
+
+ê·¸ëž˜ì„œ ì²˜ìŒë¶€í„° ì´ëŸ° ê±° ì•ˆ ë‚˜ì˜´:
+
+37x = 1443
+x / 28 = 19
+
+ì´ ë°©ì‹ì€ ê²Œìž„ ë‚œì´ë„ ê³¡ì„  ë§Œë“¤ ë•Œ ì œì¼ ê¸°ë³¸ì ì¸ ë°©ì‹ìž„.
+
+3. Difficulty ScoreëŠ” â€œì±„ì í‘œâ€ìž„
+
+ì˜ˆë¥¼ ë“¤ì–´ ì‹ í•˜ë‚˜ê°€ ë§Œë“¤ì–´ì¡Œë‹¤ê³  í•˜ìž.
+
+23x = 391
+
+ì´ê±¸ ë³´ê³  ì‹œìŠ¤í…œì´ ëŒ€ì¶© ì ìˆ˜í™”í•¨:
+
+ê¸°ë³¸ ì ìˆ˜: Rank ì ìˆ˜
+ì—°ì‚° ì ìˆ˜: ê³±ì…ˆì´ë¼ +ë†’ìŒ
+ì •ë‹µ í¬ê¸° ì ìˆ˜: xê°€ 17ì´ë¼ +ì¡°ê¸ˆ
+í”¼ì—°ì‚°ìž ì ìˆ˜: 23ì´ë¼ +ì¡°ê¸ˆ
+
+ê·¸ëž˜ì„œ ì´ ë¬¸ì œëŠ” ì ìˆ˜ê°€ ê½¤ ë†’ìŒ.
+
+ë°˜ëŒ€ë¡œ:
+
+x + 2 = 7
+
+ì´ê±´:
+
+ë§ì…ˆì´ë¼ ë‚®ìŒ
+ìˆ«ìž ìž‘ìŒ
+ì •ë‹µ ìž‘ìŒ
+
+ì ìˆ˜ê°€ ë‚®ìŒ.
+
+4. ì§„ì§œ ë‚œì´ë„ íŒë‹¨ì€ ë‚˜ì¤‘ì— ë” ì •êµí•˜ê²Œ í•´ì•¼ í•¨
+
+ì§€ê¸ˆ ë°©ì‹ì€ ë‹¨ìˆœí•¨.
+ì‹¤ì œë¡œëŠ” ì´ëŸ° ìš”ì†Œë„ ê³ ë ¤í•´ì•¼ í•¨:
+
+ì•”ì‚° ì‰¬ìš´ ìˆ«ìžì¸ê°€?
+10, 20, 50, 100 ê°™ì€ ì¹œìˆ™í•œ ìˆ˜ì¸ê°€?
+êµ¬êµ¬ë‹¨ ì•ˆì— ë“¤ì–´ê°€ëŠ”ê°€?
+ë‚˜ëˆ—ì…ˆì´ ê¹”ë”í•œê°€?
+ìŒìˆ˜ê°€ ë‚˜ì˜¤ëŠ”ê°€?
+ìžë¦¬ìˆ˜ê°€ ëª‡ ê°œì¸ê°€?
+ë°›ì•„ì˜¬ë¦¼/ë¹Œë¦¼ì´ í•„ìš”í•œê°€?
+ì†Œìˆ˜/ë¶„ìˆ˜/ê´„í˜¸ê°€ ìžˆëŠ”ê°€?
+í”Œë ˆì´ì–´ê°€ ìµœê·¼ì— ë¹„ìŠ·í•œ ë¬¸ì œë¥¼ í’€ì—ˆëŠ”ê°€?
+
+ì˜ˆë¥¼ ë“¤ì–´ ë‘˜ ë‹¤ Rank 10 ë¬¸ì œì—¬ë„:
+
+10x = 100
+
+ì´ê±´ ì‰¬ì›€.
+
+ê·¼ë°:
+
+17x = 391
+
+ì´ê±´ í›¨ì”¬ ì–´ë ¤ì›€.
+
+ë‘˜ ë‹¤ ê³±ì…ˆì´ê³  ìˆ«ìž ë²”ìœ„ë„ ë¹„ìŠ·í•˜ì§€ë§Œ, ì•”ì‚° ë‚œì´ë„ëŠ” ë‹¤ë¦„.
+ê·¸ëž˜ì„œ ë‚˜ì¤‘ì—ëŠ” Difficulty Scoreë¥¼ ë” ë˜‘ë˜‘í•˜ê²Œ ë§Œë“¤ë©´ ë¨.
+
+5. ë‚˜ì¤‘ì— ê°ˆ ì§„ì§œ ì‹œìŠ¤í…œ
+
+ìµœì¢…ì ìœ¼ë¡œëŠ” ì´ë ‡ê²Œ ê°ˆ ìˆ˜ ìžˆìŒ:
+
+Generate 20 candidate equations
+â†’ ê° ë¬¸ì œ Difficulty Score ê³„ì‚°
+â†’ í˜„ìž¬ Rankì— ë§žëŠ” ë‚œì´ë„ ë²”ìœ„ ì•ˆì˜ ë¬¸ì œë§Œ ì„ íƒ
+â†’ ë„ˆë¬´ ì‰¬ìš´ ë¬¸ì œ ë²„ë¦¼
+â†’ ë„ˆë¬´ ì–´ë ¤ìš´ ë¬¸ì œë„ ë²„ë¦¼
+â†’ ìµœê·¼ ë‚˜ì˜¨ ë¬¸ì œì™€ ë¹„ìŠ·í•˜ë©´ ë²„ë¦¼
+â†’ ìµœì¢… í•˜ë‚˜ ì„ íƒ
+
+ì˜ˆì‹œ:
+
+Rank 10 ëª©í‘œ ë‚œì´ë„: 45~55
+
+í›„ë³´ 1: x + 2 = 23, ì ìˆ˜ 20 â†’ ë„ˆë¬´ ì‰¬ì›€, ë²„ë¦¼
+í›„ë³´ 2: 47x = 2256, ì ìˆ˜ 80 â†’ ë„ˆë¬´ ì–´ë ¤ì›€, ë²„ë¦¼
+í›„ë³´ 3: x - 19 = 34, ì ìˆ˜ 48 â†’ ì±„íƒ
+
+ì´ëŸ¬ë©´ ë‚œì´ë„ ê³¡ì„ ì´ í›¨ì”¬ ì•ˆì •ë¨.
+
+í•µì‹¬ ì •ë¦¬
+
+ì§€ê¸ˆ ë‚œì´ë„ ì‹œìŠ¤í…œì€ â€œAIê°€ ë¬¸ì œë¥¼ ì´í•´í•˜ëŠ” ê²ƒâ€ì´ ì•„ë‹ˆë¼:
+
+Rankê°€ ë†’ì„ìˆ˜ë¡
+ë‚®ì€ ìˆ«ìžëŠ” ëª» ë‚˜ì˜¤ê²Œ í•˜ê³ ,
+ì–´ë ¤ìš´ ì—°ì‚°ì„ ì—´ê³ ,
+ë¬¸ì œì— ì ìˆ˜ë¥¼ ë§¤ê²¨ì„œ
+ë„ˆë¬´ ì‰¬ìš´ ë¬¸ì œë¥¼ ì¤„ì´ëŠ” ë°©ì‹
+
+ìž„.
+
+ì§€ê¸ˆì€ v1ìœ¼ë¡œ ì¶©ë¶„í•¨.
+ë‚˜ì¤‘ì— ì§„ì§œ ê²Œìž„ë‹µê²Œ ë§Œë“¤ë ¤ë©´ Difficulty Score + í›„ë³´ ìƒì„± + í•„í„°ë§ êµ¬ì¡°ë¡œ ê°€ë©´ ë¨.
+
+* * *
+
+**You:**
+
+ì—°ì‚° íƒ€ìž…ë„ Rankë¡œ ìž ê¸ˆ í•´ì œì¸ê±´ ì•„ì§ ì ì´ í•˜ë‚˜ë¼ ê·¸ëŸ°ê±°ì§€? 
+ìš°ë¦¬ ì—°ì‚°íƒ€ìž… Rankê°€ ì•„ë‹Œ ì¢…ì¡±ìœ¼ë¡œ í•˜ìžê³  í–ˆìžë‚˜
+
+* * *
+
+**ChatGPT:**
+
+ë§žìŒ. ë„¤ ë§ì´ ì •í™•í•¨.
+
+ì—°ì‚° íƒ€ìž…ì„ Rankë¡œ í•´ê¸ˆí•˜ëŠ” ê±´ ì§€ê¸ˆ ìž„ì‹œ ì•¼ë§¤ì˜€ê³ , GDD ê¸°ì¤€ìœ¼ë¡œëŠ” í‹€ë¦° ë°©í–¥ì— ê°€ê¹Œì›€.
+ìš°ë¦¬ê°€ ì •í•œ ì„¤ê³„ëŠ” ì´ê±°ì˜€ìŒ:
+
+ì¢…ì¡± = ê³µì‹ íƒ€ìž…ì„ ê²°ì •
+Rank = ìˆ«ìž í¬ê¸°ì™€ ë‚œì´ë„ë¥¼ ì¦ê°€
+Armor = ê¸°ë³¸ ê³µì‹ ìœ„ì— ë³µìž¡ì„±ì„ ì¶”ê°€
+
+ì¦‰, ì´ê²Œ ë§žìŒ:
+
+Goblin Rank 1: x + 5 = 10
+Goblin Rank 5: x + 37 = 91
+Goblin Rank 20: x - 124 = 57
+
+í•˜ì§€ë§Œ ì´ê±´ í‹€ë¦° ë°©í–¥:
+
+Goblin Rank 1: x + 5 = 10
+Goblin Rank 5: 7x = 42
+Goblin Rank 7: x / 8 = 6
+
+ì™œëƒë©´ ê·¸ëŸ¬ë©´ ê³ ë¸”ë¦°ì´ ê°‘ìžê¸° ì˜¤í¬/ë¹„ìŠ¤íŠ¸ë§¨ ì—­í• ì„ ë¨¹ì–´ë²„ë¦¼.
+
+ìµœì¢… ì›ì¹™
+Slime
+x = n
+Goblin
+x + a = b
+x - a = b
+Orc
+ax = b
+Beastman / Centaur
+x / a = b
+Frok
+x + a = b
+ë‹¨, xëŠ” ì†Œìˆ˜
+Skeleton
+x + a = b
+x - a = b
+ë‹¨, xëŠ” ìŒìˆ˜ ê°€ëŠ¥
+Armored Goblin
+Base: x + a = b
+Armor: Ã—n
+Displayed: (x + a) Ã— n = b Ã— n
+Rankê°€ í•´ì•¼ í•˜ëŠ” ì¼
+
+RankëŠ” ì—°ì‚° íƒ€ìž…ì„ ë°”ê¾¸ëŠ” ê²Œ ì•„ë‹ˆë¼, ì´ëŸ° ê±¸ ë°”ê¿”ì•¼ í•¨:
+
+ìˆ«ìž í¬ê¸° ì¦ê°€
+operand í¬ê¸° ì¦ê°€
+ê³µê²©ì„± ì¦ê°€
+ê·¸ë¡œê¸° ì €í•­ ì¦ê°€
+ë‚´êµ¬ë„ ìš”êµ¬ëŸ‰ ì¦ê°€
+Armor ì¶”ê°€ í™•ë¥  ì¦ê°€
+ì˜¤ë‹µ íŽ˜ë„í‹° ì¦ê°€
+
+ì˜ˆì‹œ:
+
+Goblin Rank 1:
+x + 5 = 10
+
+Goblin Rank 3:
+x - 12 = 8
+
+Goblin Rank 10:
+x + 47 = 103
+
+Goblin Rank 30:
+x - 211 = 489
+
+ê³ ë¸”ë¦°ì€ ê³„ì† ë§ì…ˆ/ëº„ì…ˆ ëª¬ìŠ¤í„°ì—¬ì•¼ í•¨.
+
+ì§€ê¸ˆ ì½”ë“œì—ì„œ ê³ ì³ì•¼ í•  ë¶€ë¶„
+
+í˜„ìž¬ Codexì—ê²Œ ì‹œí‚¨ ì´ ë¶€ë¶„ì´ ìž„ì‹œì˜€ìŒ:
+
+Rank 1~2: Add
+Rank 3~4: Add/Subtract
+Rank 5~6: Add/Subtract/Multiply
+Rank 7+: Add/Subtract/Multiply/Divide
+
+ì´ê±¸ ì´ë ‡ê²Œ ë°”ê¿”ì•¼ í•¨:
+
+EnemySpeciesê°€ Slimeì´ë©´ Directë§Œ
+EnemySpeciesê°€ Goblinì´ë©´ Add/Subtractë§Œ
+EnemySpeciesê°€ Orcì´ë©´ Multiplyë§Œ
+EnemySpeciesê°€ Beastmanì´ë©´ Divideë§Œ
+
+ê·¸ë¦¬ê³  RankëŠ” ìˆ«ìž ë²”ìœ„ë§Œ ì˜¬ë¦¼.
+
+ì§€ê¸ˆ ë°”ë¡œ ê³ ì¹˜ëŠ” ê²Œ ë§žìŒ
+
+ì´ê±´ í•µì‹¬ ì„¤ê³„ ë°©í–¥ì´ë¼ ì§€ê¸ˆ ìž¡ëŠ” ê²Œ ì¢‹ë‹¤.
+ë‹¤ìŒ ìž‘ì—…ì€ Species-based Equation Generator v1ìœ¼ë¡œ ê°€ìž.
+
+Codexì— ì´ê±° ë„£ì–´.
+
+Refactor the procedural equation generator so equation type is determined by enemy species/formula type, not by Rank.
+
+Modify only the equation system and prototype enemy files unless absolutely necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp
+
+Do not modify player input, character input binding, UI widgets, weapons, inventory, animation, or AI.
+
+Design rule:
+Species/formula type determines what kind of equation the enemy can generate.
+Rank only scales difficulty, number ranges, and future aggression.
+Rank should not cause a Goblin to become a multiplication or division enemy.
+
+Requirements:
+
+1. Add enum EPrototypeEnemySpecies or EPrototypeFormulaFamily with:
+- Slime
+- Goblin
+- Orc
+- Beastman
+- Frok
+- Skeleton
+- ArmoredGoblin
+
+Use whichever name is cleaner, but keep it prototype-focused.
+
+2. Add a species/formula family property to UEnemyEquationComponent:
+- Default should be Goblin.
+- Make it EditAnywhere and BlueprintReadOnly or BlueprintReadWrite so it can be changed in the editor later.
+
+3. Update GenerateEquationForRank(int32 NewRank):
+It should choose equation type based on species/formula family:
+
+Slime:
+- Direct only
+- x = n
+
+Goblin:
+- Add or Subtract only
+- x + a = b
+- x - a = b
+
+Orc:
+- Multiply only
+- a x = b
+
+Beastman:
+- Divide only
+- x / a = b
+
+Frok:
+- Add only for now
+- Correct answer should be prime if practical.
+- If prime generation is too much, add a helper IsPrime(int32 Value) and GeneratePrimeAnswerForRank(int32 Rank).
+
+Skeleton:
+- Add or Subtract only for now.
+- For this prototype, keep answer non-negative unless negative input support already exists.
+- Add comments that negative answers will be added later.
+
+ArmoredGoblin:
+- For now, generate the same base equations as Goblin.
+- Do not implement Mathematical Armor yet.
+- Add comments that armor will be added later.
+
+4. Remove or stop using the current Rank-based equation type unlock logic:
+- Rank 1-2 Add only
+- Rank 3-4 Add/Subtract
+- Rank 5-6 Add/Subtract/Multiply
+- Rank 7+ Add/Subtract/Multiply/Divide
+
+That logic should no longer determine the enemy's equation family.
+
+5. Keep Rank 1 default deterministic for Goblin:
+- x + 5 = 10
+- CorrectAnswer = 5
+- Rank = 1
+
+6. After wrong answers:
+- Rank increases by 1.
+- New equation is generated according to current species/formula family.
+- For Goblin, this means Add/Subtract only, forever.
+
+7. Keep the existing difficulty range helpers:
+- GetMinAnswerForRank
+- GetMaxAnswerForRank
+- GetMinOperandForRank
+- GetMaxOperandForRank
+
+8. Update UE_LOG when generating equations:
+Print:
+- Species/formula family
+- Rank
+- DisplayText
+- CorrectAnswer
+- DifficultyScore if it exists
+
+9. Preserve existing public API:
+- GetDisplayText()
+- GetCorrectAnswer()
+- GetRank()
+- IsAnswerCorrect()
+- SubmitAnswer()
+- RegenerateEquation()
+- SetRankAndGenerateEquation()
+
+10. Keep beginner-friendly comments.
+
+Before finalizing, explain:
+1. Which files changed
+2. How species/formula family now controls equation type
+3. What Rank controls now
+4. How to test that Goblin no longer generates multiplication or division equations
+í…ŒìŠ¤íŠ¸ ë°©ë²•
+
+Playì—ì„œ ê³ ë¸”ë¦° ìƒëŒ€ë¡œ ê³„ì† ì˜¤ë‹µ ë„£ì–´.
+
+1 ìž…ë ¥
+X
+1 ìž…ë ¥
+X
+1 ìž…ë ¥
+X
+1 ìž…ë ¥
+X
+...
+
+í™•ì¸í•  ê²ƒ:
+
+RankëŠ” ê³„ì† ì˜¤ë¥¸ë‹¤.
+ìˆ«ìžëŠ” ì ì  ì»¤ì§„ë‹¤.
+í•˜ì§€ë§Œ Goblinì€ ê³„ì† x + a = b ë˜ëŠ” x - a = bë§Œ ë‚˜ì˜¨ë‹¤.
+ê³±ì…ˆ ax = b ì•ˆ ë‚˜ì™€ì•¼ í•¨.
+ë‚˜ëˆ—ì…ˆ x / a = b ì•ˆ ë‚˜ì™€ì•¼ í•¨.
+
+ì´ê²Œ ë§žëŠ” ë°©í–¥ìž„.
+RankëŠ” ë‚œì´ë„ ìŠ¤ì¼€ì¼ëŸ¬, ì¢…ì¡±ì€ ìˆ˜í•™ íƒ€ìž….
+
+* * *
+
+**You:**
+
+í .... it works. Are we coming back to this or we solving this rn?
+
+* * *
+
+**ChatGPT:**
+
+Come back later.
+ì§€ê¸ˆì€ ì—¬ê¸°ì„œ ë” ê¹Šê²Œ íŒŒë©´ ì•ˆ ë¨.
+
+ë°©ê¸ˆ í•´ê²°í•œ ê±´ ì¤‘ìš”í•œ êµ¬ì¡° ë¬¸ì œì˜€ìŒ:
+
+ì¢…ì¡± = ê³µì‹ íƒ€ìž…
+Rank = ìˆ«ìž í¬ê¸°/ë‚œì´ë„
+
+ì´ê±´ ì§€ê¸ˆ ê³ ì¹œ ê²Œ ë§žìŒ.
+
+ê·¼ë° ë‚¨ì€ ë¬¸ì œ:
+
+ë‚œì´ë„ ì ìˆ˜ ì •êµí™”
+ë„ˆë¬´ ì‰¬ìš´ ë¬¸ì œ í•„í„°ë§
+í›„ë³´ ì—¬ëŸ¬ ê°œ ìƒì„± í›„ ì„ íƒ
+ìµœê·¼ ë¬¸ì œ ë°˜ë³µ ë°©ì§€
+êµ¬êµ¬ë‹¨/ì•”ì‚° ë‚œì´ë„ íŒë‹¨
+
+ì´ê±´ ë°¸ëŸ°ì‹±/ì»¤ë¦¬í˜ëŸ¼ ì‹œìŠ¤í…œì´ë¼ ì§€ê¸ˆ í•˜ë©´ ë„ˆë¬´ ê¹Šê²Œ ë¹ ì§.
+
+ì§€ê¸ˆ ìƒíƒœëŠ” ì¶©ë¶„ížˆ ì¢‹ìŒ
+
+í˜„ìž¬ í•µì‹¬ ë£¨í”„:
+
+í”Œë ˆì´ì–´ ìˆ«ìž ìž…ë ¥
+â†’ X ì œì¶œ
+â†’ ì ì´ ì •ë‹µ ê²€ì‚¬
+â†’ ì •ë‹µì´ë©´ AXIOM EXECUTION
+â†’ ì˜¤ë‹µì´ë©´ Rank ìƒìŠ¹
+â†’ ì¢…ì¡± ê³µì‹ íƒ€ìž… ìœ ì§€í•˜ë©´ì„œ ìƒˆ ë¬¸ì œ ìƒì„±
+
+ì´ ì •ë„ë©´ ë‹¤ìŒ ì‹œìŠ¤í…œìœ¼ë¡œ ë„˜ì–´ê°€ë„ ë¨.
+
+ì§€ê¸ˆ í•  ì¼
+
+ë¨¼ì € ì»¤ë°‹.
+
+GitHub Desktop:
+
+Summary:
+Refactor equations by enemy species
+
+Description:
+Updated procedural equation generation so enemy species controls equation type while rank controls difficulty scaling.
+
+Commit + Push.
+
+TODOë¡œ ë‚¨ê¸¸ ê²ƒ
+
+í”„ë¡œì íŠ¸ ë£¨íŠ¸ì— TODO.md ìžˆìœ¼ë©´ ì¶”ê°€. ì—†ìœ¼ë©´ ìƒˆë¡œ ë§Œë“¤ì–´ë„ ë¨.
+
+Markdown
+# TODO
+
+## Equation Difficulty
+
+- Current procedural generator works, but difficulty is still rough.
+- Species controls equation family.
+- Rank controls number ranges.
+- Later, add proper DifficultyScore filtering.
+- Later, generate multiple candidate equations and choose one within target difficulty range.
+- Prevent high-rank enemies from generating equations that are too easy.
+- Consider mental-math difficulty, digit count, multiplication table familiarity, clean divisibility, and recent repetition.
+ë‹¤ìŒ ë‹¨ê³„: Operation Weapon v0
+
+ì´ì œ ì§„ì§œ GDD í•µì‹¬ìœ¼ë¡œ ê°€ì•¼ í•¨.
+
+ì§€ê¸ˆì€ ì •ë‹µì„ ë°”ë¡œ ì°”ëŸ¬ ì£½ì´ëŠ” ê²ƒë§Œ ë¨.
+ë‹¤ìŒì€ ì´ê±¸ ë§Œë“¤ì–´ì•¼ í•¨:
+
+ì : x + 5 = 10
+í”Œë ˆì´ì–´: 5 ìž…ë ¥
+Subtraction action ì‚¬ìš©
+ê²°ê³¼: x = 5
+ê·¸ë‹¤ìŒ 5 ìž…ë ¥
+X ì œì¶œ
+AXIOM EXECUTION
+
+ì¦‰, ëº„ì…ˆ ë¬´ê¸°ë¡œ ì‹ì„ ë³€í˜•í•˜ëŠ” ì²« ë‹¨ê³„.
+
+ë‹¤ìŒ Codex í”„ë¡¬í”„íŠ¸
+
+ê°™ì€ ì„¸ì…˜ì— ë„£ì–´.
+
+Add prototype operation submission for equation transformation.
+
+Goal:
+Allow the player to apply a subtraction operation to the nearest equation enemy using the current input number.
+
+This is still prototype-only. Do not create real weapons, animations, inventory, or UI widgets yet.
+
+Modify only what is necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+- PythagoreanHarmonyCharacter.h
+- PythagoreanHarmonyCharacter.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp if needed
+
+Requirements:
+
+1. Add a way for UEnemyEquationComponent to apply a subtraction operation to the current equation.
+
+Add BlueprintCallable function:
+- ApplySubtractionOperation(int32 Value)
+
+Behavior:
+- It should apply "- Value" to both sides of the equation where supported.
+- For the prototype, support at least Goblin Add/Subtract equations.
+
+Examples:
+
+If current equation is:
+x + 5 = 10
+
+ApplySubtractionOperation(5)
+
+Result:
+x = 5
+CorrectAnswer remains 5
+EquationType becomes Direct
+DisplayText becomes "x = 5"
+
+If current equation is:
+x + 7 = 15
+
+ApplySubtractionOperation(7)
+
+Result:
+x = 8
+
+If current equation is:
+x - 4 = 9
+
+ApplySubtractionOperation(-4) is not supported yet.
+For now, keep this simple and add comments that broader inverse-operation support comes later.
+
+2. Add a BlueprintCallable function to APrototypeEquationEnemy:
+- ApplySubtractionToEnemy(int32 Value)
+
+This should call EquationComponent->ApplySubtractionOperation(Value) and refresh the displayed equation.
+
+3. In APythagoreanHarmonyCharacter:
+- Bind a prototype key to apply subtraction to nearest equation enemy.
+- Use key Q for now.
+- Q should read the current player input.
+- If no input, show "No input."
+- If no enemy in range, show "No equation enemy in range."
+- If enemy found, call ApplySubtractionToEnemy(CurrentInput).
+- After applying the operation, clear player input.
+- Print on-screen debug messages:
+  - "Applied Subtraction: -N"
+  - "Equation transformed."
+
+4. Do not change X answer submission behavior.
+
+5. Keep code beginner-readable.
+
+6. Add UE_LOG messages when an operation is applied.
+
+Before finalizing, explain:
+1. Which files changed
+2. How subtraction operation works
+3. Which key was bound
+4. How to test in Play mode
+í…ŒìŠ¤íŠ¸ ë°©ë²•
+
+Playì—ì„œ:
+
+ê³ ë¸”ë¦°: x + 5 = 10
+5 ìž…ë ¥
+Q ëˆ„ë¦„
+
+ì„±ê³µí•˜ë©´:
+
+x = 5
+
+ê·¸ ë‹¤ìŒ:
+
+5 ìž…ë ¥
+X ëˆ„ë¦„
+
+ì„±ê³µí•˜ë©´:
+
+AXIOM EXECUTION
+
+ì´ê±° ë˜ë©´ ë“œë””ì–´ ìˆ˜í•™ì´ ê³µê²©ìœ¼ë¡œ ì‹ì„ ë°”ê¾¸ëŠ” ì²« ë£¨í”„ê°€ ì™„ì„±ë¨.
+
+* * *
+
+**You:**
+
+LoginId:0b1be43d4f1e97eb0df13bb514cc791d
+EpicAccountId:66dc3235020943d7b8b91d014f3ef265
+
+Fatal error: [File:D:\build\++UE5\Sync\Engine\Source\Runtime\CoreUObject\Private\Templates\Casts.cpp] [Line: 10] 
+Cast of Object /Script/CoreUObject.Default__Object to Actor failed
+
+
+
+
+UnrealEditor_CoreUObject
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_Engine
+UnrealEditor_UnrealEd
+UnrealEditor_UnrealEd
+UnrealEditor_UnrealEd
+UnrealEditor_UnrealEd
+UnrealEditor_UnrealEd
+UnrealEditor_UnrealEd
+UnrealEditor
+UnrealEditor
+UnrealEditor
+UnrealEditor
+UnrealEditor
+UnrealEditor
+kernel32
+ntdll
+
+* * *
+
+**ChatGPT:**
+
+ì˜¤ì¼€ì´, ì´ê±´ ê²Œìž„ ë¡œì§ ë¬¸ì œê°€ ì•„ë‹ˆë¼ C++ ì½”ë“œì—ì„œ ìž˜ëª»ëœ Castê°€ ë“¤ì–´ê°„ í¬ëž˜ì‹œìž„.
+
+í•µì‹¬ ì—ëŸ¬:
+
+Cast of Object /Script/CoreUObject.Default__Object to Actor failed
+
+ëœ»:
+
+UObjectë¥¼ AActorë¡œ ê°•ì œ ìºìŠ¤íŒ…í•˜ë ¤ê³  í–ˆëŠ”ë°,
+ê·¸ UObjectê°€ ì‹¤ì œ Actorê°€ ì•„ë‹ˆë¼ì„œ Unrealì´ ì¦‰ì‹œ ì£½ìŒ.
+
+ê°€ìž¥ ê°€ëŠ¥ì„± ë†’ì€ ì›ì¸:
+
+CastChecked<AActor>(...)
+
+ë˜ëŠ”
+
+Cast<AActor>(...)
+
+ë¥¼ ìž˜ëª»ëœ ëŒ€ìƒì— ì‚¬ìš©í–ˆê±°ë‚˜, GetDefaultObject, Default__Object, UObject ê°™ì€ ê±¸ Actorë¼ê³  ì°©ê°í•œ ì½”ë“œê°€ ë“¤ì–´ê°.
+
+ì§€ê¸ˆ í•˜ì§€ ë§ ê²ƒ
+Unreal Editor ê³„ì† ë‹¤ì‹œ ì—´ê¸°
+Live Coding ê³„ì† ëˆ„ë¥´ê¸°
+ìƒˆ ê¸°ëŠ¥ ê³„ì† ì¶”ê°€í•˜ê¸°
+
+ë¨¼ì € ìµœê·¼ Codex ë³€ê²½ì„ ê³ ì³ì•¼ í•¨.
+
+1ë‹¨ê³„: Codexì—ê²Œ â€œë””ë²„ê·¸ë§Œâ€ ì‹œí‚¤ê¸°
+
+Codexì— ì´ê±° ê·¸ëŒ€ë¡œ ë„£ì–´.
+
+Unreal crashed after the last changes with this error:
+
+Fatal error:
+Cast of Object /Script/CoreUObject.Default__Object to Actor failed
+
+Do not add new features.
+
+Inspect the most recent changes related to the subtraction operation and player character bindings.
+
+Find any unsafe cast from UObject to AActor or any use of CastChecked that could be causing this crash.

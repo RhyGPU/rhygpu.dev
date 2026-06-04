@@ -1,0 +1,523 @@
+DO NOT REPLAY:
+- discovering the phone
+
+Humans infer that easily. LLMs often do, but not always.
+
+3. The current user message can re-anchor the model incorrectly
+
+The user said â€œSure. I would like some Pad Thaiâ€¦â€ That should anchor to the food invitation. But the model may interpret the emotional confession, â€œlonely and stuff,â€ as still connected to the earlier Tinder reveal and replay the reveal to rebuild emotional context.
+
+4. Recent chat is not prioritized enough
+
+If your prompt has:
+
+[WORLD SNAPSHOT]
+[RELEVANT MEMORIES]
+[RELATIONSHIP]
+[RECENT CHAT]
+
+the model may treat [RECENT CHAT] as background, not as a hard continuity constraint.
+
+The new [IMMEDIATE CONTINUITY] section fixes that by promoting the latest action state above recent chat.
+
+So why add continuity if recent chat exists?
+
+Because [IMMEDIATE CONTINUITY] is not â€œmore memory.â€ It is a state checkpoint.
+
+Recent chat is:
+
+Here is what was said.
+
+Immediate continuity is:
+
+Here is where the scene currently is. Continue from here. Do not replay.
+
+That distinction matters a lot.
+
+For RP engines, you need both:
+
+Recent Chat = dialogue/prose continuity
+Immediate Continuity = action-state continuity
+World Log = scene/plot continuity
+Soul Memory = character/emotional continuity
+Your fix was the right one, but it is still a patch
+
+The [IMMEDIATE CONTINUITY] section is the correct immediate fix. But the deeper fix is to store micro scene state in the engine, not just infer it from recent assistant text.
+
+Example future state:
+
+JSON
+{
+  "scene_state": {
+    "current_location": "Aurora's apartment kitchen",
+    "latest_completed_actions": [
+      "Aurora saw the phone/Tinder screenshot",
+      "Aurora reacted with embarrassment",
+      "Aurora tossed the phone onto the couch",
+      "Aurora moved toward the kitchen to get pad thai"
+    ],
+    "pending_user_intent": "User accepted pad thai and confessed loneliness",
+    "do_not_replay": [
+      "phone reveal",
+      "first recognition of the Tinder post"
+    ]
+  }
+}
+
+That is stronger than relying on the LLM to infer everything from prose.
+
+What to do now
+
+Since Immediate Continuity Guard is implemented and tests passed, do this:
+
+1. Commit and push it.
+2. Test the exact same phone/pad-thai scenario again.
+3. If it no longer repeats, move on.
+
+Commit message:
+
+Add immediate continuity context guard
+Next feature after this
+
+Next should be Scene State V1, not embeddings yet.
+
+Task goal:
+
+World Log should store current scene facts, completed actions, pending action, and do-not-replay facts.
+
+This will make the engine much more reliable than recent chat alone.
+
+The order should be:
+
+1. Immediate Continuity Guard, already done
+2. Scene State V1
+3. Retrieval Layer V1
+4. Regenerate / fix last response UI
+
+Your todo.md already points toward the UI side: regenerate response, ask AI to fix last response with directions, and move back and forth between generated messages. 
+
+todo
+
+ But engine continuity should come first.
+
+* * *
+
+**You:**
+
+She pauses mid-reach into the fridge, her fingers hovering over a plastic container. The words land in the quiet kitchen like a stone dropped into still waterâ€”ripples spreading outward, touching everything.
+
+*Lonely.*
+
+She knows that word. Lives inside it, most nights, like a studio apartment with thin walls and a radiator that clanks. She's just better at decorating hersâ€”hanging art on the walls, lighting candles, pretending the echo is ambiance instead of emptiness.
+
+She pulls out the container and sets it on the counter, then leans her hip against the edge of the fridge. Her arms crossâ€”not defensive, exactly, but *holding*. Like she's keeping something from spilling out.
+
+"Yeah?" Her voice is softer now. The sarcasm dialed back a few notches, revealing the grain underneathâ€”warm, a little rough, real. She tilts her head, studying the visitor with those sharp blue eyes. Not performing. Not deflecting. Just... *looking*.
+
+"You know, most people lead with the pad thai and save the existential crisis for the second date." A beat. The corner of her mouth twitches. "I respect the efficiency."
+
+She pushes off the fridge and moves to the microwave, her bare feet silent on the tile. The container goes in. The hum fills the space between themâ€”mechanical, steady, buying her a few seconds to think.
+
+The thing isâ€”and this is the part she'd never admit out loud, not yet, maybe not everâ€”hearing someone else say *lonely* in that same flat, unperformed way does something to her chest. Loosens a bolt she didn't know was tightened. It's terrifying. It's a relief. It's both at once, braided together so tightly she can't tell where one feeling ends and the other begins.
+
+She punches the timer. Thirty seconds. Not enough time to say something stupid. Just enough time to decide whether she wants to.
+
+The microwave hums. The neon outside flickersâ€”pink, blue, pink, blueâ€”painting her bare shoulders in alternating colors. The shirt has slipped further down her arm, exposing the curve of her collarbone, the thin strap of something dark underneath. She doesn't fix it.
+
+"Second date, huh?" She glances over her shoulder, and there it isâ€”the smirk. But it's different now. Less armor, more invitation. "Bold of you to assume there'll be a first."
+
+The microwave beeps.
+
+She doesn't move toward it. Not yet. She just stands there, backlit by the kitchen light, holding the silence like a card she hasn't decided whether to play.
+
+
+She mentioned second date then acted as if i said it. At this point, is it the LLM issue?
+
+Give me a prompt for codex or cursor (based on you pick). 
+
+* * *
+
+**ChatGPT:**
+
+Yes, at this point this is mostly an LLM generation issue, not a memory-system issue.
+
+The model did not forget the previous chat. It made a speaker attribution error inside its own response:
+
+Aurora says: "most people ... save the existential crisis for the second date"
+Then Aurora acts like the user said "second date"
+
+That is not long-term memory failure. That is local coherence / attribution drift. The engine can reduce it with a stronger narrator prompt, but it will never be 100% eliminated unless you add a â€œregenerate/fix last responseâ€ workflow later. Your own TODO already points toward that feature: regenerate response, ask AI to fix last response with directions, and choose between generated messages. 
+
+todo
+
+Use Cursor Agent
+
+This is a targeted prompt/system-instruction fix, not a big Codex architecture pass.
+
+Work directly on main.
+
+Paste this into Cursor Agent:
+
+Task: Add Narrator Attribution Guard V1.
+
+Problem:
+The narrator sometimes misattributes its own character dialogue or narration to the user.
+
+Observed example:
+Aurora says, "most people lead with the pad thai and save the existential crisis for the second date."
+Later in the same response, Aurora says, "Second date, huh? Bold of you to assume there'll be a first."
+This incorrectly treats "second date" as if the user said it, when it was Aurora's own joke.
+
+This is not a memory problem. It is a speaker attribution and local coherence problem.
+
+Files to inspect:
+- src-tauri/src/providers/api.rs
+- src/tauri.ts
+- src-tauri/state_engine/src/context_compiler.rs
+- src/App.tsx if needed
+
+Goals:
+1. Strengthen the narrator system prompt with an attribution guard.
+2. Update both backend and frontend/preview prompt constants if duplicated.
+3. The narrator must distinguish:
+   - what the user actually said
+   - what the character said
+   - what the narrator described
+   - what is only metaphor or narration
+4. The narrator must not later respond to its own joke, metaphor, or narration as if the user said it.
+5. The narrator must not invent user dialogue, user thoughts, or user intentions.
+6. The narrator must continue from user-provided input only, plus established scene state.
+7. Keep this neutral and genre-agnostic.
+8. Do not change launcher BAT files.
+9. Do not implement Scene State V1 yet.
+10. Do not rewrite the UI.
+
+Add wording similar to this into the narrator prompt:
+
+## ATTRIBUTION AND AGENCY
+- Track speaker ownership strictly.
+- The user's actual words are only the latest user message and prior user messages.
+- Character dialogue written by the narrator is not user dialogue.
+- Narrator metaphors, jokes, labels, and summaries are not user statements.
+- Never react to the character's own line as if the user said it.
+- Never invent user actions, thoughts, motives, or dialogue.
+- If the character makes a joke or rhetorical comment, later narration must remember that the character said it.
+- Before writing the final response, check: "What did the user actually say? What did the character already say? What already happened?"
+
+Tests:
+- Add or update tests that verify the built system prompt contains the attribution guard.
+- If there is a duplicated frontend preview prompt, keep it consistent.
+- Existing tests must still pass.
+
+Run:
+- npm.cmd run test:rust
+- npm.cmd run typecheck
+
+Report:
+- changed files
+- exact prompt section added
+- tests run/results
+After Cursor finishes
+
+Test with this exact scenario:
+
+User: Sure. I would like some Pad Thai. Also, I'm here cause I'm in the same boat. Lonely and stuff. And thought you were cute.
+
+A good response should do this:
+
+Aurora continues from the kitchen / microwave / pad thai.
+She reacts to "lonely" and "cute."
+She may joke, but she does not act like the user said "second date" unless the user actually did.
+
+Commit message:
+
+Add narrator attribution guard
+
+Then push.
+
+Next after this
+
+After attribution guard, the next real engine step should be Scene State V1, because recent chat plus immediate continuity still relies too much on the LLM interpreting prose correctly. A compact engine-owned scene state will make this much more reliable.
+
+* * *
+
+**You:**
+
+We can't perfect... probably. The main goal is less tokens best outcome. THus, is this fix worth it?
+
+* * *
+
+**ChatGPT:**
+
+Yes, but only as a small prompt-level fix.
+
+Do not build a huge attribution system for this yet. The goal is token efficiency, and this issue is not serious enough to justify a large engine layer.
+
+My judgment
+Worth it: yes
+Priority: medium
+Implementation size: tiny
+Token cost target: under 80-120 tokens
+Do not over-engineer it
+
+The failure was annoying, but not catastrophic. The model made a local attribution mistake, not a memory failure. Since you cannot perfect LLM narration, the correct response is:
+
+Add a compact narrator rule that reduces this class of mistake, then move on.
+
+Why it is worth it
+
+A short attribution guard gives good value because it affects many common RP errors:
+
+- AI treats its own joke as user dialogue
+- AI invents user intent
+- AI repeats its own narration as if user caused it
+- AI over-controls user actions
+- AI confuses character speech with player speech
+
+These are frequent in roleplay. Fixing them with 5-7 lines in the system prompt is cheap.
+
+Why it is not worth overbuilding
+
+Do not add:
+
+- a full second evaluator model
+- a huge attribution parser
+- a long checklist every turn
+- a giant "do not do X" prompt block
+- a separate correction pass after every response
+
+That would fight your core goal: less tokens, best outcome.
+
+Best version of the fix
+
+Use a compact version only:
+
+[ATTRIBUTION]
+User facts come only from user messages. Character dialogue and narrator prose are not user statements. Do not react to the character's own jokes, metaphors, or narration as if the user said them. Never invent user actions, thoughts, motives, or dialogue. Continue from completed scene facts without replaying them.
+
+That is enough.
+
+It costs roughly 50-70 tokens, and it directly targets the issue.
+
+Bigger concern: Immediate Continuity may be too expensive
+
+The more important token-efficiency issue is your new [IMMEDIATE CONTINUITY] section.
+
+If it repeats the full last assistant message and full last user message, then it may duplicate [RECENT CHAT], which is wasteful.
+
+Better structure:
+
+[IMMEDIATE CONTINUITY]
+Last completed state: Aurora is in the kitchen heating pad thai. She has already seen and reacted to the phone/Tinder post. The user accepted food and admitted loneliness/attraction. Continue from there, do not replay the phone reveal.
+
+This is better than feeding the full prior assistant message twice.
+
+My recommendation
+
+Do this:
+
+1. Add the compact Attribution guard.
+2. Keep it under 100 tokens.
+3. Change Immediate Continuity so it is a compact state digest, not duplicate transcript.
+4. Then move on to Scene State V1 or Retrieval V1.
+
+So yes, the attribution fix is worth it, but only if it stays small. The bigger optimization is preventing duplicate context blocks.
+
+* * *
+
+**You:**
+
+She pauses, one hand still inside the fridge door, a takeout container half-lifted. The cold air spills over her bare forearms and she doesn't move for a full secondâ€”just stands there, processing.
+
+*In the same boat.*
+
+Something in her chest does a complicated thing. Not quite a squeeze. More like a door she thought was locked turning out to just be stuck, and the right amount of pressure finallyâ€”
+
+"Yeah?" She pulls the container out, sets it on the counter. Doesn't turn around yet. Her thumb traces the edge of the cardboard lid, back and forth, a nervous rhythm she's not aware of. "Lonely and stuff." She repeats it flatly, but there's a crack in the flatnessâ€”a hairline fracture running through the sarcasm. "That's... yeah. That's a very eloquent summary of the human condition right there."
+
+She turns. Leans her hip against the counter, arms crossedâ€”not defensive, exactly, but holding herself together. Her eyes find theirs, and for once the teasing glint is dialed back. What's left is something rawer. More honest.
+
+"You know what's funny?" A breath that's almost a laugh. "I spent twenty minutes trying to figure out how to play that off. The photo. The messages. I had like three different sarcastic deflections lined up." She uncrosses her arms, gestures vaguely at herselfâ€”the slipped shirt, the bare feet, the whole disaster of her. "But you just... said you're lonely too. And now I don't know what to do with that."
+
+The microwave beeps behind her. She ignores it.
+
+"I'm not good at this," she says quietly. The admission costs her somethingâ€”she can see it in the way her jaw tightens after, like she's already regretting the honesty. "The... *real* part. I'm great at the other part. The fun part. The part where we both pretend this is justâ€”" She waves a hand. "But you're standing in my kitchen at one in the morning, and you just told me you're lonely, and Iâ€”"
+
+She stops. Swallows. Her throat works around something that doesn't want to come out.
+
+"I don't want to fuck this up by being weird about it," she finishes, softer. "So. Pad Thai. I have two containers because I ordered too much, whichâ€”surprise, surpriseâ€”is also a metaphor for my life." The crooked smile is back, but it's gentler now. Less armor. "You want the one with extra peanuts or the one where I accidentally ordered it spicy enough to punish myself?"
+
+She pushes off the counter, pads toward the microwave on silent feet, and this time when she moves, there's no performance in it. Just a woman in her kitchen, offering food to someone who showed up. The trembling in her hands has stopped.
+
+
+status
+Aurora Schwarz | Skin: Warm flush fading to a soft pink across her cheeks, pale beneath | Zones: The press of her own thumbnail into her palm, the cool kitchen tile under her arches, the ghost of cold air from the fridge on her forearms | Atmosphere: The microwave hums its low note; the rain outside has thinned to a whisper, and the apartment feels less like a stage and more like a place where someone actually lives.
+
+.somehow its been 20 min. do I need to fix this too?
+
+1. Add the compact Attribution guard.
+2. Keep it under 100 tokens.
+3. Change Immediate Continuity so it is a compact state digest, not duplicate transcript.
+4. Then move on to Scene State V1 or Retrieval V1.
+
+How? give me a idea and prompt
+
+* * *
+
+**ChatGPT:**
+
+Yes, this is worth fixing, but again only with small, high-impact rules, not a huge system.
+
+The â€œtwenty minutesâ€ issue is a time-continuity hallucination. The model invented a duration that was not in the scene. It is similar to the attribution issue:
+
+Attribution issue:
+The model treats its own line as if the user said it.
+
+Time issue:
+The model invents elapsed time or exact duration without world-state support.
+
+Do not build a giant time engine yet. Add a compact Attribution + Time Discipline Guard, and make Immediate Continuity cheaper.
+
+What I would do
+
+Use Codex for this because it touches backend prompt constants and context compiler behavior.
+
+Work on main unless GitHub Desktop shows scary changes. This is a small engine/prompt cleanup.
+
+Design idea
+1. Compact attribution guard
+
+Add a short system prompt section:
+
+[ATTRIBUTION]
+User facts come only from user messages. Character dialogue and narrator prose are not user statements. Do not react to the character's own jokes, metaphors, or narration as if the user said them. Never invent user actions, thoughts, motives, or dialogue.
+2. Compact time guard
+
+Add this:
+
+[TIME DISCIPLINE]
+Do not invent exact elapsed time, timestamps, or scene transitions unless provided by the user or World Log. Vague emotional pacing is allowed; concrete claims like "twenty minutes later" require support.
+
+This directly targets the â€œtwenty minutesâ€ problem.
+
+3. Make Immediate Continuity a digest, not transcript duplication
+
+Bad:
+
+[IMMEDIATE CONTINUITY]
+Last narrator action: entire previous assistant message...
+Last user action: entire previous user message...
+
+Good:
+
+[IMMEDIATE CONTINUITY]
+Completed scene facts: Aurora is in the kitchen with pad thai; she has already seen and reacted to the phone/Tinder post.
+Latest user input: The user accepted pad thai, said they were lonely too, and called her cute.
+Continue forward. Do not replay completed beats or invent time skips.
+
+That is the ideal. It costs fewer tokens and gives stronger guidance.
+
+Since deterministic summarization is hard without another LLM pass, use a practical hybrid:
+
+Primary source:
+- latest World Log recent_event
+- latest user message excerpt
+
+Fallback:
+- short last assistant excerpt, max 220 chars
+- short last user excerpt, max 220 chars
+4. Improve hidden world_event
+
+Tell the model that world_event should be a compact completed scene fact, not vague mood.
+
+Example:
+
+JSON
+"world_event": "Aurora has already seen the phone/Tinder post, reacted with embarrassment, invited the user in, and moved to the kitchen to heat pad thai."
+
+Then your context compiler can use that as the compact continuity anchor next turn.
+
+Codex task
+
+Paste this into Codex:
+
+Task: Add compact Attribution + Time Discipline Guard and make Immediate Continuity cheaper.
+
+Current problem:
+The narrator sometimes makes local coherence mistakes:
+1. It treats the character's own joke or narration as if the user said it.
+2. It invents exact elapsed time or timestamps not supported by the user or World Log.
+Example: Aurora says she spent "twenty minutes" figuring out a reaction, even though the scene did not establish that amount of time.
+
+Goal:
+Reduce these errors with small prompt/context changes while keeping token usage low.
+
+Files to inspect:
+- src-tauri/src/providers/api.rs
+- src/tauri.ts
+- src-tauri/state_engine/src/context_compiler.rs
+- src-tauri/state_engine/src/hidden_state.rs
+- src-tauri/state_engine/src/patch.rs
+- src-tauri/src/commands.rs
+
+Requirements:
+
+1. Add a compact attribution guard to the narrator system prompt.
+Keep it under about 80 tokens.
+
+Suggested text:
+[ATTRIBUTION]
+User facts come only from user messages. Character dialogue and narrator prose are not user statements. Do not react to the character's own jokes, metaphors, or narration as if the user said them. Never invent user actions, thoughts, motives, or dialogue.
+
+2. Add a compact time discipline guard to the narrator system prompt.
+Keep it under about 50 tokens.
+
+Suggested text:
+[TIME DISCIPLINE]
+Do not invent exact elapsed time, timestamps, or scene transitions unless provided by the user or World Log. Vague emotional pacing is allowed; concrete durations require support.
+
+3. Update both backend and frontend/preview prompt constants if duplicated.
+Likely files:
+- src-tauri/src/providers/api.rs
+- src/tauri.ts
+
+4. Improve the hidden-state prompt for `world_event`.
+Make it clear that `world_event` should be a compact completed scene fact, not a vague mood summary.
+
+Suggested wording:
+world_event should summarize completed physical/story facts needed for next-turn continuity, including what has already happened and what should not be replayed.
+
+5. Change [IMMEDIATE CONTINUITY] in context_compiler.rs so it is compact.
+Do not duplicate full previous assistant/user messages.
+
+Preferred format:
+[IMMEDIATE CONTINUITY]
+Completed scene facts: <latest world recent_event if available, otherwise short assistant excerpt>
+Latest user input: <short latest user excerpt>
+Continue forward. Do not replay completed beats, misattribute speaker ownership, or invent unsupported time skips.
+
+6. Add excerpt limits:
+- latest assistant fallback max around 220 characters
+- latest user input max around 220 characters
+- avoid breaking UTF-8 character boundaries
+- add ellipsis when truncated
+
+7. Keep [RECENT CHAT], but make sure it is not huge.
+If recent chat currently includes full long messages, cap each message excerpt around 500 characters.
+Do not remove recent chat entirely.
+
+8. Do not implement a second LLM summarizer.
+9. Do not implement Scene State V1 yet.
+10. Do not change launcher BAT files.
+11. Do not change provider API behavior except prompt text.
+
+Tests:
+- system prompt contains attribution guard
+- system prompt contains time discipline guard
+- hidden state prompt describes world_event as completed scene fact
+- immediate continuity prefers latest world recent_event when available
+- immediate continuity falls back to assistant excerpt when no world event exists
+- immediate continuity appears before [RECENT CHAT]
+- long recent chat messages are compacted safely
+- budget is still respected
+- typecheck passes

@@ -1,0 +1,524 @@
+    - restore_session_reappears_in_active_list
+    - archive_session_does_not_delete_messages
+    - archive_session_does_not_delete_payload_logs
+    - archive_one_session_does_not_affect_sibling_sessions
+- [x] **Phase D: Turn / Message Hide & Restore**
+  - [x] Implement schema migration for messages.hidden_at.
+  - [x] Update deactivate_downstream_from_message to populate hidden_at.
+  - [x] Implement hide_turn_range, restore_turn_range, and list_hidden_turns in db/mod.rs.
+  - [x] Expose as Tauri commands and map delete_message to a safe deactivation / range hide helper.
+  - [x] Add tests:
+    - hide_turn_range_removes_from_visible_chat_only
+    - hide_turn_range_does_not_delete_payload_logs
+    - restore_turn_range_restores_canonical_active_branch_only
+    - restore_skips_pending_failed_retry_duplicate_discarded_messages
+    - restore_does_not_create_2_2_variant_regression
+    - evaluator_patch_links_survive_hide_restore
+- [x] **Phase E: UI Wording & Dev Commands**
+  - [x] Check frontend files for "Delete session" or "Delete message" occurrences and update to "Archive session" or "Hide/Rewind turn".
+- [x] **Phase F: Verification**
+  - [x] Run state_engine tests.
+  - [x] Run full workspace tests.
+  - [x] Run typecheck and cargo fmt.
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1).txt
+ë¬¸ì„œ
+# Task Checklist: P0.1A Data Safety Foundation (Archive / Restore / Backup)
+
+- [x] **Phase B: DB Backup**
+  - [x] Implement create_backup_file and Tauri command create_backup.
+  - [x] Integrate automatic backup before tests that modify session/turn visibility.
+  - [x] Add tests: backup_created_before_destructive_path_test, backup_file_has_nonzero_size.
+- [x] **Phase C: Session Archive & Restore**
+  - [x] Implement schema migration for conversations.archived_at.
+  - [x] Implement archive_session, restore_session, and list_archived_sessions in db/mod.rs.
+  - [x] Filter archived conversations in list_conversations (archived_at IS NULL).
+  - [x] Expose as Tauri commands and map delete_conversation to archive_session.
+  - [x] Add tests:
+    - archive_session_hides_from_active_list
+    - restore_session_reappears_in_active_list
+    - archive_session_does_not_delete_messages
+    - archive_session_does_not_delete_payload_logs
+    - archive_one_session_does_not_affect_sibling_sessions
+- [x] **Phase D: Turn / Message Hide & Restore**
+  - [x] Implement schema migration for messages.hidden_at.
+  - [x] Update deactivate_downstream_from_message to populate hidden_at.
+  - [x] Implement hide_turn_range, restore_turn_range, and list_hidden_turns in db/mod.rs.
+  - [x] Expose as Tauri commands and map delete_message to a safe deactivation / range hide helper.
+  - [x] Add tests:
+    - hide_turn_range_removes_from_visible_chat_only
+    - hide_turn_range_does_not_delete_payload_logs
+    - restore_turn_range_restores_canonical_active_branch_only
+    - restore_skips_pending_failed_retry_duplicate_discarded_messages
+    - restore_does_not_create_2_2_variant_regression
+    - evaluator_patch_links_survive_hide_restore
+- [x] **Phase E: UI Wording & Dev Commands**
+  - [x] Check frontend files for "Delete session" or "Delete message" occurrences and update to "Archive session" or "Hide/Rewind turn".
+- [x] **Phase F: Verification**
+  - [x] Run state_engine tests.
+  - [x] Run full workspace tests.
+  - [x] Run typecheck and cargo fmt.
+
+# Implementation Plan: P0.1B Data Safety, Soul / Savepoint Archive + Restore
+
+Implement safe soft-archiving and restoration of Souls and Savepoints (both embedded in the same souls database table) to completely prevent unrecoverable data loss in normal UI paths.
+
+## Phase A: Audit Soul/savepoint destructive paths
+
+### Audit Summary Table
+
+| Function / Action | File Path | Hard-Deletes Rows? | Exposed to UI? | Recommended Safe Replacement |
+| :--- | :--- | :--- | :--- | :--- |
+| delete_soul | src-tauri/src/db/mod.rs (line 1228) | Yes, executes DELETE FROM souls WHERE character_id = ?1 | Yes, exposed via Tauri command delete_soul to React deleteSoul() | Change delete_soul to call archive_soul (or map to a soft-archiving helper) to set archived_at = Some(timestamp) rather than hard-deleting the row. |
+| Custom Character / Savepoint Deletions | Embedded in souls table | Yes, because custom savepoints are stored in the souls table (with soul_kind = 'savepoint' or 'checkpoint'). | Yes, managed via delete_soul | Soft-archive savepoints by introducing archive_savepoint and archive_soul which write archived_at in the souls table and filter active lists. |
+
+### Cascading Deletions Risk Analysis
+If a Soul row is hard-deleted from souls, it triggers SQL-level foreign key cascades (ON DELETE CASCADE):
+1. **conversations** matching the Soul's soul_id are hard-deleted.
+2. **messages** inside those conversations are hard-deleted.
+3. **turn_snapshots**, **assistant_message_variants**, and **state_patches** associated with those conversations/messages are cascade-deleted.
+Soft-archiving entirely prevents this cascade of data destruction.
+
+---
+
+## Phase B: Schema Migration
+
+We will perform a single, safe migration adding a nullable archived_at column to the souls table. Since "Souls" and "Savepoints" are both stored inside the souls table (differentiated by soul_kind), this single column covers both cleanly:
+
+### Migration Statement
+
+rust
+add_column_if_missing(conn, "souls", "archived_at", "INTEGER")?;
+
+
+---
+
+## Phase C: Soul Archive / Restore
+
+### Database Functions
+1. **archive_soul(conn, id)**:
+   Sets archived_at = Some(now_ts()) for the given Soul ID. Does not touch or cascade-delete conversations, savepoints, worlds, messages, payload logs, state patches, or memories.
+2. **restore_soul(conn, id)**:
+   Clears archived_at = None for the given Soul ID, restoring it to the active list.
+3. **list_archived_souls(conn)**:
+   Lists all Souls with archived_at IS NOT NULL (and soul_kind != 'session_clone').
+4. **Update list_souls(conn)**:
+   Add AND archived_at IS NULL to the filter.
+5. **Update list_souls_including_session_clones(conn)**:
+   Add WHERE archived_at IS NULL (or filter appropriately).
+
+---
+
+## Phase D: Savepoint Archive / Restore
+
+Since savepoints are also stored in the souls table (as soul_kind = 'savepoint' or 'checkpoint'), we will implement:
+1. **archive_savepoint(conn, id)**:
+   Sets archived_at = Some(now_ts()) on the savepoint Soul row.
+2. **restore_savepoint(conn, id)**:
+   Sets archived_at = None on the savepoint Soul row.
+3. **list_archived_savepoints(conn)**:
+   Lists all savepoint Souls (or checkpoint Souls) where archived_at IS NOT NULL.
+
+---
+
+## Phase E: UI Wording & Tauri Commands
+
+1. **Commands to expose**:
+   - archive_soul
+   - restore_soul
+   - list_archived_souls
+   - archive_savepoint
+   - restore_savepoint
+   - list_archived_savepoints
+2. **UI Wording updates**:
+   - "Delete selected Soul" -> "Archive selected Soul"
+   - Confirm prompt: "Delete Aurora Schwarz and all local chats... This cannot be undone." -> "Archive Aurora Schwarz? Local chats and savepoint history remain safe and recoverable."
+   - Map frontend deleteSoul to invoke archive_soul (or soft-archive) in Tauri.
+
+---
+
+## Phase F: Verification Plan
+
+### Automated Tests
+We will add the following tests to src-tauri/src/db/mod.rs to verify all archive, restore, and cascade-free properties:
+- archive_soul_hides_from_active_soul_list
+- restore_soul_reappears_in_active_soul_list
+- archive_soul_does_not_delete_conversations
+- archive_soul_does_not_delete_messages
+- archive_soul_does_not_delete_savepoints
+- archive_soul_does_not_delete_payload_logs
+- archive_one_soul_does_not_affect_sibling_souls
+- archive_savepoint_hides_from_active_list
+- restore_savepoint_reappears_in_active_list
+- archive_savepoint_does_not_delete_checkpoint_data
+- archive_savepoint_does_not_affect_sibling_savepoints
+- restore_savepoint_preserves_linked_soul_and_world
+
+We will run:
+
+powershell
+npm.cmd run test:rust
+npm.cmd run typecheck
+cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ ë§ˆí¬ë‹¤ìš´(1).md
+íŒŒì¼
+# Implementation Plan: P0.1B Data Safety, Soul / Savepoint Archive + Restore
+
+Implement safe soft-archiving and restoration of Souls and Savepoints (both embedded in the same souls database table) to completely prevent unrecoverable data loss in normal UI paths.
+
+## Phase A: Audit Soul/savepoint destructive paths
+
+### Audit Summary Table
+
+| Function / Action | File Path | Hard-Deletes Rows? | Exposed to UI? | Recommended Safe Replacement |
+| :--- | :--- | :--- | :--- | :--- |
+| delete_soul | src-tauri/src/db/mod.rs (line 1228) | Yes, executes DELETE FROM souls WHERE character_id = ?1 | Yes, exposed via Tauri command delete_soul to React deleteSoul() | Change delete_soul to call archive_soul (or map to a soft-archiving helper) to set archived_at = Some(timestamp) rather than hard-deleting the row. |
+| Custom Character / Savepoint Deletions | Embedded in souls table | Yes, because custom savepoints are stored in the souls table (with soul_kind = 'savepoint' or 'checkpoint'). | Yes, managed via delete_soul | Soft-archive savepoints by introducing archive_savepoint and archive_soul which write archived_at in the souls table and filter active lists. |
+
+### Cascading Deletions Risk Analysis
+If a Soul row is hard-deleted from souls, it triggers SQL-level foreign key cascades (ON DELETE CASCADE):
+1. **conversations** matching the Soul's soul_id are hard-deleted.
+2. **messages** inside those conversations are hard-deleted.
+3. **turn_snapshots**, **assistant_message_variants**, and **state_patches** associated with those conversations/messages are cascade-deleted.
+Soft-archiving entirely prevents this cascade of data destruction.
+
+---
+
+## Phase B: Schema Migration
+
+We will perform a single, safe migration adding a nullable archived_at column to the souls table. Since "Souls" and "Savepoints" are both stored inside the souls table (differentiated by soul_kind), this single column covers both cleanly:
+
+### Migration Statement
+
+rust
+add_column_if_missing(conn, "souls", "archived_at", "INTEGER")?;
+
+
+---
+
+## Phase C: Soul Archive / Restore
+
+### Database Functions
+1. **archive_soul(conn, id)**:
+   Sets archived_at = Some(now_ts()) for the given Soul ID. Does not touch or cascade-delete conversations, savepoints, worlds, messages, payload logs, state patches, or memories.
+2. **restore_soul(conn, id)**:
+   Clears archived_at = None for the given Soul ID, restoring it to the active list.
+3. **list_archived_souls(conn)**:
+   Lists all Souls with archived_at IS NOT NULL (and soul_kind != 'session_clone').
+4. **Update list_souls(conn)**:
+   Add AND archived_at IS NULL to the filter.
+5. **Update list_souls_including_session_clones(conn)**:
+   Add WHERE archived_at IS NULL (or filter appropriately).
+
+---
+
+## Phase D: Savepoint Archive / Restore
+
+Since savepoints are also stored in the souls table (as soul_kind = 'savepoint' or 'checkpoint'), we will implement:
+1. **archive_savepoint(conn, id)**:
+   Sets archived_at = Some(now_ts()) on the savepoint Soul row.
+2. **restore_savepoint(conn, id)**:
+   Sets archived_at = None on the savepoint Soul row.
+3. **list_archived_savepoints(conn)**:
+   Lists all savepoint Souls (or checkpoint Souls) where archived_at IS NOT NULL.
+
+---
+
+## Phase E: UI Wording & Tauri Commands
+
+1. **Commands to expose**:
+   - archive_soul
+   - restore_soul
+   - list_archived_souls
+   - archive_savepoint
+   - restore_savepoint
+   - list_archived_savepoints
+2. **UI Wording updates**:
+   - "Delete selected Soul" -> "Archive selected Soul"
+   - Confirm prompt: "Delete Aurora Schwarz and all local chats... This cannot be undone." -> "Archive Aurora Schwarz? Local chats and savepoint history remain safe and recoverable."
+   - Map frontend deleteSoul to invoke archive_soul (or soft-archive) in Tauri.
+
+---
+
+## Phase F: Verification Plan
+
+### Automated Tests
+We will add the following tests to src-tauri/src/db/mod.rs to verify all archive, restore, and cascade-free properties:
+- archive_soul_hides_from_active_soul_list
+- restore_soul_reappears_in_active_soul_list
+- archive_soul_does_not_delete_conversations
+- archive_soul_does_not_delete_messages
+- archive_soul_does_not_delete_savepoints
+- archive_soul_does_not_delete_payload_logs
+- archive_one_soul_does_not_affect_sibling_souls
+- archive_savepoint_hides_from_active_list
+- restore_savepoint_reappears_in_active_list
+- archive_savepoint_does_not_delete_checkpoint_data
+- archive_savepoint_does_not_affect_sibling_savepoints
+- restore_savepoint_preserves_linked_soul_and_world
+
+We will run:
+
+powershell
+npm.cmd run test:rust
+npm.cmd run typecheck
+cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+# Task Checklist: P0.2A API Provider Profile Safety (Archive / Restore / Active Profile Protection)
+
+- [x] **Phase B: Schema Migration**
+  - [x] Add provider_profiles.archived_at INTEGER NULL in database migration steps.
+  - [x] Update ProviderProfile struct in db/mod.rs to include archived_at.
+- [x] **Phase C: Provider Profile Archive & Restore Backend**
+  - [x] Implement archive_provider_profile in db/mod.rs with active profile guards.
+  - [x] Implement restore_provider_profile in db/mod.rs.
+  - [x] Implement list_archived_provider_profiles in db/mod.rs.
+  - [x] Update list_provider_profiles to filter WHERE archived_at IS NULL.
+  - [x] Add Tauri commands in commands.rs and expose them in lib.rs.
+  - [x] Write unit tests:
+    - [x] archive_provider_profile_hides_from_active_list
+    - [x] restore_provider_profile_reappears_in_active_list
+    - [x] archive_provider_profile_does_not_delete_config
+    - [x] archive_provider_profile_does_not_delete_api_key_field
+    - [x] archive_active_provider_profile_is_blocked
+    - [x] archive_one_profile_does_not_affect_sibling_profiles
+- [x] **Phase D: UI Integration & Labels**
+  - [x] Map frontend Tauri invocations in tauri.ts.
+  - [x] Intercept delete clicks in App.tsx and show window alerts / errors for active profiles.
+  - [x] Update UI labels from "Delete provider profile" to "Archive provider profile".
+  - [x] Provide restore functionality or UI state for archived profiles.
+- [x] **Phase F: Verification**
+  - [x] Run state_engine tests (npm.cmd run test:rust).
+  - [x] Run typecheck (npm.cmd run typecheck).
+  - [x] Check cargo format.
+# Walkthrough: P0.2A API Provider Profile Safety (Archive / Restore / Active Protection)
+
+We successfully implemented complete provider/API profile soft-archiving, restoration, and active profile protection. Users can no longer hard-delete their API profiles from the normal UI. Active narrator and updater profiles are fully protected against accidental archiving.
+
+---
+
+## 1. Summary of Changes Made
+
+### Schema & Database Migration
+- Added nullable archived_at INTEGER column to the provider_profiles table.
+- Added archived_at field to ProviderProfile type definitions in both Rust (db/mod.rs) and TypeScript (tauri.ts).
+- Created safe, automated migration in run_migrations.
+
+### Backend Implementation (src-tauri/src/db/mod.rs)
+- **archive_provider_profile(conn, id, active_ids)**: Soft-archives the profile (sets archived_at = Some(now)). Prevents archiving the profile if its ID is present in active_ids (the currently selected narrator/updater profiles), returning a detailed validation error: "Cannot archive the active provider profile. Switch profiles first."
+- **restore_provider_profile(conn, id)**: Restores the profile (sets archived_at = NULL).
+- **list_archived_provider_profiles(conn)**: Lists all archived profiles sorted by when they were archived.
+- **list_provider_profiles(conn)**: Filtered to return only active, non-archived profiles (WHERE archived_at IS NULL).
+- **Fail-safe delete_provider_profile**: Mapped backend delete_provider_profile to use soft-archiving instead of database row deletion, guaranteeing that any legacy calls never hard-delete.
+
+### Tauri Command Layer (src-tauri/src/commands.rs, src-tauri/src/lib.rs)
+- Registered and exposed archive_provider_profile, restore_provider_profile, and list_archived_provider_profiles Tauri commands.
+
+### Frontend UI Integration (src/App.tsx, src/tauri.ts)
+- Mapped Tauri commands in src/tauri.ts to archiveProviderProfile, restoreProviderProfile, and listArchivedProviderProfiles.
+- Updated React handlers in src/App.tsx:
+  - handleArchiveProviderProfile: Constructs active profile ID arrays, checks if the target profile is currently active in narrator/updater slots, blocks and alerts the user with "Cannot archive the active provider profile. Switch profiles first.", and executes the soft-archiving call.
+  - handleRestoreProviderProfile: Restores any archived profile back to active duty.
+- Re-labeled all card buttons from "Delete" to "Archive Profile" with Archive icon instead of trash cans.
+- Added a beautiful, premium **"Saved Provider Profiles"** section to the provider settings sidebar drawer, enabling users to easily see all saved profiles, archive inactive ones, and restore archived ones with one click.
+
+---
+
+## 2. Test Suite & Verification Results
+
+### Automated Rust Unit Tests
+We added provider_profiles_archive_restore_safety inside src-tauri/src/db/mod.rs covering all required scenarios:
+- **archive_provider_profile_hides_from_active_list**: Soft-archived profiles disappear from standard listings.
+- **restore_provider_profile_reappears_in_active_list**: Restored profiles immediately return to standard listings.
+- **archive_provider_profile_does_not_delete_config**: Configuration properties like base_url, model, system_prompt are fully preserved.
+- **archive_provider_profile_does_not_delete_api_key_field**: API keys are completely preserved.
+- **archive_active_provider_profile_is_blocked**: Trying to archive an active narrator or updater profile raises a clear error.
+- **archive_one_profile_does_not_affect_sibling_profiles**: Sibling profiles remain active and untouched.
+
+All **234 backend unit tests** and **200 state engine integration tests** passed successfully:
+
+powershell
+test db::tests::provider_profiles_archive_restore_safety ... ok
+test db::tests::provider_profiles_crud ... ok
+test result: ok. 234 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.57s
+
+
+All formatting, checks, and types checked cleanly:
+- cargo fmt --check (Passed!)
+- npm run typecheck (Passed!)
+- cargo check (Passed!)
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ ë§ˆí¬ë‹¤ìš´(1).md
+íŒŒì¼
+# Walkthrough - Harden Legacy delete_provider_profile Safety
+
+We successfully hardened the provider profile deletion and archiving system in both the Tauri API layer and the underlying database layer, choosing Option A (safest) while incorporating all approval corrections.
+
+## Changes Made
+
+### 1. Tauri Backend Commands
+- **Modified** [commands.rs](file:///c:/Users/T-ROBOTICS/Downloads/mnemosyne/src-tauri/src/commands.rs):
+  - Updated the Tauri command delete_provider_profile to immediately return the deprecated error:
+    "delete_provider_profile is deprecated; use archive_provider_profile with active profile guard."
+  - Updated archive_provider_profile to validate that active_ids is non-empty, preventing empty-list bypasses.
+
+### 2. Database Engine
+- **Modified** [mod.rs](file:///c:/Users/T-ROBOTICS/Downloads/mnemosyne/src-tauri/src/db/mod.rs):
+  - Updated the database-level db::delete_provider_profile function to always return a deprecation error.
+  - Internalized the legacy hard DELETE behavior to a new pub(crate) fn delete_provider_profile_internal helper (with #[allow(dead_code)] to suppress warnings when not compiling tests). This helper is strictly used to clean up unit tests.
+  - Modified db::archive_provider_profile to return an error if active_ids is empty, ensuring that all archive requests explicitly specify active narrator/updater profile IDs.
+
+### 3. Tests
+- **Fixed** existing test cases:
+  - Updated provider_profiles_crud to assert that delete_provider_profile returns a deprecation error, and use the new internal helper delete_provider_profile_internal for test state cleanup.
+  - Updated provider_profiles_archive_restore_safety to pass a valid non-empty active list (&["anthropic"]) when archiving the target profile.
+- **Added** the four required unit tests:
+  - delete_provider_profile_no_longer_hard_deletes
+  - delete_provider_profile_cannot_archive_active_profile_or_returns_deprecated_error
+  - archive_provider_profile_still_blocks_active_profile
+  - archive_provider_profile_still_archives_inactive_profile
+
+---
+
+## Verification Results
+
+### Automated Rust Unit Tests
+We executed the Rust unit tests, and all **238 tests passed successfully** (including the new safety tests).
+
+
+test result: ok. 238 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.34s
+
+
+### Formatting Check
+Executed cargo fmt check successfully:
+
+cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+The command completed successfully with exit code 0.
+
+### Cargo Compilation Check
+Executed cargo check successfully:
+
+cargo check --manifest-path src-tauri/Cargo.toml
+
+The command built the backend completely with no errors or warnings.
+
+### Frontend TypeScript Check
+Executed npm run typecheck successfully:
+
+npm run typecheck
+
+The command completed successfully, confirming no type errors in the frontend.
+# Task Checklist
+
+- [x] Update delete_provider_profile Tauri command in commands.rs to return the deprecated error
+- [x] Update archive_provider_profile Tauri command in commands.rs to validate non-empty active_ids
+- [x] Update db::delete_provider_profile to return a deprecation error and rename the hard-delete function to delete_provider_profile_internal (internalized for test cleanup use only)
+- [x] Update db::archive_provider_profile in db/mod.rs to always require non-empty active_ids
+- [x] Fix existing provider profile tests in db/mod.rs to pass non-empty active_ids to archive_provider_profile
+- [x] Add the required new unit tests to db/mod.rs to assert:
+  - delete_provider_profile_no_longer_hard_deletes
+  - delete_provider_profile_cannot_archive_active_profile_or_returns_deprecated_error
+  - archive_provider_profile_still_blocks_active_profile
+  - archive_provider_profile_still_archives_inactive_profile
+- [x] Run Cargo and NPM commands to verify everything works and builds correctly:
+  - cargo check --manifest-path src-tauri/Cargo.toml
+  - npm.cmd run test:rust
+  - npm.cmd run typecheck
+  - cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ ë§ˆí¬ë‹¤ìš´(1).md
+íŒŒì¼
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ ë§ˆí¬ë‹¤ìš´(1).md
+íŒŒì¼
+# Walkthrough - P0.2B Settings Safety, Archive / Restore / Hard-Delete Guard
+
+We successfully designed, implemented, and validated the settings safety archiving and restoring model to protect user-created settings/world/location configurations from hard deletes.
+
+## Changes Made
+
+### 1. Database Schema & Migration
+- **Added** settings.archived_at as the source of truth:
+  - Updated CREATE TABLE IF NOT EXISTS settings statement in src-tauri/src/db/mod.rs to include archived_at INTEGER (nullable).
+  - Added migration instruction using add_column_if_missing to safely add archived_at to existing settings tables without losing any data.
+
+### 2. Database Operations (db/mod.rs)
+- **Updated** SettingSummary struct to include pub archived_at: Option<i64>.
+- **Modified** list_settings to select archived_at and only return active settings (WHERE archived_at IS NULL).
+- **Implemented** settings archive and restore engine:
+  - archive_setting(conn, setting_id, active_or_default_ids):
+    - Blocks archiving if the setting ID is in the active_or_default_ids list.
+    - Blocks archiving if this setting is the last remaining non-archived setting in the database (returning "Cannot archive the active/default setting. Switch settings first.").
+    - Sets archived_at = Some(now_ts()) upon success, preserving all configuration fields intact.
+  - restore_setting(conn, setting_id): Clears archived_at (sets to NULL).
+  - list_archived_settings(conn): Returns only archived settings (WHERE archived_at IS NOT NULL).
+- **Deprecated** delete_setting to return a ToSqlConversionFailure error.
+- **Added** delete_setting_internal (unreachable from Tauri/frontend, decorated with #[allow(dead_code)]) strictly for unit test cleanups.
+
+### 3. Tauri Command Layer (commands.rs & lib.rs)
+- **Exposed** new commands: archive_setting, restore_setting, and list_archived_settings.
+- **Modified** delete_setting command to return the deprecated error: "delete_setting is deprecated; use archive_setting with active/default setting guard.".
+- **Registered** all new commands in src-tauri/src/lib.rs.
+
+### 4. Frontend Wiring (src/tauri.ts & src/App.tsx)
+- **Updated** SettingSummary type to include optional archived_at.
+- **Implemented** frontend API wrappers in tauri.ts for archiveSetting, restoreSetting, and listArchivedSettings, while deprecating deleteSetting.
+- **Updated** React UI in App.tsx:
+  - Replaced the "Delete" button with "Archive" (using <Archive size={18} /> instead of <Trash2 size={18} />).
+  - Implemented handleArchiveSetting with safety guards to collect active/default setting IDs and alert with the exact message: "Cannot archive the active/default setting. Switch settings first." when attempted.
+  - Confirmation alert dialog updated to say: "Archive [Name]? Local chats and world settings remain safe and recoverable."
+
+---
+
+## Verification Results
+
+### Automated Rust Unit Tests
+We executed the Rust unit tests, and all **246 tests passed successfully**, verifying that:
+1. archive_setting_hides_from_active_list hides archived settings.
+2. restore_setting_reappears_in_active_list restores archived settings.
+3. archive_setting_does_not_delete_config preserves all config fields.
+4. archive_one_setting_does_not_affect_sibling_settings isolates changes.
+5. archive_active_or_default_setting_is_blocked blocks archiving the active or last remaining setting.
+6. list_archived_settings_returns_only_archived separates lists.
+7. delete_setting_returns_deprecated_error_or_noops safely returns errors.
+8. setting_row_survives_legacy_delete_attempt protects data.
+
+
+test result: ok. 246 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.76s
+
+
+### state_engine Tests
+Executed cargo test on state_engine package successfully:
+
+cargo test --manifest-path src-tauri/state_engine/Cargo.toml
+
+All **200 tests passed successfully**!
+
+### Formatting Check
+Executed cargo fmt check successfully:
+
+cargo fmt --manifest-path src-tauri/Cargo.toml --check

@@ -1,0 +1,829 @@
+
+êµ¬í˜„í•  ê²ƒ:
+
+ArmoredGoblin
+Base: x + 5 = 10
+Armor Layer: Ã—2
+Displayed: (x + 5) Ã— 2 = 20
+
+ArmoredGoblinWithHelmet
+Base: x + 5 = 10
+Armor Layer: Ã—2
+Helmet Layer: +2
+Displayed: (x + 5) Ã— 2 + 2 = 22
+
+ì•„ì§ ë°©ì–´êµ¬ mesh, ì§„ì§œ helmet actor, ìž¥ë¹„ íŒŒê´´ ì´íŽ™íŠ¸ëŠ” ì•ˆ í•¨.
+
+Codexì— ë„£ì„ í”„ë¡¬í”„íŠ¸
+Add Mathematical Armor layer stack v1 for Armored Goblin.
+
+We already have a polynomial equation model. Do not replace it. Add a wrapper/layer system on top of the base polynomial equation.
+
+Modify only what is necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+- PrototypeEquationEnemy.h
+- PrototypeEquationEnemy.cpp if needed
+
+Avoid modifying:
+- PythagoreanHarmonyCharacter unless absolutely necessary
+- UI widgets
+- real weapons
+- inventory
+- animation
+- AI
+- save systems
+
+Goal:
+Support displayed equations such as:
+
+Base Formula:
+x + 5 = 10
+
+Armor Layer:
+Ã—2
+
+Displayed:
+(x + 5) Ã— 2 = 20
+
+And:
+
+Base Formula:
+x + 5 = 10
+
+Armor Layer:
+Ã—2
+
+Helmet Layer:
++2
+
+Displayed:
+(x + 5) Ã— 2 + 2 = 22
+
+Design:
+The base polynomial equation remains the source formula.
+Mathematical armor layers wrap the base formula visually and mathematically.
+Layers should be removed from outside to inside using inverse operations.
+
+Requirements:
+
+1. In EquationTypes.h, add enum EEquationLayerOperation:
+- Add
+- Subtract
+- Multiply
+- Divide
+
+2. In EquationTypes.h, add enum EEquationLayerSource:
+- None
+- Armor
+- Helmet
+- ChestArmor
+- Gauntlets
+- LegArmor
+- Cloak
+- Other
+
+3. In EquationTypes.h, add USTRUCT FEquationLayer:
+- EEquationLayerOperation Operation
+- int32 Value
+- EEquationLayerSource Source
+- FText DisplayName
+- bool bCanBeRemoved
+
+4. In UEnemyEquationComponent, add:
+- TArray<FEquationLayer> EquationLayers
+
+Layer order:
+- index 0 is closest to the base formula
+- last index is outermost layer
+
+Example:
+EquationLayers[0] = Multiply 2, Armor
+EquationLayers[1] = Add 2, Helmet
+
+Display:
+(x + 5) Ã— 2 + 2 = 22
+
+5. Add helper functions:
+- bool HasEquationLayers() const
+- FText BuildLayeredEquationDisplayText() const
+- int64 EvaluateLayeredLeftSideAtX(int32 X) const
+- int64 EvaluateLayeredRightSide() const
+- bool TryRemoveTopLayerWithOperation(EPrototypeOperationType OperationType, int32 Value)
+- void ClearEquationLayers()
+- void AddEquationLayer(const FEquationLayer& Layer)
+
+6. Display behavior:
+GetDisplayText() should return layered display if there are layers.
+Otherwise return the normal polynomial display.
+
+Examples:
+No layers:
+x + 5 = 10
+
+Multiply 2 layer:
+(x + 5) Ã— 2 = 20
+
+Multiply 2, then Add 2:
+(x + 5) Ã— 2 + 2 = 22
+
+Use readable symbols:
++ 2
+- 2
+Ã— 2
+/ 2
+
+If symbol formatting is risky, use:
+* 2
+/ 2
+but prefer Ã— for display text.
+
+7. Answer checking:
+Update IsAnswerCorrect(int32 SubmittedAnswer) so it evaluates the layered equation:
+EvaluateLayeredLeftSideAtX(SubmittedAnswer) == EvaluateLayeredRightSide()
+
+This should still make x = 5 correct for:
+x + 5 = 10
+(x + 5) Ã— 2 = 20
+(x + 5) Ã— 2 + 2 = 22
+
+8. Operation behavior with layers:
+If EquationLayers is not empty:
+- ApplyOperationToBothSides should first try to remove the outermost layer.
+- Only remove the top layer if the operation is the inverse operation and the Value matches.
+
+Inverse rules:
+- Top layer Add N is removed by Subtract N
+- Top layer Subtract N is removed by Add N
+- Top layer Multiply N is removed by Divide N
+- Top layer Divide N is removed by Multiply N
+
+Example:
+Displayed:
+(x + 5) Ã— 2 + 2 = 22
+Top layer:
+Add 2, Helmet
+
+Input 2 + Subtraction weapon:
+remove Helmet layer
+Displayed:
+(x + 5) Ã— 2 = 20
+
+Then input 2 + Division weapon:
+remove Armor layer
+Displayed:
+x + 5 = 10
+
+If the operation does not match the top layer:
+- Return false
+- Do not mutate the base equation
+- Log "Operation blocked by mathematical armor layer."
+
+If there are no layers:
+- Existing polynomial Add/Subtract/Multiply/Divide behavior should work as it does now.
+
+9. Add setup functions in UEnemyEquationComponent:
+- InitializeArmoredGoblinEquation()
+Creates:
+Base polynomial: x + 5 = 10
+Layer: Multiply 2, Source Armor
+Displayed: (x + 5) Ã— 2 = 20
+Rank 1
+CorrectAnswer 5 for debug compatibility
+
+- InitializeArmoredGoblinWithHelmetEquation()
+Creates:
+Base polynomial: x + 5 = 10
+Layer 1: Multiply 2, Source Armor
+Layer 2: Add 2, Source Helmet
+Displayed: (x + 5) Ã— 2 + 2 = 22
+Rank 1
+CorrectAnswer 5 for debug compatibility
+
+Make both BlueprintCallable or CallInEditor if useful for testing.
+
+10. If EPrototypeEnemySpecies already has ArmoredGoblin:
+Use it.
+If not, add ArmoredGoblin and ArmoredGoblinWithHelmet or a simple test mode if appropriate.
+
+11. In APrototypeEquationEnemy, add CallInEditor test functions if useful:
+- TestSetArmoredGoblin()
+- TestSetArmoredGoblinWithHelmet()
+
+These should call the component setup functions and refresh display.
+
+12. Preserve existing behavior:
+- Normal Goblin still starts as x + 5 = 10
+- 5 + X still executes normal Goblin
+- 13 + Subtraction still transforms normal Goblin to x - 8 = -3
+- Addition/Subtraction/Multiplication/Clean Division still work on equations with no layers
+- Wrong answer evolution should still work. It is acceptable if evolved procedural equations have no armor for now.
+
+13. Add UE_LOG messages for:
+- Layer added
+- Top layer removed
+- Operation blocked by top layer
+- Layered display built
+- Layered answer evaluation
+
+14. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. What structs/enums were added
+3. How layer order works
+4. How display is built
+5. How answer checking works with layers
+6. How inverse operation removal works
+7. How to test Armored Goblin
+8. How to test Armored Goblin with Helmet
+í…ŒìŠ¤íŠ¸ ë°©ë²•
+Test 1, ì¼ë°˜ Goblin ë³´ì¡´
+ê¸°ë³¸ Goblin:
+x + 5 = 10
+
+M ì„ íƒ
+5 ìž…ë ¥
+Enter
+LMB
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+Test 2, Armored Goblin
+
+ì—ë””í„°ì—ì„œ ì  ì„ íƒ í›„:
+
+TestSetArmoredGoblin
+
+í‘œì‹œ ê¸°ëŒ€:
+
+(x + 5) Ã— 2 = 20
+
+ê·¸ ë‹¤ìŒ Play:
+
+N ì„ íƒ, Division weapon
+2 ìž…ë ¥
+Enter
+LMB
+
+ê¸°ëŒ€:
+
+x + 5 = 10
+
+ê·¸ ë‹¤ìŒ:
+
+M ì„ íƒ, X weapon
+5 ìž…ë ¥
+Enter
+LMB
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+Test 3, Helmet + Armor
+
+ì—ë””í„°ì—ì„œ:
+
+TestSetArmoredGoblinWithHelmet
+
+í‘œì‹œ ê¸°ëŒ€:
+
+(x + 5) Ã— 2 + 2 = 22
+
+Playì—ì„œ:
+
+V ì„ íƒ, Subtraction weapon
+2 ìž…ë ¥
+Enter
+LMB
+
+ê¸°ëŒ€:
+
+(x + 5) Ã— 2 = 20
+
+ê·¸ ë‹¤ìŒ:
+
+N ì„ íƒ, Division weapon
+2 ìž…ë ¥
+Enter
+LMB
+
+ê¸°ëŒ€:
+
+x + 5 = 10
+
+ê·¸ ë‹¤ìŒ:
+
+M ì„ íƒ, X weapon
+5 ìž…ë ¥
+Enter
+LMB
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+Test 4, í‹€ë¦° ì œê±° ì‹œë„
+
+Helmet ìƒíƒœ:
+
+(x + 5) Ã— 2 + 2 = 22
+
+ì—¬ê¸°ì„œ ë°”ë¡œ:
+
+N ì„ íƒ, Division weapon
+2 ìž…ë ¥
+Enter
+LMB
+
+ê¸°ëŒ€:
+
+Operation failed.
+Operation blocked by mathematical armor layer.
+ì‹ ê·¸ëŒ€ë¡œ: (x + 5) Ã— 2 + 2 = 22
+
+ì´ê²Œ ì¤‘ìš”í•¨. ë°”ê¹¥ layerë¶€í„° ì œê±°í•´ì•¼ í•˜ë‹ˆê¹Œ.
+
+ì§€ê¸ˆ íŒë‹¨
+
+ì´ êµ¬ì¡°ë¡œ ê°€ë©´ ë‚˜ì¤‘ì— ìž¥ë¹„ ë¶€ìœ„ëž‘ ìžì—°ìŠ¤ëŸ½ê²Œ ì—°ê²°ë¨.
+
+ì˜ˆ:
+
+Helmet: +2
+ChestArmor: Ã—2
+Cloak: -3
+Gauntlets: Ã—5
+
+ê·¸ë¦¬ê³  í”Œë ˆì´ì–´ê°€ ì—­ì—°ì‚°ìœ¼ë¡œ ìž¥ë¹„ë¥¼ ë²—ê²¨ëƒ„:
+
++2 Helmet â†’ -2ë¡œ ì œê±°
+Ã—2 Armor â†’ /2ë¡œ ì œê±°
+-3 Cloak â†’ +3ìœ¼ë¡œ ì œê±°
+Ã—5 Gauntlets â†’ /5ë¡œ ì œê±°
+
+ì´ê²Œ ë°”ë¡œ ë„¤ê°€ ë§í•œ â€œìž¥ë¹„/ë³´í˜¸ë§‰ì„ íŒŒê´´í•´ì•¼ ë³¸ëž˜ ê³µì‹ì´ ë³´ì´ëŠ” ë³´ìŠ¤â€ì˜ ê¸°ì´ˆ êµ¬ì¡°ìž„.
+
+* * *
+
+**You:**
+
+í ... 2(x+5)+2=22ì¸ë° ìœ ì €ê°€ /2 í•˜ë©´, (x+5)+1= 11 ë– ì•¼í• ê¹Œ ì•„ë‹˜ x+6=11 ì´ ë– ì•¼í• ê¹Œ? ê´„í˜¸ ì—†ì• ëŠ” ì„ íƒ£ì„ ì–´ì¼€ ìœ ì €ê°€ í•˜ê²Œ í•¨? ì•„ë‹˜ ìœ ì €ê°€ ì„ íƒ ëª»í•˜ê²Œ í•¨?
+
+ì†”ì§ížˆ ê°‘ì˜· íŒŒê´´ ì˜ë¬´í™” ì›í•˜ì§€ ì•Šì•„. ì„¸ìƒ ì–´ë–¤ ì „íˆ¬ê°€ ì•„ë¨¸ ë¸Œë ˆì´í‚¹ì„ ê¸°ë³¸ìœ¼ë¡œ ê¹”ê³  ê°€ëƒ? ì„ íƒì´ì§€. ê·¼ë° ê·¸ë ‡ë‹¤ê³  ìžë™ ì •ë¦¬í•˜ë©´, ìœ ì €ê°€ ê°‘ë°” ë¶€ì‰¬ëŠ” ì„ íƒì§€ë¥¼ ì—†ì• ìžë‚˜... ë¨¸ë¦¬ê°€ ì•„í”„ë‹¤. x+6=11ë©´ ê°‘ë°”ê°€ ìžˆëŠ”ë°ë„ ëª»ë³´ëŠ”ê±°ìžë‚˜ ì•„ë¨¸ ë¸Œë ˆì´í¬.... ì˜ˆë¥¼ë“¤ì–´, ìœ ì €ê°€ ë ˆë²¨ì´ ë‚®ì•„ì„œ 1ë°–ì— ëª»ì¨ì„œ /2 í…œì„ ì¨ì„œ (x+5)+1= 11ë¥¼ í•´ì„œ -1ê³µê²©ìœ¼ë¡œ ì•„ë¨¸íŒŒê´´ í›„ ê³„ì†í•  ìƒê°ìž„ ì–´ìº„?
+
+
+* * *
+
+**ChatGPT:**
+
+ë¬¸ì„œ ê¸°ì¤€ í™•ì¸: GDD ì „ì²´ ì²˜ë¦¬ë¨, ì„¹ì…˜ 1~30 í™•ì¸ë¨. Plan ë¬¸ì„œë„ ì „ì²´ ì²˜ë¦¬ë¨, Phase 5 ëª©í‘œê°€ Armored Goblin / Mathematical Armorìž„. GDDëŠ” Mathematical Armorë¥¼ â€œBase Formula ìœ„ì— ë§ì”Œì›Œì§„ ë°©ì–´ë§‰â€ìœ¼ë¡œ ì •ì˜í•˜ê³ , ì—­ì—°ì‚°ìœ¼ë¡œ ì œê±° ê°€ëŠ¥í•˜ë‹¤ê³  ìž¡ê³  ìžˆìŒ. ë™ì‹œì— X ì²˜í˜•ì€ ì •ë‹µì´ë©´ ì¦‰ì‹œ ê°€ëŠ¥í•˜ë‹¤ëŠ” ì² í•™ë„ ìžˆìŒ. 
+
+í”¼íƒ€ê³ ë¼ìŠ¤ì˜ ì¡°ìœ¨ ë§Œë¬¼ì€ ìˆ˜ë‹¤ Gdd ë°”ì´ë¸”
+
+ 
+
+Plan till prototype
+
+ê²°ë¡ ë¶€í„°:
+
+ê°‘ì˜· íŒŒê´´ëŠ” ì˜ë¬´ê°€ ì•„ë‹ˆì–´ì•¼ í•¨.
+ê·¸ë¦¬ê³  /2ë¥¼ ì¼ì„ ë•Œ ê¸°ë³¸ í‘œì‹œëŠ” (x + 5) + 1 = 11 ìª½ì´ ë§žìŒ.
+x + 6 = 11ì€ ìžë™ìœ¼ë¡œ ê°€ë©´ ì•ˆ ë¨. ê·¸ê±´ â€œSimplify / Flattenâ€ ì„ íƒì§€ë¡œ ë”°ë¡œ ë‘¬ì•¼ í•¨.
+
+ì •ë‹µ êµ¬ì¡°
+
+ì˜ˆì‹œ:
+
+2(x + 5) + 2 = 22
+
+ìœ ì €ê°€ /2ë¥¼ ì“°ë©´ ìˆ˜í•™ì ìœ¼ë¡œ:
+
+(2(x + 5) + 2) / 2 = 11
+
+ì •ë¦¬í•˜ë©´:
+
+(x + 5) + 1 = 11
+
+ë” ì •ë¦¬í•˜ë©´:
+
+x + 6 = 11
+
+ë‘˜ ë‹¤ ë§žìŒ.
+í•˜ì§€ë§Œ ê²Œìž„ ë””ìžì¸ìƒ ê¸°ë³¸ì€:
+
+(x + 5) + 1 = 11
+
+ì´ì–´ì•¼ í•¨.
+
+ì´ìœ :
+
+x + 6 = 11
+
+ë¡œ ìžë™ ì •ë¦¬í•˜ë©´, í”Œë ˆì´ì–´ê°€ â€œì•„, ì›ëž˜ Armor êµ¬ì¡°ê°€ ìžˆì—ˆêµ¬ë‚˜â€ë¥¼ ëª» ë´„. ë„¤ ë§ëŒ€ë¡œ ê°‘ì˜·/í—¬ë©§/ë³´í˜¸ë§‰ì„ íŒŒê´´í•˜ëŠ” ì„ íƒì§€ê°€ íë ¤ì§.
+
+í•µì‹¬ ê·œì¹™ 3ê°œë¡œ ë‚˜ëˆ„ìž
+1. Solve Operation, ì¼ë°˜ ìˆ˜ì‹ ì¡°ìž‘
+
+ì´ê±´ ê·¸ëƒ¥ ì–‘ë³€ì— ì—°ì‚°ì„ ì ìš©í•¨.
+
+ì˜ˆ:
+
+2(x + 5) + 2 = 22
+
+/2 ì‚¬ìš©
+
+(x + 5) + 1 = 11
+
+ì´ê±´ ê°‘ì˜· íŒŒê´´ ì•„ë‹˜.
+ê·¸ëƒ¥ ìˆ˜ì‹ ì¡°ìž‘ìž„.
+
+í”Œë ˆì´ì–´ê°€ ë ˆë²¨ ë‚®ê±°ë‚˜ í° ìˆ«ìžë¥¼ ëª» ì“°ë©´ ì´ëŸ° ì‹ìœ¼ë¡œ ìš°íšŒ ê°€ëŠ¥í•´ì•¼ í•¨.
+
+ì˜ˆ:
+
+2(x + 5) + 2 = 22
+/2
+â†’ (x + 5) + 1 = 11
+
+-1
+â†’ x + 5 = 10
+
+-5
+â†’ x = 5
+
+ì´ ë£¨íŠ¸ëŠ” í—ˆìš©í•´ì•¼ í•¨. ì´ê²Œ ìž¬ë°ŒìŒ.
+
+2. Armor Break, ìž¥ë¹„/ë³´í˜¸ë§‰ íŒŒê´´
+
+ì´ê±´ ë³„ë„ ì•¡ì…˜ì´ì–´ì•¼ í•¨.
+
+ì˜ˆ:
+
+2(x + 5) + 2 = 22
+
+ì—¬ê¸°ì„œ ë°”ê¹¥ Helmetì´ +2ë©´:
+
+-2 Armor Break
+â†’ 2(x + 5) = 20
+
+ê·¸ë‹¤ìŒ Armorê°€ Ã—2ë©´:
+
+/2 Armor Break
+â†’ x + 5 = 10
+
+ì´ê±´ ê·¸ëƒ¥ ìˆ˜ì‹ ì¡°ìž‘ì´ ì•„ë‹ˆë¼ ìž¥ë¹„ íŒŒê´´ íŒì •ìž„.
+
+ë³´ìƒ:
+
+Equation Break Stagger
+ê°‘ì˜·/í—¬ë©§ ë¹„ì£¼ì–¼ íŒŒê´´
+ì  ë°©ì–´ë ¥ ê°ì†Œ
+ì „íˆ¬ ë¡œê·¸: Helmet broken
+3. Simplify / Flatten, ê´„í˜¸ ì—†ì• ê¸°
+
+ì´ê±´ ìžë™ì´ ì•„ë‹ˆë¼ ì„ íƒì§€ë¡œ ë‘¬ì•¼ í•¨.
+
+ì˜ˆ:
+
+(x + 5) + 1 = 11
+
+ìœ ì €ê°€ Simplifyë¥¼ ì„ íƒí•˜ë©´:
+
+x + 6 = 11
+
+í•˜ì§€ë§Œ ì´ê±´ ì •ë³´ë¥¼ ìˆ¨ê¸°ëŠ” í–‰ë™ì´ê¸°ë„ í•¨.
+ê·¸ëž˜ì„œ ê¸°ë³¸ ìžë™ ì •ë¦¬ëŠ” í•˜ë©´ ì•ˆ ë¨.
+
+ë‚˜ì¤‘ì— ê°€ëŠ¥:
+
+Tactician NPCê°€ ì‹ì„ ì •ë¦¬í•´ì¤Œ
+Insight ìŠ¤íƒ¯ ë†’ìœ¼ë©´ Simplify View ê°€ëŠ¥
+íŠ¹ì • í‚¤ë¡œ Structured View / Simplified View ì „í™˜
+ê·¸ëž˜ì„œ ì¡°ìž‘ì€ ì´ë ‡ê²Œ ê°€ì•¼ í•¨
+
+í˜„ìž¬ ë¬´ê¸° ì„ íƒ + Enter ìž¥ì „ êµ¬ì¡° ê¸°ì¤€ìœ¼ë¡œ:
+
+LMB = ì¼ë°˜ ìˆ˜ì‹ ê³µê²© / Solve Operation
+Shift + LMB = Armor Break ì‹œë„
+T = Simplify View í† ê¸€, ë‚˜ì¤‘
+
+í”„ë¡œí† íƒ€ìž…ì—ì„œëŠ” Shiftê¹Œì§€ ê·€ì°®ìœ¼ë©´:
+
+LMB = Solve Operation
+G = Armor Break Operation
+
+ì´ë ‡ê²Œ í•´ë„ ë¨.
+
+ì¤‘ìš”í•œ ë””ìžì¸ ê²°ë¡ 
+ì •ë‹µ X ì²˜í˜•ì€ Armor ìžˆì–´ë„ ê°€ëŠ¥í•´ì•¼ í•¨
+
+ì˜ˆ:
+
+2(x + 5) + 2 = 22
+
+ì •ë‹µì€ ì—¬ì „ížˆ:
+
+x = 5
+
+í”Œë ˆì´ì–´ê°€ 5ë¥¼ ì•Œê³  X ë¬´ê¸°ë¡œ ì°Œë¥´ë©´:
+
+2(5 + 5) + 2 = 22
+20 + 2 = 22
+
+ë§žìœ¼ë‹ˆê¹Œ ì¦‰ì‹œ ì²˜í˜• ê°€ëŠ¥ì´ì–´ì•¼ í•¨.
+
+ê°‘ì˜· ì œê±°ëŠ” í•„ìˆ˜ ì¡°ê±´ì´ ì•„ë‹ˆë¼:
+
+ì‹ ë³´ê¸° ì‰½ê²Œ ë§Œë“¤ê¸°
+ì ì„ ê·¸ë¡œê¸°ì‹œí‚¤ê¸°
+ë°©ì–´ ìž¥ë¹„ íŒŒê´´í•˜ê¸°
+ë‚®ì€ ë ˆë²¨ ìˆ«ìžë¡œ ìš°íšŒí•˜ê¸°
+
+ì´ëŸ° ì„ íƒì§€ì—¬ì•¼ í•¨.
+
+êµ¬í˜„ ë°©í–¥
+
+ì§€ê¸ˆ layer stackì„ ì´ë ‡ê²Œ ë°”ê¾¸ë©´ ë¨.
+
+Equation Expression = ì‹¤ì œ í˜„ìž¬ ìˆ˜ì‹
+Armor Tags = ê·¸ ìˆ˜ì‹ ì•ˆì— ë¶™ì–´ ìžˆëŠ” ìž¥ë¹„ íƒœê·¸
+
+ì¦‰, ê°‘ì˜·ì€ ìˆ˜í•™ì‹ì„ ë§‰ëŠ” ë²½ì´ ì•„ë‹ˆë¼, ì‹ êµ¬ì¡°ì— ë¶™ì€ íƒœê·¸ ë‹¬ë¦° ë…¸ë“œìž„.
+
+ì˜ˆ:
+
+Base: x + 5
+Armor node: Ã—2
+Helmet node: +2
+Right: 22
+
+ì¼ë°˜ /2ëŠ” ìˆ˜ì‹ì„ ì¡°ìž‘í•¨:
+
+2(x + 5) + 2 = 22
+â†’ (x + 5) + 1 = 11
+
+Armor Break /2ëŠ” íŠ¹ì • armor nodeë¥¼ ì œê±°í•¨:
+
+2(x + 5) = 20
+â†’ x + 5 = 10
+
+ì´ ë‘ ê°œë¥¼ ë¶„ë¦¬í•´ì•¼ ë¨¸ë¦¬ê°€ ì•ˆ ì•„í””.
+
+ì§€ê¸ˆ ê²°ì •í•´ì•¼ í•  ê·œì¹™
+
+ë‚˜ëŠ” ì´ê±¸ ì¶”ì²œí•¨:
+
+Rule 1:
+Armor BreakëŠ” ì ˆëŒ€ ìžë™ ë°œë™í•˜ì§€ ì•ŠëŠ”ë‹¤.
+
+Rule 2:
+ì¼ë°˜ ì—°ì‚°ì€ í•­ìƒ ì–‘ë³€ì— ì ìš©ë˜ê³ , êµ¬ì¡° ë³´ì¡´ displayë¥¼ ìš°ì„ í•œë‹¤.
+
+Rule 3:
+ìžë™ìœ¼ë¡œ x + 6 = 11ì²˜ëŸ¼ flattení•˜ì§€ ì•ŠëŠ”ë‹¤.
+
+Rule 4:
+Flatten/SimplifyëŠ” ë‚˜ì¤‘ì— ë³„ë„ ì•¡ì…˜ ë˜ëŠ” UI í† ê¸€ë¡œ ë‘”ë‹¤.
+
+Rule 5:
+X ì²˜í˜•ì€ Armor ìƒíƒœì™€ ë¬´ê´€í•˜ê²Œ ì‹ ì „ì²´ì— ëŒ€ìž…í•´ì„œ ë§žìœ¼ë©´ ì„±ê³µí•œë‹¤.
+
+ì´ëŸ¬ë©´ ë„¤ê°€ ì›í•˜ëŠ” ê²Œ ë‹¤ ì‚´ì•„ë‚¨ìŒ.
+
+ì•”ì‚° ìž˜í•˜ëŠ” ì‚¬ëžŒ:
+5 ë°”ë¡œ X ì²˜í˜•
+
+ê°‘ì˜· ë¶€ìˆ˜ê³  ì‹¶ì€ ì‚¬ëžŒ:
+-2ë¡œ Helmet break, /2ë¡œ Armor break
+
+ë‚®ì€ ìˆ«ìžë§Œ ì“°ëŠ” ì‚¬ëžŒ:
+ì¼ë°˜ /2, ì¼ë°˜ -1ë¡œ ìš°íšŒ
+
+ì •ë¦¬í•˜ê³  ì‹¶ì€ ì‚¬ëžŒ:
+ë‚˜ì¤‘ì— Simplify View ì‚¬ìš©
+ì§€ê¸ˆ Codexì—ëŠ” ë°”ë¡œ êµ¬í˜„ì‹œí‚¤ì§€ ë§ê³  ë¨¼ì € ì„¤ê³„ ìˆ˜ì • í”„ë¡¬í”„íŠ¸
+
+ë‹¤ìŒì€ â€œlayerë¥¼ ê°•ì œ ì œê±° êµ¬ì¡°ë¡œ ë§Œë“¤ì§€ ë§ê³ , ì¼ë°˜ ì—°ì‚°ê³¼ Armor Breakë¥¼ ë¶„ë¦¬í•˜ë¼â€ëŠ” ê³„íšë¶€í„° ë°›ëŠ” ê²Œ ì•ˆì „í•¨.
+
+Do not modify files yet.
+
+We need to revise the Mathematical Armor design before implementation.
+
+Current concern:
+Armor breaking should not be mandatory.
+A player should be able to solve through armor, break armor intentionally, or simplify the equation later.
+
+Design decision:
+Separate three concepts:
+
+1. Solve Operation:
+Applies an operation to both sides of the entire displayed equation.
+Example:
+2(x + 5) + 2 = 22
+Divide by 2:
+(x + 5) + 1 = 11
+This does not count as armor breaking.
+
+2. Armor Break Operation:
+Targets a tagged armor layer using the correct inverse operation.
+Example:
+Helmet +2 is removed by -2.
+Armor Ã—2 is removed by /2.
+This triggers armor break feedback and Equation Break Stagger later.
+
+3. Simplify / Flatten:
+Optional display/action later.
+Example:
+(x + 5) + 1 = 11
+can become:
+x + 6 = 11
+But this should not happen automatically.
+
+Rules:
+- Do not automatically flatten parentheses.
+- Do not automatically break armor during normal solve operations.
+- X answer checking should evaluate the whole current expression, so correct x can execute even through armor.
+- Armor break gives tactical rewards but is not required.
+
+Read the current polynomial and planned layer code.
+Propose a safe implementation plan for this design.
+Do not implement yet.
+Explain:
+1. What structs need to exist
+2. How normal operations differ from armor break operations
+3. How display should work
+4. How answer checking should work
+5. How we can support:
+   2(x + 5) + 2 = 22
+   /2 normal operation -> (x + 5) + 1 = 11
+   -1 normal operation -> x + 5 = 10
+6. How armor break would separately remove Helmet +2 and Armor Ã—2
+
+ì´ ì„¤ê³„ë¡œ ê°€ë©´ ë¨.
+ì§€ê¸ˆ í•µì‹¬ì€ Armor = í•„ìˆ˜ ê´€ë¬¸ì´ ì•„ë‹ˆë¼ ì „ìˆ ì  ì„ íƒì§€ë¡œ ë§Œë“œëŠ” ê±°ìž„.
+
+* * *
+
+**You:**
+
+ê·¸ëŸ¼... ì•„ë¨¸ë¸Œë ˆì´í¬ í‚¤ë¥¼ ë”°ë¡œ í•˜ìžëŠ”ê±°ì•¼, ì•„ë‹˜ ì¡°ê±´ ì¶©ì¡±ë˜ë©´ ì•Œì•„ì„œ ëœ¨ëŠ”ê±°ì•¼? ì°¸ê³ ë¡œ ê° ì•„ë¨¸ë§ˆë‹¤ ì•„ë¨¸ë¸Œë ˆì´í¬ ì´ë“ì€ ìžˆì–´ì•¼ í• ë“¯. í—¬ë©§ íŒŒê´´ ë¨¼ì „ì§€ ê°‘ë°” íŒŒê´´ ë¨¼ì „ì§€ëŠ” ìœ ì € ì„ íƒì´ë‹ˆê¹Œ.
+2(x + 5) + 2 = 22 ì—ì„œ /2ëŠ” ì²´ìŠ¤íŠ¸ ì•„ë¨¸ íŒŒê´´. -2ëŠ” í—¬ë©§ íŒŒê´´ì¸ì§€ ì„ íƒì¼€ í•´ì•¼ì§€. ê·¸ëž˜ì•¼ ìœ ì €ê°€ ìƒí™©ë³´ê³  í—¬ë©§ íŒŒê´´í•´ì•¼ ë¨¸ë¦¬(ì•½ì  ë…¸ë¦´ë§Œ í•˜ë©´) ë•Œë ¤ì„œ ê·¸ë¡œê¸° ì¶”ê°€ ë§Žì´ í• ê±´ì§€ ì•„ë‹˜ í‰ê°‘ íŒŒê´´í•´ì„œ ë•Œë¦¬ê¸° íž˜ë“  ì•½ì ë§ê³  ì „ë°˜ì  ë°©ì–´ë ¥ ì¤„ì¼ê±´ì§€ ì •í•˜ì§€
+
+* * *
+
+**ChatGPT:**
+
+ë§žìŒ. ì•„ë¨¸ë¸Œë ˆì´í¬ëŠ” ìžë™ì´ë©´ ì•ˆ ë¨.
+ì¡°ê±´ì´ ì¶©ì¡±ë˜ë©´ â€œê°€ëŠ¥í•˜ë‹¤â€ê³  ë³´ì—¬ì£¼ë˜, ì‹¤í–‰ì€ ìœ ì €ê°€ ëª…ì‹œì ìœ¼ë¡œ ì„ íƒí•´ì•¼ í•¨.
+
+ì§€ê¸ˆë¶€í„° ê·œì¹™ì„ ì´ë ‡ê²Œ ìž¡ëŠ” ê²Œ ì œì¼ ì¢‹ìŒ.
+
+LMB = ì¼ë°˜ ìˆ˜ì‹ ê³µê²© / Solve Operation
+Armor Break input = ìž¥ë¹„ íŒŒê´´ ì‹œë„
+
+ì¦‰:
+
+/2ë¥¼ ì¼ë‹¤ê³  ë¬´ì¡°ê±´ Chest Armorê°€ ê¹¨ì§€ëŠ” ê²Œ ì•„ë‹˜.
+-2ë¥¼ ì¼ë‹¤ê³  ë¬´ì¡°ê±´ Helmetì´ ê¹¨ì§€ëŠ” ê²Œ ì•„ë‹˜.
+
+ìœ ì €ê°€ "ì´ê±´ ìˆ˜ì‹ ì¡°ìž‘ìœ¼ë¡œ ì“¸ ê±´ì§€"
+ì•„ë‹ˆë©´ "ìž¥ë¹„ íŒŒê´´ë¡œ ì“¸ ê±´ì§€" ì„ íƒí•´ì•¼ í•¨.
+í•µì‹¬ ì˜ˆì‹œ
+
+ì  ìƒíƒœ:
+
+Base Formula:
+x + 5 = 10
+
+Chest Armor:
+Ã—2
+
+Helmet:
++2
+
+Displayed:
+2(x + 5) + 2 = 22
+ì„ íƒì§€ A, ì¼ë°˜ ìˆ˜ì‹ ì¡°ìž‘
+
+ìœ ì €ê°€ /2ë¥¼ ì¼ë°˜ ê³µê²©ìœ¼ë¡œ ì‚¬ìš©:
+
+2(x + 5) + 2 = 22
+Ã·2
+â†’ (x + 5) + 1 = 11
+
+ì´ ê²½ìš°:
+
+Chest Armor ì•ˆ ê¹¨ì§
+Helmet ì•ˆ ê¹¨ì§
+ê·¸ëƒ¥ ìˆ˜ì‹ë§Œ ë³€í˜•ë¨
+ì„ íƒì§€ B, Chest Armor Break
+
+ìœ ì €ê°€ /2ë¥¼ Armor Breakë¡œ ì‚¬ìš©í•˜ê³  Chestë¥¼ íƒ€ê²Ÿ:
+
+2(x + 5) + 2 = 22
+Chest Armor Ã—2 ì œê±°
+â†’ (x + 5) + 2 = 12
+
+ì´ ê²½ìš°:
+
+Chest Armor íŒŒê´´ë¨
+ì „ë°˜ì  ë°©ì–´ë ¥ ê°ì†Œ
+ëª¸í†µ í”¼ê²©/ê·¸ë¡œê¸° ë³´ìƒ ì¦ê°€
+Helmetì€ ì•„ì§ ë‚¨ì•„ ìžˆìŒ
+ì„ íƒì§€ C, Helmet Break
+
+ìœ ì €ê°€ -2ë¥¼ Armor Breakë¡œ ì‚¬ìš©í•˜ê³  Helmetì„ íƒ€ê²Ÿ:
+
+2(x + 5) + 2 = 22
+Helmet +2 ì œê±°
+â†’ 2(x + 5) = 20
+
+ì´ ê²½ìš°:
+
+Helmet íŒŒê´´ë¨
+ë¨¸ë¦¬ ì•½ì  ë…¸ì¶œ
+í—¤ë“œ ížˆíŠ¸/ì¹˜ëª…íƒ€/ê·¸ë¡œê¸° ë³´ìƒ ì¦ê°€
+Chest ArmorëŠ” ì•„ì§ ë‚¨ì•„ ìžˆìŒ
+
+ì´ê²Œ ë„¤ê°€ ë§í•œ ì„ íƒì§€ë¥¼ ì‚´ë¦¼.
+
+ì¤‘ìš”í•œ ê²°ë¡ 
+
+ê¸°ì¡´ì— ë‚´ê°€ ë§í•œ â€œë°”ê¹¥ ë ˆì´ì–´ë¶€í„° ì œê±°â€ëŠ” ë„ˆë¬´ ì œí•œì ìž„.
+ê·¸ê±´ í¼ì¦ê²Œìž„ì‹ì´ê³ , ë„¤ ê²Œìž„ì—ëŠ” ì•ˆ ë§žìŒ.
+
+ìˆ˜ì •ëœ ê·œì¹™ì€ ì´ê±°ìž„:
+
+Armor layerëŠ” ìˆ˜ì‹ ë ˆì´ì–´ì´ë©´ì„œ ë™ì‹œì— ìž¥ë¹„ ë¶€ìœ„ë‹¤.
+Armor BreakëŠ” ë°”ê¹¥ ë ˆì´ì–´ ìˆœì„œê°€ ì•„ë‹ˆë¼, ìœ ì €ê°€ ì„ íƒí•œ ìž¥ë¹„ ë¶€ìœ„ë¥¼ ëŒ€ìƒìœ¼ë¡œ í•œë‹¤.
+
+ì¦‰:
+
+Helmet ë¨¼ì € ê¹¨ë„ ë¨.
+Chest ë¨¼ì € ê¹¨ë„ ë¨.
+ë‘˜ ë‹¤ ì•ˆ ê¹¨ê³  ê·¸ëƒ¥ ì‹ í’€ì–´ë„ ë¨.
+ì •ë‹µ ì•Œë©´ ë°”ë¡œ X ì²˜í˜•í•´ë„ ë¨.
+
+ì´ê²Œ ì•¡ì…˜ RPGë‹µë‹¤.
+
+ì¡°ìž‘ ë°©ì‹ ì¶”ì²œ
+
+í”„ë¡œí† íƒ€ìž…ì—ì„œëŠ” ì´ë ‡ê²Œ ê°€ìž.
+
+Enter = Equation Action Armed
+LMB = ì¼ë°˜ ìˆ˜ì‹ ê³µê²©
+G = Armor Break ê³µê²©
+C = ì·¨ì†Œ
+
+ì˜ˆ:
+
+N ì„ íƒ, Division weapon
+2 ìž…ë ¥
+Enter
+LMB
+â†’ ì¼ë°˜ /2
+â†’ (x + 5) + 1 = 11
+N ì„ íƒ, Division weapon
+2 ìž…ë ¥
+Enter
+G
+â†’ Chest Armor Break
+â†’ (x + 5) + 2 = 12
+V ì„ íƒ, Subtraction weapon
+2 ìž…ë ¥
+Enter
+G
+â†’ Helmet Break
+â†’ 2(x + 5) = 20
+
+ë‚˜ì¤‘ì—ëŠ” G ëŒ€ì‹ :
+
+Shift + LMB
+ë˜ëŠ”
+Right Mouse special attack
+ë˜ëŠ”
+ë¬´ê¸° ê°•ê³µê²©
+
+ìœ¼ë¡œ ë°”ê¾¸ë©´ ë¨.
+
+ì—¬ëŸ¬ ê°‘ì˜·ì´ ë™ì‹œì— ì¡°ê±´ ì¶©ì¡±í•˜ë©´?
+
+ì˜ˆë¥¼ ë“¤ì–´ Helmetë„ +2, Ringë„ +2ë¼ë©´ -2 Armor Breakê°€ ë‘˜ ë‹¤ ê°€ëŠ¥í•¨.
+
+ì´ëŸ´ ë•ŒëŠ” ìžë™ ì„ íƒ ê¸ˆì§€.
+
+í”„ë¡œí† íƒ€ìž…ì—ì„œëŠ” ê°„ë‹¨ížˆ:
+
+ê°€ëŠ¥í•œ Armor Break targetì´ ì—¬ëŸ¬ ê°œë©´
+"Multiple armor targets. Select target."
+
+ë‚˜ì¤‘ì— UI:
+
+Armor target radial
+ë¨¸ë¦¬ / í‰ê°‘ / íŒ” / ë‹¤ë¦¬ ì„ íƒ
+ë½ì˜¨ ë¶€ìœ„ ì„ íƒ
+ë§ˆìš°ìŠ¤ë¡œ ì•½ì  ì¡°ì¤€

@@ -1,0 +1,523 @@
+scene_state must track current physical continuity: where characters are, what objects are currently held/set down, completed beats that must not be replayed, and any known time state. Do not invent exact time unless established.
+
+Give concrete example:
+If Aurora saw the phone, set it down, and moved to the kitchen, scene_state should say:
+current_physical_state: "Aurora is in/near the kitchen preparing pad thai; the phone reveal has already happened."
+completed_beat_add: ["Aurora saw and reacted to the phone/Tinder post", "Aurora moved toward the kitchen for pad thai"]
+do_not_replay_add: ["Do not replay the phone reveal", "Do not put the phone back in Aurora's hand unless a later action says so"]
+object_location_set: [{"object":"user phone","location":"couch or counter","state":"face-down, no longer being examined"}]
+
+6. Update Context Compiler.
+[SCENE STATE] should now prefer structured scene_state over raw recent_event.
+
+Include:
+- Current physical state
+- Object locations
+- Completed beats
+- Do not replay
+- Pending focus
+- Time state only if known
+
+Recent chat remains lower priority.
+
+7. Remove/avoid redundant scene prose.
+Do not inject giant previous assistant prose if structured scene_state exists.
+
+8. Keep ContextPreview unchanged.
+
+9. Do not implement embeddings.
+10. Do not implement multi-character.
+11. Do not change launcher BAT files.
+12. Keep changes focused.
+
+Tests:
+- legacy Soul JSON without scene_state still loads.
+- WorldLog default includes empty SceneState.
+- WorldPatch updates current physical state.
+- WorldPatch adds completed beats with deduplication and cap.
+- WorldPatch adds do_not_replay with deduplication and cap.
+- WorldPatch upserts object location by object name.
+- Context compiler includes structured scene state.
+- Context compiler puts scene state before recent chat.
+- Unsupported/empty scene patches do not corrupt state.
+- Existing patch tests still pass.
+- Existing context tests still pass.
+
+Run:
+- npm.cmd run test:rust
+- npm.cmd run typecheck
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Manual test:
+Use this scenario:
+1. User says hello.
+2. User asks if she is Kit from Tinder.
+3. User shows phone.
+4. Narrator establishes Aurora saw the phone, reacted, set/tossed it down, and moved toward kitchen.
+5. User accepts pad thai and says they are lonely too.
+
+Expected:
+- Narrator must not replay the phone reveal.
+- Narrator must not say Aurora is still holding the phone unless scene_state says she is.
+- Narrator must continue from kitchen/pad thai/current confession.
+- Narrator must not invent exact elapsed time such as "three minutes" unless scene_state or user established it.
+
+Report:
+- changed files
+- new SceneState schema
+- prompt changes
+- context changes
+- tests run/results
+Why this is the correct next move
+
+Prompt guards are soft. Context priority is soft. Recent chat is soft.
+
+Scene State is harder.
+
+You need the engine to say:
+
+Current physical state:
+Aurora is in the kitchen preparing pad thai.
+The phone reveal already happened.
+The user's phone is no longer actively being examined.
+
+Then the model has much less room to resurrect stale details.
+
+After Codex finishes
+
+Test with the exact same scenario. Then inspect Context Preview. You should see something like:
+
+[SCENE STATE]
+Current physical state: Aurora is in/near the kitchen preparing pad thai; the phone reveal has already happened.
+Object locations:
+- user phone: couch/counter, face-down, no longer being examined
+Completed beats:
+- Aurora saw and reacted to the phone/Tinder post
+- Aurora moved toward the kitchen for pad thai
+Do not replay:
+- Do not replay the phone reveal
+- Do not put the phone back in Aurora's hand unless a later action says so
+
+If the model still ignores that, then the next solution is not more context. It is response repair/regenerate with instruction, because the model is simply making a bad generation despite being briefed.
+
+* * *
+
+**You:**
+
+I disagree. Your telling me you will track every minor detail? No, that is too much shit. We already give it the latest chats. Or your failing to feed the latest chat correctly. If not, change the order it feeds the chat.
+
+The priority and order of feeding the llm the info should be important.
+
+* * *
+
+**ChatGPT:**
+
+You are right. Tracking every minor object location is the wrong direction for your stated goal.
+
+A full Scene State system would become bloat if we let it track every cup, phone, door, shirt, fork, fridge, microwave, and room position. That fights the project thesis: less tokens, best outcome.
+
+The actual problem is probably this:
+
+The latest chat is either:
+1. not being fed close enough to the current user message,
+2. being over-compressed,
+3. being treated as lower priority than generated summaries,
+4. losing the end-state of the last assistant response.
+
+The line that mattered was near the end of the previous assistant message:
+
+She turns back toward the kitchen, tossing the phone onto the couch behind her...
+
+But the next response behaved as if the model weighted the earlier dramatic phone reveal more heavily than the final end-state. That means the feed order and summarization are wrong.
+
+New approach: Latest Exchange First-Class
+
+Do not track every detail. Instead:
+
+Keep broad Soul/World summaries compact.
+Keep memories compact.
+But preserve the latest exchange with high priority.
+
+The LLM needs to see:
+
+LAST ASSISTANT FINAL STATE:
+Aurora tossed the phone away and moved toward the kitchen for pad thai.
+
+LATEST USER MESSAGE:
+User accepted pad thai, said they were lonely too, and called Aurora cute.
+
+This should be placed late in the context, right before the current user message. In your current architecture, the API sends only:
+
+system: prompt + context
+user: latest user message
+
+So put the latest exact exchange at the bottom of the system context, not buried above memory/world/soul.
+
+Feed order I recommend
+
+Use this order:
+
+1. SYSTEM RULES
+   Narrator mode, attribution/time rules, content boundaries.
+
+2. CHARACTER SNAPSHOT
+   Identity, personality, relationship, emotional state.
+
+3. WORLD / STORY SNAPSHOT
+   Location, active plot, key objects, time if known.
+
+4. RELEVANT MEMORIES
+   Core memories, schemas, high-salience memories.
+
+5. LOWER-PRIORITY RECENT CHAT
+   Short excerpts from older recent turns.
+
+6. LATEST EXCHANGE, HIGH PRIORITY
+   Last assistant response, preferably the final 700-1200 chars.
+   Last user message, preferably full or capped at 700 chars.
+   Instruction: continue from the final state of the last assistant response and latest user input.
+
+7. CURRENT USER MESSAGE
+   Sent as the actual user message.
+
+The key difference:
+
+The latest exchange should come after Soul, World, and Memory, because it is the most immediate continuity anchor.
+
+What to change now
+
+Use Codex. This is a context compiler ordering task.
+
+Paste this:
+
+Task: Reorder context feeding so latest chat is treated as the strongest immediate continuity anchor.
+
+Problem:
+The narrator still contradicts the immediately previous assistant response. Example:
+Previous assistant response ended with Aurora tossing the phone onto the couch and moving toward the kitchen for pad thai. The next response said she was still holding the phone.
+
+I do NOT want to track every minor physical object in structured SceneState. That would create too much state bloat.
+
+Hypothesis:
+The latest chat is either being fed too early, too compressed, or with lower priority than summaries. The model is over-weighting earlier dramatic prose and ignoring the final state of the last assistant response.
+
+Goal:
+Change context order and latest-exchange handling for better continuity with minimal token cost.
+
+Files to inspect:
+- src-tauri/state_engine/src/context_compiler.rs
+- src-tauri/src/providers/api.rs
+- src/tauri.ts
+- src-tauri/src/commands.rs
+- src/App.tsx only if needed
+
+Requirements:
+
+1. Do not implement Scene State V1.
+2. Do not track every minor object location.
+3. Do not add a giant new state schema.
+4. Do not change launcher BAT files.
+5. Keep ContextPreview unchanged.
+
+Context order should become:
+
+[CONTEXT PRIORITY]
+[CHARACTER SNAPSHOT]
+[WORLD SNAPSHOT]
+[RELEVANT MEMORIES]
+[RELATIONSHIP]
+[RECENT CHAT, LOWER PRIORITY]
+[LATEST EXCHANGE, HIGH PRIORITY]
+
+The latest exchange must appear AFTER memory/world/recent chat, close to the end of the compiled context.
+
+6. Add [LATEST EXCHANGE] section.
+It should include:
+- Last assistant response excerpt
+- Last user message excerpt
+- Continuity instruction
+
+Format:
+[LATEST EXCHANGE, HIGH PRIORITY]
+Last narrator response, final state first:
+<prefer final 700-1200 characters of the last assistant message after stripping status/hidden blocks>
+Latest user input:
+<latest user message, full if reasonable, otherwise capped>
+Continue from the final state of the last narrator response and the latest user input. Do not replay earlier beats.
+
+7. Important:
+For assistant messages, prefer the END of the previous assistant response, not the beginning.
+Reason:
+The beginning often contains the dramatic setup. The end usually contains the actual current state.
+
+8. Keep [RECENT CHAT] but make it lower priority.
+Recent chat should include older messages only, not duplicate the latest assistant/user pair if [LATEST EXCHANGE] already includes them.
+
+9. Strip from assistant context:
+- ```status blocks
+- hidden state blocks
+- markdown status artifacts
+
+10. User message preservation:
+- Latest user input should be preserved more strongly than assistant prose.
+- Cap latest user input around 1000 characters.
+- Cap latest assistant final-state excerpt around 1200 characters.
+- Use UTF-8 safe truncation.
+- Add ellipsis when truncated.
+
+11. Reduce or remove [DO NOT REPLAY] if it is redundant or causing token waste.
+Keep only a short instruction inside [LATEST EXCHANGE].
+
+12. Keep compact attribution/time discipline rules if already present, but do not expand them.
+
+Tests:
+- [LATEST EXCHANGE, HIGH PRIORITY] appears after [RECENT CHAT].
+- Latest assistant excerpt uses the tail/end of the assistant message, not the beginning.
+- Latest user input appears in latest exchange.
+- Latest assistant/user pair is not duplicated in [RECENT CHAT].
+- Assistant status blocks are stripped.
+- UTF-8 truncation is safe with em dash, Korean, and emoji.
+- Budget is respected.
+- Existing tests pass.
+
+Run:
+- npm.cmd run test:rust
+- npm.cmd run typecheck
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Manual test:
+Use the phone/pad-thai scenario:
+1. Assistant response ends with Aurora tossing the phone away and moving toward kitchen.
+2. User says they want pad thai, are lonely too, and think she is cute.
+Expected:
+The next narrator response must continue from the kitchen/pad-thai state and must not say Aurora is still holding or looking at the phone.
+Why this is better
+
+This fixes the real weakness without adding state bloat.
+
+Instead of storing every detail, you are saying:
+
+The immediate previous assistant ending is the current physical state.
+The latest user message is the current new input.
+Everything else is lower priority.
+
+That is exactly aligned with your token-efficiency goal.
+
+My revised roadmap
+1. Reorder context and add Latest Exchange high-priority section.
+2. Test phone/pad-thai again.
+3. If it works, move to Retrieval Layer V1.
+4. If it still fails, add regenerate/fix-last-response UI, not more memory machinery.
+
+I would not build Scene State V1 yet. This context order fix is cheaper and more aligned with Mnemosyneâ€™s core idea.
+
+* * *
+
+**You:**
+
+My order:
+1. SYSTEM RULES
+   Narrator mode, attribution/time rules, content boundaries.
+
+2. WORLD / STORY SNAPSHOT 
+   Location, active plot, key objects, time if known. 
+
+3. CHARACTER SNAPSHOT
+   Identity, personality, relationship, emotional state.
+
+4. RELEVANT MEMORIES
+   Core memories, schemas, high-salience memories.
+
+5. LOWER-PRIORITY RECENT CHAT
+   Short excerpts from older recent turns.
+
+6. LATEST EXCHANGE, HIGH PRIORITY
+   Last assistant response, preferably the final 700-1200 chars.
+   Last user message, preferably full or capped at 700 chars.
+   Instruction: continue from the final state of the last assistant response and latest user input.
+
+7. CURRENT USER MESSAGE
+   Sent as the actual user message.
+Maybe say continue from:6 when feeding chat 6. Is there a way I can get the text or token that our thing feeds the LLM? Would be easier to fix.
+
+* * *
+
+**ChatGPT:**
+
+Your order is better. I agree with this ordering:
+
+1. SYSTEM RULES
+2. WORLD / STORY SNAPSHOT
+3. CHARACTER SNAPSHOT
+4. RELEVANT MEMORIES
+5. LOWER-PRIORITY RECENT CHAT
+6. LATEST EXCHANGE, HIGH PRIORITY
+7. CURRENT USER MESSAGE
+
+Reason: the world/story snapshot should come before character psychology because the LLM first needs to know â€œwhere are we, what is happening, what is physically true.â€ Then the character state tells it how Aurora reacts to that world state.
+
+And yes, section 6 should explicitly say something like:
+
+Continue from this section first. If older context conflicts with this section, ignore older context.
+Yes, you should add an LLM Payload Inspector
+
+Right now, the Context Preview may show part of what is compiled, but you need the exact final payload sent to the model:
+
+system message = narrator prompt + context compiler output
+user message = latest user input
+
+That is what you need to debug this properly.
+
+Use Cursor Agent for this. It is mostly UI/debug tooling, not deep architecture.
+
+Paste this:
+
+Task: Add LLM Payload Inspector for debugging exact context sent to the model.
+
+Goal:
+I need to see and copy the exact text/token estimate being sent to the LLM so I can debug continuity and context ordering.
+
+Current desired context order:
+1. SYSTEM RULES
+2. WORLD / STORY SNAPSHOT
+3. CHARACTER SNAPSHOT
+4. RELEVANT MEMORIES
+5. LOWER-PRIORITY RECENT CHAT
+6. LATEST EXCHANGE, HIGH PRIORITY
+7. CURRENT USER MESSAGE
+
+Important instruction:
+[LATEST EXCHANGE, HIGH PRIORITY] should explicitly say:
+"Continue from this section first. If older context conflicts with this section, ignore older context."
+
+Files to inspect:
+- src-tauri/state_engine/src/context_compiler.rs
+- src-tauri/src/providers/api.rs
+- src-tauri/src/commands.rs
+- src/tauri.ts
+- src/App.tsx
+- src/styles.css
+
+Requirements:
+
+1. Reorder compiled context sections to match this order:
+   [WORLD SNAPSHOT]
+   [CHARACTER SNAPSHOT]
+   [RELEVANT MEMORIES]
+   [RELATIONSHIP] if separate
+   [RECENT CHAT, LOWER PRIORITY]
+   [LATEST EXCHANGE, HIGH PRIORITY]
+
+System rules remain in provider system prompt, not inside context compiler unless currently designed otherwise.
+
+2. Add or update [LATEST EXCHANGE, HIGH PRIORITY] instruction:
+   "Continue from this section first. If older context conflicts with this section, ignore older context. Continue from the final state of the last narrator response and the latest user input. Do not replay earlier beats."
+
+3. Add an LLM Payload Inspector in the UI.
+It should show:
+   - final system message text
+   - final current user message text
+   - context text
+   - estimated tokens for system/context/user/total
+   - provider mode/model/base URL, but never show the API key
+
+4. Add a "Copy LLM Payload" button.
+It should copy a readable debug block like:
+
+=== SYSTEM MESSAGE ===
+...
+
+=== USER MESSAGE ===
+...
+
+=== ESTIMATED TOKENS ===
+System: X
+User: Y
+Total: Z
+
+5. The payload inspector must reflect the same system prompt/context construction used by API generation.
+Do not make a fake preview that differs from the actual API call.
+
+6. If needed, expose a Tauri command such as preview_api_payload or compile_llm_payload.
+It should reuse existing build_system_prompt and compile_context_for_messages logic.
+
+7. Keep API keys hidden.
+Never include api_key in the copied payload.
+
+8. Keep ContextPreview unchanged if possible.
+If new types are needed, add them separately.
+
+9. Do not change launcher BAT files.
+10. Do not implement Scene State V1.
+11. Do not implement embeddings or multi-character.
+
+Tests:
+- context order test verifies [WORLD SNAPSHOT] appears before [CHARACTER SNAPSHOT]
+- [LATEST EXCHANGE, HIGH PRIORITY] appears after [RECENT CHAT, LOWER PRIORITY]
+- latest exchange contains the conflict override instruction
+- payload preview excludes API key
+- payload preview includes system message and user message
+- token estimates are nonzero
+- existing tests pass
+
+Run:
+- npm.cmd run test:rust
+- npm.cmd run typecheck
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Report:
+- changed files
+- where the inspector appears in the UI
+- how to copy the exact LLM payload
+- test results
+Why this is the right next step
+
+You are correct: instead of guessing, you need to inspect the actual payload.
+
+Once you can copy the exact LLM input, debugging becomes easy. You can look at it and ask:
+
+Is the latest exchange actually near the bottom?
+Is the assistant tail actually included?
+Did the phone-toss line survive?
+Is recent chat duplicating or confusing things?
+Is the world snapshot overriding the latest exchange?
+Is the current user message duplicated?
+
+After this tool exists, every future continuity problem becomes much easier to diagnose.
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1).txt
+ë¬¸ì„œ
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (2).txt
+ë¬¸ì„œ
+Explain what is going on?
+
+* * *
+
+**ChatGPT:**
+
+Document processing confirmation
+
+I processed both attached text files fully.
+
+File	Length detected	Headers detected
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1).txt	86 lines, 1,494 words, 8,739 characters	None
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (2).txt	50 lines, 838 words, 4,995 characters	None
+
+Entire documents processed: Yes.
+
+What is going on
+
+Your payload inspector worked. It exposed the actual bug.
+
+The problem is not that the LLM ignored the latest exchange. The problem is that your [LATEST EXCHANGE, HIGH PRIORITY] section is feeding the wrong part of the last assistant response.
+
+It says it should continue from the final state, but the actual excerpt starts from the beginning of the phone reaction:
+
+Last narrator response: She doesn't take the phone right away...
+then it cuts off around the early phone-snatching part. 
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1)

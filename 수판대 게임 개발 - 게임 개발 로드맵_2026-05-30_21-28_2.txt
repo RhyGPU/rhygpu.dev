@@ -1,0 +1,829 @@
+Read README.md, GDD_SUMMARY.md, PROTOTYPE_SCOPE.md, and AGENTS.md.
+
+Current project status:
+- UEnemyEquationComponent exists.
+- APrototypeEquationEnemy exists.
+- The enemy displays equations.
+- Wrong answer evolves the equation.
+- Correct answer executes the enemy.
+- We are building only the first 1v1 prototype.
+
+Do not modify files yet.
+Summarize the current architecture and wait for my next instruction.
+ì§€ê¸ˆ ê²°ë¡ 
+
+ì§€ê¸ˆì€ ìˆ«ìžíœ  ë§Œë“¤ì§€ ë§ê³ , í‚¤ë³´ë“œ ìˆ«ìž ìž…ë ¥ìœ¼ë¡œ ë¡œì§ ë¨¼ì € ëš«ìž.
+
+ë‹¤ìŒ ìž‘ì—…ì€ ê·¸ëŒ€ë¡œ:
+
+UPlayerNumberInputComponentë¥¼ í”Œë ˆì´ì–´ ìºë¦­í„°ì— ë¶™ì´ê¸°
+ìˆ«ìží‚¤ 0~9 ìž…ë ¥
+Backspace ì‚­ì œ
+C ì „ì²´ ì‚­ì œ
+í™”ë©´ ë””ë²„ê·¸ ë©”ì‹œì§€ ì¶œë ¥
+
+ê·¸ ë‹¤ìŒì—:
+
+í˜„ìž¬ ìž…ë ¥ê°’ì„ ê³ ë¸”ë¦°ì—ê²Œ ì œì¶œ
+ì •ë‹µì´ë©´ AXIOM EXECUTION
+ì˜¤ë‹µì´ë©´ Rank ìƒìŠ¹
+
+ì—¬ê¸°ê¹Œì§€ ë˜ë©´ ìˆ«ìžíœ  ë§Œë“¤ ê°€ì¹˜ê°€ ìƒê¹€.
+
+* * *
+
+**You:**
+
+1. ì¢Œìƒë‹¨ ì¸í’‹ì— ìˆ«ìž ëœ¸. ìž˜ ë¨¹ìŒ. 6ìžë¦¬ ìˆ˜ ìµœëŒ€. cë¡œ ì´ˆê¸°í™”
+backspace ì§€ì›Œì§ ì •ìƒìž‘ë™
+Hooked the player number input into the existing Third Person template character.
+
+Modified character class: APythagoreanHarmonyCharacter
+
+Files changed:
+
+[PythagoreanHarmonyCharacter.h](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.h>)  
+Added a UPlayerNumberInputComponent* NumberInputComponent, helper digit handlers, debug print helper, and an accessor.
+
+[PythagoreanHarmonyCharacter.cpp](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.cpp>)  
+Creates the component in the constructor, binds keys in SetupPlayerInputComponent, and prints the current input with GEngine->AddOnScreenDebugMessage.
+
+Keys bound:
+
+- 0 through 9: append that digit
+- Backspace: remove last digit
+- C: clear input
+
+How to test in Play mode:
+
+1. Disable Live Coding or press Ctrl+Alt+F11, then compile.
+2. Press Play.
+3. Press 1: screen shows Input: 1
+4. Press 2: screen shows Input: 12
+5. Press 3: screen shows Input: 123
+6. Press Backspace: screen shows Input: 12
+7. Press C: screen shows Input: -
+
+Verification note: UnrealHeaderTool processed the headers successfully, but the full build is still blocked because Live Coding is active in the Unreal editor.
+
+* * *
+
+**ChatGPT:**
+
+ì¢‹ì•„. Phase 1-C ì™„ë£Œ.
+ì§€ê¸ˆê¹Œì§€ í•µì‹¬ ë¡œì§ì€ ì •ìƒìž„.
+
+í˜„ìž¬ êµ¬í˜„ ìƒíƒœ:
+
+[ì™„ë£Œ] ì  ë°©ì •ì‹ í‘œì‹œ
+[ì™„ë£Œ] ì˜¤ë‹µ ì§„í™”
+[ì™„ë£Œ] ì •ë‹µ ì²˜í˜•
+[ì™„ë£Œ] í”Œë ˆì´ì–´ ìˆ«ìž ìž…ë ¥
+[ì™„ë£Œ] Backspace ì‚­ì œ
+[ì™„ë£Œ] C ì´ˆê¸°í™”
+[ì™„ë£Œ] 6ìžë¦¬ ì œí•œ
+
+ë¨¼ì € ì»¤ë°‹.
+
+GitHub Desktop:
+
+Summary:
+
+Hook number input into player character
+
+Description:
+
+Added player number input component to the third-person character and bound digit, backspace, and clear keys.
+
+Commit + Push.
+
+ë‹¤ìŒ: Phase 1-D, ìž…ë ¥ê°’ì„ ì ì—ê²Œ ì œì¶œ
+
+ì´ì œ í•  ê²ƒ:
+
+í”Œë ˆì´ì–´ê°€ ìˆ«ìžë¥¼ ìž…ë ¥í•œë‹¤.
+X í‚¤ë¥¼ ëˆ„ë¥¸ë‹¤.
+ê°€ìž¥ ê°€ê¹Œìš´ PrototypeEquationEnemyì—ê²Œ í˜„ìž¬ ìˆ«ìžë¥¼ ì œì¶œí•œë‹¤.
+ì •ë‹µì´ë©´ ì²˜í˜•.
+ì˜¤ë‹µì´ë©´ ì§„í™”.
+
+ì•„ì§ ì§„ì§œ ë¬´ê¸° ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì—†ìŒ.
+ì§€ê¸ˆì˜ X í‚¤ëŠ” ìž„ì‹œë¡œ X ë¬´ê¸° ê³µê²© í…ŒìŠ¤íŠ¸ ë²„íŠ¼ ì—­í• ìž„.
+
+ëª©í‘œ í…ŒìŠ¤íŠ¸
+
+Play ëª¨ë“œì—ì„œ:
+
+5 ìž…ë ¥
+X ëˆ„ë¦„
+ê°€ê¹Œìš´ ê³ ë¸”ë¦°ì´ AXIOM EXECUTION
+
+ì˜¤ë‹µ í…ŒìŠ¤íŠ¸:
+
+4 ìž…ë ¥
+X ëˆ„ë¦„
+ê³ ë¸”ë¦° ì‹ì´ x + 7 = 15ë¡œ ì§„í™”
+Codexì— ë„£ì„ í”„ë¡¬í”„íŠ¸
+
+ê°™ì€ Codex ì„¸ì…˜ì— ê·¸ëŒ€ë¡œ ë„£ì–´.
+
+Connect player number input to the prototype enemy submission flow.
+
+Modify only what is necessary.
+
+Requirements:
+
+- Use the existing APythagoreanHarmonyCharacter.
+- Add a prototype action bound to the X key.
+- When X is pressed, submit the current number input to the nearest APrototypeEquationEnemy.
+- Search for the nearest APrototypeEquationEnemy within 2000 units.
+- If there is no current input, show an on-screen debug message: "No input."
+- If no enemy is found in range, show: "No equation enemy in range."
+- If an enemy is found, call SubmitAnswerToEnemy(CurrentInput).
+- If the answer is correct, the enemy should execute using its existing ExecuteEnemy flow.
+- If the answer is wrong, the enemy should evolve using its existing equation component flow.
+- After submitting an answer, clear the player input.
+- Print useful on-screen debug messages:
+  - Submitted Answer: N
+  - Correct Answer. Axiom Execution.
+  - Wrong Answer. Enemy evolved.
+  - Current Input: -
+
+Do not create real weapons yet.
+Do not create attack animations yet.
+Do not create UI widgets yet.
+Do not create lock-on yet.
+Do not modify equation logic unless absolutely necessary.
+Do not create inventory or combat resolver yet.
+
+Keep this prototype-focused and beginner-readable.
+
+Before finalizing, explain:
+1. Which files were changed
+2. Which functions were added
+3. Which key was bound
+4. How to test correct and wrong answers in Play mode
+Codex ëë‚˜ë©´ í•  ì¼
+
+Unrealì—ì„œ:
+
+Ctrl + Alt + F11
+
+ì´ˆë¡ìƒ‰ Live Coding succeeded í™•ì¸.
+
+ê·¸ë‹¤ìŒ Play.
+
+í…ŒìŠ¤íŠ¸ ìˆœì„œ
+í…ŒìŠ¤íŠ¸ 1, ì •ë‹µ ì²˜í˜•
+ë ˆë²¨ì— PrototypeEquationEnemy í•˜ë‚˜ ìžˆì–´ì•¼ í•¨
+Play ëˆ„ë¦„
+ê³ ë¸”ë¦° ê°€ê¹Œì´ ê°
+í‚¤ë³´ë“œ 5
+í‚¤ë³´ë“œ X
+
+ì„±ê³µ ê²°ê³¼:
+
+Submitted Answer: 5
+Correct Answer. Axiom Execution.
+ì  í…ìŠ¤íŠ¸ê°€ AXIOM EXECUTIONìœ¼ë¡œ ë°”ë€œ
+ì  ëª¸ì²´ ìˆ¨ê¹€
+Input: -
+í…ŒìŠ¤íŠ¸ 2, ì˜¤ë‹µ ì§„í™”
+
+ìƒˆë¡œ Play ì‹œìž‘.
+
+ê³ ë¸”ë¦° ê°€ê¹Œì´ ê°
+í‚¤ë³´ë“œ 4
+í‚¤ë³´ë“œ X
+
+ì„±ê³µ ê²°ê³¼:
+
+Submitted Answer: 4
+Wrong Answer. Enemy evolved.
+ì‹ì´ x + 7 = 15ë¡œ ë°”ë€œ
+Input: -
+
+í•œ ë²ˆ ë” ì˜¤ë‹µ í•˜ë ¤ë©´:
+
+4 ìž…ë ¥
+X ëˆ„ë¦„
+x + 9 = 20
+ì´ë²ˆ ë‹¨ê³„ ì„±ê³µ ê¸°ì¤€
+[ ] X í‚¤ë¡œ í˜„ìž¬ ìˆ«ìž ì œì¶œ ê°€ëŠ¥
+[ ] ìž…ë ¥ ì—†ìœ¼ë©´ No input í‘œì‹œ
+[ ] ì ì´ ë©€ë©´ No equation enemy in range í‘œì‹œ
+[ ] 5 ì œì¶œ ì‹œ AXIOM EXECUTION
+[ ] 4 ì œì¶œ ì‹œ x + 7 = 15
+[ ] ì œì¶œ í›„ Input ì´ˆê¸°í™”
+
+ì´ê±° ì„±ê³µí•˜ë©´ ë“œë””ì–´ í”Œë ˆì´ì–´ê°€ ì§ì ‘ ë°©ì •ì‹ ì ì„ ì£½ì´ëŠ” ì²« ë£¨í”„ê°€ ì™„ì„±ë¨.
+
+* * *
+
+**You:**
+
+ì§ˆë¬¸: ë¬¸ì œê°€ 3ê°œ ë°–ì— ì—†ëŠ”ë° ì´ê±° ì•žìœ¼ë¡œ random procedural equation ì¶”ê°€í•´ì„œ ê³µì‹ê³¼ ë‹µ ì²œì°¨ë§Œë³„ í• ê±´ë°, ì´ ì‹œìŠ¤í…œì´ ìž˜ ì§„í™” í•¨? ì•„ë‹˜ 3ê°œ eqationì—... ê·¸ëƒ¥... ì•¼ë§¤ë¡œ ë§žì¶˜ê±°?
+
+* * *
+
+**ChatGPT:**
+
+ã…‡ã…‡ ì •í™•ížˆ ë´¤ìŒ.
+
+ì§€ê¸ˆ 3ê°œ equationì€ ì•¼ë§¤ ë§žìŒ.
+ê·¼ë° ë‚˜ìœ ì•¼ë§¤ê°€ ì•„ë‹ˆë¼, í”„ë¡œí† íƒ€ìž…ìš© ì˜ë„ëœ í•˜ë“œì½”ë”©ìž„.
+
+í˜„ìž¬ ì‹œìŠ¤í…œì€ ì´ë ‡ê²Œ ë˜ì–´ ìžˆìŒ:
+
+Rank 1: x + 5 = 10
+Rank 2: x + 7 = 15
+Rank 3: x + 9 = 20
+
+ì¦‰, ì§€ê¸ˆì€ â€œëžœë¤ ë°©ì •ì‹ ì‹œìŠ¤í…œâ€ì´ ì•„ë‹ˆë¼:
+
+ì •ë‹µ ê²€ì‚¬ì™€ ì§„í™” íë¦„ì´ ë˜ëŠ”ì§€ í™•ì¸í•˜ëŠ” í…ŒìŠ¤íŠ¸ìš© ê³„ë‹¨
+
+ìž„.
+
+ê·¸ëŸ¼ ì´ êµ¬ì¡°ê°€ ë‚˜ì¤‘ì— ì§„í™” ê°€ëŠ¥í•˜ëƒ?
+
+ê°€ëŠ¥í•¨.
+ì´ìœ ëŠ” ì¢‹ì€ ë°©í–¥ìœ¼ë¡œ ë¶„ë¦¬ë˜ì–´ ìžˆìŒ.
+
+í˜„ìž¬ í•µì‹¬ì´ ì—¬ê¸°ë¡œ ë¶„ë¦¬ë¼ ìžˆì§€?
+
+UEnemyEquationComponent
+FEquationDefinition
+EPrototypeEquationType
+
+ì´ê²Œ ì¤‘ìš”í•¨.
+
+ë‚˜ì¤‘ì— í•˜ë“œì½”ë”©ëœ ì´ ë¶€ë¶„:
+
+SetEquationForRank(1)
+SetEquationForRank(2)
+SetEquationForRank(3)
+
+ì„ ì§€ìš°ê³ , ì´ëŸ° í•¨ìˆ˜ë¡œ êµì²´í•˜ë©´ ë¨:
+
+GenerateEquationForRank(int32 Rank)
+GenerateEquationForDifficulty(int32 Difficulty)
+GenerateEquationForSpecies(EnemySpecies, Rank)
+
+ì¦‰, í˜„ìž¬ëŠ” ì•¼ë§¤ ë°ì´í„° 3ê°œì§€ë§Œ, êµ¬ì¡° ìžì²´ëŠ” ë‚˜ì¤‘ì— proceduralë¡œ ê°ˆ ìˆ˜ ìžˆìŒ.
+
+ì•žìœ¼ë¡œì˜ ì§„ì§œ ë°©ì‹
+
+ëžœë¤ ë°©ì •ì‹ì€ â€œë¬¸ìžì—´ì„ ëžœë¤ìœ¼ë¡œ ë§Œë“œëŠ” ê²ƒâ€ì´ ì•„ë‹˜.
+
+ìž˜ëª»ëœ ë°©ì‹:
+
+ëžœë¤ìœ¼ë¡œ "x + 7 = 15" ê°™ì€ ë¬¸ìžì—´ ë§Œë“¤ê¸°
+ê·¸ê±¸ ë‹¤ì‹œ íŒŒì‹±í•´ì„œ ë‹µ ê³„ì‚°í•˜ê¸°
+
+ì´ê±´ ì´ˆë°˜ì— ì ˆëŒ€ í•˜ì§€ ë§ˆ. ë³µìž¡í•´ì§.
+
+ì¢‹ì€ ë°©ì‹:
+
+1. ë¨¼ì € ì •ë‹µ xë¥¼ ê³ ë¥¸ë‹¤.
+2. ì—°ì‚° íƒ€ìž…ì„ ê³ ë¥¸ë‹¤.
+3. a ê°’ì„ ê³ ë¥¸ë‹¤.
+4. bë¥¼ ê³„ì‚°í•œë‹¤.
+5. DisplayTextë¥¼ ë§Œë“ ë‹¤.
+6. CorrectAnswerëŠ” ì´ë¯¸ ì•Œê³  ìžˆë‹¤.
+
+ì˜ˆì‹œ:
+
+Add equation
+ì •ë‹µ x = 8
+a = 7
+b = x + a = 15
+
+í‘œì‹œ:
+x + 7 = 15
+
+ì •ë‹µ:
+8
+Multiply equation
+ì •ë‹µ x = 5
+a = 6
+b = a * x = 30
+
+í‘œì‹œ:
+6x = 30
+
+ì •ë‹µ:
+5
+Divide equation
+ì •ë‹µ x = 21
+a = 3
+b = x / a = 7
+
+í‘œì‹œ:
+x / 3 = 7
+
+ì •ë‹µ:
+21
+
+ì´ëŸ¬ë©´ ëžœë¤ì´ì–´ë„ í•­ìƒ ë‹µì´ ê¹”ë”í•˜ê²Œ ë‚˜ì˜´.
+
+ì•žìœ¼ë¡œ ì‹œìŠ¤í…œì€ ì´ë ‡ê²Œ ì§„í™”í•´ì•¼ í•¨
+
+í˜„ìž¬:
+
+Hardcoded Rank 1, 2, 3
+
+ë‹¤ìŒ ì§„í™”:
+
+Rank ê¸°ë°˜ ëžœë¤ ë°©ì •ì‹ ìƒì„±
+
+ê·¸ë‹¤ìŒ:
+
+Species ê¸°ë°˜ ê³µì‹ íƒ€ìž…
+
+ì˜ˆ:
+
+Slime: x = n
+Goblin: x + a = b, x - a = b
+Orc: ax = b
+Beastman: x / a = b
+Frok: x + a = b, ë‹¨ xëŠ” ì†Œìˆ˜
+Skeleton: x + a = b, ë‹¨ xëŠ” ìŒìˆ˜
+
+ê·¸ë‹¤ìŒ:
+
+Mathematical Armor ì¶”ê°€
+
+ì˜ˆ:
+
+Base:
+x + 5 = 10
+
+Armor:
+Ã—2
+
+Displayed:
+(x + 5) Ã— 2 = 20
+
+True Answer:
+5
+ì§€ê¸ˆ ë‹¹ìž¥ ë°”ê¾¸ë©´ ì•ˆ ë˜ëŠ” ì´ìœ 
+
+ì•„ì§ ì´ê²ƒë„ ì•ˆ ëë‚¬ìŒ:
+
+ìˆ«ìž ìž…ë ¥
+X ì œì¶œ
+ì •ë‹µ ì²˜í˜•
+ì˜¤ë‹µ ì§„í™”
+
+ì¦‰, ì§€ê¸ˆ procedural equationë¶€í„° ë§Œë“¤ë©´ í•µì‹¬ ì „íˆ¬ ë£¨í”„ê°€ ëŠ¦ì–´ì§.
+
+ì§€ê¸ˆ ìˆœì„œëŠ” ì´ê²Œ ë§žìŒ:
+
+1. í•˜ë“œì½”ë”© 3ê°œë¡œ ì „íˆ¬ ë£¨í”„ ì™„ì„±
+2. X í‚¤ë¡œ ì  ì²˜í˜•/ì§„í™” ì„±ê³µ
+3. ê·¸ë‹¤ìŒ í•˜ë“œì½”ë”© ì œê±°
+4. Equation Generatorë¡œ êµì²´
+5. ì¢…ì¡±ë³„ ê³µì‹ ì¶”ê°€
+6. Armor ì¶”ê°€
+ê²°ë¡ 
+
+í˜„ìž¬ 3ê°œ equationì€ ì•¼ë§¤ ë§žìŒ.
+í•˜ì§€ë§Œ ë²„ë¦´ ì•¼ë§¤ê°€ ì•„ë‹ˆë¼, í•µì‹¬ íë¦„ ê²€ì¦ìš© scaffoldìž„.
+
+ì¤‘ìš”í•œ ê±´ ì§€ê¸ˆ UEnemyEquationComponent ì•ˆì— ë°©ì •ì‹ ë¡œì§ì„ ëª¨ì•„ë’€ë‹¤ëŠ” ì ìž„.
+ê·¸ëž˜ì„œ ë‚˜ì¤‘ì— ë‚´ë¶€ë§Œ ì´ë ‡ê²Œ ê°ˆì•„ë¼ìš°ë©´ ë¨:
+
+Before:
+SetEquationForRank(1/2/3)
+
+After:
+CurrentEquation = GenerateEquation(Species, Rank, Difficulty)
+
+ì¦‰, ì§€ê¸ˆ êµ¬ì¡°ëŠ” ì¶©ë¶„ížˆ ì§„í™” ê°€ëŠ¥í•¨.
+
+ë‹¤ìŒ ë‹¨ê³„ëŠ” ê·¸ëŒ€ë¡œ ì§„í–‰í•´ë„ ë¨.
+ë¨¼ì € X í‚¤ë¡œ í˜„ìž¬ ìˆ«ìžë¥¼ ê³ ë¸”ë¦°ì—ê²Œ ì œì¶œí•˜ëŠ” ë£¨í”„ë¥¼ ì™„ì„±í•˜ìž.
+
+* * *
+
+**You:**
+
+ã…‡ã…‹. ë¬´í•œížˆ ë¬¸ì œ ì–´ë ¤ì›Œì§ˆ ìˆ˜ ìžˆìŒ ë¬ìŒ
+. ã…ˆã„´ ìž˜ ìž‘ë™í•¨ ìš”. I didn't do extreme tests, but a simple test shows it works. í‹€ë¦¬ë©´ ë‹¤ìŒ ê³µì‹, ë§žìŒ AXIOM EXECUTION ëœ¸
+
+* * *
+
+**You:**
+
+ã…‡ã…‹. ë¬´í•œížˆ ë¬¸ì œ ì–´ë ¤ì›Œì§ˆ ìˆ˜ ìžˆìŒ ë¬ìŒ
+. ã…ˆã„´ ìž˜ ìž‘ë™í•¨ ìš”. I didn't do extreme tests, but a simple test shows it works. í‹€ë¦¬ë©´ ë‹¤ìŒ ê³µì‹, ë§žìŒ AXIOM EXECUTION ëœ¸
+Connected the number input to prototype enemy submission through the existing Third Person character.
+
+Changed files:
+
+[PythagoreanHarmonyCharacter.h](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.h>)  
+[PythagoreanHarmonyCharacter.cpp](</E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/PythagoreanHarmonyCharacter.cpp>)
+
+Functions added:
+
+SubmitInputToNearestEquationEnemy()  
+Reads the current input, finds the nearest unexecuted APrototypeEquationEnemy within 2000 units, submits the answer, prints result messages, then clears input.
+
+FindNearestPrototypeEquationEnemy(float SearchRadius) const  
+Searches the level for the nearest valid prototype equation enemy.
+
+PrintPrototypeDebugMessage(...) const  
+Small helper for on-screen prototype messages.
+
+Key bound:
+
+X submits the current number input to the nearest prototype equation enemy.
+
+How to test in Play mode:
+
+1. Place a PrototypeEquationEnemy within 2000 units of the player.
+2. Press 5, then X.
+   You should see Submitted Answer: 5, then Correct Answer. Axiom Execution., and the enemy should execute.
+3. Restart or place another enemy.
+4. Press 4, then X.
+   You should see Submitted Answer: 4, then Wrong Answer. Enemy evolved., and the enemy equation should update.
+5. Press X with no input to see No input.
+6. Move away from enemies, enter a number, press X, and you should see No equation enemy in range.
+
+Verification note: UnrealHeaderTool processed the changed header successfully. Full build is still blocked because Live Coding is active in the Unreal editor.
+
+
+* * *
+
+**ChatGPT:**
+
+ì¢‹ì•„. Phase 1-D ì™„ë£Œ.
+ì´ì œ ê²Œìž„ì˜ ì œì¼ ì¤‘ìš”í•œ ì²« ë£¨í”„ê°€ ì‹¤ì œë¡œ ìž‘ë™í•¨.
+
+í˜„ìž¬ êµ¬í˜„ëœ í•µì‹¬:
+
+ìˆ«ìž ìž…ë ¥
+â†’ X í‚¤ ì œì¶œ
+â†’ ê°€ê¹Œìš´ ë°©ì •ì‹ ì  íƒìƒ‰
+â†’ ì •ë‹µ ê²€ì‚¬
+â†’ ë§žìœ¼ë©´ AXIOM EXECUTION
+â†’ í‹€ë¦¬ë©´ ë‹¤ìŒ ê³µì‹ìœ¼ë¡œ ì§„í™”
+
+ì´ê±´ í° ì§„ì „ìž„. ì§€ê¸ˆë¶€í„°ëŠ” â€œì•¼ë§¤ 3ê°œ ê³µì‹â€ì„ ì§„ì§œ procedural equation generatorë¡œ ê°ˆì•„ë¼ìš°ë©´ ë¨.
+
+ë¨¼ì € ì»¤ë°‹.
+
+GitHub Desktop:
+
+Summary:
+Connect number input to enemy answer submission
+
+Description:
+Bound X key to submit the current player input to the nearest prototype equation enemy and trigger execution or evolution.
+
+Commit + Push.
+
+ë‹¤ìŒ: Phase 1-E, Procedural Equation Generator v1
+
+ëª©í‘œ:
+
+í‹€ë¦´ ë•Œë§ˆë‹¤ Rankê°€ ì˜¬ë¼ê°€ê³ ,
+Rankì— ë§žì¶° ìƒˆë¡œìš´ ë°©ì •ì‹ì´ ìžë™ ìƒì„±ë¨.
+
+ì¦‰ í˜„ìž¬:
+
+Rank 1: x + 5 = 10
+Rank 2: x + 7 = 15
+Rank 3: x + 9 = 20
+
+ì´ê±¸ ë²„ë¦¬ê³ :
+
+Rank 1: x + 3 = 9
+Rank 2: 4x = 28
+Rank 3: x - 12 = 5
+Rank 4: x / 5 = 7
+Rank 5: x + 48 = 91
+...
+
+ì´ëŸ° ì‹ìœ¼ë¡œ ê°€ê²Œ í•œë‹¤.
+
+ì¤‘ìš”í•œ ì„¤ê³„ ì›ì¹™
+
+ëžœë¤ ì‹ì€ ë¬¸ìžì—´ì„ ë¨¼ì € ë§Œë“¤ë©´ ì•ˆ ë¨.
+
+ì¢‹ì€ ë°©ì‹:
+
+1. ì •ë‹µ xë¥¼ ë¨¼ì € ê³ ë¥¸ë‹¤.
+2. ì—°ì‚° íƒ€ìž…ì„ ê³ ë¥¸ë‹¤.
+3. ë³´ì¡° ìˆ«ìž aë¥¼ ê³ ë¥¸ë‹¤.
+4. bë¥¼ ê³„ì‚°í•œë‹¤.
+5. DisplayTextë¥¼ ë§Œë“ ë‹¤.
+6. CorrectAnswerëŠ” ì´ë¯¸ ì•Œê³  ìžˆë‹¤.
+
+ì´ ë°©ì‹ì´ë©´ ë¬´í•œížˆ ë¬¸ì œë¥¼ ë§Œë“¤ ìˆ˜ ìžˆê³ , ë‹µë„ í•­ìƒ í™•ì‹¤í•¨.
+
+Codexì— ë„£ì„ í”„ë¡¬í”„íŠ¸
+
+ê°™ì€ Codex ì„¸ì…˜ì— ê·¸ëŒ€ë¡œ ë„£ì–´.
+
+Replace the hardcoded 3-rank equation evolution with a simple procedural equation generator.
+
+Modify only the existing equation system files unless absolutely necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+
+Do not modify player input, character input binding, enemy actor display logic, UI, weapons, inventory, or AI unless required for compilation.
+
+Goal:
+Wrong answers should increase Rank and generate a new equation procedurally instead of selecting from only three hardcoded equations.
+
+Requirements:
+
+1. Keep EPrototypeEquationType:
+- Direct
+- Add
+- Subtract
+- Multiply
+- Divide
+
+2. Keep FEquationDefinition, but update it if useful.
+
+3. In UEnemyEquationComponent, add procedural generation functions:
+- GenerateEquationForRank(int32 NewRank)
+- GenerateDirectEquation(int32 NewRank)
+- GenerateAddEquation(int32 NewRank)
+- GenerateSubtractEquation(int32 NewRank)
+- GenerateMultiplyEquation(int32 NewRank)
+- GenerateDivideEquation(int32 NewRank)
+
+4. Evolution behavior:
+- On wrong answer, increase Rank by 1.
+- Generate a new equation for the new Rank.
+- Do not cap at Rank 3 anymore.
+- For safety, cap Rank at 999 for now.
+
+5. Starting behavior:
+- Begin with a deterministic beginner Goblin equation by default:
+  x + 5 = 10
+  answer 5
+  rank 1
+
+6. After the first wrong answer:
+- Generate procedural equations based on Rank.
+
+7. Difficulty scaling:
+Use Rank to increase number ranges.
+
+Suggested ranges:
+- MaxAnswer = 10 + Rank * 5
+- MaxOperand = 5 + Rank * 3
+
+Clamp both to reasonable values to avoid int overflow:
+- MaxAnswer <= 100000
+- MaxOperand <= 10000
+
+8. Equation generation rules:
+
+Direct:
+- Pick answer x
+- Display: x = answer
+- CorrectAnswer = answer
+
+Add:
+- Pick answer x
+- Pick a
+- b = x + a
+- Display: x + a = b
+- CorrectAnswer = x
+
+Subtract:
+- Pick answer x
+- Pick a
+- b = x - a
+- Display: x - a = b
+- CorrectAnswer = x
+
+Multiply:
+- Pick answer x
+- Pick a from 2 to MaxOperand
+- b = a * x
+- Display: a x = b
+- CorrectAnswer = x
+
+Divide:
+- Pick answer x
+- Pick a from 2 to MaxOperand
+- b = x / a style equations should stay integer-friendly.
+Use:
+  result = random positive integer
+  x = result * a
+  Display: x / a = result
+  CorrectAnswer = x
+
+9. Equation type selection:
+For now, choose based on Rank:
+- Rank 1 to 2: Add only
+- Rank 3 to 4: Add or Subtract
+- Rank 5 to 6: Add, Subtract, or Multiply
+- Rank 7 and above: Add, Subtract, Multiply, or Divide
+
+Do not use Direct in random evolution yet except if explicitly called.
+
+10. Add BlueprintCallable function:
+- RegenerateEquation()
+
+This should generate a new equation for the current rank.
+
+11. Add BlueprintCallable function:
+- SetRankAndGenerateEquation(int32 NewRank)
+
+This should set rank and generate an equation for that rank.
+
+12. Add useful UE_LOG messages when an equation is generated:
+- Rank
+- DisplayText
+- CorrectAnswer
+
+13. Keep beginner-friendly comments.
+
+14. Preserve existing public functions:
+- GetDisplayText()
+- GetCorrectAnswer()
+- GetRank()
+- IsAnswerCorrect()
+- SubmitAnswer()
+
+15. Update SubmitAnswer:
+- Correct answer returns true.
+- Wrong answer evolves procedurally and returns false.
+
+Before finalizing, explain:
+1. Which files were changed
+2. How procedural generation works
+3. How Rank affects difficulty
+4. How to test in Play mode
+Codex ëë‚˜ë©´ í…ŒìŠ¤íŠ¸
+
+ì»´íŒŒì¼:
+
+Ctrl + Alt + F11
+
+Play ëª¨ë“œ í…ŒìŠ¤íŠ¸:
+
+í…ŒìŠ¤íŠ¸ 1, ì´ˆê¸° ì •ë‹µ
+5 ìž…ë ¥
+X
+
+ê²°ê³¼:
+
+AXIOM EXECUTION
+
+ì´ˆê¸° ê³µì‹ì€ ì•„ì§ x + 5 = 10ì´ì–´ì•¼ í•¨.
+
+í…ŒìŠ¤íŠ¸ 2, procedural evolution
+
+ìƒˆë¡œ Play ì‹œìž‘.
+
+4 ìž…ë ¥
+X
+
+ê²°ê³¼:
+
+Wrong Answer. Enemy evolved.
+ìƒˆë¡œìš´ ê³µì‹ í‘œì‹œ
+
+ê·¸ë‹¤ìŒ ì¼ë¶€ëŸ¬ ê³„ì† í‹€ë ¤:
+
+1 ìž…ë ¥
+X
+1 ìž…ë ¥
+X
+1 ìž…ë ¥
+X
+
+ê²°ê³¼:
+
+Rank ê³„ì† ìƒìŠ¹
+ê³µì‹ ê³„ì† ë°”ë€œ
+ìˆ«ìž ì ì  ì»¤ì§
+Rank 5 ì´í›„ ê³±ì…ˆ ë‚˜ì˜¬ ìˆ˜ ìžˆìŒ
+Rank 7 ì´í›„ ë‚˜ëˆ—ì…ˆ ë‚˜ì˜¬ ìˆ˜ ìžˆìŒ
+ì´ë²ˆ ë‹¨ê³„ ì„±ê³µ ê¸°ì¤€
+[ ] ì²« ê³µì‹ì€ ì—¬ì „ížˆ x + 5 = 10
+[ ] 5 ìž…ë ¥ + X = AXIOM EXECUTION
+[ ] ì˜¤ë‹µ ì‹œ Rank 2ë¡œ ì§„í™”
+[ ] Rank 3 ì´ìƒì—ì„œë„ ê³„ì† ìƒˆ ê³µì‹ ìƒì„±
+[ ] Rank 3ì—ì„œ ë©ˆì¶”ì§€ ì•ŠìŒ
+[ ] ìˆ«ìž ë²”ìœ„ê°€ Rankì— ë”°ë¼ ì»¤ì§
+[ ] ì»´íŒŒì¼ ì„±ê³µ
+
+ì´ê±° ë˜ë©´ ì´ì œ â€œë¬¸ì œ 3ê°œì§œë¦¬ ì•¼ë§¤â€ì—ì„œ ë²—ì–´ë‚˜ì„œ, ì§„ì§œ ê²Œìž„ ì‹œìŠ¤í…œì˜ ê¸°ë°˜ì´ ìƒê¸´ë‹¤.
+
+* * *
+
+**You:**
+
+ìž˜ ìž‘ë™ì€ í•¨... ì´ì œ ëžœë¤ ê³µì‹ì— ë‹µ/ì˜¤ë‹µ ì œëŒ€ë¡œ í•¨. ë¬¸ì œ: ë‚œì´ë„... ë„ˆë¬´ ëžœë¤. ë­... í”„ë¡œí† íƒ€ìž… ì ì´ë¼ ë¬¸ì œëŠ” ì—†ê³  ì•žìœ¼ë¡œ ë” ì„¸ë¶„í™” ë ê±´ ì•Œì§€ë§Œ, just so you know, ì–´ë ¤ìš´ ë¬¸ì œì—ì„œ ì‰¬ìš´ë¬¸ì œë¡œ ê°€ëŠ”ê±° ì–¸ì  ê°„ ë§‰ì•„ì•¼ í•¨
+
+* * *
+
+**ChatGPT:**
+
+ë§žìŒ. ì´ê±´ ì§€ê¸ˆ ì‹œìŠ¤í…œì˜ ì •ìƒì ì¸ í•œê³„ìž„.
+
+í˜„ìž¬ procedural generatorëŠ” ëŒ€ì¶© ì´ëŸ° êµ¬ì¡°ë¼ì„œ:
+
+Rank ì˜¬ë¼ê°
+â†’ ìˆ«ìž ë²”ìœ„ MaxAnswer, MaxOperand ì¦ê°€
+â†’ ê·¸ ì•ˆì—ì„œ ëžœë¤ ìƒì„±
+
+ê·¸ëž˜ì„œ ì´ëŸ° ë¬¸ì œê°€ ìƒê¸¸ ìˆ˜ ìžˆìŒ:
+
+Rank 8: 23x = 184
+Rank 9: x + 2 = 5
+
+ì¦‰, ìµœëŒ€ ë‚œì´ë„ ë²”ìœ„ëŠ” ì»¤ì§€ëŠ”ë°, ìµœì†Œ ë‚œì´ë„ëŠ” ë³´ìž¥ ì•ˆ ë¨.
+ê·¸ëž˜ì„œ ì–´ë ¤ìš´ ë¬¸ì œ ë‹¤ìŒì— ì‰¬ìš´ ë¬¸ì œê°€ ë‚˜ì˜¤ëŠ” ê²Œ ê°€ëŠ¥í•¨.
+
+ê²°ë¡ 
+
+ì§€ê¸ˆì€ í”„ë¡œí† íƒ€ìž…ì´ë¼ ê´œì°®ìŒ.
+í•˜ì§€ë§Œ ì •ì‹ ì‹œìŠ¤í…œì—ì„œëŠ” ë°˜ë“œì‹œ ë§‰ì•„ì•¼ í•¨.
+
+ì•žìœ¼ë¡œ í•„ìš”í•œ ê±´ ë‹¨ìˆœ ëžœë¤ì´ ì•„ë‹ˆë¼:
+
+Rankë³„ ë‚œì´ë„ í•˜í•œì„  + ìƒí•œì„ 
+
+ë˜ëŠ” ë” ì •í™•ížˆ:
+
+Equation Difficulty Score
+
+ìž„.
+
+ë‚˜ì¤‘ì— ë“¤ì–´ê°ˆ êµ¬ì¡°
+
+ê° ë°©ì •ì‹ì´ ìƒì„±ë  ë•Œ ì ìˆ˜ë¥¼ ë§¤ê¹€:
+
+x + 5 = 10        difficulty 10
+x + 47 = 91       difficulty 35
+8x = 72           difficulty 45
+x / 13 = 9        difficulty 55
+37x = 999         difficulty 90
+
+ê·¸ë¦¬ê³  Rankë³„ í—ˆìš© ë‚œì´ë„ë¥¼ ë‘ :
+
+Rank 1: 5~10
+Rank 2: 10~20
+Rank 3: 20~30
+Rank 4: 30~40
+Rank 5: 40~50
+...
+
+ìƒì„±ëœ ì‹ì´ í˜„ìž¬ Rankì˜ ë‚œì´ë„ ë²”ìœ„ë³´ë‹¤ ë„ˆë¬´ ì‰¬ìš°ë©´ ë²„ë¦¼.
+
+Generate equation
+â†’ Calculate difficulty score
+â†’ Too easy? regenerate
+â†’ Too hard? regenerate
+â†’ acceptable? use it
+
+ì´ë ‡ê²Œ ê°€ì•¼ í•¨.
+
+ì§€ê¸ˆ ë°”ë¡œ ê³ ì¹  ìˆ˜ë„ ìžˆìŒ
+
+ë‚´ ì¶”ì²œì€ ì§€ê¸ˆ ë°”ë¡œ v1ë§Œ ë„£ëŠ” ê²ƒìž„.
+ì™œëƒë©´ equation generatorë¥¼ ë°©ê¸ˆ ë§Œë“  ìƒíƒœë¼ì„œ, ì§€ê¸ˆ ìž¡ì•„ë‘ë©´ ë‚˜ì¤‘ì— ëœ ê¼¬ìž„.
+
+ë„ˆë¬´ ë³µìž¡í•˜ê²Œ ë§ê³ , ì¼ë‹¨ ì´ë ‡ê²Œë§Œ:
+
+Rankê°€ ì˜¬ë¼ê°ˆìˆ˜ë¡ ìµœì†Œ answerë„ ì»¤ì§
+Rankê°€ ì˜¬ë¼ê°ˆìˆ˜ë¡ ìµœì†Œ operandë„ ì»¤ì§
+Rankê°€ ì˜¬ë¼ê°ˆìˆ˜ë¡ ì‰¬ìš´ ì—°ì‚° íƒ€ìž… ë¹„ì¤‘ ê°ì†Œ
+
+ì˜ˆ:
+
+Rank 2: x + a = b
+Rank 3~4: x + a, x - a
+Rank 5~6: ìž‘ì€ ê³±ì…ˆ ì¶”ê°€
+Rank 7~10: ë‚˜ëˆ—ì…ˆ ì¶”ê°€
+Rank 11+: ë” í° ìˆ«ìž ì‚¬ìš©
+
+ê·¸ë¦¬ê³  ìµœì†Œê°’:
+
+MinAnswer = max(1, Rank * 2)
+MaxAnswer = 10 + Rank * 5
+
+MinOperand = max(1, Rank)
+MaxOperand = 5 + Rank * 3
+
+ì´ëŸ¬ë©´ ì ì–´ë„ Rank 10ì—ì„œ x + 1 = 2 ê°™ì€ ê±´ ìž˜ ì•ˆ ë‚˜ì˜´.
+
+ì§€ê¸ˆ í•  ì¼
+
+ë¨¼ì € í˜„ìž¬ procedural generatorê°€ ìž˜ ìž‘ë™í–ˆìœ¼ë‹ˆ ì»¤ë°‹.
+
+GitHub Desktop:

@@ -1,0 +1,828 @@
+
+ì˜ˆ:
+
+3x^2 + 2x + 7 = 52
+x = 3
+
+Left:
+3*9 + 2*3 + 7 = 34
+
+34 != 52
+ì˜¤ë‹µ
+
+x = 4:
+
+3*16 + 2*4 + 7 = 63
+
+63 != 52
+ì˜¤ë‹µ
+
+ë§Œì•½ ì‹ì„ ìƒì„±í•  ë•Œ TrueXë¥¼ ë¨¼ì € ê³ ë¥´ê³  RHSë¥¼ ê³„ì‚°í•˜ë©´ ë¨:
+
+TrueX = 5
+Left = 3x^2 + 2x + 7
+RightValue = 3*25 + 2*5 + 7 = 92
+
+ìµœì¢…:
+3x^2 + 2x + 7 = 92
+ì •ë‹µ x = 5
+ì£¼ì˜: ë‹¤í•­ì‹ì€ ë‹µì´ ì—¬ëŸ¬ ê°œì¼ ìˆ˜ ìžˆìŒ
+
+ì´ê±´ ì¤‘ìš”í•¨.
+
+x^2 = 4
+
+ì •ë‹µì€:
+
+x = 2
+x = -2
+
+ë‘˜ ë‹¤ ê°€ëŠ¥í•¨.
+
+ê·¸ëž˜ì„œ ì§€ê¸ˆì€ ì •ì±…ì„ ì •í•´ì•¼ í•¨.
+
+ì´ˆê¸° ì¶”ì²œ:
+
+ìžì—°ìˆ˜ ì˜ì—­ë§Œ í—ˆìš©
+ê³„ìˆ˜ëŠ” ì–‘ìˆ˜ ìœ„ì£¼
+TrueXëŠ” ì–‘ìˆ˜
+x ìž…ë ¥ë„ ë¹„ìŒìˆ˜
+
+ê·¸ëŸ¬ë©´ ëŒ€ì²´ë¡œ ë‹¨ì¡°ì¦ê°€ë¼ ë‹µì´ í•˜ë‚˜ì²˜ëŸ¼ ìž‘ë™í•¨.
+
+ì¦‰, ì´ˆë°˜ì—ëŠ”:
+
+x >= 0
+coefficients >= 0
+powers >= 0
+
+ì„ ìœ ì§€.
+
+ìŒìˆ˜, ë³µìˆ˜í•´, ë¶„ìˆ˜ëŠ” ë‚˜ì¤‘ì— ì»¨ì…‰ í•´ê¸ˆìœ¼ë¡œ ë„£ìž.
+
+ì¢…ì¡±ê³¼ nê°’ ì œí•œ
+
+ì´ ë°©í–¥ ì¢‹ìŒ.
+
+ì˜ˆ:
+
+Slime:
+max degree 1
+ê±°ì˜ x = n
+
+Goblin:
+max degree 1
+x + a = b
+x - a = b
+
+Orc:
+max degree 1
+ax = b
+
+Quadratic Beast / Square Golem:
+max degree 2
+ax^2 + bx + c = answer
+
+Cubic Entity:
+max degree 3
+
+Abstract Entity:
+higher degree / function
+
+RankëŠ” ì´ë ‡ê²Œ:
+
+ê³„ìˆ˜ ë²”ìœ„ ì¦ê°€
+ìƒìˆ˜ ë²”ìœ„ ì¦ê°€
+TrueX ë²”ìœ„ ì¦ê°€
+degree í•´ê¸ˆ ì¡°ê±´ì—ëŠ” ì˜í–¥ ê°€ëŠ¥
+í•˜ì§€ë§Œ ì¢…ì¡±ì˜ identityë¥¼ ê¹¨ì§€ëŠ” ì•ŠìŒ
+
+ì¦‰:
+
+Slimeì€ Rank 999ì—¬ë„ degree 1
+Quadratic enemyëŠ” Rank ë‚®ì•„ë„ degree 2 ê°€ëŠ¥
+
+ì´ê²Œ ì¢‹ìŒ.
+
+y, z ê²€ ì•„ì´ë””ì–´
+
+ê°€ëŠ¥í•¨. ê·¼ë° ì´ê±´ ë‹¤ë³€ìˆ˜ ì‹ìœ¼ë¡œ ë„˜ì–´ê°€ëŠ” ìˆœê°„ ë‚œì´ë„ê°€ í™• ì˜¬ë¼ê°.
+
+ì˜ˆ:
+
+2x + 3y + z = 20
+
+ì´ê±° í•˜ë‚˜ë§Œ ìžˆìœ¼ë©´ x, y, zëŠ” ë¬´í•œížˆ ë§Žì€ í•´ê°€ ìžˆìŒ.
+
+ê·¸ëž˜ì„œ y/zë¥¼ ë„£ìœ¼ë ¤ë©´ ì´ë ‡ê²Œ í•´ì•¼ í•¨:
+
+ë°©ë²• A, hidden true values
+
+ë‚´ë¶€ì ìœ¼ë¡œ:
+
+TrueX = 5
+TrueY = 2
+TrueZ = 4
+
+ê·¸ë¦¬ê³  ì‹ ìƒì„±:
+
+2x + 3y + z = 20
+
+Xê²€ì€ xê°’ì„ ê²€ì‚¬, Yê²€ì€ yê°’ì„ ê²€ì‚¬, Zê²€ì€ zê°’ì„ ê²€ì‚¬.
+
+ê²Œìž„ì ìœ¼ë¡œëŠ” ê°€ëŠ¥í•˜ì§€ë§Œ, ìˆ˜í•™ì ìœ¼ë¡œëŠ” ë‹¨ì¼ ì‹ë§Œ ë³´ê³ ëŠ” x/y/zë¥¼ ìœ ì¼í•˜ê²Œ ëª» êµ¬í•¨. ê·¸ëž˜ì„œ ížŒíŠ¸, ìž¥ë¹„, ë³´í˜¸ë§‰, ì¶”ê°€ ì‹ì´ í•„ìš”í•¨.
+
+ë°©ë²• B, ë³´ìŠ¤ ë³´í˜¸ë§‰
+
+ì´ê±´ ë„¤ ì•„ì´ë””ì–´ëž‘ ìž˜ ë§žìŒ.
+
+ì˜ˆ:
+
+Main Formula:
+x + 5 = 10
+
+Y Shield:
+y + 3 = 7
+
+Z Shield:
+z - 2 = 4
+
+í”Œë ˆì´ì–´ëŠ”:
+
+Yê²€ìœ¼ë¡œ y = 4 ë§žì¶¤
+Zê²€ìœ¼ë¡œ z = 6 ë§žì¶¤
+ë³´í˜¸ë§‰ ì œê±°
+ë³¸ì²´ x ê³µì‹ ë…¸ì¶œ
+Xê²€ìœ¼ë¡œ x = 5 ì²˜í˜•
+
+ì´ê²Œ ë” ê²Œìž„ì ìœ¼ë¡œ ì¢‹ìŒ.
+
+ë°©ë²• C, ë‹¤ì¤‘ ë°©ì •ì‹ ì‹œìŠ¤í…œ
+x + y = 10
+y + z = 8
+z = 3
+
+ì´ê±´ ì—°ë¦½ë°©ì •ì‹ì´ë¼ í›„ë°˜/DLCê¸‰.
+
+ì´ˆê¸°ì—ëŠ” í•˜ì§€ ë§ˆ.
+
+ì§€ê¸ˆ ê²°ì •
+
+ë‚˜ëŠ” ì§€ê¸ˆ ë°©í–¥ì„ ì´ë ‡ê²Œ ì¶”ì²œí•¨:
+
+í˜„ìž¬ ì–•ì€ EquationType ì‹œìŠ¤í…œì„ ë²„ë¦¬ê³ ,
+PolynomialEquation v1ë¡œ ë¦¬íŒ©í„°í•œë‹¤.
+
+í•˜ì§€ë§Œ ë²”ìœ„ëŠ” ì œí•œ:
+
+ë‹¨ì¼ ë³€ìˆ˜ xë§Œ
+ì •ìˆ˜ ê³„ìˆ˜ë§Œ
+ì •ìˆ˜ RHSë§Œ
+ìžì—°ìˆ˜/ë¹„ìŒìˆ˜ xë§Œ
+degreeëŠ” ì¼ë‹¨ 1ë§Œ ì‹¤ì œ ìƒì„±
+degree 2 êµ¬ì¡°ëŠ” ì§€ì›ë§Œ í•´ë‘ 
+
+ì¦‰, ì§€ê¸ˆ ì½”ë“œëŠ” ë¯¸ëž˜ë¥¼ ìœ„í•´:
+
+x^2, x^3ë„ í‘œí˜„ ê°€ëŠ¥
+
+í•˜ê²Œ ë§Œë“¤ë˜, ì‹¤ì œ í”„ë¡œí† íƒ€ìž… ì ì€ ì•„ì§:
+
+x + 5 = 10
+x - a = b
+ax = b
+
+ì •ë„ë§Œ ìƒì„±.
+
+ì´ê²Œ ê°€ìž¥ ì•ˆì „í•¨.
+
+Codexì— ë„£ì„ í”„ë¡¬í”„íŠ¸
+
+ì´ê±´ í° ë¦¬íŒ©í„°ë¼ì„œ, ë¨¼ì € ìˆ˜ì • ê³„íšë§Œ ë°›ìž. ë°”ë¡œ ì½”ë“œ ì“°ê²Œ í•˜ì§€ ë§ˆ.
+
+We need to refactor the equation system toward a real polynomial equation model.
+
+Do not modify files yet.
+
+Read the current equation-related code and propose a refactor plan.
+
+Context:
+The current EquationType/A/B model is too shallow. We need operation weapons to apply mathematically to both sides of an equation, not just special-case x + A = B.
+
+Long-term direction:
+Represent equations as polynomial data, not parsed strings.
+
+Example:
+x + 5 = 10 should be represented as:
+LeftTerms:
+- coefficient 1, power 1
+- coefficient 5, power 0
+RightValue:
+10
+
+Then applying subtraction 13 means:
+Left constant term -= 13
+RightValue -= 13
+Result:
+x - 8 = -3
+
+Requirements for the plan:
+1. Keep the prototype working.
+2. Do not build a text parser.
+3. Use data structures, not string parsing.
+4. Support a single variable x for now.
+5. Support integer coefficients and integer right side.
+6. Support powers in the data model, at least power 0, 1, and 2.
+7. Generated enemies may still use degree 1 for now.
+8. X answer check should evaluate the polynomial at SubmittedX and compare to RightValue.
+9. Addition operation should add a constant to both sides.
+10. Subtraction operation should subtract a constant from both sides.
+11. Multiplication operation should multiply all left coefficients and right side.
+12. Division operation should divide all left coefficients and right side only if clean integer division is possible.
+13. Preserve existing gameplay behavior:
+- x + 5 = 10 still starts as the tutorial Goblin equation.
+- Input 5 + X still executes.
+- Input 13 + Q on x + 5 = 10 should produce x - 8 = -3.
+- Input 5 + X after that should still execute.
+14. Explain which existing files would change.
+15. Explain what new structs/classes would be introduced.
+16. Explain migration risk and testing plan.
+
+Do not implement yet. Only provide the plan.
+ì´ ê³„íšì„ ë°›ì€ ë‹¤ìŒ
+
+Codex ë‹µë³€ ë³´ë‚´ì¤˜.
+ê·¸ë‹¤ìŒ ë‚´ê°€ ë³´ê³ :
+
+ê´œì°®ìœ¼ë©´ êµ¬í˜„ í”„ë¡¬í”„íŠ¸ 1ë‹¨ê³„
+
+ë¡œ ìª¼ê°œì„œ ê°ˆê²Œ.
+
+í•œ ë²ˆì— ì „ì²´ ë¦¬íŒ©í„° ë§¡ê¸°ë©´ ìœ„í—˜í•¨.
+ìˆœì„œëŠ” ì´ë ‡ê²Œ ìª¼ê°œì•¼ í•¨:
+
+1. Polynomial structs ì¶”ê°€
+2. DisplayText ìƒì„± í•¨ìˆ˜ ì¶”ê°€
+3. Evaluate í•¨ìˆ˜ ì¶”ê°€
+4. ê¸°ì¡´ Goblinì„ polynomialë¡œ ë§ˆì´ê·¸ë ˆì´ì…˜
+5. X ì •ë‹µ ê²€ì‚¬ ì—°ê²°
+6. Add/Subtract operation ì—°ê²°
+7. Multiply/Divide operation ì¶”ê°€
+8. ê¸°ì¡´ EquationType ì œê±° ë˜ëŠ” compatibility ìœ ì§€
+
+ì´ ë°©í–¥ì´ ì§„ì§œ ìž¥ê¸°ì ìœ¼ë¡œ ë§žë‹¤.
+
+* * *
+
+**You:**
+
+I read the current equation-related code. The clean refactor is to make FEquationDefinition stop being the math model and become either a compatibility wrapper or a thin display/debug container around a real polynomial equation struct.
+
+**Refactor Direction**
+Introduce polynomial data in EquationTypes.h:
+
+
+cpp
+FPolynomialTerm
+- Coefficient: int32
+- Power: int32
+
+FPolynomialEquation
+- LeftTerms: TArray<FPolynomialTerm>
+- RightValue: int32
+- Rank: int32
+- CachedDisplayText: FText
+
+
+Example tutorial Goblin:
+
+
+text
+LeftTerms:
+  1x^1
+  5x^0
+RightValue:
+  10
+
+
+This keeps us data-driven and avoids parsing strings. Display text should be generated from the data, never used as source of truth.
+
+**Existing Files That Would Change**
+- EquationTypes.h
+  - Add FPolynomialTerm.
+  - Add FPolynomialEquation.
+  - Possibly keep EPrototypeEquationType temporarily for enemy generation/debug, but it should no longer drive operation logic.
+  - Either update FEquationDefinition to contain FPolynomialEquation, or replace its current A/B/CorrectAnswer role gradually.
+
+- EnemyEquationComponent.h/.cpp
+  - Store CurrentEquation as polynomial data.
+  - Add helpers like:
+    - EvaluateLeftSideAtX(int32 X) const
+    - RefreshDisplayText()
+    - NormalizeEquation()
+    - AddConstantToBothSides(int32 Value)
+    - SubtractConstantFromBothSides(int32 Value)
+    - MultiplyBothSides(int32 Value)
+    - DivideBothSidesIfClean(int32 Value)
+  - Change IsAnswerCorrect() to evaluate the polynomial at SubmittedX and compare against RightValue.
+  - Keep GetDisplayText(), GetCorrectAnswer(), GetRank(), SubmitAnswer(), RegenerateEquation(), and SetRankAndGenerateEquation() so the prototype actor and character continue working.
+
+- PrototypeEquationEnemy.h/.cpp
+  - Likely only light changes.
+  - RefreshEquationDisplay() can keep calling EquationComponent->GetDisplayText().
+  - ApplySubtractionToEnemy() can keep returning bool.
+
+- PythagoreanHarmonyCharacter.cpp
+  - Minimal change at first.
+  - Q can still call subtraction.
+  - X can still submit the current input.
+  - Later, addition/multiplication/division keys or weapons can call matching component functions.
+
+**Operation Behavior**
+The component should mutate polynomial data directly:
+
+- Addition operation +N:
+  - Add N to the left constant term.
+  - Add N to RightValue.
+
+- Subtraction operation -N:
+  - Subtract N from the left constant term.
+  - Subtract N from RightValue.
+
+- Multiplication operation *N:
+  - Multiply every left coefficient by N.
+  - Multiply RightValue by N.
+
+- Division operation /N:
+  - Only succeeds if every left coefficient and RightValue divide cleanly by N.
+  - Otherwise returns false and leaves equation unchanged.
+
+So x + 5 = 10, then input 13 + Q becomes:
+
+
+text
+Left: 1x + -8
+Right: -3
+Display: x - 8 = -3
+
+
+Then input 5 + X still executes because evaluating left side gives 5 - 8 = -3.
+
+**Generated Enemies**
+For now, generation can still create degree-1 equations only:
+
+- Goblin Add: x + a = b
+- Goblin Subtract: x - a = b
+- Slime Direct: x = n
+- Orc Multiply can become a*x = b
+- Beastman Divide can become x = result * a or later model fractional/division form separately
+
+Even though generation stays simple, the model should support powers 0, 1, and 2 now so quadratic enemies can arrive later without another rewrite.
+
+**Migration Plan**
+1. Add polynomial structs and helpers while preserving current public APIs.
+2. Convert tutorial Goblin generation to produce polynomial data for x + 5 = 10.
+3. Replace answer checking with evaluation: EvaluateLeftSideAtX(SubmittedX) == RightValue.
+4. Replace subtraction special case with true polynomial constant subtraction.
+5. Regenerate display text from polynomial data after every mutation.
+6. Convert procedural equation generators one by one to fill polynomial terms instead of A/B.
+7. Keep CorrectAnswer temporarily for editor testing and debug logs, but stop relying on it for truth.
+
+**Risk**
+Main risk is display formatting and preserving existing tests. The math itself is straightforward, but the current code assumes EquationType/A/B/CorrectAnswer everywhere inside generation and difficulty scoring. The safest path is a compatibility phase where those fields remain briefly while polynomial evaluation becomes authoritative.
+
+**Testing Plan**
+- Start PIE with default Goblin: verify display is x + 5 = 10.
+- Input 5, press X: enemy executes.
+- Restart or place another enemy.
+- Input 13, press Q: display becomes x - 8 = -3.
+- Input 5, press X: enemy executes.
+- Try division operation later with non-clean values: verify it fails and equation does not change.
+- Wrong answer with X: verify rank evolution still generates a new enemy equation.
+
+* * *
+
+**ChatGPT:**
+
+ì¢‹ì•„. Codex ê³„íš ë°©í–¥ ë§žìŒ.
+ì´ì œ ë°”ë¡œ ì „ì²´ ë¦¬íŒ©í„°ë¥¼ í•œ ë²ˆì— ì‹œí‚¤ë©´ ìœ„í—˜í•¨. ìª¼ê°œì„œ ê°€ì•¼ í•¨.
+
+í˜„ìž¬ GDD ê¸°ì¤€ìœ¼ë¡œë„ ì‚¬ì¹™ì—°ì‚°ì€ ì–‘ë³€ì— ê°™ì€ ì—°ì‚°ì„ ì ìš©í•˜ëŠ” ì‹œìŠ¤í…œì´ê³ , ì´ˆê¸° í”„ë¡œí† íƒ€ìž…ì—ì„œëŠ” ì™„ì „í•œ ì‹¬ë³¼ë¦­ íŒŒì„œëŠ” í”¼í•˜ë¼ê³  ë˜ì–´ ìžˆìŒ. ê·¸ëž˜ì„œ â€œë¬¸ìžì—´ íŒŒì„œâ€ê°€ ì•„ë‹ˆë¼ Polynomial data modelë¡œ ê°€ëŠ” ê²Œ ë§žìŒ. 
+
+í”¼íƒ€ê³ ë¼ìŠ¤ì˜ ì¡°ìœ¨ ë§Œë¬¼ì€ ìˆ˜ë‹¤ Gdd ë°”ì´ë¸”
+
+ë¨¼ì € í•  ì¼: ì•ˆì „ ì €ìž¥
+
+ì§€ê¸ˆ ê¸°ëŠ¥ì´ ìž‘ë™í•˜ëŠ” ìƒíƒœë‹ˆê¹Œ, ë¦¬íŒ©í„° ì „ì— ë°˜ë“œì‹œ ì €ìž¥í•´.
+
+GitHub Desktopì—ì„œ:
+
+Summary:
+Save working equation prototype before polynomial refactor
+
+Description:
+Current prototype supports number input, X execution, wrong-answer evolution, species-based equation generation, and prototype subtraction behavior.
+
+ê·¸ë¦¬ê³ :
+
+Commit to main
+Push origin
+
+ê·¸ë‹¤ìŒ ìƒˆ ë¸Œëžœì¹˜ ë§Œë“¤ê¸° ì¶”ì²œ:
+
+polynomial-equation-refactor
+
+GitHub Desktop:
+
+Branch
+â†’ New Branch
+â†’ polynomial-equation-refactor
+
+ì´ë ‡ê²Œ í•´ë‘ë©´ ë¦¬íŒ©í„° ë§í•´ë„ mainìœ¼ë¡œ ëŒì•„ê°€ë©´ ë¨.
+
+êµ¬í˜„ ì „ëžµ
+
+í•œ ë²ˆì— ë‹¤ í•˜ì§€ ë§ê³  3ë‹¨ê³„ë¡œ ê°€ìž.
+
+Step 1: Polynomial structs ì¶”ê°€ + display/evaluate helperë§Œ ì¶”ê°€
+Step 2: EnemyEquationComponentë¥¼ polynomial ê¸°ë°˜ìœ¼ë¡œ ë§ˆì´ê·¸ë ˆì´ì…˜
+Step 3: ì‚¬ì¹™ì—°ì‚° í•¨ìˆ˜ ì—°ê²°
+
+ì§€ê¸ˆ ë°”ë¡œ í•  ê²ƒì€ Step 1 + Step 2 ì¼ë¶€.
+
+ëª©í‘œëŠ” ì´ê²ƒ:
+
+x + 5 = 10ì´ polynomial dataë¡œ ì €ìž¥ë¨
+5 + X í•˜ë©´ evaluationìœ¼ë¡œ ì •ë‹µ íŒì •ë¨
+13 + Q í•˜ë©´ x - 8 = -3ìœ¼ë¡œ ë°”ë€œ
+5 + X í•˜ë©´ ì—¬ì „ížˆ ì²˜í˜•ë¨
+ì¤‘ìš”í•œ ì„¤ê³„ ê²°ì •
+1. DisplayTextëŠ” ì§„ì‹¤ì´ ì•„ë‹˜
+
+ì¢‹ìŒ:
+
+LeftTerms + RightValue
+â†’ DisplayText ìƒì„±
+
+ë‚˜ì¨:
+
+DisplayText íŒŒì‹±
+â†’ ìˆ˜ì‹ ê³„ì‚°
+
+ìš°ë¦¬ëŠ” íŒŒì„œ ì•ˆ ë§Œë“¦.
+
+2. CorrectAnswerëŠ” ë‹¹ìž¥ì€ ìœ ì§€
+
+Codexê°€ ë§í•œ ê²ƒì²˜ëŸ¼ CorrectAnswerëŠ” ë‹¹ë¶„ê°„ ìœ ì§€í•´ë„ ë¨.
+
+í•˜ì§€ë§Œ ì •ë‹µ íŒì •ì˜ ì§„ì§œ ê¸°ì¤€ì€ ì´ê±°ë¡œ ë°”ê¿”ì•¼ í•¨:
+
+EvaluateLeftSideAtX(SubmittedX) == RightValue
+
+ì¦‰:
+
+x - 8 = -3
+x = 5
+
+5 - 8 = -3
+ì •ë‹µ
+
+ì´ê²Œ í•µì‹¬.
+
+3. ë‹¤í•­ì‹ì€ ë‹¤ì¤‘í•´ ë¬¸ì œê°€ ìžˆìŒ
+
+ë‚˜ì¤‘ì—:
+
+x^2 = 4
+
+ëŠ” x = 2, x = -2 ë‘˜ ë‹¤ ì •ë‹µìž„.
+
+ì´ˆë°˜ì—” ì•ˆì „í•˜ê²Œ:
+
+x >= 0
+ê³„ìˆ˜ëŠ” ëŒ€ë¶€ë¶„ ì–‘ìˆ˜
+degree 1 ìœ„ì£¼ ìƒì„±
+degree 2ëŠ” êµ¬ì¡°ë§Œ ì§€ì›
+
+ìœ¼ë¡œ ê°€ë©´ ë¨.
+
+Codex êµ¬í˜„ í”„ë¡¬í”„íŠ¸ 1
+
+ê°™ì€ Codex ì„¸ì…˜ì— ë„£ì–´.
+
+Implement polynomial equation model v1 in small, safe steps.
+
+We are on the polynomial-equation-refactor branch.
+
+Modify only what is necessary.
+
+Likely files:
+- EquationTypes.h
+- EnemyEquationComponent.h
+- EnemyEquationComponent.cpp
+
+Avoid modifying:
+- PythagoreanHarmonyCharacter unless absolutely necessary
+- PrototypeEquationEnemy unless absolutely necessary
+- UI
+- weapons
+- inventory
+- animation
+- AI
+
+Goal:
+Replace the shallow EquationType/A/B math model with a polynomial data model while preserving the existing prototype behavior.
+
+Important:
+Do not build a text parser.
+Do not parse DisplayText.
+DisplayText must be generated from equation data.
+
+Requirements:
+
+1. In EquationTypes.h, add:
+
+FPolynomialTerm:
+- int32 Coefficient
+- int32 Power
+
+FPolynomialEquation:
+- TArray<FPolynomialTerm> LeftTerms
+- int32 RightValue
+- int32 Rank
+- FText CachedDisplayText
+
+2. Keep EPrototypeEquationType and FEquationDefinition temporarily if needed for compatibility, generation, logs, or difficulty scoring.
+
+3. In UEnemyEquationComponent, add a new property:
+- FPolynomialEquation CurrentPolynomialEquation
+
+4. Add helper functions to UEnemyEquationComponent:
+
+- int64 EvaluatePolynomialLeftSideAtX(int32 X) const
+- FText BuildPolynomialDisplayText() const
+- void RefreshPolynomialDisplayText()
+- void NormalizePolynomialTerms()
+- void SetPolynomialConstantTerm(int32 NewConstant)
+- int32 GetPolynomialConstantTerm() const
+- void AddToPolynomialConstantTerm(int32 Delta)
+
+5. BuildPolynomialDisplayText should format:
+- x + 5 = 10
+- x - 8 = -3
+- 3x = 15
+- 2x^2 + 3x + 5 = 50
+- x = 5
+
+Formatting does not need to be perfect, but it must be readable.
+
+Rules:
+- Hide coefficient 1 for x terms, so show x not 1x.
+- Show x^2 for power 2.
+- Show x for power 1.
+- Show constants normally.
+- Use + and - signs cleanly.
+- Remove zero coefficient terms, except make sure the equation never has an empty left side.
+
+6. Update the default tutorial Goblin equation so it creates polynomial data:
+LeftTerms:
+- coefficient 1, power 1
+- coefficient 5, power 0
+RightValue:
+10
+Rank:
+1
+Display:
+x + 5 = 10
+
+7. Preserve existing public API:
+- GetDisplayText()
+- GetCorrectAnswer()
+- GetRank()
+- IsAnswerCorrect()
+- SubmitAnswer()
+- RegenerateEquation()
+- SetRankAndGenerateEquation()
+- ApplySubtractionOperation()
+
+8. Update GetDisplayText() so it returns the polynomial display text.
+
+9. Update IsAnswerCorrect(int32 SubmittedAnswer):
+It should now use:
+EvaluatePolynomialLeftSideAtX(SubmittedAnswer) == CurrentPolynomialEquation.RightValue
+
+Do not rely on CorrectAnswer for truth anymore, but keep CorrectAnswer for debug and tutorial generation if currently needed.
+
+10. Update ApplySubtractionOperation(int32 Value):
+It should apply "-Value" to both sides:
+- Add -Value to the polynomial constant term
+- Subtract Value from RightValue
+- Normalize terms
+- Refresh display
+- Return true unless Value is 0
+
+Examples:
+x + 5 = 10
+ApplySubtractionOperation(13)
+Result:
+x - 8 = -3
+
+Then SubmittedAnswer 5 should still be correct.
+
+x + 5 = 10
+ApplySubtractionOperation(5)
+Result:
+x = 5
+
+11. For now, do not implement addition, multiplication, or division operations yet.
+
+12. Keep procedural generation working if possible.
+If full migration of procedural generation is too large, at minimum make Goblin Add/Subtract generation fill CurrentPolynomialEquation correctly.
+
+13. Add UE_LOG messages for:
+- Generated polynomial equation
+- Evaluated answer check
+- Applied subtraction operation
+
+14. Keep code beginner-readable.
+
+Before finalizing, explain:
+1. Which files changed
+2. What new structs were added
+3. How answer checking now works
+4. How subtraction now works
+5. What compatibility fields remain
+6. How to test in Play mode
+í…ŒìŠ¤íŠ¸ ìˆœì„œ
+
+ìˆ˜ì • í›„ ì»´íŒŒì¼:
+
+Ctrl + Alt + F11
+
+í…ŒìŠ¤íŠ¸ 1:
+
+5 ìž…ë ¥
+X
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+
+í…ŒìŠ¤íŠ¸ 2:
+
+ìƒˆë¡œ Play
+13 ìž…ë ¥
+Q
+
+ê¸°ëŒ€:
+
+x - 8 = -3
+
+ê·¸ë‹¤ìŒ:
+
+5 ìž…ë ¥
+X
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+
+í…ŒìŠ¤íŠ¸ 3:
+
+ìƒˆë¡œ Play
+5 ìž…ë ¥
+Q
+
+ê¸°ëŒ€:
+
+x = 5
+
+ê·¸ë‹¤ìŒ:
+
+5 ìž…ë ¥
+X
+
+ê¸°ëŒ€:
+
+AXIOM EXECUTION
+
+í…ŒìŠ¤íŠ¸ 4:
+
+ìƒˆë¡œ Play
+ì˜¤ë‹µ ê³„ì† ìž…ë ¥
+
+ê¸°ëŒ€:
+
+Rank ìƒìŠ¹
+ìƒˆ equation í‘œì‹œ
+ì •ë‹µ ìž…ë ¥í•˜ë©´ ì²˜í˜•
+ì§€ê¸ˆ íŒë‹¨
+
+ì´ ë¦¬íŒ©í„°ëŠ” ë§žë‹¤.
+
+ë‹¤ë§Œ ì§€ê¸ˆ ë‹¹ìž¥ x, y, zê¹Œì§€ ê°€ì§€ ë§ˆ.
+ì§€ê¸ˆì€:
+
+ë‹¨ì¼ ë³€ìˆ˜ x polynomial engine
+
+ê¹Œì§€ë§Œ.
+
+ë‚˜ì¤‘ì— í™•ìž¥:
+
+FPolynomialTermì— Variable ì¶”ê°€
+Variable = X, Y, Z
+
+ì˜ˆ:
+
+C++
+Coefficient = 3
+Variable = Y
+Power = 1
+
+ê·¸ëŸ¬ë©´:
+
+3y
+2x^2
+z
+
+ê¹Œì§€ í™•ìž¥ ê°€ëŠ¥í•¨.
+
+ì§€ê¸ˆì€ ê¸°ì´ˆ ìˆ˜ì‹ ì—”ì§„ë¶€í„° ì•ˆì •í™”í•˜ìž.
+
+* * *
+
+**You:**
+
+ìž‘ë™ ìž˜í•¨. í…ŒìŠ¤íŠ¸ í•¨ìš”
+
+Implemented polynomial equation model v1 without touching character, enemy actor, UI, weapons, inventory, animation, or AI.
+
+Changed files:
+- [EquationTypes.h](<E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/EquationTypes.h:40>)
+- [EnemyEquationComponent.h](<E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/EnemyEquationComponent.h:36>)
+- [EnemyEquationComponent.cpp](<E:/UE Project/PythagoreanHarmony/Source/PythagoreanHarmony/EnemyEquationComponent.cpp:46>)
+
+New structs added:
+- FPolynomialTerm: Coefficient, Power
+- FPolynomialEquation: LeftTerms, RightValue, Rank, CachedDisplayText
+
+What changed:
+- UEnemyEquationComponent now stores CurrentPolynomialEquation.
+- GetDisplayText() returns generated polynomial display text.
+- IsAnswerCorrect() now evaluates the polynomial left side at the submitted x and compares it to RightValue.
+- ApplySubtractionOperation(Value) now applies real equation transformation:
+  - left constant term -= Value
+  - right side -= Value
+  - display is regenerated from data
+
+So:
+- x + 5 = 10
+- input 13, press Q
+- becomes x - 8 = -3
+- input 5, press X
+- still executes, because 5 - 8 == -3
+
+Compatibility fields that remain:
+- EPrototypeEquationType
+- FEquationDefinition
+- CurrentEquation
+- CorrectAnswer, A, B
+
+They are still used for procedural generation, logs, difficulty scoring, and editor/debug compatibility. They are no longer the source of truth for answer checking or display.
+
+Verification:
+- git diff --check passed.
+- UnrealHeaderTool passed and processed the reflected structs/properties.
+- Full C++ build is still blocked by active Live Coding: close the editor or press Ctrl+Alt+F11, then rebuild.
+
+Play test:
+1. Start with default Goblin: should show x + 5 = 10.
+2. Press 5, then X: enemy executes.
+3. Restart/place another Goblin.
+4. Press 13, then Q: equation should become x - 8 = -3.
+5. Press 5, then X: enemy should execute.
+
+* * *
+
+**ChatGPT:**
+
+ì¢‹ì•„. Polynomial Equation v1 ì„±ê³µ.
+ì´ì œ ì§„ì§œ ìž¥ê¸° êµ¬ì¡°ë¡œ ë„˜ì–´ì˜¨ ê±°ìž„.
+
+í˜„ìž¬ ì¤‘ìš”í•œ ë³€í™”:
+
+ì´ì „:
+x + A = B ê°™ì€ ì–•ì€ íƒ€ìž… ê¸°ë°˜
+
+í˜„ìž¬:
+LeftTerms + RightValue ê¸°ë°˜ polynomial equation
+
+ê·¸ëž˜ì„œ ì´ì œ ì´ëŸ° ë³€í˜•ì´ ìžì—°ìŠ¤ëŸ½ê²Œ ë¨:
+
+x + 5 = 10
+13 ìž…ë ¥ + Q
+â†’ x - 8 = -3
+
+5 ìž…ë ¥ + X
+â†’ 5 - 8 = -3
+â†’ AXIOM EXECUTION

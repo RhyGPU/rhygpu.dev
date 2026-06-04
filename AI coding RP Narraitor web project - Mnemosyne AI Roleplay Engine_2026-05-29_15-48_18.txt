@@ -1,0 +1,524 @@
+
+I have researched the modularization requirements and analyzed the existing structure of evaluator_form.rs (which spans 6,069 lines).
+
+I have created a comprehensive **Implementation Plan** detailing the target structure, how the code will be distributed by responsibility into smaller modules under a new src-tauri/state_engine/src/evaluator_form/ directory, and how perfect public API compatibility will be maintained.
+
+Please review the implementation plan at [implementation_plan.md](file:///C:/Users/T-ROBOTICS/.gemini/antigravity/brain/165d6e14-4a71-475b-a552-c7a8f00810b6/implementation_plan.md). Once you approve, I will proceed to create the task checklist and execute the refactoring.
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ ë§ˆí¬ë‹¤ìš´(1).md
+íŒŒì¼
+# Walkthrough: Modularize evaluator_form.rs
+
+## What Changed
+
+src-tauri/state_engine/src/evaluator_form.rs (originally ~3 600 lines) was split into a directory of focused submodules with no behavior changes.
+
+## Final File Layout
+
+
+src-tauri/state_engine/src/evaluator_form/
+â”œâ”€â”€ mod.rs          93 lines  â€” facade: sub-mod declarations + 3 pub(crate) helpers
+â”œâ”€â”€ types.rs                  â€” all structs, enums, and basic impls
+â”œâ”€â”€ trace.rs                  â€” trace/status helpers (EvalFormTrace, format_honest_ui_status, â€¦)
+â”œâ”€â”€ raw_repair.rs             â€” raw JSON repair and parse_eval_form_response*
+â”œâ”€â”€ normalize.rs              â€” normalization helpers (normalize_eval_form_response, aliases, â€¦)
+â”œâ”€â”€ validate.rs               â€” per-row validators (validate_event_row, â€¦)
+â”œâ”€â”€ compile.rs                â€” spec builder, compile_eval_form_response, all conversion helpers
+â””â”€â”€ tests.rs       ~2 700 lines â€” full unit test suite (file-based #[cfg(test)] mod tests;)
+
+
+## Key Decisions
+
+- **Public API preserved**: All types and functions that were previously pub remain pub and accessible through state_engine::evaluator_form::* via pub use submod::*; re-exports in mod.rs.
+- **Internal helpers**: Functions that only need to be visible within the evaluator_form subtree were made pub(crate). This includes slugify, clean, resolve_active_entity_id (in mod.rs) and various helpers in each submodule.
+- **tests.rs visibility**: Because tests.rs is a child module of evaluator_form, use super::* inside it pulls in all the re-exported public and pub(crate) items. No visibility changes were required for the test move.
+- **No aliases added**, no behavior changed, no branch/variant logic touched.
+
+## Verification Results
+
+| Check | Result |
+|---|---|
+| cargo test (state_engine only) | **194 passed, 0 failed** |
+| npm run test:rust (full suite incl. db) | **222 passed, 0 failed** |
+| npm run typecheck | **Clean** |
+| cargo fmt --check | **Clean** |
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ ë§ˆí¬ë‹¤ìš´(1).md
+íŒŒì¼
+# Fix: Live Object Row Defaulting
+
+## Problem
+
+validate_object_row rejects rows with "property_changed and new_value are required" or "object_id or new_object_label is required".
+
+Two normalisation gaps in normalize_object_aliases cause this:
+
+1. **Gap 1 â€” empty new_value when property_changed = "state"**: The function only fills new_value from evidence_quote when change_type == "state_change". If the LLM already set property_changed = "state" but left new_value blank (e.g. via the object_state alias), the fallback never fires.
+
+2. **Gap 2 â€” missing object_id and new_object_label**: When neither field is present and change_type is not set, no object ID can be inferred. The fix adds a conservative noun-extraction pass against evidence_quote using a static list of common physical nouns (jacket, chair, door, table, â€¦). Abstract terms are rejected.
+
+## Proposed Changes
+
+### normalize.rs â€” normalize_object_aliases
+
+**Gap 1 fix** (lines ~1387-1391): After the change_type-based new_value block, add a second fallback:
+
+
+rust
+// Gap 1: property_changed already "state" but new_value still empty
+if row.new_value.trim().is_empty() && row.property_changed == "state" {
+    if !row.evidence_quote.trim().is_empty() {
+        row.new_value = row.evidence_quote.clone();
+    }
+}
+
+
+**Gap 2 fix** (lines ~1372-1376): After the new_object_label â†’ object_id slug block, add:
+
+
+rust
+// Gap 2: infer conservative object label from evidence when id still missing
+if row.object_id.as_deref().and_then(clean).is_none() {
+    if let Some(label) = infer_physical_object_from_evidence(&row.evidence_quote) {
+        row.new_object_label = Some(label.to_string());
+        row.object_id = Some(slugify(label));
+    }
+}
+
+
+Add new pub(crate) fn infer_physical_object_from_evidence(evidence: &str) -> Option<&'static str> that checks for a static list of known physical nouns in the evidence string. Returns None for abstract text (no match).
+
+### validate.rs
+
+No changes needed. After normalization fills the gaps, the existing validator passes.
+
+### compile.rs
+
+No changes needed. The object compilation path already handles inferred IDs (line 253-262).
+
+### tests.rs
+
+Five new tests:
+- object_row_empty_new_value_derives_from_evidence_quote
+- object_row_missing_id_infers_wet_jacket_from_evidence
+- object_row_missing_id_infers_chair_from_evidence
+- object_row_without_physical_object_still_rejects
+- live_wet_jacket_chair_rows_create_object_patch
+
+## Verification Plan
+
+
+cargo test --manifest-path src-tauri/state_engine/Cargo.toml
+npm.cmd run test:rust
+npm.cmd run typecheck
+cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+
+* * *
+
+**You:**
+
+Aurora_Schwarz_Session_session_checkpoint_1779964197_182640ca.mne
+íŒŒì¼
+mnemosyne-local-mock-182640ca-61c4-42b9-a036-93e1ff0c65fc-f07ae2c4-0e13-4d58-9b01-d6acb689-llm-payload-history-1779964196.md
+íŒŒì¼
+mnemosyne-local-mock-182640ca-61c4-42b9-a036-93e1ff0c65fc-f07ae2c4-0e13-4d58-9b01-d6acb689-visible-chat-log-1779964203.md
+íŒŒì¼
+mnemosyne-local-mock-182640ca-61c4-42b9-a036-93e1ff0c65fc-f07ae2c4-0e13-4d58-9b01-d6acb689-llm-payload-history-1779964202.md
+íŒŒì¼
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-21728a23-dce3-403b-bb0e-5602f831dba1-ee8a9845-8363-402f-a570-1a74e5b3-llm-payload-history-1779971809.md
+íŒŒì¼
+Aurora_Schwarz_Session_session_checkpoint_1779971805_21728a23.mne
+íŒŒì¼
+mnemosyne-local-mock-21728a23-dce3-403b-bb0e-5602f831dba1-ee8a9845-8363-402f-a570-1a74e5b3-llm-payload-history-1779971817.md
+íŒŒì¼
+mnemosyne-local-mock-21728a23-dce3-403b-bb0e-5602f831dba1-ee8a9845-8363-402f-a570-1a74e5b3-visible-chat-log-1779971817.md
+íŒŒì¼
+[Mnemosyne] Using Node npm: "C:\Program Files\nodejs\npm.cmd"
+[Mnemosyne] Repo root: C:\Users\T-ROBOTICS\Downloads\mnemosyne
+
+[Mnemosyne] Starting Tauri dev (npm run dev)...
+
+
+> mnemosyne@0.1.0 dev
+> tauri dev
+
+     Running BeforeDevCommand (node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 1420)
+
+  VITE v6.4.2  ready in 755 ms
+
+  âžœ  Local:   http://127.0.0.1:1420/
+     Running DevCommand (cargo  run --no-default-features --color always --)
+        Info Watching C:\Users\T-ROBOTICS\Downloads\mnemosyne\src-tauri for changes...
+warning: unused imports: HashMap and HashSet
+ --> state_engine\src\evaluator_form\mod.rs:1:24
+  |
+1 | use std::collections::{HashMap, HashSet};
+  |                        ^^^^^^^  ^^^^^^^
+  |
+  = note: #[warn(unused_imports)] (part of #[warn(unused)]) on by default
+
+warning: unused imports: Deserialize and Serialize
+ --> state_engine\src\evaluator_form\mod.rs:3:13
+  |
+3 | use serde::{Deserialize, Serialize};
+  |             ^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: serde_json::Value
+ --> state_engine\src\evaluator_form\mod.rs:4:5
+  |
+4 | use serde_json::Value;
+  |     ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: EVALUATOR_SCHEMA_VERSION, EvaluatorConversionContext, EvaluatorConversionReport, EvaluatorOutputV1, GlobalSceneEvaluation, MemoryCandidate, MemoryPatch, MemorySlot, MemorySourceType, ObjectChangeEvaluation, ObjectState, PATCH_PROTOCOL_VERSION, RelationshipEvaluation, RelevanceTags, SceneStatePatch, Soul, TruthStatus, TurnClassification, WorldChangeEvaluation, evaluator_ingest::NormalizedEvaluationDraft, evaluator_output_to_engine_patch, setting::SessionWorld, and turn_flags
+  --> state_engine\src\evaluator_form\mod.rs:8:9
+   |
+ 8 |         evaluator_output_to_engine_patch, turn_flags, EvaluatorConversionContext,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 9 |         EvaluatorConversionReport, EvaluatorOutputV1, GlobalSceneEvaluation, MemoryCandidate,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+10 |         MemorySlot, ObjectChangeEvaluation, RelationshipEvaluation, RelevanceTags,
+   |         ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+11 |         TurnClassification, WorldChangeEvaluation, EVALUATOR_SCHEMA_VERSION,
+   |         ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
+12 |     },
+13 |     evaluator_ingest::NormalizedEvaluationDraft,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14 |     patch::{MemoryPatch, SceneStatePatch, PATCH_PROTOCOL_VERSION},
+   |             ^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+15 |     setting::SessionWorld,
+   |     ^^^^^^^^^^^^^^^^^^^^^
+16 |     soul::{MemorySourceType, ObjectState, Soul, TruthStatus},
+   |            ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^  ^^^^  ^^^^^^^^^^^
+
+warning: unused imports: GlobalSceneEvaluation, MemoryCandidate, RelevanceTags, and TurnClassification
+ --> state_engine\src\evaluator_form\types.rs:8:55
+  |
+8 |         EvaluatorConversionReport, EvaluatorOutputV1, GlobalSceneEvaluation, MemoryCandidate,
+  |                                                       ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+9 |         MemorySlot, RelevanceTags, TurnClassification,
+  |                     ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: ConfidenceTier and ReviewRow
+  --> state_engine\src\evaluator_form\normalize.rs:9:9
+   |
+ 9 |         ConfidenceTier, EvalFormRepairTrace, EvalFormResponse, EvalFormSpec, EventRow, EventType,
+   |         ^^^^^^^^^^^^^^
+10 |         ImportanceTier, MagnitudeTier, MemoryRow, ObjectRow, RelationshipDimension, RelationshipDirection,
+11 |         RelationshipRow, ReviewRow,
+   |                          ^^^^^^^^^
+
+warning: unused imports: ObjectRow and resolve_active_entity_id
+  --> state_engine\src\evaluator_form\compile.rs:11:16
+   |
+11 |         clean, resolve_active_entity_id, slugify,
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+17 |         MagnitudeTier, MemoryRow, ObjectRow, RelationshipDimension, RelationshipDirection,
+   |                                   ^^^^^^^^^
+
+warning: state_engine (lib) generated 7 warnings (run cargo fix --lib -p state_engine to apply 7 suggestions)
+   Compiling mnemosyne v0.1.0 (C:\Users\T-ROBOTICS\Downloads\mnemosyne\src-tauri)
+    Finished dev profile [unoptimized + debuginfo] target(s) in 20.52s
+     Running target\debug\mnemosyne.exe
+
+
+
+* * *
+
+**ChatGPT:**
+
+Document processing confirmation
+File/material	Length detected	Structure / headers in order	Entire material processed
+Payload history 1779971809.md	5,618 lines, 117 headers	# Mnemosyne LLM Payload History â†’ Payloads 1â€“8 â†’ narrator/evaluator traces	Yes
+Payload history 1779971817.md	5,618 lines, 117 headers	# Mnemosyne LLM Payload History â†’ Payloads 1â€“8 â†’ export trace	Yes
+Visible chat log 1779971817.md	119 lines, 11 headers	# Mnemosyne Chat Log â†’ alternating User/Narrator entries	Yes
+.mne checkpoint	ZIP bundle, 5 JSON files	manifest.json â†’ Soul JSON â†’ World JSON â†’ conversation JSON â†’ messages JSON	Yes
+Verdict
+App launch: PASS, with warnings
+Visible </assistant> cleanup: PASS
+Object state export: PASS
+Memory export: PASS
+Diagnostic trace: PASS
+Remaining issues: unused imports, evaluator-log tag cleanup, narrator timing total=0 on scene payload
+
+The important part: visible chat no longer leaks </assistant>. The raw provider response still contains it, but that is fine because raw logs should stay raw. The saved visible responses and exported chat messages are clean. The visible chat log has no </assistant> in the narrator messages. 
+
+mnemosyne-local-mock-21728a23-dâ€¦
+
+What passed
+1. App launched
+
+The dev server compiled and ran:
+
+Finished `dev` profile
+Running `target\debug\mnemosyne.exe`
+
+So the modularization and tag cleanup did not break startup.
+
+2. </assistant> visible cleanup worked
+
+Payload 1 and 2 raw responses still contain </assistant>, but their normalized responses and saved_visible_response fields are clean. That is the correct behavior. The visible chat export also has no leaked tag in the narrator messages.
+
+3. Object state is now live-good
+
+Export result:
+
+exported_object_state_count = 2
+
+The .mne world contains:
+
+bottle
+wet_jacket
+
+The wet jacket state is properly stored:
+
+object_id = wet_jacket
+status = The wet jacket hits the chair with a soft drip...
+
+So the object defaulting fix worked and survived export.
+
+4. Memory and scene state are live-good
+
+Export result:
+
+exported_memory_recent_count = 7
+exported_recent_event_count = 5
+exported_scene_state_present = true
+
+The .mne confirms:
+
+memory.recent = 7
+recent_events = 5
+scene_state present
+5. Relationship state is alive but still modest
+
+Final relationship state:
+
+comfort = 11
+trust = 0
+fear = 20
+boundary_pressure = 0
+
+So at least one relationship delta has landed, but relationship semantics are still not where I would want them.
+
+What still needs attention
+A. Compiler warnings after modularization
+
+You have 7 warnings, all unused imports in the new evaluator_form modules:
+
+unused imports: HashMap, HashSet
+unused imports: Deserialize, Serialize
+unused import: serde_json::Value
+unused evaluator/patch/soul imports in mod.rs
+unused imports in types.rs
+unused imports in normalize.rs
+unused imports in compile.rs
+
+Not dangerous. The app runs. But clean backend means this should be fixed now, while the refactor is fresh.
+
+This is a tiny cleanup pass:
+
+cargo fix --lib -p state_engine
+
+or manually remove unused imports from:
+
+state_engine/src/evaluator_form/mod.rs
+state_engine/src/evaluator_form/types.rs
+state_engine/src/evaluator_form/normalize.rs
+state_engine/src/evaluator_form/compile.rs
+B. Evaluator normalized JSON log still has </assistant>
+
+The visible narrator output is fixed, but the evaluator payloadâ€™s ### NORMALIZED RESPONSE still includes trailing </assistant> in evaluator JSON sections. That does not appear to break parsing, because evaluator parsing still succeeds. But diagnostically, it is ugly and confusing.
+
+I would classify this as:
+
+Low-priority log hygiene, not user-visible bug.
+
+Fix later by applying the same strip to evaluator normalized-response rendering after raw JSON extraction, not to raw provider response.
+
+C. Scene narrator payload still shows total_elapsed_ms: 0
+
+Payload 3 still shows:
+
+total_elapsed_ms: 0
+
+while stages include narrator and evaluator timings. Then the background evaluator payload has the correct combined timing:
+
+total_elapsed_ms: 27533
+
+So the finalized evaluator trace is good, but the narrator-side payload is still stale/pre-finalized. Not a blocker, but the label should be clearer:
+
+pre_background_total_elapsed_ms
+
+or the narrator payload should not include post-background stages unless total is recalculated.
+
+Current state board
+[âœ“] App boots
+[âœ“] No visible </assistant> leak
+[âœ“] Raw logs preserve raw provider response
+[âœ“] Normalized narrator response clean
+[âœ“] Saved visible response clean
+[âœ“] Visible chat export clean
+[âœ“] Object state exports
+[âœ“] Memory exports
+[âœ“] Scene state exports
+[âœ“] Diagnostic trace works
+[~] Relationship semantics still partial
+[~] Evaluator normalized JSON log still has tag
+[~] Some pipeline totals still 0 in narrator payload
+[!] Unused import warnings need cleanup
+My next recommendation
+
+Do one tiny cleanup pass before moving to data safety:
+
+Task: Clean Modularization Warnings, No Behavior Changes
+
+Goal:
+Remove unused import warnings caused by evaluator_form modularization.
+
+Scope:
+- state_engine/src/evaluator_form/mod.rs
+- state_engine/src/evaluator_form/types.rs
+- state_engine/src/evaluator_form/normalize.rs
+- state_engine/src/evaluator_form/compile.rs
+
+Rules:
+- No behavior changes.
+- No alias changes.
+- No evaluator logic changes.
+- No commands.rs changes unless required by compiler.
+- Do not touch relationship semantics.
+
+Run:
+cargo check --manifest-path src-tauri/Cargo.toml
+cargo test --manifest-path src-tauri/state_engine/Cargo.toml
+npm.cmd run test:rust
+npm.cmd run typecheck
+cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Final report:
+- warnings before/after
+- files changed
+- tests passed
+
+After that, I would move to P0.1 data safety / restore / backup, because the roadmapâ€™s highest-priority gate is preventing user data loss before alpha work. The roadmap explicitly puts delete/restore safety, API preset safety, and recovery tools before alpha and broader memory work. 
+
+road-map-ver-1
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ ë§ˆí¬ë‹¤ìš´(1).md
+íŒŒì¼
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ ë§ˆí¬ë‹¤ìš´(1).md
+íŒŒì¼
+# Implementation Plan: Strip Leaked Assistant Closing Tags (With User Additions)
+
+## Goal
+To prevent </assistant> tags from leaking into saved or displayed responses, especially when repeated at the end, or when they appear between the body prose and the status block during normalization.
+
+## Proposed Changes
+
+We will implement a robust tag-stripping utility in state_engine::hidden_state and apply it at multiple stages of response processing.
+
+### 1. [hidden_state.rs](file:///c:/Users/T-ROBOTICS/Downloads/mnemosyne/src-tauri/state_engine/src/hidden_state.rs)
+
+#### [MODIFY] strip_assistant_close_tag and parse_hidden_state
+- Implement strip_assistant_close_tag(s: &str) -> String to repeatedly strip trailing </assistant> tags:
+  
+rust
+  pub fn strip_assistant_close_tag(s: &str) -> String {
+      let tag = "</assistant>";
+      let mut current = s.to_string();
+      loop {
+          let trimmed = current.trim_end();
+          if let Some(stripped) = trimmed.strip_suffix(tag) {
+              current = stripped.to_string();
+          } else {
+              break;
+          }
+      }
+      current.trim_end().to_string()
+  }
+
+- Clean visible_text inside parse_hidden_state with strip_assistant_close_tag.
+
+---
+
+### 2. [commands.rs](file:///c:/Users/T-ROBOTICS/Downloads/mnemosyne/src-tauri/src/commands.rs)
+
+#### [MODIFY] apply_output_contract_guard_core
+We will apply strip_assistant_close_tag at three crucial checkpoints to ensure no tags escape:
+1. **Entry**: Strip at entry from content.
+2. **Body Prose**: Strip from the extracted body before appending the status block to prevent any tags from being sandwiched between body and status.
+3. **Final Return**: Strip at final-return from the constructed normalized output.
+
+#### [NEW TESTS]
+Add the following tests to the tests module in commands.rs:
+- narrator_visible_response_strips_trailing_assistant_close_tag: Basic stripping.
+- ooc_response_strips_trailing_assistant_close_tag: Meta Turn / OOC stripping.
+- status_block_response_strips_assistant_tag_but_preserves_status: Strips tag at the very end of status.
+- evaluator_json_with_outer_assistant_tag_still_parses: Verifies parser logic ignores outer tags.
+- repeated_trailing_tags_are_stripped: Verifies that multiple sequential tags (e.g. </assistant></assistant>) are completely removed.
+- status_block_repair_strips_assistant_tag_between_body_and_status: Verifies that tags between the body and status blocks are successfully stripped and do not end up sandwiched between them.
+
+---
+
+## Verification Plan
+
+### Automated Tests
+1. Run all Rust unit tests in state_engine and the main app:
+   
+cargo test --manifest-path src-tauri/Cargo.toml
+   npm.cmd run test:rust
+
+2. Verify typescript typechecking:
+   
+npm.cmd run typecheck
+
+3. Check code formatting:
+   
+cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+
+* * *
+
+**You:**
+
+ë¶™ì—¬ë„£ì€ í…ìŠ¤íŠ¸ (1).txt
+ë¬¸ì„œ
+ë¶™ì—¬ë„£ì€ ë§ˆí¬ë‹¤ìš´(2).md
+íŒŒì¼
+# Task Checklist: P0.1A Data Safety Foundation (Archive / Restore / Backup)
+
+- [x] **Phase B: DB Backup**
+  - [x] Implement create_backup_file and Tauri command create_backup.
+  - [x] Integrate automatic backup before tests that modify session/turn visibility.
+  - [x] Add tests: backup_created_before_destructive_path_test, backup_file_has_nonzero_size.
+- [x] **Phase C: Session Archive & Restore**
+  - [x] Implement schema migration for conversations.archived_at.
+  - [x] Implement archive_session, restore_session, and list_archived_sessions in db/mod.rs.
+  - [x] Filter archived conversations in list_conversations (archived_at IS NULL).
+  - [x] Expose as Tauri commands and map delete_conversation to archive_session.
+  - [x] Add tests:
+    - archive_session_hides_from_active_list
