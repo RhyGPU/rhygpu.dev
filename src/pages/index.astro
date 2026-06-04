@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import PostCard from '../components/PostCard.astro';
+
+const posts = (await getCollection('devlogs'))
+  .filter((post) => post.data.status === 'published')
+  .sort((a, b) => Number(b.data.number) - Number(a.data.number));
+---
+<BaseLayout title="RhyGPU" description="RhyGPU devlog archive for Mnemosyne, local-first AI memory systems, and project logs.">
+  <div class="wrap">
+    <header class="site-header">
+      <p class="eyebrow">rhygpu.dev</p>
+      <h1 class="site-name">
+        RhyGPU
+        <span>// devlog archive</span>
+      </h1>
+      <p class="tagline">
+        Building Mnemosyne, a local-first AI memory engine for roleplay continuity.
+        Vibe coding, hidden state, and the psyche of a soul system.
+      </p>
+    </header>
+
+    <div class="rule" data-label="mnemosyne"></div>
+
+    <p class="section-label">Mnemosyne devlogs</p>
+    <ul class="devlog-list">
+      {posts.map((post) => (
+        <PostCard
+          href={`/devlog/${post.data.slug}/`}
+          number={post.data.number}
+          title={post.data.title}
+          summary={post.data.summary}
+        />
+      ))}
+    </ul>
+
+    <SiteFooter />
+  </div>
+</BaseLayout>
