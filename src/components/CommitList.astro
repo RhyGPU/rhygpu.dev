@@ -1,0 +1,31 @@
+---
+interface CommitEntry {
+  hash: string;
+  title: string;
+  repo?: string;
+  url?: string;
+}
+
+interface Props {
+  commits: CommitEntry[];
+}
+
+const { commits } = Astro.props;
+---
+{commits.length > 0 && (
+  <section class="covered">
+    <h2>Covered commits</h2>
+    <ol>
+      {commits.map((commit) => (
+        <li>
+          {commit.url ? (
+            <a href={commit.url}><code>{commit.hash}</code></a>
+          ) : (
+            <code>{commit.hash}</code>
+          )}
+          {' '}{commit.title}
+        </li>
+      ))}
+    </ol>
+  </section>
+)}
