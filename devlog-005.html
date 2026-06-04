@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Devlog 005, Fighting Prose Gravity | RhyGPU</title>
-<meta name="description" content="The live grenade incident, the Context Priority Stack, and how I finally broke Prose Gravity with a hierarchy of truth." />
+<title>005, Keeping the Scene From Replaying | RhyGPU</title>
+<meta name="description" content="Immediate continuity, attribution guard, and the first context priority stack in Mnemosyne." />
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,61 +14,296 @@
 
   <article>
     <header class="post-header">
-      <p class="kicker">Mnemosyne Devlog · 005</p>
-      <h1 class="post-title">Fighting Prose Gravity</h1>
-      <p class="post-subtitle">With a Hierarchy of Truth</p>
-      <p class="post-meta">June 2026 · context_compiler.rs · Priority Stack</p>
+      <p class="kicker">Mnemosyne · 005</p>
+      <h1 class="post-title">Keeping the Scene From Replaying</h1>
+      <p class="post-subtitle">Immediate continuity, attribution guard, and the first context priority stack.</p>
+      <p class="post-meta">May 2026 · Context Priority Stack · Attribution Guard · Scene continuity</p>
     </header>
 
     <div class="prose">
 
-      <p>In the previous logs, I documented the birth of the Soul and the World Log — the two-system architecture meant to kill AI amnesia. The hidden state loop was breathing, and the engine was finally managing character data outside the prompt. But as soon as I moved into intensive roleplay testing, I hit a wall that every AI developer eventually faces.</p>
+      <p>Context Compiler V2 gave the model a session packet.</p>
 
-      <blockquote class="idea">Prose Gravity.</blockquote>
+      <p>That helped, but it exposed the next problem fast: the model could still continue from the wrong part of the scene.</p>
 
-      <p>The setup was simple. Aurora reacted to a phone screen, took the phone, locked it, and tossed it onto the couch before moving to the kitchen to heat up food.</p>
+      <p>The packet had Soul, World, relationship state, recent events, and recent chat. On paper, that sounded like enough. In practice, the model could still grab the wrong anchor. It could treat old dramatic prose as current physical state. It could replay a completed beat because that beat was emotionally loud. It could treat its own character dialogue like the user said it.</p>
 
-      <p>In the very next turn, despite the history being right there in the context, the model described her as "still holding their phone like it's a live grenade".</p>
+      <p>The issue was not just memory anymore.</p>
 
-      <p>This was my AAAAAAHHHH moment. The engine knew the phone was on the couch. The chat history said she threw it there. But the LLM completely ignored the state in favor of the drama.</p>
+      <p>It was priority.</p>
 
-      <p>I realized a fundamental truth: recent chat is just a transcript to an LLM — it is not a binding law. A long, 800-word emotional paragraph about a phone reveal carries more attention weight than a single sentence at the end of the message stating the phone was put away.</p>
+      <p>The model needed to know which part of the context was legally binding.</p>
 
-      <p>The AI's Narrator was fighting with the Engine's reality.</p>
+      <blockquote class="idea">A session packet is not enough if the narrator follows the wrong part of it.</blockquote>
 
-      <p>My initial reaction was to try and track every minor detail — the location of every fork and chair. But I quickly realized that was too much shit. It would bloat the state and fight the project's core goal: less tokens, best outcome.</p>
+      <div class="section-label">What changed</div>
 
-      <blockquote>The solution wasn't better memory. It was a Hierarchy of Truth.</blockquote>
+      <p>This pass started with continuity guards and ended with a stronger context priority structure.</p>
 
-      <p>I needed to tell the AI exactly which parts of the prompt were authoritative and which were just flavor.</p>
+      <p>The first fix was <code>[IMMEDIATE CONTINUITY]</code>.</p>
 
-      <p>I refactored <code>context_compiler.rs</code> to implement a ranked Context Priority Stack. Instead of dumping history into the prompt, the engine now compiles a State Brief where priority is enforced by placement and explicit labeling.</p>
+      <p>Recent chat was useful, but it was not strict enough. It preserved what was said, but the model could still treat it like background. I needed a section that told the model where the scene currently was.</p>
 
-      <blockquote class="idea">P0 — Latest User Input<br>The immediate new action. Overrides everything else.</blockquote>
+      <p>Not just:</p>
 
-      <blockquote class="idea">P1 — [LATEST EXCHANGE]<br>The most immediate anchor for continuity.</blockquote>
+      <blockquote>Here is what was said.</blockquote>
 
-      <blockquote class="idea">P2 — [SCENE STATE]<br>Authoritative physical facts. What is true right now.</blockquote>
+      <p>But:</p>
 
-      <blockquote class="idea">P3 — [CHARACTER / WORLD SNAPSHOT]<br>The underlying psyche and environment.</blockquote>
+      <blockquote>Here is where the scene is now. Continue from here. Do not replay.</blockquote>
 
-      <blockquote class="idea">P4 — [RECENT CHAT]<br>Lower-priority excerpts. Tone and dialogue flow only.</blockquote>
+      <p>That created a cleaner split:</p>
 
-      <p>While debugging the Priority Stack using the new LLM Payload Inspector, I found a massive technical flaw: the engine was accidentally feeding the model the beginning of long assistant responses instead of the end.</p>
+      <pre><code>Recent Chat = dialogue and prose continuity
+Immediate Continuity = action-state continuity
+World Log = scene and plot continuity
+Soul Memory = character and emotional continuity</code></pre>
 
-      <p>In a 1,200-character response, the setup — Aurora seeing the phone — happens at the start. The final state — Aurora tossing the phone — happens at the end. By feeding the head of the message, I was literally forcing the AI to re-anchor to a state that no longer existed.</p>
+      <p>That was the first useful improvement.</p>
 
-      <p>I implemented a tail-based excerpt system in three steps.</p>
+      <p>Then the attribution issue showed up.</p>
 
-      <p>First, strip the noise. Before processing, the engine strips status blocks, hidden state JSON, and sensory clutter. Second, grab the tail — only the last 700 to 1,200 characters of the response, ensuring the most recent physical actions are what the LLM reads first. Third, placement: the Latest Exchange goes at the bottom of the system context, right next to the new user message, so it's the last thing the model sees before it writes.</p>
+      <p>The model wrote a character joke, then later acted like the user had said the joke. That is not long-term memory failure. That is local speaker ownership failure.</p>
 
-      <p>Aurora finally stopped resurrecting the phone. She stayed in the kitchen where the state engine said she was.</p>
+      <p>So I added the narrator attribution guard.</p>
 
-      <blockquote class="idea">Continuity isn't just about memory. It's about enforcing a hierarchy of reality.</blockquote>
+      <p>The rule was simple: user facts come from user messages. Character dialogue is not user dialogue. Narrator prose is not user action. The narrator cannot invent user thoughts, motives, actions, or dialogue just to smooth the scene forward.</p>
 
-      <p>The Narrator can be creative. The Engine must be the law.</p>
+      <p>After that, the continuity problem still was not fully solved.</p>
 
-      <p class="closing">Next: <a href="/devlog-006.html">Devlog 006</a> — "Opening the Black Box." Building the LLM Payload Inspector and the fight against schema drift.</p>
+      <p>The model got better, but it could still resurrect stale physical facts. It could bring an old object back into the character's hand because the old prose was more vivid than the current state. It could invent unsupported elapsed time because that made the scene flow better.</p>
+
+      <p>That is when the priority problem became obvious.</p>
+
+      <blockquote>A guard says: please do not mess this up.</blockquote>
+      <blockquote>A priority stack says: this section outranks that section.</blockquote>
+
+      <p>That is the stronger fix.</p>
+
+      <div class="section-label">Why I touched this</div>
+
+      <p>The test case was simple.</p>
+
+      <p>A scene had already moved past a phone reveal and into the kitchen. The user accepted food and added a new emotional beat. The next response should continue from the kitchen, react to the new user input, and leave the completed reveal behind.</p>
+
+      <p>Instead, the model pulled the phone back into focus.</p>
+
+      <p>That told me the context packet was not authoritative enough.</p>
+
+      <p>It had the information, but the model did not know how to rank it. Recent chat, status prose, world events, character emotion, and the latest user message were all competing inside the same prompt. The model followed the most dramatic thing, not necessarily the most current thing.</p>
+
+      <p>That is bad for RP continuity.</p>
+
+      <p>A long scene cannot keep replaying whatever detail was most intense two turns ago. If a character already saw something, reacted, set it down, and moved to the kitchen, that state needs to be current fact. It should not be re-discovered because the prose was vivid.</p>
+
+      <p>So the goal became narrower:</p>
+
+      <blockquote>Feed less clutter.</blockquote>
+      <blockquote>Rank the state harder.</blockquote>
+      <blockquote>Make recent chat support the scene, not override it.</blockquote>
+
+      <div class="section-label">Immediate continuity</div>
+
+      <p><code>[IMMEDIATE CONTINUITY]</code> was the first version of that fix.</p>
+
+      <p>The idea was to promote the latest action state above recent chat.</p>
+
+      <p>Recent chat still matters. It keeps tone, rhythm, and dialogue texture alive. But it is not always a safe source of physical continuity. Prose can be long. It can contain metaphors, old actions, sensory detail, and status text. The model may latch onto the wrong part.</p>
+
+      <p>Immediate continuity was supposed to give the model a short checkpoint:</p>
+
+      <pre><code>Completed scene facts:
+Aurora has already seen and reacted to the phone reveal.
+She moved toward the kitchen for food.
+
+Latest user input:
+The user accepted food and admitted loneliness/attraction.
+
+Continue forward.
+Do not replay completed beats.</code></pre>
+
+      <p>It tells the model where the scene is instead of asking it to infer everything from prose.</p>
+
+      <div class="section-label">Attribution guard</div>
+
+      <p>The attribution bug was a different failure class.</p>
+
+      <p>The model did not forget. It confused ownership.</p>
+
+      <p>A character made a joke. Later, the same character reacted as if the user had said it. That is small in one response, but dangerous for an RP engine because the same pattern can become worse:</p>
+
+      <ul>
+        <li>character speech becomes user speech</li>
+        <li>narrator metaphor becomes world fact</li>
+        <li>user intent gets invented</li>
+        <li>the narrator moves the user to keep the scene smooth</li>
+        <li>the model reacts to its own setup instead of the player's actual input</li>
+      </ul>
+
+      <p>So the guard had to be compact.</p>
+
+      <p>Not a giant prompt lecture.</p>
+
+      <p>Just enough pressure to remind the narrator:</p>
+
+      <blockquote>User facts only come from user messages.</blockquote>
+      <blockquote>Character dialogue is character dialogue.</blockquote>
+      <blockquote>Narrator prose is not user action.</blockquote>
+      <blockquote>Do not invent user thoughts, motives, actions, or dialogue.</blockquote>
+
+      <p>That was worth doing because it targets a common RP failure without spending many tokens.</p>
+
+      <p>The point was not perfection. The point was cheap damage reduction.</p>
+
+      <div class="section-label">Time discipline</div>
+
+      <p>The next bug was time.</p>
+
+      <p>The model invented a concrete duration that the scene never established.</p>
+
+      <p>That is the same kind of issue as attribution drift. It fills a gap because the prose wants to move smoothly. For normal writing, that might be fine. For a continuity engine, it is dangerous.</p>
+
+      <p>If the World Log or user did not establish a timestamp or elapsed duration, the narrator should not make one up.</p>
+
+      <p>Vague pacing is fine.</p>
+
+      <p>Concrete time claims need support.</p>
+
+      <p>So the time rule stayed compact too:</p>
+
+      <blockquote>Do not invent exact elapsed time, timestamps, or scene transitions unless the user or World Log supports them.</blockquote>
+
+      <p>Again, this is not a full time engine. It is a small guard against an expensive class of mistakes.</p>
+
+      <div class="section-label">Context Priority Stack</div>
+
+      <p>The bigger fix was the Context Priority Stack.</p>
+
+      <p>At this point, adding more guard text was not the right move. The model already had instructions. The problem was that the context did not clearly say what outranked what.</p>
+
+      <p>So the compiled context needed a priority order.</p>
+
+      <p>The shape became:</p>
+
+      <pre><code>P0 Latest user message
+P1 Scene State
+P2 Do Not Replay
+P3 Active World
+P4 Active Soul
+P5 Relevant Memory
+P6 Recent Chat Excerpt</code></pre>
+
+      <p>That changed what recent chat was supposed to do.</p>
+
+      <p>Recent chat stopped being treated as the main authority. It became tone and dialogue support.</p>
+
+      <p>Scene State was introduced as the intended physical-continuity anchor, with Do Not Replay marking completed beats above old prose.</p>
+
+      <p>World and Soul state were meant to outrank old chat. The latest user input stayed highest because the user is the new action.</p>
+
+      <p>That is the important difference.</p>
+
+      <p>Before this, the model could see a lot of context and still choose the wrong anchor. After this, the prompt at least tells it how to rank the context.</p>
+
+      <blockquote>A guard asks the model to behave.</blockquote>
+      <blockquote>A priority stack gives the model a hierarchy.</blockquote>
+
+      <div class="section-label">Recent chat cleanup</div>
+
+      <p>Recent chat also needed cleanup.</p>
+
+      <p>Full assistant responses are expensive, and for this engine they can be actively harmful. They contain style, sensory detail, status blocks, metaphors, old physical positions, and dramatic phrasing. A lot of that is good for reading, but bad as authority.</p>
+
+      <p>So recent chat had to become shorter and lower priority.</p>
+
+      <p>The direction was:</p>
+
+      <ul>
+        <li>strip assistant status blocks</li>
+        <li>strip hidden state if it appears</li>
+        <li>cap assistant excerpts</li>
+        <li>preserve user messages more strongly</li>
+        <li>keep recent chat for tone, not state authority</li>
+        <li>avoid breaking UTF-8 while trimming</li>
+      </ul>
+
+      <p>That matches the project goal better: fewer tokens, better outcome.</p>
+
+      <p>Not less context for its own sake.</p>
+
+      <p>Less useless context.</p>
+
+      <div class="section-label">What got better</div>
+
+      <p>The compiler became less dependent on raw prose, but not enough to solve physical continuity by itself.</p>
+
+      <p>Instead of throwing a dense recent scene at the model and hoping it infers the current physical state, the app started pushing a ranked state brief:</p>
+
+      <ul>
+        <li>latest user input is the new action</li>
+        <li>scene state is intended to hold current physical continuity</li>
+        <li>completed beats should not replay</li>
+        <li>world and Soul state should override older chat</li>
+        <li>recent chat exists for tone</li>
+      </ul>
+
+      <p>That was a better shape for long-form RP, but the next test showed the limit immediately.</p>
+
+      <p>It also gives debugging a cleaner target. If the model repeats something, I can check whether the completed beat was missing from Do Not Replay. If it resurrects an object, I can check whether Scene State had the current object location. If it invents time, I can check whether Time State was blank or vague.</p>
+
+      <p>The failure gets a place to live.</p>
+
+      <div class="section-label">What still failed</div>
+
+      <p>The priority stack improved the situation, but it did not fully solve physical continuity.</p>
+
+      <p>The same kind of stale-state bug still showed up: the model could continue as if an object was still central after the scene had already moved on. It could also invent unsupported time because it sounded natural.</p>
+
+      <p>That was the limit of prompt and context fixes.</p>
+
+      <p>The system was still asking the LLM to infer physical state from recent events and excerpts.</p>
+
+      <p>That is not reliable enough.</p>
+
+      <p>Object position should not be hidden inside prose.</p>
+
+      <p>Completed actions should not only exist as text the model has to interpret.</p>
+
+      <p>Current physical state should be engine-owned state.</p>
+
+      <p>That points directly to Scene State V1.</p>
+
+      <section class="covered">
+        <h2>Covered commits / implementation checkpoints</h2>
+        <ol>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/70ed66a7fd862af321346426da8d058cb3690fdb"><code>70ed66a</code></a> Add narrator attribution guard</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/38018a6ce17f9b729e47efb9e5528f1d08e24b7e"><code>38018a</code></a> Add narrator response integrity guard V1</li>
+          <li><a href="https://github.com/RhyGPU/mnemosyne/commit/71b04d10fe693b9ae6ca3b539488fdfb5b3d78a7"><code>71b04d1</code></a> Verified code snapshot containing <code>[CONTEXT PRIORITY]</code>, <code>[SCENE STATE]</code>, and <code>[DO NOT REPLAY]</code>. The exact introducing commit still needs later commit archaeology.</li>
+        </ol>
+      </section>
+
+      <div class="section-label">Next</div>
+
+      <p>Next is Scene State V1.</p>
+
+      <p>The current system can rank context better, but it still relies too much on the model reading prose correctly. Scene State V1 should move current physical continuity into the engine:</p>
+
+      <pre><code>current_physical_state
+completed_beats
+do_not_replay
+object_locations
+pending_focus
+time_state</code></pre>
+
+      <p>That is the real next step.</p>
+
+      <p>The model should not have to infer that the phone is on the couch, the food is in the kitchen, or a reveal already happened.</p>
+
+      <p>The engine should know.</p>
+
+      <p>The narrator should continue from that.</p>
+
+      <p class="closing">Next: Scene State V1, moving physical continuity out of prose and into engine-owned world state.</p>
 
     </div>
   </article>
