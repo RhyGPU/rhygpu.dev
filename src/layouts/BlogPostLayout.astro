@@ -1,0 +1,71 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import CommitList from '../components/CommitList.astro';
+
+interface CommitEntry {
+  hash: string;
+  title: string;
+  repo?: string;
+  url?: string;
+}
+
+interface NavPost {
+  href: string;
+  label: string;
+  title: string;
+}
+
+interface Props {
+  number: string;
+  title: string;
+  subtitle?: string;
+  description: string;
+  project: string;
+  date: Date;
+  commits: CommitEntry[];
+  previous?: NavPost;
+  next?: NavPost;
+}
+
+const { number, title, subtitle, description, project, date, commits, previous, next } = Astro.props;
+const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<BaseLayout title={`${number}, ${title} | RhyGPU`} description={description}>
+  <div class="wrap">
+    <a class="back" href="/">rhygpu.dev</a>
+
+    <article>
+      <header class="post-header">
+        <p class="kicker">{project} · {number}</p>
+        <h1 class="post-title">{title}</h1>
+        {subtitle && <p class="post-subtitle">{subtitle}</p>}
+        <p class="post-meta">{formattedDate} · {project}</p>
+      </header>
+
+      <div class="prose">
+        <slot />
+        <CommitList commits={commits} />
+
+        {(previous || next) && (
+          <nav class="post-nav" aria-label="Post navigation">
+            {previous ? (
+              <a class="nav-card" href={previous.href}>
+                <span>Previous</span>
+                <strong>{previous.label}, {previous.title}</strong>
+              </a>
+            ) : <div></div>}
+            {next ? (
+              <a class="nav-card" href={next.href}>
+                <span>Next</span>
+                <strong>{next.label}, {next.title}</strong>
+              </a>
+            ) : <div></div>}
+          </nav>
+        )}
+      </div>
+    </article>
+
+    <SiteFooter />
+  </div>
+</BaseLayout>
