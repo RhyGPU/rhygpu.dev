@@ -19,21 +19,15 @@ commits:
     repo: "RhyGPU/mnemosyne"
 ---
 
-The logs worked.
+The logs did what I built them to do.
 
-That was the problem.
+They made the lie obvious.
 
-Once visible chat export and payload history existed, the bug stopped being a feeling. I could finally compare what the player saw against what the model received.
+A new session looked clean from the chat window. New opening. New direction. New test. But the exported payload told a different story. Under the surface, Mnemosyne was still dragging old scene state into the next run: leftover relationship warmth, stale location, old objects, and active plots that belonged to another setup.
 
-And the answer was ugly:
+So the model was not always failing in a vacuum.
 
-New sessions were not actually new.
-
-A fresh test could look new in the chat window, but the backend still carried old scene state. The payload could still remember old relationship warmth, old location, old objects, and old active plots.
-
-So the model was not always being stupid by itself.
-
-Sometimes I was handing it a dirty brief and expecting a clean scene.
+Sometimes I was handing it a dirty brief and then acting surprised when the scene came out dirty.
 
 <div class="section-label">What changed</div>
 
@@ -51,32 +45,23 @@ or:
 Start fresh scenario state
 ```
 
-That distinction matters.
+The distinction is small in the UI, but huge for the engine.
 
-The Soul can persist. The character can still be the same person. Their long-term personality, core memories, trauma patterns, preferences, and emotional tendencies can remain.
+The Soul can persist. The character can still be herself: long-term personality, core memories, trauma patterns, preferences, emotional tendencies, the slow drift that makes her feel lived-in.
 
-But a scenario is different.
+A scenario is not that.
 
-A new test should not automatically inherit:
-
-- old location
-- old key objects
-- old active plots
-- old recent events
-- old relationship temperature
-- old scene-specific emotional momentum
-
-A character can be persistent without every new scene starting inside the last room.
+A new test should not automatically inherit old location, key objects, active plots, recent events, relationship temperature, or scene-specific emotional momentum. A character can stay persistent without every fresh scene starting inside the previous room.
 
 That was the boundary I needed.
 
 <div class="section-label">Why I touched this</div>
 
-The test case was obvious.
+The test case was blunt.
 
-A new debt collector or random threat scene should not inherit trust over 100, affection over 100, and a kitchen-counter setup from an earlier scenario.
+A debt collector scene, or any random threat opener, should not start with trust over 100, affection over 100, and a kitchen-counter setup from a completely different run.
 
-If the payload tells the model:
+If the payload says:
 
 ```txt
 Location: Aurora's kitchen counter
@@ -84,23 +69,15 @@ Key objects: wine glass, couch, phone
 Relationship: high trust, high affection
 ```
 
-then the model will write from that.
+the model has every reason to write from that. It will make Aurora warmer than she should be. It will pull the setting back toward the apartment. It will resurrect the phone or wine glass because the context says those objects are relevant.
 
-It will make the character warmer than she should be. It will pull the scene back toward the apartment. It will reuse the old phone or wine glass because the context says those objects matter.
+That is not some mysterious LLM curse.
 
-That is not a mysterious LLM failure.
+It is stale state with a narrator attached to it.
 
-That is stale state.
+The logs made the fix narrower. Not Memory Retrieval V1. Not object tracking. Not full Scene State.
 
-The logs made that clear.
-
-So the fix was not Memory Retrieval V1.
-
-It was not object tracking.
-
-It was not full Scene State.
-
-The fix was simpler:
+Just this:
 
 ```txt
 Make fresh sessions actually fresh.
@@ -108,17 +85,15 @@ Make fresh sessions actually fresh.
 
 <div class="section-label">Persistent Soul vs scenario state</div>
 
-This became one of those boundaries that seems obvious after the bug exposes it.
+This became one of those boundaries that seems obvious only after the bug embarrasses you.
 
 The Soul is long-term character continuity.
 
 Scenario state is current-session continuity.
 
-They should not be the same reset lever.
+They should not share the same reset lever.
 
-If I delete all Soul continuity every time I start a fresh scene, the character becomes shallow again. That defeats the point of Mnemosyne.
-
-But if I preserve every scene detail forever, the character gets haunted by old tests. Every new scene starts with leftover objects, stale relationship warmth, and active plots that no longer belong.
+If I wipe the Soul every time I start a new scene, the character becomes shallow again. That defeats the whole point of Mnemosyne. But if I preserve every scene detail forever, the character gets haunted by old tests. Every new opening arrives with someone else's props, emotional temperature, and plot residue.
 
 So the split became:
 
@@ -144,7 +119,7 @@ scene-specific memories
 current relationship temperature, if starting fresh
 ```
 
-That lets the character remain herself without forcing every new test to continue the last setup.
+That lets the character remain herself without turning every test into a sequel.
 
 <div class="section-label">Fresh scenario state</div>
 
@@ -162,15 +137,11 @@ recent scenario-specific memories
 relationship warmth toward the user
 ```
 
-Unless the user chooses persistent continuity.
+unless the user deliberately chooses persistent continuity.
 
-That last part is important.
+Sometimes I want the relationship to continue. Sometimes I want the same character in a clean room, with no old emotional debt attached. Those are different user intentions, and the app should not blur them together.
 
-Sometimes I want the relationship to continue. Sometimes I want a fresh test with the same character but not the same relationship state.
-
-Those are different user intentions.
-
-The UI should make that visible:
+The UI needs to make the mode visible:
 
 ```txt
 Using persistent Soul continuity
@@ -182,41 +153,27 @@ or:
 Fresh scenario state
 ```
 
-The model should not have to guess what kind of session this is.
-
-The user should know.
-
-The engine should know.
-
-The payload should reflect it.
+The model should not have to guess what kind of session this is. Neither should the user. The payload should carry that decision clearly.
 
 <div class="section-label">What got better</div>
 
 The first fix helped.
 
-The relationship state no longer started completely insane in fresh tests. Instead of carrying huge trust and affection values from old scenes, the new session started closer to neutral.
+Fresh tests no longer started with completely insane relationship values. Instead of inheriting huge trust and affection from old scenes, the new session moved closer to neutral.
 
-That mattered immediately.
+That changed the tone immediately.
 
-A cold or threatening opener should not inherit romantic warmth by default. A character facing a dangerous stranger should not behave like she is continuing a vulnerable kitchen scene.
+A cold opener should feel cold. A threat scene should not carry romantic warmth by default. A dangerous stranger should not be treated like the continuation of a vulnerable kitchen conversation.
 
-The payload became less contaminated.
+The payload was still imperfect, but less contaminated. Visible chat export kept working. Payload history kept working. Most importantly, the app could now prove that the relationship reset was moving in the right direction.
 
-The visible chat export still worked.
-
-The payload history still worked.
-
-The app could now prove that the relationship reset was moving in the right direction.
-
-That was progress.
-
-Not complete, but real.
+Progress, but not victory.
 
 <div class="section-label">What still failed</div>
 
-The world snapshot was still not clean enough.
+The world snapshot was still too sticky.
 
-Even after the relationship reset improved, fresh sessions could still carry the default Aurora apartment setup:
+Even after the relationship reset improved, fresh sessions could still inherit the default Aurora apartment setup:
 
 ```txt
 Location: Aurora's kitchen counter
@@ -224,97 +181,67 @@ Active plots: Establish the first scene
 Key objects: Half-empty wine glass; Couch with rumpled blankets; Phone
 ```
 
-That meant the fresh session was only half fresh.
+So the session was only half fresh. The relationship state cleaned up, while the setting kept dragging the model back into the old default scenario.
 
-The relationship was cleaner, but the setting still dragged the model back into the default scenario.
+That explains why a broad opener could still collapse into kitchen-counter staging. The user gives a loose start, the model checks the payload, and the payload quietly says: Aurora is basically in her apartment with wine, couch, and phone.
 
-That explains why a random opener could still become kitchen-counter based.
+Of course the model follows the brief.
 
-The user says something broad, the model looks at the payload, and the payload says Aurora is basically in her apartment with wine, couch, and phone.
-
-So the model follows the brief.
-
-Again, not pure model stupidity.
-
-Dirty context.
+Dirty context again.
 
 <div class="section-label">Threat severity</div>
 
-The fresh session test also exposed another state problem.
+The fresh session test also exposed a second state problem: threat scenes were not scaling hard enough.
 
-Threat scenes were not scaling hard enough.
+Trust could drop, but fear stayed too low. The prose could describe Aurora as terrified or cornered, while the numeric state still treated fear like a mild concern.
 
-Trust could drop, but fear stayed too low. A scene could describe Aurora as terrified or cornered, while the numeric state still treated fear like a mild concern.
-
-That mismatch matters.
-
-If the state says fear is low, the next prompt may soften the character too quickly. If affection or desire remain active in a violent threat context, the narrator can start writing emotional tones that feel completely wrong.
+That mismatch matters because the next prompt reads those numbers. If fear stays low, the narrator may soften her too quickly. If affection or desire remain active in a violent threat context, the emotional tone can turn wrong fast.
 
 A threat should not only reduce trust.
 
-It should push fear hard.
+It should push fear hard, and it should suppress romance-adjacent values unless the scene strongly justifies otherwise.
 
-It should suppress romance-adjacent values unless the scene strongly justifies otherwise.
-
-That does not need a giant trauma system yet.
-
-It just needs the state engine to respect severity.
+No giant trauma system yet. Just severity that respects the scene.
 
 <div class="section-label">Time and POV still leaked</div>
 
-The same tests also showed smaller prompt issues.
+The same tests showed smaller prompt problems.
 
-Time discipline still failed. The narrator invented concrete durations even when the user or World Log never established them.
+Time discipline still failed. The narrator invented concrete durations even when neither the user nor the World Log established them. In prose, that kind of detail sounds natural. In a continuity engine, it creates fake facts.
 
-That kind of detail sounds natural in prose, but it is dangerous for continuity.
-
-If the system does not know the duration, the narrator should not make one up.
-
-The rule needs to be shorter and harder:
+The rule needed to be shorter and harder:
 
 ```txt
 Never invent concrete durations.
 Do not say minutes, hours, days, or years passed unless the user or World Log established it.
 ```
 
-There was also mild POV leakage.
+There was also mild POV leakage. The narrator could write as if it knew exactly what the user felt, saw, or aimed. Sometimes it was a reasonable inference, sometimes it crossed the line into steering the player.
 
-The narrator could write as if it knew exactly what the user felt, saw, or aimed. Sometimes that is a reasonable inference. Sometimes it crosses into controlling the user.
-
-The better rule is not to make the narrator timid.
-
-The better rule is:
+The better boundary is not to make the narrator timid. The better boundary is:
 
 ```txt
 Describe what the character perceives.
 Do not claim the user's internal experience or exact action unless the user gave it.
 ```
 
+That keeps the character active without stealing the user's side of the scene.
+
 <div class="section-label">The overcorrection</div>
 
 This is where I made a wrong turn.
 
-To stop the narrator from controlling the user's device, a device/prop agency rule got added.
+To stop the narrator from controlling the user's device, a device/prop agency rule got added. The intention was reasonable: if the user shows a phone, the narrator should not decide Aurora takes it, unlocks it, searches it, and reads everything unless the user allows that.
 
-The intention made sense.
+But the wording was too rigid.
 
-If the user shows a phone, the narrator should not decide that Aurora takes it, unlocks it, searches it, and reads everything unless the user allows that.
+It made the narrator cautious around phones and props in general. Worse, it pushed against the thing I actually wanted: a character who can act.
 
-But the rule was too rigid.
-
-It made the narrator cautious around phones and props in general. Worse, it started pushing against the thing I actually wanted: a character who can act.
-
-Aurora should be allowed to use her own phone.
-
-She should be allowed to reach for things.
-
-She should be allowed to interrupt, step forward, grab for something, refuse, challenge, retreat, escalate, or use her own environment.
+Aurora should be allowed to use her own phone. She should be allowed to reach for things, interrupt, step forward, grab for something, refuse, challenge, retreat, escalate, or use her own environment.
 
 The problem is not character action.
 
 The problem is resolving the user's reaction without permission.
-
-That is the real boundary.
 
 Good:
 
@@ -328,57 +255,45 @@ Bad:
 Aurora takes the phone from his hand, unlocks it, scrolls through the messages, and reads everything.
 ```
 
-The first one creates pressure.
+The first creates pressure.
 
-The second one steals the user's response.
+The second steals the response.
 
-That distinction matters more than a blunt device rule.
+That distinction is cleaner than a blunt device rule.
 
 <div class="section-label">What this taught me</div>
 
-This pass exposed a pattern.
+A pattern started showing up.
 
-When the model behaves badly, the tempting fix is to add another restriction.
+When the model behaves badly, the tempting fix is to add another restriction. Do not touch the phone. Do not infer objects. Do not invent time. Do not move too much. Do not act too strongly.
 
-Do not touch the phone.
+Stack enough of those rules and the narrator stops feeling careful. It starts feeling sedated.
 
-Do not infer objects.
-
-Do not invent time.
-
-Do not move too much.
-
-Do not act too strongly.
-
-But too many rules make the narrator worse.
-
-The model starts writing like it is filling out a compliance form instead of writing a living character.
+The model writes like it is filling out a compliance checklist instead of portraying a living character.
 
 That is not Mnemosyne.
 
-The engine should make the narrator smarter, not more timid.
+The engine should make the narrator smarter, not more timid. Most of the time, the answer is a cleaner boundary, not a bigger cage.
 
-The right fix is usually a cleaner boundary, not a bigger cage.
-
-For fresh sessions, the boundary is:
+For fresh sessions:
 
 ```txt
 persistent Soul continuity vs fresh scenario state
 ```
 
-For action, the boundary is:
+For action:
 
 ```txt
 character may act, but user reaction stays with the user
 ```
 
-For time, the boundary is:
+For time:
 
 ```txt
 concrete duration requires evidence
 ```
 
-Those are cleaner than piling up mechanical restrictions.
+Those rules are still rules, but they aim at the real boundary instead of choking the scene.
 
 <div class="section-label">What stayed rough</div>
 
@@ -394,21 +309,15 @@ Still rough:
 - device/prop agency rule overcorrected
 - model quality may still depend heavily on provider choice
 
-That last one matters too.
+That last one matters. If the model is weak at instruction following, continuity, and nuance, the backend can only help so much. A cleaner payload gives the model a better chance, but it does not turn a weak model into a great writer.
 
-If the model is weak at instruction following, continuity, and nuance, the backend can only help so much. A cleaner payload gives the model a better chance, but it does not turn a weak model into a great writer.
+Still, the backend had obvious cleanup left. Blaming the model first would be too easy.
 
-Still, the backend had obvious cleanup left.
-
-So the next move was not to blame the model first.
-
-It was to clean the prompt and the brief.
+The next move was to clean the prompt and the brief.
 
 <div class="section-label">Next</div>
 
-Fresh sessions got cleaner.
-
-But the next diagnosis was bigger:
+Fresh sessions got cleaner, but the next diagnosis was bigger.
 
 Mnemosyne was becoming over-prompted.
 
@@ -435,9 +344,7 @@ The model was being briefed, but also lawyered.
 
 That is why the same model could sound more natural in a simpler Janitor-style setup and dumber inside Mnemosyne.
 
-The engine should not bury the narrator under rules.
-
-It should brief the model, preserve continuity, and then let the character act.
+The engine should not bury the narrator under rules. It should brief the model, preserve continuity, and then let the character act.
 
 So the next pass is Prompt Cleanup V2.
 
