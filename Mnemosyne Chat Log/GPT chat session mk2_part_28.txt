@@ -1,0 +1,926 @@
+Benchmark fails if no visible messages are created.
+Benchmark is not hardcoded to Aurora.
+Current session target uses current active Soul.
+Selected Soul/World target creates benchmark session correctly.
+Strict tool benchmark fails on form fallback.
+Benchmark exports .mne, payload history, transcript, and summary JSON.
+Player simulator is not given hidden state by default.
+Stop/cancel leaves session recoverable, not deleted.
+Verification
+
+Run:
+
+cargo test --manifest-path src-tauri/state_engine/Cargo.toml
+npm.cmd run test:rust
+npm.cmd run typecheck
+cargo fmt --manifest-path src-tauri/Cargo.toml --check
+Manual Pass Criteria
+
+Run Visible AI Chat with:
+
+Target: Current Session
+Turn Count: 5
+Narrator Style: Active Director
+Evaluator: Structured Ops
+Transport: tool_call
+Policy: required
+Player Simulator Profile: selected tool-capable/chat-capable model
+Player Goal: Build cautious trust with the active Soul while respecting boundaries.
+
+Pass if:
+
+[PASS] generated user messages appear in chat
+[PASS] narrator replies appear in chat
+[PASS] evaluator runs after each turn
+[PASS] memory/object/relationship state changes
+[PASS] next simulator turn sees previous narrator response
+[PASS] `.mne` export contains benchmark conversation
+[PASS] benchmark summary reports real provider calls
+[PASS] not hardcoded to Aurora unless Aurora was selected
+Non-Goals
+
+Do not:
+
+fake benchmark turns
+only generate a scorecard
+run only in background without visible messages unless mode is explicitly headless
+hardcode Aurora
+skip narrator/evaluator
+bypass the normal chat pipeline
+expose API keys
+hard-delete benchmark sessions
+
+
+Short version
+
+Tell the coding agent:
+
+The benchmark must be an autoplay chat session, not a report generator.
+
+If it does not create actual visible chat messages and run the normal narrator/evaluator loop X times, it is not the benchmark.
+
+* * *
+
+**You:**
+
+Implemented the visible benchmark runner path.
+
+What changed:
+- Added benchmark modes: visible_ai_chat, scripted_visible_replay, headless_regression, multi_agent_visible_chat.
+- Added benchmark targets, defaulting to current_session.
+- Current-session benchmark now marks the real session as benchmark and drives the existing normal turn pipeline.
+- Visible AI Chat calls the player simulator LLM, inserts its output as a real user turn, runs narrator, then waits for evaluator when enabled.
+- Scripted replay inserts scripted user messages through the same normal path.
+- Removed the fake browser-preview benchmark success path.
+- Replaced Aurora-specific simulator prompt language and removed the default wet-jacket object check from the general benchmark scorecard.
+- Added per-turn summary JSON fields and stronger scorecard gates for visible messages and normal pipeline usage.
+- Updated the Settings/Dev UI with mode, target, transport, wait, strict tool, and result controls.
+
+Touched main files:
+- [commands.rs](C:/Users/T-ROBOTICS/Downloads/mnemosyne/src-tauri/src/commands.rs)
+- [tauri.ts](C:/Users/T-ROBOTICS/Downloads/mnemosyne/src/tauri.ts)
+- [App.tsx](C:/Users/T-ROBOTICS/Downloads/mnemosyne/src/App.tsx)
+
+Verification passed:
+- cargo test --manifest-path src-tauri/state_engine/Cargo.toml
+- npm.cmd run test:rust
+- npm.cmd run typecheck
+- cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Note: the Stop Benchmark button is present but disabled; true mid-run cancellation still needs a backend cancellation token/command.
+
+* * *
+
+**ChatGPT:**
+
+Good. This is the benchmark runner you actually meant.
+
+The key line is this:
+
+Visible AI Chat calls the player simulator LLM, inserts its output as a real user turn, runs narrator, then waits for evaluator when enabled.
+
+That is the correct loop.
+
+What is now fixed
+[PASS] benchmark is no longer fake-preview only
+[PASS] visible_ai_chat mode exists
+[PASS] scripted_visible_replay mode exists
+[PASS] current_session target exists
+[PASS] no Aurora hardcoding
+[PASS] player simulator becomes the user-side actor
+[PASS] generated user messages are inserted as real chat turns
+[PASS] narrator runs through existing normal pipeline
+[PASS] evaluator runs after narrator
+[PASS] benchmark waits for evaluator when enabled
+[PASS] summary JSON has per-turn fields
+[PASS] scorecard checks visible messages + normal pipeline
+
+This is now aligned with your original ask:
+
+two LLMs talking to each other inside the actual chat system
+
+not:
+
+background fake scorecard
+What to test now
+
+Run the smallest possible visible benchmark first:
+
+Mode: Visible AI Chat
+Target: Current Session
+Turns: 3
+Wait for evaluator: ON
+Strict Tool: ON
+Narrator Style: Active Director
+Evaluator Transport: tool_call
+Evaluator Policy: required
+Player Simulator Profile: cheap/free chat-capable model
+
+Player goal:
+
+You control the active player persona. Build cautious trust with the active Soul while respecting boundaries. Respond naturally in first person. Do not control the narrator character.
+
+Expected visible behavior:
+
+AI user message appears
+Narrator response appears
+AI user message appears
+Narrator response appears
+AI user message appears
+Narrator response appears
+
+Expected backend behavior:
+
+evaluator runs after each narrator response
+memory count changes
+relationship state changes
+payload history is exported
+.mne checkpoint exports
+benchmark scorecard shows visible_chat_messages_created > 0
+normal_pipeline_used = true
+Still missing
+
+Stop button being disabled is fine for now, but it is the next UX safety feature.
+
+Add later:
+
+backend cancellation token
+cancel_benchmark command
+benchmark_run_status
+safe stop after current turn
+
+Do not hard-kill in the middle of DB writes. Stop after the current turn/evaluator job finishes.
+
+What I will check from the next upload
+
+Upload the benchmark summary JSON + payload history + .mne.
+
+I’ll check:
+
+[ ] visible_ai_chat mode used
+[ ] target = current_session or selected target
+[ ] generated simulator messages became real user messages
+[ ] narrator responses became real assistant messages
+[ ] evaluator ran after each turn
+[ ] state fed forward into next turn
+[ ] no Aurora hardcoding unless Aurora was actually selected
+[ ] strict tool mode respected
+[ ] fallback count
+[ ] retry count
+[ ] memory/object/relationship changes
+[ ] .mne contains benchmark conversation
+Current status
+Benchmark runner: now conceptually correct
+Manual testing burden: should drop
+Self-play stepping stone: implemented
+Multi-agent path: skeleton started
+Stop/cancel: not yet
+
+This patch finally makes the benchmark a real product tool instead of a report generator. Run 3 turns first, not 20. Validate the loop, then scale.
+
+* * *
+
+**You:**
+
+I have not commit since idk forever. What should the commit title and description be?
+
+* * *
+
+**ChatGPT:**
+
+Use a large milestone commit title. This was not one small fix anymore; it was a full architecture pivot.
+
+feat: add tool-call evaluator, active narrator, and visible benchmark runner
+
+Major architecture pass toward Mnemosyne as a schema-enforced RP state engine.
+
+Summary:
+
+Added real tool-call transport for evaluator_structured_v1 using forced submit_evaluator_ops calls.
+Reused structured evaluator ops pipeline to compile tool-call arguments into EnginePatch.
+Added structured evaluator transport/policy settings, retry handling, timeout controls, and trace fields.
+Added entity aliases (active_soul, active_player, latest_speaker, session_world) to avoid UUID copy failures in evaluator ops.
+Hardened structured evaluator diagnostics, validation, retry repair prompts, and payload history exports.
+Removed normal RP default_player leakage from structured evaluator relationship context and deduped relationship summaries.
+Added Active Director and GM Simulation narrator styles while preserving user-control boundaries.
+Added visible AI-vs-AI Benchmark Runner modes:
+visible_ai_chat
+scripted_visible_replay
+headless_regression
+multi_agent_visible_chat
+Benchmark runner now drives the real chat pipeline by inserting simulator/scripted user turns, running narrator, waiting for evaluator, and exporting scorecards/artifacts.
+Added benchmark session marking and UI controls for benchmark mode, target, simulator profile, turn count, strict tool mode, transport, and result artifacts.
+Preserved archive/save safety and .mne export behavior.
+
+Verification:
+
+cargo test --manifest-path src-tauri/state_engine/Cargo.toml
+npm.cmd run test:rust
+npm.cmd run typecheck
+cargo fmt --manifest-path src-tauri/Cargo.toml --check
+
+Notes:
+
+evaluator_form_v1 remains available as legacy fallback in normal runtime.
+Strict diagnostic mode should not count fallback success as tool-call success.
+Stop Benchmark UI is present but backend cancellation still needs a follow-up implementation.
+
+For the short commit subject only, I’d use:
+
+feat: add tool-call evaluator and visible AI benchmark runner
+
+If you want it to sound less massive/corporate:
+
+feat: pivot evaluator to tool calls and add real benchmark chat
+
+* * *
+
+**You:**
+
+mnemosyne-local-mock-27a513ba-8616-4c47-9658-7fab52245f37-891016ee-e74e-4e36-8359-695630dd-llm-payload-history-1781833652.md
+파일
+Aurora_Schwarz_Session_session_checkpoint_1781833656_27a513ba.mne
+파일
+I made a fuck ton of changes. however, i have a feeling the chat disappears a bit. Im not entriely sire but the number of chats I did feel more than the number of chats i see on the session
+PASS visible_ai_chat completed 5 / 5 turns.
+Scorecard: PASS Visible chat messages created; PASS Normal pipeline used; PASS Player simulator calls; PASS Narrator calls; PASS Evaluator calls; PASS Evaluator waited each turn; PASS Memory updated; FAIL Object state updated; PASS Relationship updated; PASS Payload history exported; PASS Narrator response each turn; PASS Tool call required path; PASS No form fallback in strict mode; PASS No syntactic repair in strict mode; PASS Memories increased; PASS Active player relationship present; PASS Object IDs stable; PASS No default_player RP relationship leak; PASS .mne export succeeded
+Payload: C:\Users\T-ROBOTICS\Downloads\mnemosyne-exports\mnemosyne-local-mock-27a513ba-8616-4c47-9658-7fab52245f37-891016ee-e74e-4e36-8359-695630dd-benchmark-payload-history-1781833494.md
+MNE: C:\Users\T-ROBOTICS\Downloads\mnemosyne-exports\Aurora_Schwarz_Session_session_checkpoint_1781833494_27a513ba.mne
+Summary: C:\Users\T-ROBOTICS\Downloads\mnemosyne-exports\mnemosyne-local-mock-27a513ba-8616-4c47-9658-7fab52245f37-891016ee-e74e-4e36-8359-695630dd-benchmark-summary-1781833494.json
+PASS visible_ai_chat completed 5 / 5 turns.
+Scorecard: PASS Visible chat messages created; PASS Normal pipeline used; PASS Player simulator calls; PASS Narrator calls; PASS Evaluator calls; PASS Evaluator waited each turn; PASS Memory updated; FAIL Object state updated; PASS Relationship updated; PASS Payload history exported; PASS Narrator response each turn; PASS Tool call required path; PASS No form fallback in strict mode; PASS No syntactic repair in strict mode; PASS Memories increased; PASS Active player relationship present; PASS Object IDs stable; PASS No default_player RP relationship leak; PASS .mne export succeeded
+Payload: C:\Users\T-ROBOTICS\Downloads\mnemosyne-exports\mnemosyne-local-mock-27a513ba-8616-4c47-9658-7fab52245f37-891016ee-e74e-4e36-8359-695630dd-benchmark-payload-history-1781833494.md
+MNE: C:\Users\T-ROBOTICS\Downloads\mnemosyne-exports\Aurora_Schwarz_Session_session_checkpoint_1781833494_27a513ba.mne
+Summary: C:\Users\T-ROBOTICS\Downloads\mnemosyne-exports\mnemosyne-local-mock-27a513ba-8616-4c47-9658-7fab52245f37-891016ee-e74e-4e36-8359-695630dd-benchmark-summary-1781833494.json
+
+
+
+* * *
+
+**ChatGPT:**
+
+I’ll audit the payload and .mne checkpoint as a consistency check: expected 5 benchmark turns should mean 5 simulator/user messages plus 5 narrator replies, with no hidden replacement/branch issue.
+
+I found the likely source of your “chat disappeared” feeling: the checkpoint has 5 turn rows, but only 3 actual user+assistant chat pairs. Two “turns” are evaluator repair/retry bookkeeping pointing at old messages, not real visible chat turns.
+
+File processing confirmation
+Payload history:
+- Length detected: 281,007 characters
+- Lines detected: 4,311
+- Payloads detected: 10
+- Entire payload processed: Yes
+
+Checkpoint .mne:
+- Valid ZIP bundle: Yes
+- Internal files detected: 10
+- Entire checkpoint inspected: Yes
+
+.mne internal files in order:
+
+manifest.json
+souls/891016ee-e74e-4e36-8359-695630dd1f24.json
+worlds/27a513ba-8616-4c47-9658-7fab52245f37.json
+conversation/conversation.json
+conversation/messages.json
+conversation/payload_logs.json
+conversation/branches.json
+conversation/turns.json
+conversation/patches.json
+conversation/variants.json
+Verdict
+
+You are not imagining it.
+
+The benchmark says:
+
+PASS visible_ai_chat completed 5 / 5 turns
+
+But the exported checkpoint contains only:
+
+7 total messages:
+- 1 opening assistant seed
+- 3 real user messages
+- 3 real narrator assistant messages
+
+So the actual visible chat is 3 RP turns, not 5.
+
+What actually happened
+
+The .mne has:
+
+messages.json: 7 messages
+turns.json: 5 turn rows
+patches.json: 8 patches
+payload_logs.json: 10 payloads
+variants.json: 4 variants
+
+The suspicious part is turns.json.
+
+It contains 5 turn rows, but two of them are not real new chat turns. They are regenerated/evaluator-repair bookkeeping rows pointing back to old messages.
+
+Example:
+
+Real turn 1:
+turn_1781832817537-5
+user_message_id: 1143
+assistant_message_id: 1144
+
+Fake/repair-ish turn:
+turn_1781832970566-41
+user_message_id: 1143
+assistant_message_id: 1144
+is_regenerated_variant: true
+
+Then again:
+
+Real turn 2:
+turn_1781832983021-48
+user_message_id: 1145
+assistant_message_id: 1146
+
+Fake/repair-ish turn:
+turn_1781833085049-96
+user_message_id: 1145
+assistant_message_id: 1146
+is_regenerated_variant: true
+
+That means the system is counting internal repair/retry rows as benchmark turns.
+
+So your feeling is correct:
+
+Benchmark reported 5 turns.
+Visible chat only has 3 real user+narrator pairs.
+It was not completely fake, but the scorecard is lying
+
+This part is real:
+
+narrator ran
+evaluator ran
+tool_call transport ran
+memory updated
+relationship updated
+.mne exported
+
+The payload shows actual narrator_brief and evaluator_structured_v1_background calls, with structured tool-call traces present. 
+
+But this part is broken:
+
+completed 5 / 5 turns
+
+It should probably say:
+
+completed 3 / 5 visible chat turns
+
+or fail.
+
+Bigger issue: repair turns are polluting the branch
+
+Evaluator repair/retry should not create turn rows in the user-visible conversation branch.
+
+Evaluator repair should be internal:
+
+payload_log only
+evaluator job trace only
+maybe patch trace
+
+Not:
+
+new turn row
+regenerated variant
+active branch turn
+duplicate user_message_id / assistant_message_id
+
+Right now it looks like evaluator repair calls are being represented as regenerated turns, which can absolutely make chat display weird or make the session look shorter/longer than it is.
+
+Also: no player simulator payloads visible
+
+The payload logs show:
+
+3 narrator payloads
+6 evaluator payloads
+1 mne_export payload
+
+I do not see player simulator payloads in the uploaded payload history.
+
+That means one of these is true:
+
+1. Player simulator calls are not being logged.
+2. Player simulator is not actually using LLM provider calls.
+3. You uploaded normal LLM payload history, not the benchmark-specific payload history.
+
+But for a real visible AI chat benchmark, the payload history should include something like:
+
+player_simulator
+narrator
+evaluator
+player_simulator
+narrator
+evaluator
+...
+
+If player simulator calls are not logged, the benchmark is not auditable.
+
+Scorecard interpretation
+
+This line makes sense:
+
+FAIL Object state updated
+
+In this specific run, the player did not create a clear object movement/change after the first jacket closet line, and the system had object_state_count: 0. That is a legit fail or maybe an over-strict scorecard depending on benchmark goal.
+
+But this line is wrong:
+
+PASS visible_ai_chat completed 5 / 5 turns
+
+Because the checkpoint does not support it.
+
+Fix prompt
+
+Use this:
+
+Task: Fix visible benchmark turn accounting and prevent evaluator repair runs from creating chat/turn rows.
+
+Problem:
+Latest benchmark reports:
+PASS visible_ai_chat completed 5 / 5 turns
+
+But exported .mne shows:
+- messages.json: 7 messages total
+- visible RP turns: only 3 user+assistant pairs
+- turns.json: 5 turn rows
+- two turn rows are regenerated/evaluator-repair bookkeeping rows pointing to old message IDs
+- payload_logs.json has narrator/evaluator/export payloads, but no visible player_simulator payloads
+
+This makes the chat look like messages disappeared and makes the benchmark scorecard dishonest.
+
+Required fixes:
+
+1. Define visible benchmark turn strictly:
+   A visible benchmark turn is:
+   - one inserted user/player-simulator message
+   - one saved narrator assistant response
+   - linked by one normal turn row
+   - not an evaluator repair
+   - not a regenerated/evaluator retry row
+   - not a payload-only repair call
+
+2. Benchmark completed count must use visible chat turns only.
+   Do not count:
+   - evaluator repair calls
+   - structured_tool_call_retry calls
+   - eval_repair payloads
+   - regenerated variant rows
+   - duplicate turn rows pointing to the same user_message_id/assistant_message_id
+
+3. Evaluator repair/retry must not create conversation turn rows.
+   It may create:
+   - payload log
+   - evaluator trace
+   - retry trace
+   - enrichment patch if successful
+
+   It must not create:
+   - new turns.json row
+   - regenerated variant row
+   - duplicate active branch turn
+   - duplicate selected variant entry
+
+4. If repair currently uses a normal send/regenerate path, split it out.
+   Add/use internal function:
+   run_evaluator_repair_attempt(...)
+   This function must not call create_turn / create_variant / regenerate_turn.
+
+5. Add benchmark scorecard fields:
+   - visible_turns_requested
+   - visible_turns_completed
+   - visible_user_messages_created
+   - visible_assistant_messages_created
+   - unique_user_message_ids
+   - unique_assistant_message_ids
+   - internal_evaluator_retry_count
+   - internal_evaluator_retry_payload_count
+   - duplicate_turn_rows_detected
+   - duplicate_turn_message_pairs
+   - player_simulator_payload_count
+
+6. Benchmark must fail if:
+   - visible_turns_completed < visible_turns_requested
+   - visible_user_messages_created != visible_turns_requested
+   - visible_assistant_messages_created != visible_turns_requested
+   - duplicate_turn_rows_detected = true
+   - normal_pipeline_used = false
+
+7. Log player simulator provider calls.
+   Payload history should show:
+   - player_simulator
+   - narrator
+   - evaluator
+   repeated per visible turn.
+
+   If player simulator calls are intentionally not stored in normal payload logs, add a benchmark payload section for them.
+
+8. Add tests:
+   - 5-turn visible benchmark creates 5 unique user messages and 5 unique assistant messages.
+   - Evaluator retry does not create a turn row.
+   - Evaluator retry does not create a regenerated variant.
+   - Benchmark completed count ignores evaluator repair payloads.
+   - Duplicate user/assistant message pair in turns.json makes benchmark fail.
+   - Player simulator calls are logged or reported.
+   - .mne export after 5-turn benchmark contains 5 visible benchmark turns plus opening seed, not 3.
+
+9. Update UI:
+   Show:
+   Visible turns: 3 / 5
+   Internal evaluator retries: N
+   Player simulator calls: N
+   Duplicate turn rows: PASS/FAIL
+
+10. Verification:
+   cargo test --manifest-path src-tauri/state_engine/Cargo.toml
+   npm.cmd run test:rust
+   npm.cmd run typecheck
+   cargo fmt --manifest-path src-tauri/Cargo.toml --check
+Current read
+Benchmark is now real enough to create chat.
+But it is still miscounting internal evaluator repair as visible turns.
+That is why the chat feels shorter than the benchmark says.
+
+So the next fix is not “make benchmark real.” It is:
+
+separate visible chat turns from internal evaluator retry bookkeeping
+
+* * *
+
+**You:**
+
+aside from that how is the upgraded eval path?
+
+* * *
+
+**ChatGPT:**
+
+File processing confirmation
+Payload history:
+- Length detected: 281,007 characters
+- Lines detected: 4,311
+- Payloads detected: 10
+- Entire payload processed: Yes
+
+Checkpoint .mne:
+- Size detected: 454,652 bytes
+- Internal files detected: 10
+- Entire checkpoint inspected: Yes
+
+Payload headers in order:
+
+1. narrator_brief
+2. evaluator_structured_v1
+3. evaluator_structured_v1 repair
+4. narrator_brief
+5. evaluator_structured_v1
+6. evaluator_structured_v1 repair
+7. narrator_brief
+8. evaluator_structured_v1
+9. evaluator_structured_v1 repair / related evaluator call
+10. mne_export
+Aside from the chat-count bug: upgraded eval path is actually solid
+
+The evaluator path itself is much better than before.
+
+The important numbers from this run:
+
+Evaluator traces inspected: 5
+Tool-call transport: 5 / 5
+structured_enforcement_validated: true on 5 / 5
+tool_calls_present: true on 5 / 5
+evaluator_form_v1 fallback: 0
+syntactic_repair_used: 0
+total ops emitted: 13
+memory patches: 1
+relationship patches: 6 total-ish across accepted converted patches
+scene_state patches: 3
+object patches: 0
+
+So mechanically:
+
+[PASS] real tool_call path
+[PASS] provider returned tool calls
+[PASS] schema validation passed
+[PASS] no old form fallback
+[PASS] no syntactic repair
+[PASS] retry path works
+[PASS] relationship state updates
+[PASS] memory writes
+[PASS] scene state updates
+
+The payload clearly shows Provider: evaluator_structured_v1_background, Mode: evaluator_structured_v1, structured_transport_actual: tool_call, structured_enforcement_validated: true, and tool_calls_present: true. 
+
+What improved the most
+1. Real tool calling is working
+
+This is no longer the fake JSON-text situation.
+
+The trace has:
+
+structured_transport_actual: tool_call
+structured_transport_requested: tool_call
+structured_enforcement: tool_call
+structured_enforcement_validated: true
+tool_calls_present: true
+tool_call_count: 1
+tool_call_names: ["evaluator_structured_ops_v1"]
+
+That is the architecture we wanted.
+
+2. No form fallback
+
+This run did not drop into:
+
+evaluator_form_v1
+
+That is a big deal.
+
+Earlier, the old pipeline kept rescuing bad runs. Here, strict-ish tool behavior is actually holding.
+
+3. Retry is working
+
+Payload 2 failed because the model used:
+
+participants: ["aurora_schwarz", "preset_male"]
+
+and aurora_schwarz was not a valid entity ID. Then the repair retry fixed it to the real UUID:
+
+participants: ["891016ee-e74e-4e36-8359-695630dd1f24", "preset_male"]
+
+So the repair retry is doing useful work.
+
+4. Relationship state updates are real
+
+Relationship changed from initial-ish values to a materially different state.
+
+Example after early turns:
+
+preset_male:
+comfort: 21.5
+intimacy: 10.0
+respect: 13.0
+trust: 17.36
+
+So the evaluator is not just logging scene text; it is changing relationship state.
+
+Remaining evaluator problems
+1. Object extraction is weak
+
+This run failed:
+
+FAIL Object state updated
+
+And the checkpoint confirms:
+
+object_state_count: 0
+
+The first user message says:
+
+letting my jacket hang by the closet
+
+That should probably create/update:
+
+object_id: preset_male_jacket_1
+object_kind: jacket
+owner_entity_id: preset_male
+location: closet / by closet
+status: wet
+
+The evaluator missed it.
+
+So the object path is implemented, but the model is under-emitting object ops in this scenario.
+
+Fix direction:
+
+If latest user/narrator text contains object placement/movement/condition:
+- jacket hangs by closet
+- glass picked up
+- phone moved
+- door locked/unlocked
+then prefer update_object_state op.
+2. It still asks the model to copy UUIDs too often
+
+Even though aliases exist, the model still emits raw UUIDs constantly.
+
+Example:
+
+source_soul_id: "891016ee-e74e-4e36-8359-695630dd1f24"
+
+That works, but it defeats part of the alias design. The prompt says “prefer aliases,” but the model still copies raw IDs.
+
+Better schema/prompt behavior:
+
+For source_soul_id, owner_soul_id, perceived_by_entity_id:
+Use "active_soul" unless there is a specific reason not to.
+
+For target_entity_id, actor_entity_id, owner_entity_id:
+Use "active_player" or "latest_speaker" for the user-side persona.
+
+Could be tightened.
+
+3. aurora_schwarz still leaks as a fake entity ID
+
+The first attempt used:
+
+participants: ["aurora_schwarz", "preset_male"]
+
+That required repair.
+
+You can fix this two ways:
+
+Option A:
+Teach alias resolver that aurora_schwarz means active_soul when active Soul display name is Aurora Schwarz.
+
+Option B:
+Do not expose aurora_schwarz in [ACTIVE ENTITIES] at all.
+Only expose:
+- active_soul
+- active_player
+- latest_speaker
+
+I prefer B. Do not give the model fake IDs you do not accept.
+
+4. Relationship scoring may be too swingy
+
+Trust moved very fast for a short flirt/rapport sequence.
+
+This might be fine for a hot-start RP, but generally:
+
+trust 0 → 17 in ~2 visible turns
+
+is a lot.
+
+Probably relationship deltas should scale down unless:
+
+stakes high
+costliness high
+explicit vulnerability
+risk taken
+boundary respected under pressure
+
+Here, comfort/intimacy should rise faster than trust. Trust should probably move slower.
+
+5. parsed_evaluator_json still shows old schema junk
+
+Even successful structured traces still show:
+
+parsed_evaluator_json:
+  global_scene_evaluation...
+  memory_candidates: []
+  schema_version: 0
+
+That is confusing because the real structured ops are elsewhere.
+
+This is probably legacy trace compatibility, but it makes debugging harder.
+
+Better:
+
+parsed_structured_ops_json:
+  schema_version: 1
+  ops: [...]
+
+and either remove or label the old parsed evaluator object as:
+
+legacy_parsed_evaluator_json: not_applicable
+6. Narrator mode was Reader, not Active Director
+
+The payload says:
+
+Mode: Reader
+
+So this benchmark did not test Active Director.
+
+If you expected Active Director, the benchmark settings are not applying narrator style to the benchmark run.
+
+That is separate from evaluator, but important.
+
+My score for eval path
+Architecture: 8.5 / 10
+Tool-call correctness: 9 / 10
+Fallback discipline: 9 / 10
+Trace visibility: 8 / 10
+Memory writing: 7 / 10
+Relationship writing: 8 / 10
+Object writing: 3 / 10
+Alias usage: 6 / 10
+Scoring calibration: 6 / 10
+Current verdict
+
+The upgraded evaluator path is legit now.
+
+It is no longer the main blocker. The current blockers are narrower:
+
+1. benchmark turn accounting / disappearing chat bug
+2. object op under-extraction
+3. raw UUID / fake alias leakage
+4. relationship scoring calibration
+5. benchmark narrator mode not applying Active Director
+Next evaluator-specific fix
+
+Use this prompt:
+
+Task: Tune structured tool-call evaluator after successful visible benchmark.
+
+Findings:
+The upgraded evaluator path is working: all inspected evaluator runs used tool_call transport, schema validation passed, no evaluator_form_v1 fallback occurred, no syntactic repair was used, memory/relationship/scene patches applied.
+
+Remaining evaluator issues:
+1. Object state did not update despite user text mentioning a wet jacket hanging by the closet.
+2. Model still emits raw UUIDs and invalid pseudo-ID aurora_schwarz instead of aliases.
+3. Relationship scoring rises too aggressively.
+4. Legacy parsed_evaluator_json trace is confusing for structured ops.
+5. Benchmark may not apply Active Director narrator mode.
+
+Required changes:
+- Strengthen update_object_state prompting/tool examples for object placement/movement/condition.
+- Treat “jacket hangs by closet” as object state-worthy.
+- Prefer aliases strongly; do not expose aurora_schwarz as an acceptable entity ID.
+- Either resolve aurora_schwarz -> active_soul or stop sending it.
+- Add relationship delta dampening for low-stakes flirt/rapport turns.
+- Add structured trace field parsed_structured_ops_json and mark legacy parsed_evaluator_json as not_applicable.
+- Ensure benchmark narrator style setting is actually applied.
+
+Tests:
+- user text with “my jacket hangs by the closet” creates preset_male_jacket_1.
+- active_soul alias compiles relationship_event.
+- aurora_schwarz does not appear in structured evaluator active entities unless accepted as alias.
+- low-stakes flirt does not move trust more than configured cap.
+- structured trace contains parsed_structured_ops_json.
+- benchmark with Active Director actually sends Mode: Active Director to narrator.
+
+Bottom line: eval path is finally mostly good. The object extractor and alias hygiene need work, but the tool-call backbone is functioning.
+
+* * *
+
+**You:**
+
+so we fixed it? Dayum
+
+* * *
+
+**ChatGPT:**
+
+Yeah — the core evaluator path is basically fixed.
+
+Not “everything is done,” but the big nightmare is fixed:
+
+Before:
+prompt-shaped JSON pretending to be tools
+→ malformed output
+→ form fallback
+→ no reliable state
+
+Now:
+real tool_call transport
+→ validated structured ops
+→ EnginePatch
+→ memory / relationship / scene state writes
+→ no evaluator_form_v1 fallback in that run
+
+That is a major jump.
+
+Current state:
+
+[FIXED] real tool-calling evaluator
+[FIXED] schema/tool validation
+[FIXED] repair retry working
+[FIXED] no form fallback in latest eval path
+[FIXED] relationship + memory + scene updates
+[FIXED] benchmark can actually drive visible chat
+
+[NOT FIXED] benchmark turn-count/chat disappearance bug
+[WEAK] object extraction, especially casual objects like jacket by closet
+[NEEDS TUNING] relationship scoring swinginess
+[NEEDS CHECK] Active Director setting actually applied in benchmark
+
+So the answer is:
+
+Yes, we fixed the evaluator architecture.
+Now we are in tuning / product-hardening territory, not “everything is broken” territory.
+
+That’s a real milestone.

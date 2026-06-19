@@ -1,0 +1,426 @@
+
+   It must not create:
+   - new turns.json row
+   - regenerated variant row
+   - duplicate active branch turn
+   - duplicate selected variant entry
+
+4. If repair currently uses a normal send/regenerate path, split it out.
+   Add/use internal function:
+   run_evaluator_repair_attempt(...)
+   This function must not call create_turn / create_variant / regenerate_turn.
+
+5. Add benchmark scorecard fields:
+   - visible_turns_requested
+   - visible_turns_completed
+   - visible_user_messages_created
+   - visible_assistant_messages_created
+   - unique_user_message_ids
+   - unique_assistant_message_ids
+   - internal_evaluator_retry_count
+   - internal_evaluator_retry_payload_count
+   - duplicate_turn_rows_detected
+   - duplicate_turn_message_pairs
+   - player_simulator_payload_count
+
+6. Benchmark must fail if:
+   - visible_turns_completed < visible_turns_requested
+   - visible_user_messages_created != visible_turns_requested
+   - visible_assistant_messages_created != visible_turns_requested
+   - duplicate_turn_rows_detected = true
+   - normal_pipeline_used = false
+
+7. Log player simulator provider calls.
+   Payload history should show:
+   - player_simulator
+   - narrator
+   - evaluator
+   repeated per visible turn.
+
+   If player simulator calls are intentionally not stored in normal payload logs, add a benchmark payload section for them.
+
+8. Add tests:
+   - 5-turn visible benchmark creates 5 unique user messages and 5 unique assistant messages.
+   - Evaluator retry does not create a turn row.
+   - Evaluator retry does not create a regenerated variant.
+   - Benchmark completed count ignores evaluator repair payloads.
+   - Duplicate user/assistant message pair in turns.json makes benchmark fail.
+   - Player simulator calls are logged or reported.
+   - .mne export after 5-turn benchmark contains 5 visible benchmark turns plus opening seed, not 3.
+
+9. Update UI:
+   Show:
+   Visible turns: 3 / 5
+   Internal evaluator retries: N
+   Player simulator calls: N
+   Duplicate turn rows: PASS/FAIL
+
+10. Verification:
+   cargo test --manifest-path src-tauri/state_engine/Cargo.toml
+   npm.cmd run test:rust
+   npm.cmd run typecheck
+   cargo fmt --manifest-path src-tauri/Cargo.toml --check
+Current read
+Benchmark is now real enough to create chat.
+But it is still miscounting internal evaluator repair as visible turns.
+That is why the chat feels shorter than the benchmark says.
+
+So the next fix is not “make benchmark real.” It is:
+
+separate visible chat turns from internal evaluator retry bookkeeping
+
+* * *
+
+**You:**
+
+aside from that how is the upgraded eval path?
+
+* * *
+
+**ChatGPT:**
+
+File processing confirmation
+Payload history:
+- Length detected: 281,007 characters
+- Lines detected: 4,311
+- Payloads detected: 10
+- Entire payload processed: Yes
+
+Checkpoint .mne:
+- Size detected: 454,652 bytes
+- Internal files detected: 10
+- Entire checkpoint inspected: Yes
+
+Payload headers in order:
+
+1. narrator_brief
+2. evaluator_structured_v1
+3. evaluator_structured_v1 repair
+4. narrator_brief
+5. evaluator_structured_v1
+6. evaluator_structured_v1 repair
+7. narrator_brief
+8. evaluator_structured_v1
+9. evaluator_structured_v1 repair / related evaluator call
+10. mne_export
+Aside from the chat-count bug: upgraded eval path is actually solid
+
+The evaluator path itself is much better than before.
+
+The important numbers from this run:
+
+Evaluator traces inspected: 5
+Tool-call transport: 5 / 5
+structured_enforcement_validated: true on 5 / 5
+tool_calls_present: true on 5 / 5
+evaluator_form_v1 fallback: 0
+syntactic_repair_used: 0
+total ops emitted: 13
+memory patches: 1
+relationship patches: 6 total-ish across accepted converted patches
+scene_state patches: 3
+object patches: 0
+
+So mechanically:
+
+[PASS] real tool_call path
+[PASS] provider returned tool calls
+[PASS] schema validation passed
+[PASS] no old form fallback
+[PASS] no syntactic repair
+[PASS] retry path works
+[PASS] relationship state updates
+[PASS] memory writes
+[PASS] scene state updates
+
+The payload clearly shows Provider: evaluator_structured_v1_background, Mode: evaluator_structured_v1, structured_transport_actual: tool_call, structured_enforcement_validated: true, and tool_calls_present: true. 
+
+What improved the most
+1. Real tool calling is working
+
+This is no longer the fake JSON-text situation.
+
+The trace has:
+
+structured_transport_actual: tool_call
+structured_transport_requested: tool_call
+structured_enforcement: tool_call
+structured_enforcement_validated: true
+tool_calls_present: true
+tool_call_count: 1
+tool_call_names: ["evaluator_structured_ops_v1"]
+
+That is the architecture we wanted.
+
+2. No form fallback
+
+This run did not drop into:
+
+evaluator_form_v1
+
+That is a big deal.
+
+Earlier, the old pipeline kept rescuing bad runs. Here, strict-ish tool behavior is actually holding.
+
+3. Retry is working
+
+Payload 2 failed because the model used:
+
+participants: ["aurora_schwarz", "preset_male"]
+
+and aurora_schwarz was not a valid entity ID. Then the repair retry fixed it to the real UUID:
+
+participants: ["891016ee-e74e-4e36-8359-695630dd1f24", "preset_male"]
+
+So the repair retry is doing useful work.
+
+4. Relationship state updates are real
+
+Relationship changed from initial-ish values to a materially different state.
+
+Example after early turns:
+
+preset_male:
+comfort: 21.5
+intimacy: 10.0
+respect: 13.0
+trust: 17.36
+
+So the evaluator is not just logging scene text; it is changing relationship state.
+
+Remaining evaluator problems
+1. Object extraction is weak
+
+This run failed:
+
+FAIL Object state updated
+
+And the checkpoint confirms:
+
+object_state_count: 0
+
+The first user message says:
+
+letting my jacket hang by the closet
+
+That should probably create/update:
+
+object_id: preset_male_jacket_1
+object_kind: jacket
+owner_entity_id: preset_male
+location: closet / by closet
+status: wet
+
+The evaluator missed it.
+
+So the object path is implemented, but the model is under-emitting object ops in this scenario.
+
+Fix direction:
+
+If latest user/narrator text contains object placement/movement/condition:
+- jacket hangs by closet
+- glass picked up
+- phone moved
+- door locked/unlocked
+then prefer update_object_state op.
+2. It still asks the model to copy UUIDs too often
+
+Even though aliases exist, the model still emits raw UUIDs constantly.
+
+Example:
+
+source_soul_id: "891016ee-e74e-4e36-8359-695630dd1f24"
+
+That works, but it defeats part of the alias design. The prompt says “prefer aliases,” but the model still copies raw IDs.
+
+Better schema/prompt behavior:
+
+For source_soul_id, owner_soul_id, perceived_by_entity_id:
+Use "active_soul" unless there is a specific reason not to.
+
+For target_entity_id, actor_entity_id, owner_entity_id:
+Use "active_player" or "latest_speaker" for the user-side persona.
+
+Could be tightened.
+
+3. aurora_schwarz still leaks as a fake entity ID
+
+The first attempt used:
+
+participants: ["aurora_schwarz", "preset_male"]
+
+That required repair.
+
+You can fix this two ways:
+
+Option A:
+Teach alias resolver that aurora_schwarz means active_soul when active Soul display name is Aurora Schwarz.
+
+Option B:
+Do not expose aurora_schwarz in [ACTIVE ENTITIES] at all.
+Only expose:
+- active_soul
+- active_player
+- latest_speaker
+
+I prefer B. Do not give the model fake IDs you do not accept.
+
+4. Relationship scoring may be too swingy
+
+Trust moved very fast for a short flirt/rapport sequence.
+
+This might be fine for a hot-start RP, but generally:
+
+trust 0 → 17 in ~2 visible turns
+
+is a lot.
+
+Probably relationship deltas should scale down unless:
+
+stakes high
+costliness high
+explicit vulnerability
+risk taken
+boundary respected under pressure
+
+Here, comfort/intimacy should rise faster than trust. Trust should probably move slower.
+
+5. parsed_evaluator_json still shows old schema junk
+
+Even successful structured traces still show:
+
+parsed_evaluator_json:
+  global_scene_evaluation...
+  memory_candidates: []
+  schema_version: 0
+
+That is confusing because the real structured ops are elsewhere.
+
+This is probably legacy trace compatibility, but it makes debugging harder.
+
+Better:
+
+parsed_structured_ops_json:
+  schema_version: 1
+  ops: [...]
+
+and either remove or label the old parsed evaluator object as:
+
+legacy_parsed_evaluator_json: not_applicable
+6. Narrator mode was Reader, not Active Director
+
+The payload says:
+
+Mode: Reader
+
+So this benchmark did not test Active Director.
+
+If you expected Active Director, the benchmark settings are not applying narrator style to the benchmark run.
+
+That is separate from evaluator, but important.
+
+My score for eval path
+Architecture: 8.5 / 10
+Tool-call correctness: 9 / 10
+Fallback discipline: 9 / 10
+Trace visibility: 8 / 10
+Memory writing: 7 / 10
+Relationship writing: 8 / 10
+Object writing: 3 / 10
+Alias usage: 6 / 10
+Scoring calibration: 6 / 10
+Current verdict
+
+The upgraded evaluator path is legit now.
+
+It is no longer the main blocker. The current blockers are narrower:
+
+1. benchmark turn accounting / disappearing chat bug
+2. object op under-extraction
+3. raw UUID / fake alias leakage
+4. relationship scoring calibration
+5. benchmark narrator mode not applying Active Director
+Next evaluator-specific fix
+
+Use this prompt:
+
+Task: Tune structured tool-call evaluator after successful visible benchmark.
+
+Findings:
+The upgraded evaluator path is working: all inspected evaluator runs used tool_call transport, schema validation passed, no evaluator_form_v1 fallback occurred, no syntactic repair was used, memory/relationship/scene patches applied.
+
+Remaining evaluator issues:
+1. Object state did not update despite user text mentioning a wet jacket hanging by the closet.
+2. Model still emits raw UUIDs and invalid pseudo-ID aurora_schwarz instead of aliases.
+3. Relationship scoring rises too aggressively.
+4. Legacy parsed_evaluator_json trace is confusing for structured ops.
+5. Benchmark may not apply Active Director narrator mode.
+
+Required changes:
+- Strengthen update_object_state prompting/tool examples for object placement/movement/condition.
+- Treat “jacket hangs by closet” as object state-worthy.
+- Prefer aliases strongly; do not expose aurora_schwarz as an acceptable entity ID.
+- Either resolve aurora_schwarz -> active_soul or stop sending it.
+- Add relationship delta dampening for low-stakes flirt/rapport turns.
+- Add structured trace field parsed_structured_ops_json and mark legacy parsed_evaluator_json as not_applicable.
+- Ensure benchmark narrator style setting is actually applied.
+
+Tests:
+- user text with “my jacket hangs by the closet” creates preset_male_jacket_1.
+- active_soul alias compiles relationship_event.
+- aurora_schwarz does not appear in structured evaluator active entities unless accepted as alias.
+- low-stakes flirt does not move trust more than configured cap.
+- structured trace contains parsed_structured_ops_json.
+- benchmark with Active Director actually sends Mode: Active Director to narrator.
+
+Bottom line: eval path is finally mostly good. The object extractor and alias hygiene need work, but the tool-call backbone is functioning.
+
+* * *
+
+**You:**
+
+so we fixed it? Dayum
+
+* * *
+
+**ChatGPT:**
+
+Yeah — the core evaluator path is basically fixed.
+
+Not “everything is done,” but the big nightmare is fixed:
+
+Before:
+prompt-shaped JSON pretending to be tools
+→ malformed output
+→ form fallback
+→ no reliable state
+
+Now:
+real tool_call transport
+→ validated structured ops
+→ EnginePatch
+→ memory / relationship / scene state writes
+→ no evaluator_form_v1 fallback in that run
+
+That is a major jump.
+
+Current state:
+
+[FIXED] real tool-calling evaluator
+[FIXED] schema/tool validation
+[FIXED] repair retry working
+[FIXED] no form fallback in latest eval path
+[FIXED] relationship + memory + scene updates
+[FIXED] benchmark can actually drive visible chat
+
+[NOT FIXED] benchmark turn-count/chat disappearance bug
+[WEAK] object extraction, especially casual objects like jacket by closet
+[NEEDS TUNING] relationship scoring swinginess
+[NEEDS CHECK] Active Director setting actually applied in benchmark
+
+So the answer is:
+
+Yes, we fixed the evaluator architecture.
+Now we are in tuning / product-hardening territory, not “everything is broken” territory.
+
+That’s a real milestone.
