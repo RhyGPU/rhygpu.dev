@@ -1,0 +1,715 @@
+[
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\AI-Memory-Engine-Design.txt",
+    "sha256": "ffb835d6e508bfe6942e368ca4908f8f6b4eae056bcf74b881d2eb5fe8a87767",
+    "bytes": 29880
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\mnemosyne start of a history.txt",
+    "sha256": "51b2c8d3ca1f3d8a48ef2a5413caf91d2c1b319c57c81f55c2457a3f5a38407e",
+    "bytes": 598936
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\AI coding RP Narraitor web project complete log. do not read YOU DO NOT HAVE INFINTE TOEKNS - Mnemosyne AI Roleplay Engine_2026-06-08_09-44.txt",
+    "sha256": "49c23cc31c737badc99a3c6cdb13ebe2ec672307cde738a4c5f7f6b392871b99",
+    "bytes": 2225670
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\Slash-Command-Routing.txt",
+    "sha256": "12ae24fde0a1005b00278245521d4a0fad4d4bb8b345d999e55630a63edc83dc",
+    "bytes": 463992
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\GPT chat session mk2.txt",
+    "sha256": "645ae1e09ab64ef4e64630629f562b807f8c3e30f54fd8c6aa052028521827d1",
+    "bytes": 489185
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\chatlog cluade that follows mk2.txt",
+    "sha256": "4ecf063edd47027086a50b06fc49c8ba91c0c41765e2faaae96ae3f79e5d7d05",
+    "bytes": 163552
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\Manual-LLM-Installation.txt",
+    "sha256": "5d8cc3a6ff06ad90b9cb05db7c148c42af5b00d98f795af2456a8a1b3e8eb7f1",
+    "bytes": 129256
+  },
+  {
+    "kind": "zip_raw_binary_base64",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\Mnemosyne_ AI roleplay state engine-handoff.zip",
+    "sha256": "ceebe157ac83d21276751b54ebe4db75b92ee68b5b830aef2f64903a9a220157",
+    "bytes": 43058
+  },
+  {
+    "kind": "zip_inventory",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\Mnemosyne_ AI roleplay state engine-handoff.zip::INVENTORY",
+    "sha256": "ff5bae8b2dd2439b4ed2e5ea7fad9fee98a85fb1e27b50e8d4975d850ca86894",
+    "bytes": 1121,
+    "entries": [
+      {
+        "name": "mnemosyne-ai-roleplay-state-engine/README.md",
+        "compressed_size": 902,
+        "file_size": 1704,
+        "date_time": [
+          2026,
+          6,
+          26,
+          11,
+          34,
+          10
+        ]
+      },
+      {
+        "name": "mnemosyne-ai-roleplay-state-engine/project/.thumbnail",
+        "compressed_size": 3781,
+        "file_size": 3922,
+        "date_time": [
+          2026,
+          6,
+          26,
+          11,
+          34,
+          10
+        ]
+      },
+      {
+        "name": "mnemosyne-ai-roleplay-state-engine/project/Mnemosyne.dc.html",
+        "compressed_size": 21401,
+        "file_size": 95265,
+        "date_time": [
+          2026,
+          6,
+          26,
+          11,
+          34,
+          10
+        ]
+      },
+      {
+        "name": "mnemosyne-ai-roleplay-state-engine/project/support.js",
+        "compressed_size": 16092,
+        "file_size": 57767,
+        "date_time": [
+          2026,
+          6,
+          26,
+          11,
+          34,
+          10
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "zip_text_entry",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\Mnemosyne_ AI roleplay state engine-handoff.zip::mnemosyne-ai-roleplay-state-engine/README.md",
+    "sha256": "de9e403d2a0e4bc95934cf17c3e6e4b7a747c2d913e33e27b836dce2dd653ae8",
+    "bytes": 1704
+  },
+  {
+    "kind": "zip_binary_entry_base64",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\Mnemosyne_ AI roleplay state engine-handoff.zip::mnemosyne-ai-roleplay-state-engine/project/.thumbnail",
+    "sha256": "aa7a3f0fb187fd6edbdade2289951d7c56afa833f168672029a24f900aa1dbf0",
+    "bytes": 3922
+  },
+  {
+    "kind": "zip_text_entry",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\Mnemosyne_ AI roleplay state engine-handoff.zip::mnemosyne-ai-roleplay-state-engine/project/Mnemosyne.dc.html",
+    "sha256": "8bf0f84d2c0aef53f79180d0f3ac1b544053789bdaddd0b6e950d2d3a628e628",
+    "bytes": 95265
+  },
+  {
+    "kind": "zip_text_entry",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\Mnemosyne_ AI roleplay state engine-handoff.zip::mnemosyne-ai-roleplay-state-engine/project/support.js",
+    "sha256": "fab925b9a2ecd39654935eff0cf72691465750f4dd5fe2f836e5c5e18659979b",
+    "bytes": 57767
+  },
+  {
+    "kind": "zip_raw_binary_base64",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\session-export-1782538316039.zip",
+    "sha256": "98e156edcdad0e6dc6f34b5338f858ced7e6511aa9877ba3e8553fe4935ba542",
+    "bytes": 2396966
+  },
+  {
+    "kind": "zip_inventory",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\session-export-1782538316039.zip::INVENTORY",
+    "sha256": "083a49cce0aa7b45a79e8f031aad7e1607d87be635743938636542950f7079b0",
+    "bytes": 2059,
+    "entries": [
+      {
+        "name": "c63174a8-f6b9-4999-8508-8a699d1dc0ab.jsonl",
+        "compressed_size": 1836513,
+        "file_size": 4093117,
+        "date_time": [
+          2026,
+          6,
+          27,
+          14,
+          31,
+          56
+        ]
+      },
+      {
+        "name": "metadata.json",
+        "compressed_size": 23860,
+        "file_size": 64461,
+        "date_time": [
+          2026,
+          6,
+          27,
+          14,
+          31,
+          56
+        ]
+      },
+      {
+        "name": "logs/claude.ai-web.log",
+        "compressed_size": 67288,
+        "file_size": 4114376,
+        "date_time": [
+          2026,
+          6,
+          27,
+          14,
+          31,
+          56
+        ]
+      },
+      {
+        "name": "logs/claude.ai-web1.log",
+        "compressed_size": 76733,
+        "file_size": 5243052,
+        "date_time": [
+          2026,
+          6,
+          27,
+          14,
+          31,
+          56
+        ]
+      },
+      {
+        "name": "logs/cowork_vm_node.log",
+        "compressed_size": 4452,
+        "file_size": 39786,
+        "date_time": [
+          2026,
+          6,
+          27,
+          14,
+          31,
+          56
+        ]
+      },
+      {
+        "name": "logs/main.log",
+        "compressed_size": 250362,
+        "file_size": 4420403,
+        "date_time": [
+          2026,
+          6,
+          27,
+          14,
+          31,
+          56
+        ]
+      },
+      {
+        "name": "logs/ssh.log",
+        "compressed_size": 1506,
+        "file_size": 17219,
+        "date_time": [
+          2026,
+          6,
+          27,
+          14,
+          31,
+          56
+        ]
+      },
+      {
+        "name": "logs/unknown-window.log",
+        "compressed_size": 58423,
+        "file_size": 3841575,
+        "date_time": [
+          2026,
+          6,
+          27,
+          14,
+          31,
+          56
+        ]
+      },
+      {
+        "name": "logs/unknown-window1.log",
+        "compressed_size": 76733,
+        "file_size": 5243052,
+        "date_time": [
+          2026,
+          6,
+          27,
+          14,
+          31,
+          56
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "zip_text_entry",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\session-export-1782538316039.zip::c63174a8-f6b9-4999-8508-8a699d1dc0ab.jsonl",
+    "sha256": "430d2baee17a7cc1099bb96a2f3cf8b8e2398cccb792f06934098c219d03a07e",
+    "bytes": 4093117
+  },
+  {
+    "kind": "zip_text_entry",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\session-export-1782538316039.zip::metadata.json",
+    "sha256": "600feacf9f73a1101af48ae8c8cc651440cfec1f651fb7462f030fa7b96eb2e9",
+    "bytes": 64461
+  },
+  {
+    "kind": "zip_text_entry",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\session-export-1782538316039.zip::logs/claude.ai-web.log",
+    "sha256": "76986950cfe54fce8ee6c78b4e63bb904b50653c7417003373c8cd80765912ab",
+    "bytes": 4114376
+  },
+  {
+    "kind": "zip_text_entry",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\session-export-1782538316039.zip::logs/claude.ai-web1.log",
+    "sha256": "e36be0c1b3a8da9d777bb29c8c0a95d0cd8a78ccddd058a12710a17bb837f69b",
+    "bytes": 5243052
+  },
+  {
+    "kind": "zip_text_entry",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\session-export-1782538316039.zip::logs/cowork_vm_node.log",
+    "sha256": "e74f18590ce907bc2ca8aece5b87ed976562747c9b0258daa502e4502f5b103e",
+    "bytes": 39786
+  },
+  {
+    "kind": "zip_text_entry",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\session-export-1782538316039.zip::logs/main.log",
+    "sha256": "05edf419e8ddb02bd222673e517609d3948529dba161140ca6057b75763e52b0",
+    "bytes": 4420403
+  },
+  {
+    "kind": "zip_text_entry",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\session-export-1782538316039.zip::logs/ssh.log",
+    "sha256": "babca50d57f1d470c386cc54bfa3c379383547fa46381a97a07d41e4c3831a1f",
+    "bytes": 17219
+  },
+  {
+    "kind": "zip_text_entry",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\session-export-1782538316039.zip::logs/unknown-window.log",
+    "sha256": "3bfce9f51a75874cebd086fec43358e90a509f0543d7772d4a71d2b9bd956166",
+    "bytes": 3841575
+  },
+  {
+    "kind": "zip_text_entry",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\01_SOURCE_OG_LOGS\\OG logs\\session-export-1782538316039.zip::logs/unknown-window1.log",
+    "sha256": "e36be0c1b3a8da9d777bb29c8c0a95d0cd8a78ccddd058a12710a17bb837f69b",
+    "bytes": 5243052
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\handoff-bundle-notes.md",
+    "sha256": "622202b539334899565cd1fbd3a05fdf2d01c0222efc73141a46aed480cbe9fa",
+    "bytes": 1088
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\c63174a8-f6b9-4999-8508-8a699d1dc0ab.chat.cleaned.jsonl",
+    "sha256": "362834f76d65dcaf1a9d67d578ce9f68dbb52e723ff1e81003ea64b11c1d5003",
+    "bytes": 112354
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\c63174a8-f6b9-4999-8508-8a699d1dc0ab.chat.md",
+    "sha256": "c47022fab014872e3f278d0bc3342e73bab19cf2d9e427c84f53c95b5796c198",
+    "bytes": 91800
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\c63174a8-f6b9-4999-8508-8a699d1dc0ab.parse-errors.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "bytes": 2
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\causal_path\\00_README.md",
+    "sha256": "aa5f3851f801cc9f623b9c7a59318518ab5ab42a9fbf2ae45015f1ccc5327e9f",
+    "bytes": 3300
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\causal_path\\01_mock_vs_real_app.md",
+    "sha256": "ba8e26decea6961e7e3665926e9a8c760e4dad35eee67a1d997398261587205a",
+    "bytes": 9414
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\causal_path\\02_theme_and_flow_decisions.md",
+    "sha256": "ea3308a78ccd8d595f055e1034a7b248233c262561b866ad8cb4665353eef61c",
+    "bytes": 23004
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\causal_path\\03_new_plan_and_wrong_v2_prototype.md",
+    "sha256": "e250df4ff8e05009c6c0eeb7b4aa8bfb3544633d10f393f5de6ce06f28107f19",
+    "bytes": 12943
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\causal_path\\04_real_app_vs_mock_data_failure.md",
+    "sha256": "973eb051d14a6135a34e7469addf2cd7c8b80972c5ef3a4d58b49905b7383571",
+    "bytes": 9719
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\causal_path\\05_priority_reset_and_tab_mapping.md",
+    "sha256": "59cc36991124541830de16be2f0b6299063da7214c01151b096a411909d06902",
+    "bytes": 19054
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\causal_path\\06_partial_home_then_dev_gap.md",
+    "sha256": "2380a529a43f4c6ff6d0f3c17eb5bce9d9f11bc3e0481cc84547948f62a62bb9",
+    "bytes": 9133
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\causal_path\\07_define_all_and_final_pass.md",
+    "sha256": "fa131bdf00416b22c05bd2dc5b3ccad7fb485ba2f5789a5d9835ce0103577f70",
+    "bytes": 15068
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\causal_path\\08_closeout_and_pickup_notes.md",
+    "sha256": "4013b0a5e91663a6f15e358d3c3fb075d31c4dbba411e74395a2b6652a268298",
+    "bytes": 1546
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\02_DERIVED_EXTRACTED_CHATS\\extracted_chats\\causal_path\\combined_causal_path.md",
+    "sha256": "4c1d5118aced5abb46d9cd8f7621b3aab63b546e872ce7fccfba88a7394c8e3a",
+    "bytes": 103251
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 1 Start of a hitory\\mnemosyne start of a history_1.txt",
+    "sha256": "576905973d0cb32e1454d4b84e3bd3c0371b8e5fd2882211615453b9e53525a1",
+    "bytes": 121054
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 1 Start of a hitory\\mnemosyne start of a history_2.txt",
+    "sha256": "4056adb433940ccd5cdd7df9df3a1aba087b83a0bc308a4360ac816b25c45604",
+    "bytes": 158742
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 1 Start of a hitory\\mnemosyne start of a history_3.txt",
+    "sha256": "41951dbbe5e916bf9a3fa5107d3b747dbc7405f4ee5bb1fefee71da8e0f0824c",
+    "bytes": 97461
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 1 Start of a hitory\\mnemosyne start of a history_4.txt",
+    "sha256": "a681c190498984b707e8aeff9fbe11a5d6905f894907c6fb6a2a7f0a44db60c3",
+    "bytes": 125764
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 1 Start of a hitory\\mnemosyne start of a history_5.txt",
+    "sha256": "07bec730d3eeaf2973caaf543683dac75eba88c720089bf8652c944fd8e89a6a",
+    "bytes": 113164
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_1.txt",
+    "sha256": "db948e028a4d7b841eebbdfaf1003adb8306e7e5b68167dd4bec0284aebebdcd",
+    "bytes": 171964
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_2.txt",
+    "sha256": "b68d514e6917e7d6773051b0317aede71bf4b388b68a8197d88f1ce751abbccd",
+    "bytes": 2053704
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_3.txt",
+    "sha256": "0e107bb752406a7631f720c3c7b761df15f2dfc63bb1b3cb46aa9903075ca992",
+    "bytes": 1885921
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_4.txt",
+    "sha256": "219803263d07c553291a916fb1ace33c504a5a793375aa647082615332a167ed",
+    "bytes": 1741906
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_5.txt",
+    "sha256": "81dbac31134f7c9a9cc0be68505d9482cb66752eea0bb18de1396a0c28c8056d",
+    "bytes": 1582271
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_6.txt",
+    "sha256": "5709716308922efdbfe2541bd97aae47f2ca3dca3abe132a7bc8efb4ce9a9500",
+    "bytes": 1412235
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_7.txt",
+    "sha256": "2d7f287300f427acd091edd8a5d79c59d074420d93bb1ad6830c70d59e69b42f",
+    "bytes": 1253384
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_8.txt",
+    "sha256": "cd11716518ffacc8a896f9cce3dc30ec6f201ff5d3638d18ee91e6af01261b3e",
+    "bytes": 1082781
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_9.txt",
+    "sha256": "984c30a81cf9667d2a019d5efc8b5483dc03d516c0f13762b318d7302a85f8f7",
+    "bytes": 912690
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_10.txt",
+    "sha256": "97354945c5bc32dbb923db668bf82ac9719c0145e51eae3c54e0bd25b9b20856",
+    "bytes": 736167
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_11.txt",
+    "sha256": "5ac4fdcaef64cae6e6a83c909427e577b04d9b9cc608c8d405d131bc8739f75a",
+    "bytes": 581305
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_12.txt",
+    "sha256": "483552d938f8f927e3af1eba7ba51011cfd59549824686a927c39749da5900c9",
+    "bytes": 418205
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_13.txt",
+    "sha256": "cf81bdc3ac5773a08aeb058161f62151ab4c2c78147f0ede9a56b63af64d94fd",
+    "bytes": 250912
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 2 Bulding the base\\AI coding RP Narraitor web project - Mnemosyne AI Roleplay Engine_2026-06-08_09-44_part_14.txt",
+    "sha256": "89a640a38d41d25b97670f9de41a047187441fe1b8523a99ba63c16a161d740f",
+    "bytes": 103365
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\chatlog cluade that follows mk2_part_1.txt",
+    "sha256": "9ee0d27618901d09cb7d8dcf3ff548e271877563e390be91e5e9d9f24cf22c52",
+    "bytes": 44185
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_1.txt",
+    "sha256": "f9f30c7904898a73f37401b80831ac8ae5225433cf664abb569ac4ee1b427c39",
+    "bytes": 16029
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\chatlog cluade that follows mk2_part_2.txt",
+    "sha256": "c9b98d59ea2c2f1cef54a3e38e75865057c1a643ab1d746718f7a41194f71d07",
+    "bytes": 119365
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_2.txt",
+    "sha256": "7a34e5cec209d9fcaacd9fd58cd22770f6267923e9bcc1b73c17c11427d648b2",
+    "bytes": 473154
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\chatlog cluade that follows mk2_part_3.txt",
+    "sha256": "1cbe54720e3ac41afee7d640c4b8438d544505b60d6b0045051369b470e78377",
+    "bytes": 64319
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_3.txt",
+    "sha256": "045473acb33702b7be68b7c769a0ebe50e5cd251050d1f6f5772eb499b0c9a83",
+    "bytes": 453343
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\chatlog cluade that follows mk2_part_4.txt",
+    "sha256": "499c16dff59c4232c5646e957a2254682cc4287ddb529e6d09f63e2941a19997",
+    "bytes": 20533
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_4.txt",
+    "sha256": "73c14861ed9fc764193ac079f53a4effff56a37e34e76bb4c23fb297be6a3592",
+    "bytes": 433200
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_5.txt",
+    "sha256": "d23a0dac44778bcc192ce2e854a588a8178bb360d36021032e81f68da524951b",
+    "bytes": 413036
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_6.txt",
+    "sha256": "4646a9f81b360fd3c90684d254dcae748452c7154bb6613704148432372230ce",
+    "bytes": 392107
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_7.txt",
+    "sha256": "a7cdaf954f8cb5f0f876f01f952e8b952ccb25ec62243118e85d83ce1bd1022d",
+    "bytes": 374580
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_8.txt",
+    "sha256": "c54bff13e8571dc1cc21e24a95bce0fc8e87d8b5bc0a52b9d14789ba4ea37cef",
+    "bytes": 357228
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_9.txt",
+    "sha256": "2987d5dc15020c8ce8bb5e70b98c941853fec03b037f725b851058179afdb047",
+    "bytes": 341822
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_10.txt",
+    "sha256": "47e616d2d531ab769cb30dd06747f72b647f3491f34a668876676ec0796685a3",
+    "bytes": 324423
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_11.txt",
+    "sha256": "07b499ffea55c3f754630a33808400ee7ddfab126007550f38b8f82be4bc6177",
+    "bytes": 308609
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_12.txt",
+    "sha256": "0b7b4e5ed0611ad9f7c7f26a86db3cdf1ab8de7b044f1d3dc6feddb04dd627c5",
+    "bytes": 292760
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_13.txt",
+    "sha256": "c9719f5f895eec18001bb7f74942318dd47d01e78cb580be4dafc92b38b2488c",
+    "bytes": 279108
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_14.txt",
+    "sha256": "2c7cca5281e42c3d16130a94af57ce4a16b9cc0df1dbff910ba9414243be8636",
+    "bytes": 259644
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_15.txt",
+    "sha256": "92a6538f676f42667e298fef68b85a806b184dc2a6c380799a6d8fc0c389b254",
+    "bytes": 241458
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_16.txt",
+    "sha256": "ee53f845174a60d11d70e0e613f1472e7922bc2d9670dfa3f71ef6e4498b6ebc",
+    "bytes": 224970
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_17.txt",
+    "sha256": "9a2c18afa50ef0718b4772190cfaa82db90d040796c6bf840e198797a1a94cfd",
+    "bytes": 208968
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_18.txt",
+    "sha256": "24e27ef252c11410f0918af3927f50550494f0d034a36e953900034c39a1caec",
+    "bytes": 195220
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_19.txt",
+    "sha256": "29acc078934728be8b0afc824dd465c9ca2c468ac0010cdb10c1c6a1671c2c1b",
+    "bytes": 178582
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_20.txt",
+    "sha256": "2a8d474e79ceb1a9dee842de08ce323736704c24ed03659b2d6c7cba7f2cdba5",
+    "bytes": 162333
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_21.txt",
+    "sha256": "2f9050c43657421ca2399fa57473279e7b511f3c0b15121b8d12f2b0d18ced79",
+    "bytes": 144901
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_22.txt",
+    "sha256": "0bcb990b4d36224403a581b881f2e3dc1e19f6f04480e99472b869a957e9dfda",
+    "bytes": 124903
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_23.txt",
+    "sha256": "954d99b94c97e738554370cf0b3da05edbe8fa0a515e52a9d0ac7faa649e9c80",
+    "bytes": 108993
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_24.txt",
+    "sha256": "e7c9e5ae22d05beccc739b3eb9aaad51f8366f0532a0ecb5d3d7f110118c2ec6",
+    "bytes": 91462
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_25.txt",
+    "sha256": "725adfd48b26fa44d6d44d4bc757b88a7ad92cfdb5deb0e8f0094005dd73d30a",
+    "bytes": 75120
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_26.txt",
+    "sha256": "47a4dbece758c5dfb9b2c22aacec8488238e70f3694bcbd5d3224be108af14de",
+    "bytes": 57507
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_27.txt",
+    "sha256": "94fe8a30adf1f26c4ced74004385c706aaa997b5c1f89172ff2609e23b073bf3",
+    "bytes": 44128
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_28.txt",
+    "sha256": "ce2a78f6b179906075152cb3c27f9fdf036291a9589e7b448714f805265b86e7",
+    "bytes": 30536
+  },
+  {
+    "kind": "text",
+    "path": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log\\90_LEGACY_USER_EPISODE_SPLITS\\Episode 3 The grind that never ends\\GPT chat session mk2_part_29.txt",
+    "sha256": "b590efa639fd962729a58f5b1e41e0ba7ba79f7999d91b866fe03ec551dfc166",
+    "bytes": 12587
+  }
+]

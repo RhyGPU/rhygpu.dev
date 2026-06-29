@@ -1,0 +1,741 @@
+From: https://chatgpt.com/g/g-p-69fa89e8a20481918ec2d23a4e2c9b02/c/6a17fb81-e01c-83a6-9e91-04b603e87d15
+
+
+
+you asked
+
+message time: 2026-05-28 17:23:50
+
+read through other chat sessions and tell me about me
+
+
+chatgpt response
+
+I’ll base this on the prior-session context available to me, not guesswork. I’ll separate stable patterns from project-specific observations so it does not turn into vague personality fluff.
+
+
+you asked
+
+message time: 2026-05-28 17:24:06
+
+read through other chat sessions within the project and tell me about me
+
+
+chatgpt response
+
+ory I can access, you read like this:
+
+You are an architecture-first builder
+
+You do not just want “an app that chats.” You are trying to build a long-form AI RP memory engine with real continuity, reversible state, branch logic, Soul profiles, savepoints, provenance, and state hygiene.
+
+Your brain keeps circling around these invariants:
+
+No data loss.
+No fake memory confidence.
+No entity bleed.
+No destructive delete.
+No random updater corruption.
+Every memory should have a source.
+Every state change should be inspectable.
+
+That is a very engineering-heavy instinct. You are not satisfied with “it seems to work.” You want the system to be auditable.
+
+You hate vague help
+
+You clearly prefer:
+
+- direct correction
+- concrete next steps
+- roadmap order
+- phase labels
+- exact bugs
+- copy-pasteable prompts
+- “do this now” guidance
+
+You dislike:
+
+- generic motivation
+- soft encouragement without substance
+- “maybe try X”
+- broad brainstorming when the problem is execution
+- explanations that avoid responsibility
+
+When you ask for help, you usually want an operator, not a cheerleader.
+
+You are impatient, but not lazy
+
+Your frustration pattern is not “I do not want to work.” It is more like:
+
+I am willing to work hard, but I hate wasting motion.
+
+You get angry when:
+
+- tools fail after long setup
+- agents give partial/fragile fixes
+- bugs return after being “fixed”
+- documentation is unclear
+- a roadmap expands instead of converging
+- the system feels like it is moving sideways
+
+That is why you keep asking questions like:
+
+Are we stagnating?
+Is this the right order?
+How long until portfolio/beta?
+Is the roadmap still valid?
+What should Codex do next?
+
+You are trying to prevent the project from becoming an endless swamp.
+
+Your strongest technical instinct is system safety
+
+For Mnemosyne, your priorities are unusually mature for a prototype:
+
+1. Data safety
+2. Restore/soft delete
+3. Branch integrity
+4. Memory provenance
+5. Entity separation
+6. Debuggability
+7. Timing/instrumentation
+8. Retrieval quality
+9. Alpha readiness
+
+That tells me you are not only thinking like a feature designer. You are thinking like someone who has already been burned by state corruption and does not want hidden failure modes.
+
+Your weakness is scope gravity
+
+You have a strong vision, but the vision constantly pulls in more systems:
+
+RP memory
+Soul files
+savepoints
+world state
+branching
+ledger patches
+memory slots
+entity registry
+imported logs
+API presets
+model routing
+embedding backends
+dev console
+export/import
+alpha tester flow
+portfolio presentation
+
+The risk is not lack of ideas. The risk is too many correct ideas at once.
+
+Your best working mode is not “design the whole perfect system.” It is:
+
+Pick one invariant.
+Make it true.
+Add a regression test.
+Move on.
+
+For you, “good enough plus inspectable” is often better than “perfect but invisible.”
+
+You are very sensitive to authenticity and competence
+
+Across project and non-project chats, you repeatedly push for things to be:
+
+- grounded
+- document-based
+- source-aware
+- not hallucinated
+- not overclaimed
+- not fake-polished
+
+You also like blunt assessments. You often ask whether something is legitimate, worth it, realistic, portfolio-worthy, alpha-ready, or actually useful.
+
+So you are not just asking “can this be done?” You are asking:
+
+Is this real enough to matter?
+Is this worth my time?
+Would this convince someone competent?
+
+You are building identity through projects
+
+Mnemosyne, the math-soulslike game idea, AI tooling, local models, Unreal/Codex workflows, and job-search filtering all point in the same direction:
+
+You want to become someone who can operate above basic automation by combining:
+
+- AI systems
+- software/project architecture
+- technical writing
+- product judgment
+- fast tool adoption
+- domain-specific execution
+
+You are not trying to be only a coder. You are trying to become a systems/product operator who can use AI aggressively.
+
+You need assistants to behave like this
+
+The best assistant style for you is:
+
+- blunt but not dismissive
+- structured but not bloated
+- specific next actions
+- clear confidence level
+- no fake certainty
+- no unnecessary moralizing
+- no “background work” promises
+- push back when the plan is bad
+- preserve your project vision instead of flattening it
+
+For coding/project work, you need something like:
+
+Current diagnosis:
+What is broken.
+
+Immediate task:
+What to fix next.
+
+Exit gate:
+How we know it worked.
+
+Do not touch:
+What must not be changed.
+
+Next phase:
+What comes after this only if the gate passes.
+
+My blunt read
+
+You are a high-intensity, systems-oriented builder with strong taste and low tolerance for incompetence. You are ambitious, sometimes scattered, but not unserious. Your biggest advantage is that you can see the whole machine. Your biggest risk is that you see too much of it at once.
+
+For Mnemosyne specifically, your correct path is not more grand redesign. It is:
+
+Stabilize.
+Instrument.
+Make failures visible.
+Make state reversible.
+Then improve intelligence.
+
+That pattern fits you better than chasing one more clever feature.
+
+
+you asked
+
+message time: 2026-05-28 17:32:52
+
+So, based on your assesment, review my resume
+
+
+chatgpt response
+
+Document processing confirmation
+
+Item Result
+File reviewed Junhwa_Jeong_Resume_2026_04.pdf
+Total pages detected 1 page
+Section headers in order SUMMARY → TECHNICAL SKILLS → PROFESSIONAL EXPERIENCE → TECHNICAL PROJECTS → EDUCATION → CERTIFICATIONS & ACHIEVEMENTS
+Entire document processed Yes
+
+Overall assessment
+
+This is a stronger-than-average technical transition resume, especially for someone moving from physics + military + hardware tinkering into AI/edge/robotics-adjacent roles.
+
+Your current resume presents you as:
+
+Physics student
++ military leadership / protocol discipline
++ Edge AI planning intern
++ hardware systems builder
++ open-source AI evaluator
++ robotics/industrial automation adjacent candidate
+
+That positioning matches the way I assessed you: you are not best marketed as a pure software engineer yet. You are better marketed as a technical systems / AI hardware / Edge AI planning candidate who can evaluate tradeoffs, prepare executive-facing technical material, and operate in structured environments.
+
+The resume already supports that because the summary emphasizes Edge AI feasibility, hardware evaluation, industrial robotics, latency, compute, thermals, and technical strategy. 
+
+What is working well
+
+1. The resume has a coherent technical identity
+
+The strongest theme is Edge AI + hardware feasibility + robotics planning. Your T-Robotics bullets reinforce this with decision matrices, on-device AI vs rule-based systems, latency, compute requirements, licensing exposure, scalability, hardware platforms, integration feasibility, and roadmap reporting. 
+
+That is good. It does not feel like random student experience pasted together.
+
+2. The military experience is unusually useful
+
+Your ROK Army section is not just “served in military.” It has quantified operational leadership, 30+ tactical vehicles, 6,000+ accident-free miles, sole overnight interpreter during U.S.–ROK CCPT, secured airbase and command bunker exposure, and mission-critical protocols. 
+
+For technical operations, defense tech, robotics, logistics tech, aviation-adjacent companies, or hardware deployment roles, this is actually valuable.
+
+3. The projects are credible and personal
+
+The local AI model exploration project is directly aligned with your target identity: open-source models, OpenRouter, LM Studio, Hugging Face, hallucination tendency, repetition control, usability, and hardware trends. 
+
+The electric mobility project is also strong because it shows physical systems intuition, power, voltage, batteries, controllers, torque, diagnostics, and integration. 
+
+That makes you look like someone who actually builds and troubleshoots systems, not someone who only took classes.
+
+Main weakness
+
+The resume is strong in strategy and evaluation, but weaker in implementation proof.
+
+Right now, many bullets say you evaluated, assessed, prepared, learned, tracked, or produced materials. That is useful, but for AI/tech jobs, recruiters also want to see:
+
+built
+implemented
+automated
+benchmarked
+deployed
+measured
+tested
+integrated
+reduced
+improved
+
+Your resume currently risks being read as:
+
+Smart technical planner, maybe not hands-on enough in software.
+
+That is not fatal, but it affects which roles you should target.
+
+Best-fit job categories
+
+Based on this resume, your highest-fit targets are:
+
+Edge AI Intern / Analyst
+AI Hardware Evaluation Intern
+Robotics Systems Intern
+Technical Program Intern, AI/Robotics
+Solutions Engineering Intern, AI/Robotics
+Field Application Engineer Intern
+Hardware Systems Intern
+Industrial Automation / Simulation Intern
+Defense Tech Operations / Technical Analyst
+AI Product / Technical Strategy Intern
+
+Your weaker-fit targets, unless rewritten or backed by portfolio projects, are:
+
+Machine Learning Engineer
+Software Engineer
+AI Research Intern
+Compiler Engineer
+Backend Engineer
+Data Scientist
+Quantitative Research
+
+Not impossible, but the resume does not yet show enough coding, ML implementation, math modeling, or production software depth for those.
+
+Section-by-section review
+
+Summary
+
+Current direction is good, but it is slightly dense and sounds a bit over-polished.
+
+Current identity:
+
+Purdue Physics Student with Military Leadership Experience (E-5).
+Specialized in Edge AI feasibility, hardware evaluation, and technical planning for industrial robotics.
+
+That is strong. I would keep the structure.
+
+Suggested version:
+
+Purdue Physics student and former ROK Army Sergeant with experience in Edge AI feasibility, AI hardware evaluation, and industrial robotics planning. Skilled at translating physical constraints such as latency, compute, thermals, integration risk, and maintainability into technical recommendations for leadership. U.S. Permanent Resident, no sponsorship required.
+
+This is slightly cleaner and more recruiter-readable.
+
+Technical Skills
+
+Good categories, but the skills section is still a bit “conceptual.” For technical roles, I would strengthen tools and methods.
+
+Current skills include Python, NumPy, Matplotlib, Ubuntu/Linux, Git, AI hardware evaluation, GPU/NPU evaluation, BIOS/firmware, Excel, and PowerPoint. 
+
+I would rewrite as:
+
+TECHNICAL SKILLS
+AI & Edge Computing: Edge AI feasibility analysis, local inference workflows, open-source LLM evaluation, AI hardware benchmarking, GPU/NPU platform evaluation
+Programming & Data: Python, NumPy, Matplotlib, statistical methods, Git, Linux/Ubuntu
+Simulation & Robotics: Siemens Plant Simulation, NVIDIA Isaac Sim, industrial robotics planning
+Hardware & Systems: PC assembly, GPU/CPU compatibility diagnosis, BIOS/firmware updates, driver troubleshooting, power systems integration
+Business & Reporting: Technical reports, executive slide decks, decision matrices, Excel, PowerPoint
+
+Only keep Siemens and Isaac Sim if you are comfortable being asked about them. Since your resume says you are learning them through company-led training, that is acceptable, but do not oversell them.
+
+T-Robotics
+
+This is the most important section. It is strong, but it should move from “responsibility bullets” to “impact bullets.”
+
+Best current bullets:
+
+Defined decision matrices comparing on-device Edge AI against traditional rule-based systems...
+Produced technical reports and slide decks used by department leadership in CEO reporting...
+Prepared briefing materials and responded to technical questions in external meetings...
+
+These are valuable because they show trust and communication.
+
+Suggested rewrite:
+
+• Built decision matrices comparing on-device Edge AI and rule-based automation approaches across latency, compute load, licensing exposure, scalability, and maintainability.
+• Evaluated GPU/NPU edge hardware options for industrial robotics use cases, identifying integration constraints, vendor fit, and long-term support risks.
+• Produced technical reports and executive slide decks used by department leadership for CEO-level Edge AI planning and roadmap discussions.
+• Prepared external meeting materials and answered technical questions on AI planning, robotics deployment constraints, and hardware feasibility.
+• Trained on Siemens Plant Simulation and NVIDIA Isaac Sim workflows to support future industrial simulation and robotics validation work.
+
+This keeps your content but makes it sharper.
+
+ROK Army
+
+This section is excellent. Do not cut it too aggressively. It differentiates you.
+
+Suggested tighter version:
+
+• Supervised junior enlisted personnel and supported readiness of 30+ tactical vehicles; completed 6,000+ accident-free miles in division-level logistics operations.
+• Served as sole overnight interpreter during U.S.–ROK Combined Command Post Training, enabling real-time coordination between U.S. Air Force and ROK Army leadership.
+• Operated in secured airbase and command bunker environments under strict mission-critical security and protocol requirements.
+
+That is already close to your current version.
+
+Purdue Student Office Staff
+
+This is okay, but it is the least important professional experience. Keep it short.
+
+Your current bullet says 100% procedural compliance and trained incoming staff. 
+
+That is fine, but if space gets tight, reduce to one line.
+
+Technical Projects
+
+This section is useful, but it needs stronger “proof.”
+
+For local AI model exploration, I would make it sound less like casual experimentation and more like structured evaluation:
+
+• Evaluated 10+ open-source LLMs across hosted and local inference workflows using OpenRouter, LM Studio, and Hugging Face; compared logical consistency, hallucination tendency, repetition control, response quality, and usability.
+• Tracked model and AI hardware trends relevant to local inference, Edge AI deployment, and robotics planning.
+
+For Electric Mobility, this is one of your best differentiators. The power progression is memorable:
+
+500W/36V/12.5Ah → 1,500W/48V/20Ah → 2,000W/48V/13Ah
+
+Keep that. It shows real systems scaling. 
+
+But “motherboard-level fault diagnosis” may sound odd for EV systems. If you mean controller board-level diagnosis, say that. “Motherboard” is more PC-specific.
+
+Better:
+
+• Designed and assembled three electric mobility systems at increasing power levels, scaling from 500W/36V/12.5Ah to 2,000W/48V/13Ah.
+• Researched motor specifications, battery configurations, torque requirements, and controller compatibility; diagnosed electrical faults across battery, controller, and drive-system components.
+
+Education
+
+Good, but you should consider adding GPA only if it helps. Not in document.
+
+Your coursework is relevant and well chosen: quantum science, electronics, statistics, Python, multivariable calculus, thermal/statistical physics, electromagnetism, mechanics. 
+
+For AI/robotics/hardware roles, this coursework supports the technical identity.
+
+Biggest edits I would make
+
+1. Add a portfolio / GitHub project that proves implementation
+
+Right now, the resume needs one more project that says:
+
+I can actually build software systems with AI tools.
+
+Your Mnemosyne project is perfect for this, but only if described cleanly.
+
+Add something like:
+
+Mnemosyne, Local AI RP Memory Engine
+• Building a local-first AI roleplay memory engine with session state, branch-aware memory, soft-delete recovery, model configuration, and structured state updates.
+• Designed roadmap for memory provenance, entity separation, restore tools, API presets, and long-context retrieval hygiene.
+• Tech: Python/TypeScript/Rust/Tauri/SQLite, depending on actual stack.
+
+Only include the actual stack. Do not fake the stack.
+
+This would make the resume much more aligned with your real assessment: architecture-first, AI systems, state management, memory, tooling.
+
+2. Make the resume target-specific
+
+You should probably maintain two versions:
+
+Version A: Edge AI / Robotics / Hardware Systems
+Version B: AI Tools / Technical Product / Systems Builder
+
+The current resume is mostly Version A.
+
+Version B should emphasize:
+
+AI model evaluation
+local inference
+memory systems
+structured state
+technical writing
+roadmap planning
+GitHub projects
+
+3. Reduce “learning” language
+
+The T-Robotics first bullet starts with “Learning Siemens Plant Simulation and NVIDIA Isaac Sim...” 
+
+That is honest, but leading with “Learning” weakens the section. Put it lower, or phrase it as training:
+
+Completed company-led training and mentorship in Siemens Plant Simulation and NVIDIA Isaac Sim workflows...
+
+Do not make it the first bullet.
+
+4. Strengthen numbers
+
+You already have some numbers:
+
+10+ models
+30+ tactical vehicles
+6,000+ accident-free miles
+3 electric mobility systems
+500W → 2,000W
+100% procedural compliance
+
+Good. Add more if true:
+
+number of hardware platforms evaluated
+number of reports/decks produced
+number of external meetings supported
+number of stakeholders / departments
+size of AI planning initiative
+
+Not in document, so do not invent them.
+
+Final verdict
+
+This resume is good, but it is currently optimized for:
+
+Edge AI planning / robotics hardware evaluation / technical analyst roles
+
+It is not yet fully optimized for:
+
+software engineering / ML engineering / AI research
+
+The strongest move is to add one serious AI systems project, probably Mnemosyne, and rewrite the T-Robotics section with more action verbs and implementation/impact language.
+
+My confidence: 85%. The missing 15% is because I only reviewed the resume itself, not the exact job postings you plan to apply to.
+
+
+you asked
+
+message time: 2026-05-28 17:36:55
+
+Try me. Get me a version that shows me well. and highly wanted for a company
+
+
+chatgpt response
+
+Document processing confirmation
+
+Item Result
+File reviewed Junhwa_Jeong_Resume_2026_04.pdf
+Total pages detected 1 page
+Section headers in order SUMMARY → TECHNICAL SKILLS → PROFESSIONAL EXPERIENCE → TECHNICAL PROJECTS → EDUCATION → CERTIFICATIONS & ACHIEVEMENTS
+Entire document processed Yes
+
+I kept this truthful to the resume and repositioned you as a high-value AI systems / Edge AI / robotics technical candidate, not a generic physics student. Source resume reviewed: 
+
+
+JUNHWA JEONG
+
+West Lafayette, Indiana | &#106;&#x75;&#110;&#x6e;&#x61;&#50;&#48;&#x30;&#x32;&#x32;&#51;&#x40;&#x67;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#109; | LinkedIn | GitHub
+U.S. Permanent Resident, no sponsorship required
+
+SUMMARY
+
+Physics student at Purdue University with hands-on experience in Edge AI feasibility, AI hardware evaluation, industrial robotics planning, and technical reporting for executive decision-making. Former ROK Army Sergeant with leadership experience in high-stakes, protocol-driven environments, including U.S.–ROK joint military operations. Strong ability to translate physical system constraints, including latency, compute, thermals, integration risk, and maintainability, into practical technical recommendations for AI, robotics, and hardware systems.
+
+TECHNICAL SKILLS
+
+AI & Edge Computing: Edge AI feasibility analysis, open-source model evaluation, local inference workflows, AI hardware evaluation, GPU/NPU platform assessment
+Programming & Systems: Python, NumPy, Matplotlib, Linux/Ubuntu, Git, scientific computing
+Simulation & Robotics: Siemens Plant Simulation, NVIDIA Isaac Sim, industrial robotics planning, simulation workflow training
+Hardware & Diagnostics: Custom PC assembly, GPU/CPU compatibility diagnosis, BIOS and firmware updates, driver troubleshooting, power systems integration
+Analysis & Reporting: Statistical methods, technical decision matrices, Excel, PowerPoint, executive technical reporting
+
+PROFESSIONAL EXPERIENCE
+
+T-Robotics Corp
+
+Intern, Development Team
+Siheung, South Korea | Jan 2026 – Present
+
+Built technical decision matrices comparing on-device Edge AI and traditional rule-based automation approaches across latency, compute requirements, licensing exposure, scalability, and long-term maintainability.
+Evaluated Edge AI hardware platforms for industrial robotics use cases, assessing compute constraints, vendor fit, integration feasibility, and long-term support risk.
+Produced technical reports and executive slide decks used by department leadership for CEO-level Edge AI planning, robotics strategy, and roadmap development.
+Prepared briefing materials and responded to technical questions in external meetings related to AI planning, industrial robotics applications, and hardware feasibility.
+Trained on Siemens Plant Simulation and NVIDIA Isaac Sim workflows through company-led instruction and internal mentorship for industrial and robotics simulation.
+
+Republic of Korea Army
+
+Sergeant, E-5, Motor Transport Operator
+Gyeonggi, South Korea | Dec 2020 – Jun 2022
+
+Supervised junior enlisted personnel and supported readiness of 30+ tactical vehicles in division-level logistics operations.
+Completed 6,000+ accident-free miles while operating in mission-critical military transportation and logistics environments.
+Served as the sole overnight interpreter during U.S.–ROK Combined Command Post Training, enabling real-time coordination between U.S. Air Force and ROK Army leadership.
+Operated in secured airbases and command bunker environments under strict operational, security, and protocol requirements.
+
+Purdue University
+
+Student Office Staff
+West Lafayette, Indiana | Oct 2024 – Feb 2025
+
+Maintained equipment tracking and departmental communications with 100% procedural compliance.
+Trained incoming staff on documentation standards, service protocols, and administrative workflows.
+
+TECHNICAL PROJECTS
+
+Local AI Model Exploration & Hardware Tracking
+
+Evaluated 10+ open-source AI models across hosted and local inference workflows using OpenRouter, LM Studio, and Hugging Face.
+Compared model response quality, logical consistency, hallucination tendency, repetition control, and practical usability for technical and creative workflows.
+Tracked open-source model and AI hardware trends relevant to local inference, Edge AI deployment, and robotics applications.
+
+Electric Mobility Systems, Multi-Build Power Engineering
+
+Designed and assembled three electric mobility systems at increasing power levels, scaling from 500W/36V/12.5Ah to 1,500W/48V/20Ah and 2,000W/48V/13Ah.
+Applied first-principles analysis to evaluate energy storage, power draw, mechanical output, motor selection, and controller compatibility.
+Diagnosed electrical faults across battery, controller, and drive-system components during full system integration.
+
+Custom PC Architecture & Hardware Systems
+
+Built and configured multi-system desktop environments using AMD and Intel CPUs with NVIDIA and AMD GPUs.
+Performed BIOS updates, operating system installations, firmware configuration, driver troubleshooting, and hardware compatibility diagnosis.
+
+EDUCATION
+
+Purdue University
+
+B.S., Physics
+West Lafayette, Indiana | Aug 2019 – 2026
+
+Relevant Coursework: Quantum Science, Electronic Techniques Research, Statistical Methods, Programming with Python, Multivariate Calculus, Thermal and Statistical Physics, Electromagnetism, Modern Mechanics
+
+CERTIFICATIONS & ACHIEVEMENTS
+
+Certificate of Appreciation, U.S.–ROK Combined Command Post Training  
+Advanced Scuba Diver License, Scuba Diving International
+
+
+Why this version sells you better
+
+This version frames you as:
+
+AI systems + hardware evaluation + robotics planning + military-grade operational reliability
+
+That is much more attractive than:
+
+Physics student who did some AI and hardware stuff
+
+The strongest line of attack for companies is:
+
+This candidate can understand AI, hardware constraints, physical systems, technical tradeoffs, and leadership-facing reporting.
+
+That is your lane right now. You look most competitive for:
+
+Edge AI Intern
+Robotics Systems Intern
+AI Hardware Evaluation Intern
+Technical Program Intern, AI/Robotics
+Solutions Engineering Intern
+Field Application Engineer Intern
+Industrial Automation Intern
+Defense Tech Technical Analyst
+AI Product / Technical Strategy Intern
+
+For pure software engineering or ML engineering, you still need one stronger implementation-heavy project on the resume. Mnemosyne could become that project once it is clean enough to show.
+
+
+you asked
+
+message time: 2026-05-28 18:06:45
+
+Huh... you didn't add my ai project shit at all nor the fact that I use hermes on my local pc, antigravity, claude code, codex, and cursor for my projects. Thought you meant having those in were nice
+
+im not mad. I just curious. Also, caution in mentioning my project. Don't disclose too much if you are gonna include it.
+
+
+chatgpt response
+
+You’re right to flag that. I was too conservative and stayed inside the uploaded PDF instead of using the broader project context you explicitly wanted reflected.
+
+Document processing confirmation
+
+Item Result
+File reviewed Junhwa_Jeong_Resume_2026_04.pdf
+Total pages detected 1 page
+Section headers in order SUMMARY → TECHNICAL SKILLS → PROFESSIONAL EXPERIENCE → TECHNICAL PROJECTS → EDUCATION → CERTIFICATIONS & ACHIEVEMENTS
+Entire document processed Yes
+
+You are right. I should have included it, but carefully.
+
+The reason I did not is that the uploaded resume only explicitly mentioned OpenRouter, LM Studio, Hugging Face, local/open-source model evaluation, and hardware trend tracking. Hermes on your local PC, Antigravity, Claude Code, Codex, Cursor, and your private AI project were not in document. 
+
+But based on the broader project context you asked me to use, yes, those belong. They make you look more current, more AI-native, and more builder-oriented. The key is to include them without sounding like you are just name-dropping tools.
+
+How I would include them
+
+Do not write:
+
+Uses Claude Code, Codex, Cursor, Antigravity, Hermes, OpenRouter, LM Studio...
+
+That reads like tool collection.
+
+Write it as:
+
+AI-assisted development workflow
+Local LLM inference
+Agentic coding tools
+Applied AI prototyping
+Model evaluation
+
+Then mention the tools inside the skill line or one project bullet.
+
+For your private project, I would not disclose the full RP/narrator/Soul architecture. I would sanitize it as:
+
+local-first AI memory and state-management prototype
+
+That sounds serious, technical, and non-cringe to companies.
+
+Here is the version I would actually add.
+
+**Document Title: **
+
+SUMMARY
+
+Physics student at Purdue University with experience in Edge AI feasibility, AI hardware evaluation, local LLM workflows, and industrial robotics planning. Experienced in evaluating open-source AI models, running local inference workflows, and using agentic coding tools to accelerate technical projects. Former ROK Army Sergeant with leadership experience in high-stakes U.S.–ROK joint military operations. Strong ability to translate physical constraints such as latency, compute, thermals, integration risk, and maintainability into practical technical recommendations for AI, robotics, and hardware systems.
+
+TECHNICAL SKILLS
+
+AI & Edge Computing: Edge AI feasibility analysis, open-source model evaluation, local LLM inference, AI hardware evaluation, GPU/NPU platform assessment, local inference workflows
+AI Development Tools: OpenRouter, LM Studio, Hugging Face, Hermes local model workflows, Cursor, Claude Code, Codex, Antigravity
+Programming & Systems: Python, NumPy, Matplotlib, Linux/Ubuntu, Git, scientific computing
+Simulation & Robotics: Siemens Plant Simulation, NVIDIA Isaac Sim, industrial robotics planning, simulation workflow training
+Hardware & Diagnostics: Custom PC assembly, GPU/CPU compatibility diagnosis, BIOS and firmware updates, driver troubleshooting, power systems integration
+Analysis & Reporting: Statistical methods, technical decision matrices, Excel, PowerPoint, executive technical reporting
+
+TECHNICAL PROJECTS
+
+AI Systems Prototyping & Local Model Workflows
+
+Built and tested AI-assisted development workflows using local and hosted LLM tools, including Hermes local model workflows, OpenRouter, LM Studio, Hugging Face, Cursor, Claude Code, Codex, and Antigravity.
+Evaluated 10+ open-source AI models across hosted and local inference environments, comparing response quality, logical consistency, hallucination tendency, repetition control, and practical usability.
+Developed a private AI memory and state-management prototype focused on persistent context, structured state tracking, branch-aware continuity, and recoverable user data.
+Tracked open-source model and AI hardware trends relevant to local inference, Edge AI deployment, robotics applications, and AI-assisted software development.
+
+My blunt correction
+
+Your AI toolchain and private AI project should absolutely be on the resume. They are more valuable than the generic “Local AI Model Exploration & Hardware Tracking” section currently in the PDF.
+
+The safe framing is:
+
+Private AI memory and state-management prototype
+
+The risky framing is:
+
+AI roleplay narrator Soul engine with RP continuity
+
+The first sounds like technical infrastructure. The second may confuse recruiters or make it sound like a hobby toy, even though the underlying architecture is serious.
+
+I would use the sanitized version.

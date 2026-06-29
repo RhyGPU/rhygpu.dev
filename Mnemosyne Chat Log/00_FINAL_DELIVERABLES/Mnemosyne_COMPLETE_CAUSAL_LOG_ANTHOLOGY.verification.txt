@@ -1,0 +1,26 @@
+MNEMOSYNE COMPLETE ANTHOLOGY VERIFICATION
+anthology: D:\정준화\rhygpu.dev\Mnemosyne Chat Log\00_FINAL_DELIVERABLES\Mnemosyne_COMPLETE_CAUSAL_LOG_ANTHOLOGY.txt
+manifest: D:\정준화\rhygpu.dev\Mnemosyne Chat Log\00_FINAL_DELIVERABLES\Mnemosyne_COMPLETE_CAUSAL_LOG_ANTHOLOGY.manifest.json
+
+sections_in_txt_total: 92
+source_payload_sections_in_txt: 90
+generated_metadata_sections_in_txt: 2
+manifest_entries: 90
+expected_payloads: 90
+
+ZIP ENTRY CHECKS
+D:\정준화\rhygpu.dev\Mnemosyne Chat Log\01_SOURCE_OG_LOGS\OG logs\Mnemosyne_ AI roleplay state engine-handoff.zip: entries=4, included=4
+D:\정준화\rhygpu.dev\Mnemosyne Chat Log\01_SOURCE_OG_LOGS\OG logs\session-export-1782538316039.zip: entries=9, included=9
+
+KIND COUNTS
+text: 73
+zip_binary_entry_base64: 1
+zip_inventory: 2
+zip_raw_binary_base64: 2
+zip_text_entry: 12
+
+RESULT: PASS
+No expected source payloads are missing from the manifest or anthology TXT.
+All manifest hashes/sizes match anthology section headers.
+All zip entries are represented.
+Base64 binary payloads decode to the manifest hash and byte length.

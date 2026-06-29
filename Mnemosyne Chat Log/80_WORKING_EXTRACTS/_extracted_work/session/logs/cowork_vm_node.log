@@ -1,0 +1,464 @@
+2026-03-04 18:00:25 [info] [cleanupVMBundleIfUnsupported] yukonSilver not supported (status=unsupported), checking for stale bundle...
+2026-03-04 18:02:00 [warn] [startVM] VM not supported (win32/x64), skipping
+2026-03-04 18:02:00 [info] [Callbacks] Initializing VM event callbacks...
+2026-03-04 18:02:00 [info] [VM] Loading vmClient (TypeScript) module...
+2026-03-04 18:02:00 [info] [VM] Module loaded successfully
+2026-03-04 18:02:00 [info] [Callbacks] VM event callbacks initialized
+2026-03-04 18:02:02 [warn] [startVM] VM not supported (win32/x64), skipping
+2026-03-04 18:02:05 [warn] [startVM] VM not supported (win32/x64), skipping
+2026-03-04 18:02:09 [warn] [startVM] VM not supported (win32/x64), skipping
+2026-04-01 10:29:18 [info] [cleanupVMBundleIfUnsupported] yukonSilver not supported (status=unsupported), checking for stale bundle...
+2026-04-08 15:02:05 [info] [cleanupVMBundleIfUnsupported] yukonSilver not supported (status=unsupported), checking for stale bundle...
+2026-04-16 09:30:44 [info] [cleanupVMBundleIfUnsupported] yukonSilver not supported (status=unsupported), checking for stale bundle...
+2026-04-16 09:30:44 [info] [VM] Loading vmClient (TypeScript) module...
+2026-04-16 09:30:44 [info] [VM] Module loaded successfully
+2026-05-26 09:11:18 [info] [Bundle:status] rootfs.vhdx missing
+2026-05-26 09:11:18 [info] [VM] Loading vmClient (TypeScript) module...
+2026-05-26 09:11:18 [info] [VM] Module loaded successfully
+2026-05-26 09:12:03 [info] [Bundle:status] rootfs.vhdx missing
+2026-05-30 19:23:22 [info] [VM] Loading vmClient (TypeScript) module...
+2026-05-30 19:23:22 [info] [VM] Module loaded successfully
+2026-05-30 19:23:22 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-02 11:11:21 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-02 11:11:21 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-02 11:11:21 [info] [VM] Module loaded successfully
+2026-06-02 11:11:46 [info] [logout] User navigated to /logout, stopping VM
+2026-06-02 11:11:46 [info] [stopVM] stopping VM gracefully
+2026-06-02 11:11:46 [error] [logout] Failed to stop VM on logout: not configured: call 'configure' first
+2026-06-02 11:11:47 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-02 20:57:57 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-02 20:57:57 [info] [VM] Module loaded successfully
+2026-06-02 20:57:57 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-08 22:19:54 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-08 22:19:54 [info] [VM] Module loaded successfully
+2026-06-08 22:19:59 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-08 22:21:12 [info] [logout] User navigated to /logout, stopping VM
+2026-06-08 22:21:12 [info] [stopVM] stopping VM gracefully
+2026-06-08 22:21:13 [error] [logout] Failed to stop VM on logout: not configured: call 'configure' first
+2026-06-08 22:21:14 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-08 22:21:35 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-08 22:21:37 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-08 22:21:37 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-08 22:21:37 [info] [warm] No warm file found for rootfs.vhdx at current version
+2026-06-08 22:21:37 [info] [cache] No cached compressed file for rootfs.vhdx
+2026-06-08 22:21:37 [info] rootfs.vhdx not found, downloading...
+2026-06-08 22:21:37 [info] Downloading rootfs.vhdx...
+2026-06-08 22:23:18 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-08 22:23:18 [info] [VM] Module loaded successfully
+2026-06-08 22:23:24 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-08 22:23:24 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-08 22:23:25 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-08 22:23:25 [info] [warm] No warm file found for rootfs.vhdx at current version
+2026-06-08 22:23:25 [info] [cache] No cached compressed file for rootfs.vhdx
+2026-06-08 22:23:25 [info] rootfs.vhdx not found, downloading...
+2026-06-08 22:23:25 [info] Downloading rootfs.vhdx...
+2026-06-08 22:30:58 [info] rootfs.vhdx.zst checksum validated
+2026-06-08 22:30:58 [info] [downloadVM] Saved compressed rootfs.vhdx to cache
+2026-06-08 22:30:58 [info] [Bundle:status] vmlinuz missing
+2026-06-08 22:30:58 [info] [warm] No warm file found for vmlinuz at current version
+2026-06-08 22:30:58 [info] [cache] No cached compressed file for vmlinuz
+2026-06-08 22:30:58 [info] vmlinuz not found, downloading...
+2026-06-08 22:30:58 [info] Downloading vmlinuz...
+2026-06-08 22:30:59 [info] vmlinuz.zst checksum validated
+2026-06-08 22:30:59 [info] [downloadVM] Saved compressed vmlinuz to cache
+2026-06-08 22:30:59 [info] [Bundle:status] initrd missing
+2026-06-08 22:30:59 [info] [warm] No warm file found for initrd at current version
+2026-06-08 22:30:59 [info] [cache] No cached compressed file for initrd
+2026-06-08 22:30:59 [info] initrd not found, downloading...
+2026-06-08 22:30:59 [info] Downloading initrd...
+2026-06-08 22:31:15 [info] initrd.zst checksum validated
+2026-06-08 22:31:15 [info] [downloadVM] Saved compressed initrd to cache
+2026-06-08 22:31:15 [info] All files ready in <home>\AppData\Roaming\Claude\vm_bundles\claudevm.bundle
+2026-06-10 11:19:17 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-10 11:19:17 [info] [VM] Module loaded successfully
+2026-06-10 11:19:32 [info] [warm] Fetching VM hash for version 1.11847.5
+2026-06-10 11:19:32 [info] [warm] VM hash for version 1.11847.5: <blob>
+2026-06-10 11:19:32 [info] [warm] Starting warm download for VM SHA: <blob> (3 files, arch=x64)
+2026-06-10 11:19:32 [info] [warm] Downloading rootfs.vhdx.zst...
+2026-06-10 11:20:25 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-10 11:20:25 [info] [VM] Module loaded successfully
+2026-06-10 11:20:25 [info] [Bundle:status] rootfs.vhdx version mismatch: have=<blob>, want=<blob>
+2026-06-10 11:20:25 [info] [Bundle:status] rootfs.vhdx version mismatch: have=<blob>, want=<blob>
+2026-06-10 11:20:25 [info] [Bundle:status] rootfs.vhdx version mismatch: have=<blob>, want=<blob>
+2026-06-10 11:20:25 [info] [downloadVM] Deleting old rootfs.vhdx and cache to free disk space
+2026-06-10 11:20:25 [info] [warm] No warm file found for rootfs.vhdx at current version
+2026-06-10 11:20:25 [info] [cache] No cached compressed file for rootfs.vhdx
+2026-06-10 11:20:25 [info] rootfs.vhdx version mismatch, upgrading...
+2026-06-10 11:20:25 [info] Downloading rootfs.vhdx...
+2026-06-10 23:18:36 [error] [download] VM download failed: Request error: net::ERR_QUIC_PROTOCOL_ERROR
+2026-06-13 21:46:06 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-13 21:46:06 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-13 21:46:06 [info] [VM] Module loaded successfully
+2026-06-13 21:46:37 [info] [warm] Fetching VM hash for version 1.12603.1
+2026-06-13 21:46:38 [info] [warm] VM hash for version 1.12603.1: <blob>
+2026-06-13 21:46:38 [info] [warm] Cleaning up old warm entry: <blob>
+2026-06-13 21:46:38 [info] [warm] Starting warm download for VM SHA: <blob> (3 files, arch=x64)
+2026-06-13 21:46:38 [info] [warm] Downloading rootfs.vhdx.zst...
+2026-06-13 21:48:47 [info] [warm] rootfs.vhdx.zst downloaded
+2026-06-13 21:48:47 [info] [warm] Downloading vmlinuz.zst...
+2026-06-13 21:48:49 [info] [warm] vmlinuz.zst downloaded
+2026-06-13 21:48:49 [info] [warm] Downloading initrd.zst...
+2026-06-13 21:48:56 [info] [warm] initrd.zst downloaded
+2026-06-13 21:48:56 [info] [warm] Warm download completed in 138568ms (1648971737673 bytes total)
+2026-06-17 01:17:23 [info] [warm] Fetching VM hash for version 1.13576.0
+2026-06-17 01:17:23 [info] [warm] VM hash for version 1.13576.0: <blob>
+2026-06-17 01:17:23 [info] [warm] All warm files already exist for SHA <blob>
+2026-06-17 10:13:16 [info] [logout] User navigated to /logout, stopping VM
+2026-06-17 10:13:16 [info] [stopVM] stopping VM gracefully
+2026-06-17 10:13:16 [error] [logout] Failed to stop VM on logout: not configured: call 'configure' first
+2026-06-17 10:13:19 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-17 10:13:53 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-17 10:14:37 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-17 10:14:37 [info] [VM] Module loaded successfully
+2026-06-17 10:14:37 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-17 10:14:37 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-17 10:14:37 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-17 10:14:37 [info] [Bundle:status] vmlinuz version mismatch: have=<blob>, want=<blob>
+2026-06-17 10:14:37 [info] [setYukonSilverConfig] Stale bundle present; refreshing in background
+2026-06-17 10:14:37 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-17 10:14:37 [info] [Bundle:status] rootfs.vhdx missing
+2026-06-17 10:14:37 [info] [warm] Promoting warm file rootfs.vhdx from <home>\AppData\Roaming\Claude\vm_bundles\warm\<blob>\rootfs.vhdx.zst
+2026-06-17 10:20:06 [info] [warm] rootfs.vhdx checksum validated
+2026-06-17 10:20:06 [info] [warm] rootfs.vhdx promotion completed in 329106ms
+2026-06-17 10:20:06 [info] [downloadVM] Promoted rootfs.vhdx from warm bundle
+2026-06-17 10:20:06 [info] [Bundle:status] vmlinuz version mismatch: have=<blob>, want=<blob>
+2026-06-17 10:20:06 [info] [downloadVM] Deleting old vmlinuz and cache to free disk space
+2026-06-17 10:20:06 [info] [warm] Promoting warm file vmlinuz from <home>\AppData\Roaming\Claude\vm_bundles\warm\<blob>\vmlinuz.zst
+2026-06-17 10:20:07 [info] [warm] vmlinuz checksum validated
+2026-06-17 10:20:07 [info] [warm] vmlinuz promotion completed in 570ms
+2026-06-17 10:20:07 [info] [downloadVM] Promoted vmlinuz from warm bundle
+2026-06-17 10:20:07 [info] [Bundle:status] initrd version mismatch: have=<blob>, want=<blob>
+2026-06-17 10:20:07 [info] [downloadVM] Deleting old initrd and cache to free disk space
+2026-06-17 10:20:07 [info] [warm] Promoting warm file initrd from <home>\AppData\Roaming\Claude\vm_bundles\warm\<blob>\initrd.zst
+2026-06-17 10:20:09 [info] [warm] initrd checksum validated
+2026-06-17 10:20:09 [info] [warm] initrd promotion completed in 2009ms
+2026-06-17 10:20:09 [info] [downloadVM] Promoted initrd from warm bundle
+2026-06-17 10:20:09 [info] All files ready in <home>\AppData\Roaming\Claude\vm_bundles\claudevm.bundle
+2026-06-18 09:17:53 [info] [warm] Fetching VM hash for version 1.13576.1
+2026-06-18 09:17:53 [info] [warm] VM hash for version 1.13576.1: <blob>
+2026-06-18 09:17:53 [info] [warm] VM SHA matches current version, skipping
+2026-06-18 09:28:04 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-18 09:28:04 [info] [VM] Module loaded successfully
+2026-06-18 12:31:30 [info] [logout] User navigated to /logout/all-sessions, stopping VM
+2026-06-18 12:31:30 [info] [stopVM] stopping VM gracefully
+2026-06-18 12:31:30 [error] [logout] Failed to stop VM on logout: not configured: call 'configure' first
+2026-06-18 12:31:32 [info] [logout] User navigated to /logout/all-sessions, stopping VM
+2026-06-18 12:31:32 [info] [stopVM] stopping VM gracefully
+2026-06-18 12:31:32 [error] [logout] Failed to stop VM on logout: not configured: call 'configure' first
+2026-06-18 12:37:02 [info] [logout] User navigated to /logout, stopping VM
+2026-06-18 12:37:02 [info] [stopVM] stopping VM gracefully
+2026-06-18 12:37:02 [error] [logout] Failed to stop VM on logout: not configured: call 'configure' first
+2026-06-18 19:19:49 [info] [warm] Fetching VM hash for version 1.13576.4
+2026-06-18 19:19:49 [info] [warm] VM hash for version 1.13576.4: <blob>
+2026-06-18 19:19:49 [info] [warm] VM SHA matches current version, skipping
+2026-06-19 04:30:02 [info] [warm] Fetching VM hash for version 1.14271.0
+2026-06-19 04:30:02 [info] [warm] VM hash for version 1.14271.0: <blob>
+2026-06-19 04:30:02 [info] [warm] VM SHA matches current version, skipping
+2026-06-19 15:48:52 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-19 15:48:52 [info] [VM] Module loaded successfully
+2026-06-22 09:56:10 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-22 09:56:10 [info] [VM] Module loaded successfully
+2026-06-24 08:08:55 [info] [warm] Fetching VM hash for version 1.15200.0
+2026-06-24 08:08:55 [info] [warm] VM hash for version 1.15200.0: <blob>
+2026-06-24 08:08:55 [info] [warm] VM SHA matches current version, skipping
+2026-06-24 14:52:44 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-24 14:52:44 [info] [VM] Module loaded successfully
+2026-06-26 07:09:22 [info] [warm] Fetching VM hash for version 1.15962.0
+2026-06-26 07:09:22 [info] [warm] VM hash for version 1.15962.0: <blob>
+2026-06-26 07:09:22 [info] [warm] VM SHA matches current version, skipping
+2026-06-26 13:39:42 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-26 13:39:42 [info] [VM] Module loaded successfully
+2026-06-26 15:38:55 [info] [KernelBugMonitor] State reset
+2026-06-26 15:38:55 [info] [VM:start] Beginning startup, bundlePath=<home>\AppData\Roaming\Claude\vm_bundles\claudevm.bundle
+2026-06-26 15:38:55 [info] [VM:start] Bundle version: <blob>
+2026-06-26 15:38:55 [info] [VM:start] VM instance ID: c1f55af2-f2e6-47e0-ae48-0d4bf6841740
+2026-06-26 15:38:55 [info] [VM:steps] download_and_sdk_prepare started
+2026-06-26 15:39:00 [info] [VM:steps] download_and_sdk_prepare completed (5265ms)
+2026-06-26 15:39:00 [info] [VM:steps] load_swift_api started
+2026-06-26 15:39:00 [info] [VM:steps] load_swift_api completed (0ms)
+2026-06-26 15:39:00 [info] [Callbacks] Initializing VM event callbacks...
+2026-06-26 15:39:01 [info] [Callbacks] VM event callbacks initialized
+2026-06-26 15:39:01 [info] [VM:start] Copying smol-bin.x64.vhdx to bundle: <drv>:\Program Files\WindowsApps\Claude_1.15962.0.0_x64__pzs8sxrjxfjjc\app\resources\smol-bin.x64.vhdx -> <home>\AppData\Roaming\Claude\vm_bundles\claudevm.bundle\smol-bin.vhdx
+2026-06-26 15:39:01 [info] [VM:start] smol-bin.x64.vhdx copied successfully
+2026-06-26 15:39:01 [info] [VM:start] Configuring Windows VM service...
+2026-06-26 15:39:01 [info] [VM:start] Windows VM service configured
+2026-06-26 15:39:01 [info] [VM:steps] create_network started
+2026-06-26 15:39:01 [info] [VM:steps] create_network completed (41ms)
+2026-06-26 15:39:01 [info] [VM:steps] create_vm_config started
+2026-06-26 15:39:02 [info] [VM:steps] create_vm_config completed (242ms)
+2026-06-26 15:39:02 [info] [VM:steps] vm_boot started
+2026-06-26 15:39:02 [info] [VM:steps] vm_boot completed (313ms)
+2026-06-26 15:39:02 [info] [VM:steps] add_plan9_shares started
+2026-06-26 15:39:02 [info] [VM:steps] add_plan9_shares completed (26ms)
+2026-06-26 15:39:11 [info] [VM] Network status: CONNECTED
+2026-06-26 15:39:11 [info] [VM:steps] sdk_install started
+2026-06-26 15:39:11 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 15:39:13 [info] [VM] API reachability: REACHABLE
+2026-06-26 15:39:15 [info] [Keepalive] Starting (interval=2000ms)
+2026-06-26 15:39:15 [info] [VM:steps] sdk_install completed (3198ms)
+2026-06-26 15:39:15 [info] [VM:start] Startup complete, total time: 19704ms
+2026-06-26 15:40:15 [info] [startVM] VM already connected
+2026-06-26 15:40:15 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 15:40:15 [warn] [Keepalive] Already running
+2026-06-26 15:40:35 [info] [startVM] VM already connected
+2026-06-26 15:40:35 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 15:40:35 [warn] [Keepalive] Already running
+2026-06-26 15:40:36 [info] [startVM] VM already connected
+2026-06-26 15:40:36 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 15:40:36 [warn] [Keepalive] Already running
+2026-06-26 15:40:44 [info] [startVM] VM already connected
+2026-06-26 15:40:44 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 15:40:44 [warn] [Keepalive] Already running
+2026-06-26 15:40:46 [info] [startVM] VM already connected
+2026-06-26 15:40:46 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 15:40:46 [warn] [Keepalive] Already running
+2026-06-26 15:41:30 [info] [startVM] VM already connected
+2026-06-26 15:41:30 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 15:41:31 [warn] [Keepalive] Already running
+2026-06-26 15:42:25 [info] [startVM] VM already connected
+2026-06-26 15:42:25 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 15:42:25 [warn] [Keepalive] Already running
+2026-06-26 17:30:26 [info] [startVM] VM already connected
+2026-06-26 17:30:26 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 17:30:27 [warn] [Keepalive] Already running
+2026-06-26 17:30:33 [info] [startVM] VM already connected
+2026-06-26 17:30:33 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 17:30:33 [warn] [Keepalive] Already running
+2026-06-26 17:30:57 [info] [startVM] VM already connected
+2026-06-26 17:30:57 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 17:30:57 [warn] [Keepalive] Already running
+2026-06-26 17:48:01 [info] [startVM] VM already connected
+2026-06-26 17:48:01 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 17:48:01 [warn] [Keepalive] Already running
+2026-06-26 17:48:03 [info] [startVM] VM already connected
+2026-06-26 17:48:03 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 17:48:03 [warn] [Keepalive] Already running
+2026-06-26 17:48:19 [info] [startVM] VM already connected
+2026-06-26 17:48:19 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 17:48:19 [warn] [Keepalive] Already running
+2026-06-26 20:21:11 [info] [startVM] VM already connected
+2026-06-26 20:21:11 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 20:21:11 [warn] [Keepalive] Already running
+2026-06-26 20:23:04 [info] [startVM] VM already connected
+2026-06-26 20:23:04 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 20:23:05 [warn] [Keepalive] Already running
+2026-06-26 23:39:42 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-26 23:39:42 [info] [VM] Module loaded successfully
+2026-06-26 23:39:42 [info] [startVM] VM startup already in progress, waiting...
+2026-06-26 23:39:42 [info] [KernelBugMonitor] State reset
+2026-06-26 23:39:42 [info] [VM:start] Beginning startup, bundlePath=<home>\AppData\Roaming\Claude\vm_bundles\claudevm.bundle
+2026-06-26 23:39:42 [info] [VM:start] Bundle version: <blob>
+2026-06-26 23:39:42 [info] [VM:start] VM instance ID: 672d4fdc-f95e-47cd-a444-2e0335eccfc0
+2026-06-26 23:39:42 [info] [VM:steps] download_and_sdk_prepare started
+2026-06-26 23:39:42 [info] [VM:steps] download_and_sdk_prepare completed (27ms)
+2026-06-26 23:39:42 [info] [VM:steps] load_swift_api started
+2026-06-26 23:39:42 [info] [VM:steps] load_swift_api completed (1ms)
+2026-06-26 23:39:42 [info] [Callbacks] Initializing VM event callbacks...
+2026-06-26 23:39:43 [info] [Callbacks] VM event callbacks initialized
+2026-06-26 23:39:43 [info] [VM:start] Copying smol-bin.x64.vhdx to bundle: <drv>:\Program Files\WindowsApps\Claude_1.15962.0.0_x64__pzs8sxrjxfjjc\app\resources\smol-bin.x64.vhdx -> <home>\AppData\Roaming\Claude\vm_bundles\claudevm.bundle\smol-bin.vhdx
+2026-06-26 23:39:44 [info] [VM:start] smol-bin.x64.vhdx copied successfully
+2026-06-26 23:39:44 [info] [VM:start] Configuring Windows VM service...
+2026-06-26 23:39:44 [info] [VM:start] Windows VM service configured
+2026-06-26 23:39:44 [info] [VM:steps] create_network started
+2026-06-26 23:39:44 [info] [VM:steps] create_network completed (3ms)
+2026-06-26 23:39:44 [info] [VM:steps] create_vm_config started
+2026-06-26 23:39:44 [info] [VM:steps] create_vm_config completed (394ms)
+2026-06-26 23:39:45 [info] [VM:steps] vm_boot started
+2026-06-26 23:39:45 [info] [VM:steps] vm_boot completed (663ms)
+2026-06-26 23:39:45 [info] [VM:steps] add_plan9_shares started
+2026-06-26 23:39:45 [info] [VM:steps] add_plan9_shares completed (18ms)
+2026-06-26 23:39:55 [info] [VM:start] Still waiting for guest connection... 10182ms elapsed, 21 polls
+2026-06-26 23:39:57 [info] [startVM] VM startup already in progress, waiting...
+2026-06-26 23:40:01 [info] [VM] Network status: CONNECTED
+2026-06-26 23:40:01 [info] [VM:steps] sdk_install started
+2026-06-26 23:40:01 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 23:40:06 [info] [VM] API reachability: REACHABLE
+2026-06-26 23:40:07 [info] [Keepalive] Starting (interval=2000ms)
+2026-06-26 23:40:07 [info] [VM:steps] sdk_install completed (5612ms)
+2026-06-26 23:40:07 [info] [VM:start] Startup complete, total time: 24334ms
+2026-06-26 23:43:51 [info] [startVM] VM already connected
+2026-06-26 23:43:51 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 23:43:51 [warn] [Keepalive] Already running
+2026-06-26 23:43:56 [info] [startVM] VM already connected
+2026-06-26 23:43:56 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-26 23:43:56 [warn] [Keepalive] Already running
+2026-06-26 23:44:09 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-26 23:44:18 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-26 23:44:20 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-26 23:44:27 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-26 23:44:37 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-26 23:44:54 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 00:13:20 [info] [startVM] VM already connected
+2026-06-27 00:13:20 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 00:13:20 [warn] [Keepalive] Already running
+2026-06-27 00:13:40 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 00:13:51 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 00:14:21 [info] [startVM] VM already connected
+2026-06-27 00:14:21 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 00:14:21 [warn] [Keepalive] Already running
+2026-06-27 00:28:40 [info] [startVM] VM already connected
+2026-06-27 00:28:40 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 00:28:40 [warn] [Keepalive] Already running
+2026-06-27 00:48:22 [info] [startVM] VM already connected
+2026-06-27 00:48:22 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 00:48:23 [warn] [Keepalive] Already running
+2026-06-27 00:49:02 [info] [startVM] VM already connected
+2026-06-27 00:49:02 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 00:49:02 [warn] [Keepalive] Already running
+2026-06-27 00:49:04 [info] [startVM] VM already connected
+2026-06-27 00:49:04 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 00:49:05 [warn] [Keepalive] Already running
+2026-06-27 00:50:21 [info] [startVM] VM already connected
+2026-06-27 00:50:21 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 00:50:21 [warn] [Keepalive] Already running
+2026-06-27 00:53:07 [info] [startVM] VM already connected
+2026-06-27 00:53:07 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 00:53:07 [warn] [Keepalive] Already running
+2026-06-27 00:55:28 [info] [startVM] VM already connected
+2026-06-27 00:55:28 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 00:55:28 [warn] [Keepalive] Already running
+2026-06-27 00:56:34 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:05:01 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:05:14 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:09:01 [info] [startVM] VM already connected
+2026-06-27 01:09:01 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 01:09:01 [warn] [Keepalive] Already running
+2026-06-27 01:17:29 [info] [startVM] VM already connected
+2026-06-27 01:17:29 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 01:17:30 [warn] [Keepalive] Already running
+2026-06-27 01:22:30 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:22:30 [warn] [vm-stderr oneshot-] /sessions/intelligent-upbeat-goldberg/mnt/<vol>/node_modules/esbuild/bin/esbuild:170
+          throw new Error(`
+          ^
+
+Error: 
+You installed esbuild for another platform than the one you're…[truncated]
+2026-06-27 01:23:21 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:23:37 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:23:47 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:29:03 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:29:34 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:29:35 [warn] [vm-stderr oneshot-] rm: cannot remove 'scratch/v2out/package.json': Operation not permitted
+2026-06-27 01:29:35 [warn] [vm-stderr oneshot-] rm: cannot remove 'scratch/v2out/scratch/v2test.js': Operation not permitted
+2026-06-27 01:29:35 [warn] [vm-stderr oneshot-] rm: cannot remove 'scratch/v2out/src/tauri.js': Operation not permitted
+2026-06-27 01:29:35 [warn] [vm-stderr oneshot-] rm: cannot remove 'scratch/v2out/src/uiTypes.js': Operation not permitted
+2026-06-27 01:29:35 [warn] [vm-stderr oneshot-] rm: cannot remove 'scratch/v2out/src/v2/redaction.js': Operation not permitted
+2026-06-27 01:29:35 [warn] [vm-stderr oneshot-] rm: cannot remove 'scratch/v2out/src/v2/sessionPurpose.js': Operation not permitted
+2026-06-27 01:29:57 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:30:11 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:32:31 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:33:45 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:33:58 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:34:19 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:35:13 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:37:55 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:38:44 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:39:22 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 01:40:58 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 02:02:05 [info] [startVM] VM already connected
+2026-06-27 02:02:05 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 02:02:05 [warn] [Keepalive] Already running
+2026-06-27 02:05:46 [info] [startVM] VM already connected
+2026-06-27 02:05:46 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 02:05:46 [warn] [Keepalive] Already running
+2026-06-27 02:08:22 [info] [startVM] VM already connected
+2026-06-27 02:08:22 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 02:08:22 [warn] [Keepalive] Already running
+2026-06-27 02:16:42 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 02:17:36 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 06:03:12 [info] [startVM] VM already connected
+2026-06-27 06:03:12 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 06:03:12 [warn] [Keepalive] Already running
+2026-06-27 08:39:56 [info] [warm] Fetching VM hash for version 1.15962.1
+2026-06-27 08:39:56 [info] [warm] VM hash for version 1.15962.1: <blob>
+2026-06-27 08:39:56 [info] [warm] VM SHA matches current version, skipping
+2026-06-27 11:07:30 [info] [startVM] VM already connected
+2026-06-27 11:07:30 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 11:07:30 [warn] [Keepalive] Already running
+2026-06-27 12:27:09 [info] [startVM] VM already connected
+2026-06-27 12:27:09 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 12:27:09 [warn] [Keepalive] Already running
+2026-06-27 12:27:54 [info] [VM] Loading vmClient (TypeScript) module...
+2026-06-27 12:27:54 [info] [VM] Module loaded successfully
+2026-06-27 12:27:54 [info] [startVM] VM startup already in progress, waiting...
+2026-06-27 12:27:54 [info] [KernelBugMonitor] State reset
+2026-06-27 12:27:54 [info] [VM:start] Beginning startup, bundlePath=<home>\AppData\Roaming\Claude\vm_bundles\claudevm.bundle
+2026-06-27 12:27:54 [info] [VM:start] Bundle version: <blob>
+2026-06-27 12:27:54 [info] [VM:start] VM instance ID: 30df5355-bd13-464d-8921-71e1132e5a17
+2026-06-27 12:27:54 [info] [VM:steps] download_and_sdk_prepare started
+2026-06-27 12:27:54 [info] [VM:steps] download_and_sdk_prepare completed (14ms)
+2026-06-27 12:27:54 [info] [VM:steps] load_swift_api started
+2026-06-27 12:27:54 [info] [VM:steps] load_swift_api completed (1ms)
+2026-06-27 12:27:54 [info] [Callbacks] Initializing VM event callbacks...
+2026-06-27 12:27:54 [info] [Callbacks] VM event callbacks initialized
+2026-06-27 12:27:54 [info] [VM:start] Copying smol-bin.x64.vhdx to bundle: <drv>:\Program Files\WindowsApps\Claude_1.15962.1.0_x64__pzs8sxrjxfjjc\app\resources\smol-bin.x64.vhdx -> <home>\AppData\Roaming\Claude\vm_bundles\claudevm.bundle\smol-bin.vhdx
+2026-06-27 12:27:55 [info] [VM:start] smol-bin.x64.vhdx copied successfully
+2026-06-27 12:27:55 [info] [VM:start] Configuring Windows VM service...
+2026-06-27 12:27:55 [info] [VM:start] Windows VM service configured
+2026-06-27 12:27:55 [info] [VM:steps] create_network started
+2026-06-27 12:27:55 [info] [VM:steps] create_network completed (1ms)
+2026-06-27 12:27:55 [info] [VM:steps] create_vm_config started
+2026-06-27 12:27:55 [info] [VM:steps] create_vm_config completed (138ms)
+2026-06-27 12:27:55 [info] [VM:steps] vm_boot started
+2026-06-27 12:27:55 [info] [VM:steps] vm_boot completed (158ms)
+2026-06-27 12:27:55 [info] [VM:steps] add_plan9_shares started
+2026-06-27 12:27:55 [info] [VM:steps] add_plan9_shares completed (8ms)
+2026-06-27 12:28:00 [info] [startVM] VM startup already in progress, waiting...
+2026-06-27 12:28:01 [info] [startVM] VM startup already in progress, waiting...
+2026-06-27 12:28:03 [info] [VM] Network status: CONNECTED
+2026-06-27 12:28:03 [info] [VM:steps] sdk_install started
+2026-06-27 12:28:03 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 12:28:05 [info] [startVM] VM startup already in progress, waiting...
+2026-06-27 12:28:05 [info] [VM] API reachability: REACHABLE
+2026-06-27 12:28:05 [info] [Keepalive] Starting (interval=2000ms)
+2026-06-27 12:28:05 [info] [VM:steps] sdk_install completed (1695ms)
+2026-06-27 12:28:05 [info] [VM:start] Startup complete, total time: 10796ms
+2026-06-27 12:28:08 [info] [startVM] VM already connected
+2026-06-27 12:28:08 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 12:28:09 [warn] [Keepalive] Already running
+2026-06-27 12:31:51 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 12:42:30 [info] [startVM] VM already connected
+2026-06-27 12:42:30 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 12:42:30 [warn] [Keepalive] Already running
+2026-06-27 12:56:05 [info] [startVM] VM already connected
+2026-06-27 12:56:05 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 12:56:06 [warn] [Keepalive] Already running
+2026-06-27 13:05:34 [info] [startVM] VM already connected
+2026-06-27 13:05:34 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 13:05:35 [warn] [Keepalive] Already running
+2026-06-27 13:11:00 [info] [startVM] VM already connected
+2026-06-27 13:11:00 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 13:11:00 [warn] [Keepalive] Already running
+2026-06-27 13:30:38 [info] [startVM] VM already connected
+2026-06-27 13:30:38 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 13:30:39 [warn] [Keepalive] Already running
+2026-06-27 13:39:27 [info] [startVM] VM already connected
+2026-06-27 13:39:27 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 13:39:27 [warn] [Keepalive] Already running
+2026-06-27 13:42:26 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 13:49:43 [info] [startVM] VM already connected
+2026-06-27 13:49:43 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 13:49:43 [warn] [Keepalive] Already running
+2026-06-27 13:54:13 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 13:55:08 [info] [startVM] VM already connected
+2026-06-27 13:55:08 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 13:55:08 [warn] [Keepalive] Already running
+2026-06-27 13:56:18 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 13:56:39 [info] [startVM] VM already connected
+2026-06-27 13:56:39 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 13:56:40 [warn] [Keepalive] Already running
+2026-06-27 14:04:19 [info] [startVM] VM already connected
+2026-06-27 14:04:19 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 14:04:19 [warn] [Keepalive] Already running
+2026-06-27 14:10:11 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 14:12:21 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 14:14:05 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 14:14:59 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 14:15:19 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 14:18:43 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 14:20:35 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 14:23:28 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 14:23:53 [info] [vmOneShot] Running: bash [2 arg(s)] as intelligent-upbeat-goldberg
+2026-06-27 14:31:23 [info] [startVM] VM already connected
+2026-06-27 14:31:23 [info] [postConnect] Installing SDK: subpath=c/Users/<user>/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/claude-code-vm, version=2.1.187
+2026-06-27 14:31:23 [warn] [Keepalive] Already running
