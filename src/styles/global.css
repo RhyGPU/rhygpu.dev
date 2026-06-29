@@ -145,9 +145,11 @@ footer { margin-top: 80px; padding: 28px 0 48px; border-top: 1px solid var(--bor
 .project-archive-header { margin-bottom: 18px; }
 .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
 .project-grid.compact { margin-top: 0; }
-.project-card { border: 1px solid var(--border); background: rgba(255,255,255,0.018); padding: 20px; min-height: 100%; transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+.project-card { position: relative; border: 1px solid var(--border); background: rgba(255,255,255,0.018); padding: 20px; min-height: 100%; transition: border-color 0.2s, background 0.2s, transform 0.2s; }
 .project-card.featured { grid-column: 1 / -1; background: rgba(122,159,255,0.035); border-color: rgba(122,159,255,0.18); }
 .project-card:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.03); transform: translateY(-2px); }
+.card-cover-link { position: absolute; inset: 0; z-index: 1; color: inherit; border: 0; }
+.card-cover-link:focus-visible { outline: 1px solid rgba(122,159,255,0.55); outline-offset: 3px; }
 .card-topline { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; }
 .status-pill, .featured-mark { display: inline-flex; align-items: center; width: fit-content; border: 1px solid var(--border-hover); color: var(--accent); background: rgba(255,255,255,0.025); padding: 4px 8px; font-size: 10px; line-height: 1; letter-spacing: 0.12em; text-transform: uppercase; }
 .featured-mark { color: var(--accent2); border-color: rgba(122,159,255,0.22); }
@@ -158,6 +160,7 @@ footer { margin-top: 80px; padding: 28px 0 48px; border-top: 1px solid var(--bor
 .stack-list li { border: 1px solid var(--border-hover); color: #98a0b5; background: rgba(255,255,255,0.024); padding: 4px 7px; font-size: 10.5px; line-height: 1.2; }
 .card-actions, .section-actions, .link-row, .project-meta-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .card-actions { margin-top: 20px; }
+.card-actions, .card-actions a { position: relative; z-index: 2; }
 .section-actions { margin-top: 22px; }
 .cta-link { display: inline-flex; align-items: center; min-height: 34px; border: 1px solid rgba(122,159,255,0.28); color: var(--accent); background: rgba(122,159,255,0.045); padding: 7px 11px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; transition: border-color 0.2s, color 0.2s, background 0.2s; }
 .cta-link:hover { border-color: rgba(200,212,240,0.5); color: #fff; background: rgba(122,159,255,0.075); }

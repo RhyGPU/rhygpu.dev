@@ -20,6 +20,7 @@ const projects = (await getCollection('projects'))
     <section class="project-grid" aria-label="Projects">
       {projects.map((project) => (
         <article class={`project-card ${project.data.featured ? 'featured' : ''}`}>
+          <a class="card-cover-link" href={`/projects/${project.data.slug}/`} aria-label={`Open ${project.data.title} project page`}></a>
           <div class="card-topline">
             <span class="status-pill">{project.data.status}</span>
             {project.data.featured && <span class="featured-mark">flagship</span>}
@@ -31,8 +32,8 @@ const projects = (await getCollection('projects'))
             {project.data.stack.map((item) => <li>{item}</li>)}
           </ul>
           <div class="card-actions">
-            <a class="cta-link" href={`/projects/${project.data.slug}/`}>Project page</a>
             {project.data.repo && <a class="cta-link muted" href={project.data.repo}>GitHub</a>}
+            <a class="cta-link muted" href="/devlog/">Devlog Hub</a>
           </div>
         </article>
       ))}
