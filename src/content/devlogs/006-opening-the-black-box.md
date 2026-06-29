@@ -183,6 +183,18 @@ It was following the wrong anchor.
 
 The high-priority section was high-priority garbage.
 
+The bug was easy to miss because the label was correct.
+
+The payload said "latest exchange." The prompt language said "final state." The section sat in the right priority position. From far away, the architecture looked right.
+
+But the excerpt function was taking the front of the previous assistant message.
+
+That meant the system was prioritizing the opening image of the last response, not the place where the response landed. In a short answer, that difference might not matter. In a long narrator answer, it matters constantly.
+
+A narrator often opens with the thing being reacted to and ends with the new physical/emotional position. The head is setup. The tail is state.
+
+So the model was being told to continue from the ending while being shown the beginning.
+
 <div class="section-label">Head vs tail</div>
 
 The fix was simple once the payload made the bug visible.

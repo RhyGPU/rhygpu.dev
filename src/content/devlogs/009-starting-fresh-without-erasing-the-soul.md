@@ -359,3 +359,7 @@ Cleaner action doctrine.
 Shorter prompt.
 
 Better writing.
+
+That is the handoff point.
+
+Fresh Scenario State made the input less dirty. Prompt Cleanup V2 had to make the narrator brief less suffocating. The next problem was no longer only which state entered the payload. It was how much command language the model had to carry while trying to write a living scene.

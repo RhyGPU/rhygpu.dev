@@ -89,6 +89,18 @@ The mock did not surprise me. It did not drift. It did not forget the format. It
 
 Useful for the pipe. Useless as proof that the RP experience worked.
 
+That distinction became important later because it is easy to overclaim a mock.
+
+The mock proved that Mnemosyne could move data through the desktop app. It did not prove that a real model would obey the narrator role, preserve the hidden-state boundary, keep user agency clean, or update a Soul without smearing scene facts into character memory. It did not prove emotional pacing. It did not prove that the parser could survive a model trying to be helpful in the wrong shape.
+
+So this pass should not be read as "the engine worked."
+
+It should be read as:
+
+> The pipe existed.
+>
+> Now it needed to survive an actual model.
+
 <div class="section-label">The first real model test</div>
 
 The useful failures came from actual LLMs.

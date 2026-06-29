@@ -41,6 +41,28 @@ I needed a session packet.
 
 > The whole session, but carried forward as state.
 
+<div class="section-label">Why raw chat and summaries both failed</div>
+
+Raw chat was the obvious first answer.
+
+Just keep feeding the conversation back in. Let the model read everything. Let the long context window do the work.
+
+That breaks the whole premise.
+
+Raw chat grows every turn. It repeats old emotional beats. It carries hidden-state residue if the stripping is not perfect. It gives old prose the same weight as current state. It lets the model pick up the most dramatic line instead of the most current fact.
+
+Worse, raw chat is not typed. A narrator response contains atmosphere, implication, dialogue, physical movement, and sometimes a hidden patch. The model can reread that as if every sentence is equally live. That is how a completed action becomes current again.
+
+The opposite answer was a summary.
+
+Summaries are smaller, but they are dead in a different way. They flatten the scene. They turn rhythm into bookkeeping. They can say "trust improved" without preserving how it felt, or "the scene moved to the kitchen" without preserving the last emotional pressure in the exchange.
+
+Raw chat kept too much.
+
+Summaries killed too much.
+
+Context Compiler V2 was the middle path: preserve the recent exchange as writing texture, but carry long-term continuity as structured state.
+
 <div class="section-label">What changed</div>
 
 Context Compiler V2 started building the next provider payload from actual session pieces instead of treating the prompt as a loose pile.
@@ -147,3 +169,18 @@ A memory should not just appear. A world event should not just mutate. A relatio
 Regenerate, correction, restore, and branch logic all need that trail later.
 
 The input side and the patch foundation belong near each other. One decides what the next model call sees. The other starts making state changes explicit enough to survive edits.
+
+That mattered because the compiled packet made the model's input cleaner, but it also raised the standard for the engine's output.
+
+If the app is going to say "this is the current Soul, this is the current world, this is the current relationship," then the changes that produce those sections cannot be vague. They need a patch shape. They need a source turn. They need to be inspectable, reversible, and safe to reject.
+
+Patch protocol was not just an implementation detail beside Context Compiler V2.
+
+It was the other half of the contract:
+
+```txt
+Compiler: here is the state the model may write from.
+Patch protocol: here is the exact state change the app may accept.
+```
+
+Without that second half, the compiler would eventually become a prettier summary of untrusted drift.
