@@ -27,6 +27,7 @@ const { Content } = await render(project);
         <span class="status-pill">{project.data.status}</span>
         {project.data.repo && <a class="cta-link" href={project.data.repo}>GitHub</a>}
         {project.data.demo && <a class="cta-link" href={project.data.demo}>Demo</a>}
+        {project.data.devlog && <a class="cta-link muted" href={project.data.devlog}>Devlogs</a>}
       </div>
       <ul class="stack-list hero-stack" aria-label={`${project.data.title} stack`}>
         {project.data.stack.map((item) => <li>{item}</li>)}
@@ -38,20 +39,12 @@ const { Content } = await render(project);
         <Content />
       </section>
 
-      <section class="project-panel">
-        <p class="section-label">Technical highlights</p>
-        <ul class="highlight-list">
-          {project.data.highlights.map((item) => <li>{item}</li>)}
-        </ul>
-      </section>
-
-      {project.data.devlog && (
+      {project.data.showHighlightsPanel && project.data.highlights.length > 0 && (
         <section class="project-panel">
-          <p class="section-label">Development Journal</p>
-          <p class="panel-copy">
-            The Mnemosyne build history is kept as a public devlog archive: failures, repairs, architecture changes, and prompt-state decisions in sequence.
-          </p>
-          <a class="cta-link" href={project.data.devlog}>Open devlog archive</a>
+          <p class="section-label">Technical highlights</p>
+          <ul class="highlight-list">
+            {project.data.highlights.map((item) => <li>{item}</li>)}
+          </ul>
         </section>
       )}
 

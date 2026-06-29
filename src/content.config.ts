@@ -39,6 +39,7 @@ const projects = defineCollection({
     devlog: z.string().optional(),
     stack: z.array(z.string()).default([]),
     highlights: z.array(z.string()).default([]),
+    showHighlightsPanel: z.boolean().default(true),
     tags: z.array(z.string()).default([])
   })
 });
