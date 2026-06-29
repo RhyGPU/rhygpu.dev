@@ -1,0 +1,70 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+
+  return projects.map((project) => ({
+    params: { slug: project.data.slug },
+    props: { project }
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+<BaseLayout title={`${project.data.title} | RhyGPU`} description={project.data.summary}>
+  <div class="wrap">
+    <a class="back" href="/projects/">Projects</a>
+
+    <header class="project-hero">
+      <p class="kicker">Project</p>
+      <h1 class="post-title">{project.data.title}</h1>
+      {project.data.subtitle && <p class="post-subtitle">{project.data.subtitle}</p>}
+      <div class="project-meta-row">
+        <span class="status-pill">{project.data.status}</span>
+        {project.data.repo && <a class="cta-link" href={project.data.repo}>GitHub</a>}
+        {project.data.demo && <a class="cta-link" href={project.data.demo}>Demo</a>}
+      </div>
+      <ul class="stack-list hero-stack" aria-label={`${project.data.title} stack`}>
+        {project.data.stack.map((item) => <li>{item}</li>)}
+      </ul>
+    </header>
+
+    <main class="project-page">
+      <section class="prose project-copy">
+        <Content />
+      </section>
+
+      <section class="project-panel">
+        <p class="section-label">Technical highlights</p>
+        <ul class="highlight-list">
+          {project.data.highlights.map((item) => <li>{item}</li>)}
+        </ul>
+      </section>
+
+      {project.data.devlog && (
+        <section class="project-panel">
+          <p class="section-label">Development Journal</p>
+          <p class="panel-copy">
+            The Mnemosyne build history is kept as a public devlog archive: failures, repairs, architecture changes, and prompt-state decisions in sequence.
+          </p>
+          <a class="cta-link" href={project.data.devlog}>Open devlog archive</a>
+        </section>
+      )}
+
+      <section class="project-panel">
+        <p class="section-label">Links</p>
+        <div class="link-row">
+          {project.data.repo && <a class="cta-link" href={project.data.repo}>Repository</a>}
+          {project.data.devlog && <a class="cta-link muted" href={project.data.devlog}>Devlogs</a>}
+          <a class="cta-link muted" href="/projects/">All projects</a>
+        </div>
+      </section>
+    </main>
+
+    <SiteFooter />
+  </div>
+</BaseLayout>

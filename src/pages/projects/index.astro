@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+const projects = (await getCollection('projects'))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout title="Projects | RhyGPU" description="RhyGPU project portfolio: local-first AI tools, desktop apps, and experimental interfaces.">
+  <div class="wrap">
+    <a class="back" href="/">rhygpu.dev</a>
+
+    <header class="post-header project-archive-header">
+      <p class="kicker">Projects</p>
+      <h1 class="post-title">Builder's portfolio</h1>
+      <p class="post-subtitle">Local-first AI tools, desktop workflows, memory systems, and experimental interfaces.</p>
+      <p class="post-meta">Flagship work first. Prototypes labeled honestly.</p>
+    </header>
+
+    <section class="project-grid" aria-label="Projects">
+      {projects.map((project) => (
+        <article class={`project-card ${project.data.featured ? 'featured' : ''}`}>
+          <div class="card-topline">
+            <span class="status-pill">{project.data.status}</span>
+            {project.data.featured && <span class="featured-mark">flagship</span>}
+          </div>
+          <h2>{project.data.title}</h2>
+          {project.data.subtitle && <p class="project-subtitle">{project.data.subtitle}</p>}
+          <p>{project.data.summary}</p>
+          <ul class="stack-list" aria-label={`${project.data.title} stack`}>
+            {project.data.stack.map((item) => <li>{item}</li>)}
+          </ul>
+          <div class="card-actions">
+            <a class="cta-link" href={`/projects/${project.data.slug}/`}>Project page</a>
+            {project.data.repo && <a class="cta-link muted" href={project.data.repo}>GitHub</a>}
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <SiteFooter />
+  </div>
+</BaseLayout>

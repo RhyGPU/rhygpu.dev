@@ -29,9 +29,16 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     slug: z.string(),
+    featured: z.boolean().default(false),
+    order: z.number().default(99),
+    subtitle: z.string().optional(),
     status: z.string(),
     summary: z.string(),
     repo: z.string().url().optional(),
+    demo: z.string().url().optional(),
+    devlog: z.string().optional(),
+    stack: z.array(z.string()).default([]),
+    highlights: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([])
   })
 });

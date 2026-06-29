@@ -6,25 +6,59 @@ import PostCard from '../components/PostCard.astro';
 
 const posts = (await getCollection('devlogs'))
   .filter((post) => post.data.status === 'published')
-  .sort((a, b) => Number(b.data.number) - Number(a.data.number));
+  .sort((a, b) => Number(b.data.number) - Number(a.data.number))
+  .slice(0, 5);
+
+const projects = (await getCollection('projects'))
+  .sort((a, b) => a.data.order - b.data.order);
 ---
-<BaseLayout title="RhyGPU" description="RhyGPU devlog archive for Mnemosyne, local-first AI memory systems, and project logs.">
+<BaseLayout title="RhyGPU" description="RhyGPU portfolio hub for local-first AI tools, memory systems, desktop apps, and experimental interfaces.">
   <div class="wrap">
     <header class="site-header">
       <p class="eyebrow">rhygpu.dev</p>
       <h1 class="site-name">
         RhyGPU
-        <span>// devlog archive</span>
+        <span>// portfolio hub</span>
       </h1>
       <p class="tagline">
-        Building Mnemosyne, a local-first AI memory engine for roleplay continuity.
-        Vibe coding, hidden state, and the psyche of a soul system.
+        Building local-first AI tools, memory systems, desktop apps, and experimental interfaces.
+        The work lives somewhere between engine room, writing desk, and terminal.
       </p>
+      <div class="hero-actions">
+        <a class="cta-link" href="/projects/">View projects</a>
+        <a class="cta-link muted" href="/devlog/">Read devlogs</a>
+      </div>
     </header>
 
-    <div class="rule" data-label="mnemosyne"></div>
+    <div class="rule" data-label="projects"></div>
 
-    <p class="section-label">Mnemosyne devlogs</p>
+    <section aria-label="Featured projects">
+      <p class="section-label">Featured Projects</p>
+      <div class="project-grid compact">
+        {projects.map((project) => (
+          <article class={`project-card ${project.data.featured ? 'featured' : ''}`}>
+            <div class="card-topline">
+              <span class="status-pill">{project.data.status}</span>
+              {project.data.featured && <span class="featured-mark">flagship</span>}
+            </div>
+            <h2>{project.data.title}</h2>
+            {project.data.subtitle && <p class="project-subtitle">{project.data.subtitle}</p>}
+            <p>{project.data.summary}</p>
+            <ul class="stack-list" aria-label={`${project.data.title} stack`}>
+              {project.data.stack.slice(0, 4).map((item) => <li>{item}</li>)}
+            </ul>
+            <div class="card-actions">
+              <a class="cta-link" href={`/projects/${project.data.slug}/`}>Project page</a>
+              {project.data.repo && <a class="cta-link muted" href={project.data.repo}>GitHub</a>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <div class="rule" data-label="journal"></div>
+
+    <p class="section-label">Latest Devlogs</p>
     <ul class="devlog-list">
       {posts.map((post) => (
         <PostCard
@@ -35,6 +69,9 @@ const posts = (await getCollection('devlogs'))
         />
       ))}
     </ul>
+    <div class="section-actions">
+      <a class="cta-link muted" href="/devlog/">Open full journal</a>
+    </div>
 
     <SiteFooter />
   </div>
