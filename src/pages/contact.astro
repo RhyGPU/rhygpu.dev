@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+<BaseLayout title="Contact | RhyGPU" description="Contact links for RhyGPU projects and portfolio work.">
+  <div class="wrap">
+    <a class="back" href="/">rhygpu.dev</a>
+
+    <header class="post-header">
+      <p class="kicker">Contact</p>
+      <h1 class="post-title">Contact</h1>
+      <p class="post-subtitle">Project links, public profile, and future contact details.</p>
+      <p class="post-meta">No fake inbox. Public links first.</p>
+    </header>
+
+    <main class="prose profile-page">
+      <p>
+        Contact details can be added here. For now, GitHub is the primary public link.
+      </p>
+
+      <div class="contact-grid">
+        <a class="contact-card" href="https://github.com/RhyGPU">
+          <span>Primary public link</span>
+          <strong>GitHub</strong>
+          <p>Repositories, project history, and current source work.</p>
+        </a>
+        <a class="contact-card" href="/projects/">
+          <span>Portfolio</span>
+          <strong>Projects</strong>
+          <p>Mnemosyne, OmniPlanner, Pythagorean Harmony, and future project pages.</p>
+        </a>
+        <a class="contact-card" href="/devlog/">
+          <span>Development journal</span>
+          <strong>Devlog</strong>
+          <p>Public notes on architecture, failures, repair loops, and design decisions.</p>
+        </a>
+      </div>
+
+      <section>
+        <p class="section-label">Site / project contact</p>
+        <p>
+          For now, use the GitHub profile as the public entry point. A direct email or formal contact method can be added later when it is ready to publish.
+        </p>
+      </section>
+    </main>
+
+    <SiteFooter />
+  </div>
+</BaseLayout>

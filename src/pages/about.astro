@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+<BaseLayout title="About | RhyGPU" description="Builder profile for RhyGPU: local-first AI tools, memory systems, desktop apps, and experimental interfaces.">
+  <div class="wrap">
+    <a class="back" href="/">rhygpu.dev</a>
+
+    <header class="post-header">
+      <p class="kicker">About</p>
+      <h1 class="post-title">Builder profile</h1>
+      <p class="post-subtitle">Local-first AI tools, memory systems, desktop apps, and experimental interfaces.</p>
+      <p class="post-meta">Software engineering, product design, AI tooling, and interactive systems.</p>
+    </header>
+
+    <main class="prose profile-page">
+      <p>
+        I build local-first AI tools and experimental systems that make model behavior more inspectable, stateful, and controllable.
+        My work sits between software engineering, product design, AI tooling, and interactive systems.
+      </p>
+
+      <p>
+        Mnemosyne is the main example: a local-first memory architecture for persistent AI characters, with state separation, context compilation, payload inspection, and recovery tools.
+        The broader pattern is the same across the portfolio: make messy behavior visible, give it structure, and keep the product surface separate from the debugging machinery.
+      </p>
+
+      <p>
+        This site is a portfolio and development journal for serious experiments and shipped prototypes. Some projects are active systems. Some are lab work. The point is to show the engineering decisions, not pretend every prototype is a finished product.
+      </p>
+
+      <section>
+        <p class="section-label">What I build</p>
+        <div class="case-grid">
+          <article>
+            <h3>Local-first AI tools</h3>
+            <p>Systems that keep useful state near the user instead of treating every session as disposable chat.</p>
+          </article>
+          <article>
+            <h3>Stateful LLM systems</h3>
+            <p>Context, memory, prompt, and state layers designed so model behavior can be inspected and corrected.</p>
+          </article>
+          <article>
+            <h3>Desktop productivity apps</h3>
+            <p>Focused local workspaces for planning, review, and repeated personal workflows.</p>
+          </article>
+          <article>
+            <h3>Debuggable model pipelines</h3>
+            <p>Payload views, repair paths, provenance, and tooling that make failures concrete.</p>
+          </article>
+          <article>
+            <h3>Game/system prototypes</h3>
+            <p>Experiments that test whether an interaction loop is readable, tactical, and worth expanding.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <p class="section-label">How I work</p>
+        <ul class="resume-list">
+          <li>Build from real failure cases.</li>
+          <li>Prefer inspectable systems over black boxes.</li>
+          <li>Separate product surface from debug machinery.</li>
+          <li>Keep prototypes honest about maturity.</li>
+          <li>Turn messy experiments into reusable architecture.</li>
+        </ul>
+      </section>
+    </main>
+
+    <SiteFooter />
+  </div>
+</BaseLayout>

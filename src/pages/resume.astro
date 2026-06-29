@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+<BaseLayout title="Resume | RhyGPU" description="Technical resume-style overview for RhyGPU projects, tools, and focus areas.">
+  <div class="wrap">
+    <a class="back" href="/">rhygpu.dev</a>
+
+    <header class="post-header">
+      <p class="kicker">Resume</p>
+      <h1 class="post-title">Technical profile</h1>
+      <p class="post-subtitle">A project-based view of systems, tools, and current portfolio work.</p>
+      <p class="post-meta">Formal PDF resume can be linked later.</p>
+    </header>
+
+    <main class="prose profile-page">
+      <section>
+        <p class="section-label">Technical Focus</p>
+        <ul class="resume-list">
+          <li>LLM systems and context engineering.</li>
+          <li>Local-first desktop applications.</li>
+          <li>State and memory architecture.</li>
+          <li>Debugging and inspection tooling.</li>
+          <li>AI-assisted productivity systems.</li>
+          <li>Gameplay systems prototyping.</li>
+        </ul>
+      </section>
+
+      <section>
+        <p class="section-label">Projects</p>
+        <div class="contact-grid">
+          <a class="contact-card" href="/projects/mnemosyne/">
+            <span>Flagship</span>
+            <strong>Mnemosyne</strong>
+            <p>Local-first memory architecture for persistent AI characters.</p>
+          </a>
+          <a class="contact-card" href="/projects/omniplanner/">
+            <span>Active App</span>
+            <strong>OmniPlanner</strong>
+            <p>Desktop-first planning workspace for goals, weeks, habits, calendar blocks, and AI-assisted organization.</p>
+          </a>
+          <a class="contact-card" href="/projects/pythagorean-harmony/">
+            <span>Prototype</span>
+            <strong>Pythagorean Harmony</strong>
+            <p>Equation-duel combat prototype for a fantasy third-person action RPG.</p>
+          </a>
+        </div>
+      </section>
+
+      <section>
+        <p class="section-label">Tools / Technologies</p>
+        <div class="proof-list">
+          <span>TypeScript</span>
+          <span>React</span>
+          <span>Tauri</span>
+          <span>Rust</span>
+          <span>SQLite</span>
+          <span>Electron</span>
+          <span>Vite</span>
+          <span>Unreal Engine 5</span>
+          <span>C++</span>
+          <span>Blueprint</span>
+          <span>OpenAI-compatible APIs</span>
+          <span>Local model tooling</span>
+        </div>
+      </section>
+
+      <section>
+        <p class="section-label">Selected Work</p>
+        <ul class="resume-list">
+          <li>Mnemosyne: context compiler, Soul/World state split, payload inspector, hidden patch protocol, regenerate/fix workflows.</li>
+          <li>OmniPlanner: local desktop planning surface with weekly planning, goals, habits, calendar blocks, email workflow, and optional AI assistance.</li>
+          <li>Pythagorean Harmony: UE5 equation-duel prototype using operation weapons and answer-based execution.</li>
+        </ul>
+      </section>
+
+      <section>
+        <p class="section-label">Contact CTA</p>
+        <p>For a formal PDF resume, contact directly or link one later.</p>
+        <div class="link-row">
+          <a class="cta-link" href="/contact/">Contact</a>
+          <a class="cta-link muted" href="https://github.com/RhyGPU">GitHub</a>
+        </div>
+      </section>
+    </main>
+
+    <SiteFooter />
+  </div>
+</BaseLayout>
