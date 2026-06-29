@@ -2,7 +2,7 @@
 number: "010"
 title: "Prompt Cleanup V2 and the UI Reset"
 subtitle: "Action doctrine, paper UI, terminal dev mode, and the feature-parity correction."
-slug: "010-prompt-cleanup-v2-and-the-ui-reset"
+slug: "010-prompt-cleanup-v2"
 project: "Mnemosyne"
 date: 2026-06-27
 status: "published"
@@ -13,10 +13,7 @@ tags:
   - ui
   - state-map
   - feature-parity
-commits:
-  - hash: "TBD"
-    title: "Prompt Cleanup V2 and UI flow reset"
-    repo: "RhyGPU/mnemosyne"
+commits: []
 ---
 
 Fresh Scenario State cleaned the room.

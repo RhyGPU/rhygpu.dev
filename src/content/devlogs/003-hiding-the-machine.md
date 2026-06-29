@@ -91,7 +91,7 @@ Useful for the pipe. Useless as proof that the RP experience worked.
 
 That distinction became important later because it is easy to overclaim a mock.
 
-The mock proved that Mnemosyne could move data through the desktop app. It did not prove that a real model would obey the narrator role, preserve the hidden-state boundary, keep user agency clean, or update a Soul without smearing scene facts into character memory. It did not prove emotional pacing. It did not prove that the parser could survive a model trying to be helpful in the wrong shape.
+The mock proved that Mnemosyne could move data through the desktop app. It did not prove that a real model would obey the narrator role, preserve the hidden-state boundary, keep user agency clean, or update a Soul without smearing scene facts into character memory. Once a real LLM entered the loop, the narrator/character boundary could bend, hidden state could leak, and the output could arrive malformed. It did not prove emotional pacing. It did not prove that the parser could survive a model trying to be helpful in the wrong shape.
 
 So this pass should not be read as "the engine worked."
 
