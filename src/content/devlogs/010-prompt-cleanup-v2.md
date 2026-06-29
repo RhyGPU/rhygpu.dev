@@ -1,223 +1,345 @@
 ---
 number: "010"
-title: "Prompt Cleanup V2 and the UI Reset"
-subtitle: "Action doctrine, paper UI, terminal dev mode, and the feature-parity correction."
+title: "Prompt Cleanup V2"
+subtitle: "Less machinery in the narrator's face, cleaner action doctrine, and the first UI-flow reset."
 slug: "010-prompt-cleanup-v2"
 project: "Mnemosyne"
-date: 2026-06-27
+date: 2026-05-29
 status: "published"
-summary: "Prompt Cleanup V2, action doctrine, State Map visibility, and the UI-flow reset after the mock-vs-real-app mistake."
+summary: "How Mnemosyne moved from adding more prompt rules to cleaning the narrator brief, preserving character agency, and separating player paper UI from terminal dev machinery."
 tags:
   - mnemosyne
   - prompt-cleanup
-  - ui
+  - narrator
+  - ux
   - state-map
-  - feature-parity
-commits: []
+  - dev-console
+commits:
+  - hash: "TBD"
+    title: "Prompt Cleanup V2 and UI flow reset"
+    repo: "RhyGPU/mnemosyne"
 ---
 
-Fresh Scenario State cleaned the room.
+Fresh sessions fixed one kind of contamination.
 
-It did not clean the narrator's head.
+They did not fix the bigger pattern.
 
-The next failure was not stale location or old relationship warmth. It was pressure from the prompt itself. The model was being asked to write a scene while carrying too much machinery in its face: agency warnings, device warnings, time warnings, attribution warnings, hidden-state requirements, context hierarchy, memory instructions, relationship stats, world state, recent chat, latest exchange, and repair language.
+By this point, Mnemosyne had a lot of correct machinery: Soul continuity, World Log, recent events, relationship pressure, latest exchange priority, payload inspection, visible chat export, payload history, regenerate, and fresh scenario state.
 
-That was not discipline anymore.
+The backend was getting smarter.
 
-It was weight.
+The narrator prompt was getting worse.
 
-The narrator could follow more rules and still write worse.
+<div class="section-label">What changed</div>
 
-<div class="section-label">Prompt Cleanup V2</div>
+This pass was the first time the answer was not another rule.
 
-Prompt Cleanup V2 was the correction.
-
-The goal was not to remove boundaries. The goal was to stop explaining the engine to the narrator every turn.
-
-The model still needed a role:
+The system prompt had become a pile of defensive instructions:
 
 ```txt
-You are the narrator.
-Write the scene.
-Do not speak as the user.
-Do not reveal engine state.
-Respect the current Soul and World context.
+agency rules
+device rules
+time rules
+attribution rules
+psychology explanation
+hidden-state schema
+status reports
+context priority
+memory instructions
+relationship stats
+world snapshot
+recent memories
+recent chat
+latest exchange
 ```
 
-But it did not need the whole design philosophy stapled to the front of every response. The app should carry the structure. The prompt should brief the writer.
+Each rule had a reason. None of them were random.
 
-That is the difference.
+A rule existed because the model had once stolen the user's action. Another existed because it invented elapsed time. Another existed because it touched the user's phone too aggressively. Another existed because it confused narrator prose with user dialogue. Another existed because stale world state poisoned a new scene.
+
+The problem was that all of those local fixes were now competing with the core job:
+
+```txt
+Write the next scene well.
+```
+
+The model was being briefed, but it was also being lawyered.
+
+<div class="section-label">Why I touched this</div>
+
+The most revealing comparison was outside the app.
+
+A simpler Janitor-style setup could sometimes produce more natural prose than Mnemosyne, even when Mnemosyne had better state. That was uncomfortable, because the whole point of Mnemosyne was not to make the model worse in exchange for continuity.
+
+That told me the bug was not only memory.
+
+It was presentation.
+
+The engine had useful context, but it was throwing too much machinery into the narrator's face. The narrator was not only receiving a scene brief. It was receiving a legal document, a psychology note, a state schema, a continuity checklist, and a debugging protocol all at once.
+
+The character stopped feeling careful.
+
+She started feeling constrained.
+
+<div class="section-label">The wrong instinct</div>
+
+The wrong instinct was to keep adding narrower prohibitions.
+
+```txt
+Do not touch the phone.
+Do not infer objects.
+Do not invent time.
+Do not move too much.
+Do not act too strongly.
+Do not control the user.
+Do not change state too aggressively.
+```
+
+That kind of prompt can stop some failures.
+
+It also sedates the narrator.
+
+A living character needs to be able to act. She should be able to reach, interrupt, refuse, challenge, retreat, escalate, hesitate, grab for her own phone, or use the room around her.
+
+The real boundary is not:
+
+```txt
+The character must not act.
+```
+
+The real boundary is:
+
+```txt
+The character may act.
+The user's response belongs to the user.
+```
+
+That is a cleaner doctrine.
 
 <div class="section-label">Action doctrine</div>
 
-The device rule exposed the bigger problem.
-
-I had tried to protect user agency by adding a restriction around phones and props. The intention was right. The wording was wrong.
-
-A character should not resolve the user's action without permission. But a character should absolutely be allowed to act.
-
-Aurora can reach for the phone. She can interrupt. She can lunge, refuse, challenge, retreat, grab her own coat, slam a door, step closer, or make the situation worse.
-
-What she cannot do is decide the user's completed response.
-
-Good:
-
-```txt
-Aurora reaches for the phone, fingers closing toward the edge. "Give me that."
-```
+The device rule exposed the distinction.
 
 Bad:
 
 ```txt
-Aurora takes the phone from his hand, unlocks it, and reads everything.
+Aurora takes the phone from his hand, unlocks it, scrolls through the messages, and reads everything.
 ```
 
-That became the action doctrine:
+That resolves the user's side of the interaction. It steals the result.
 
-> Characters may initiate pressure.
->
-> The user's reaction belongs to the user.
+Good:
 
-That rule is smaller than a pile of prop prohibitions and stronger than a timid narrator.
+```txt
+Aurora lunges for the phone, fingers closing toward the edge of the screen. "Give me that."
+```
+
+That creates pressure. It gives the character agency. It still leaves the user room to pull back, let go, resist, speak, or change the scene.
+
+So the prompt needed fewer object-specific bans and more general action law:
+
+```txt
+Portray decisive character attempts.
+Do not resolve the user's reaction.
+Describe what the character perceives.
+Do not claim the user's internal state unless the user gave it.
+Concrete time requires evidence.
+```
+
+Those rules are shorter, broader, and closer to the real boundary.
+
+<div class="section-label">Prompt cleanup</div>
+
+Prompt Cleanup V2 meant separating the narrator brief from the engine internals.
+
+The narrator needs:
+
+```txt
+role
+scene state
+character state
+relationship pressure
+relevant memory
+latest exchange
+current user message
+action doctrine
+```
+
+The narrator does not need every piece of mechanical explanation every turn.
+
+It should not be forced to read a long lecture about the whole architecture before writing a single response. The state engine can remain strict underneath. The visible prompt can be calmer.
+
+That became the new direction:
+
+```txt
+Less machinery in the narrator's face.
+More useful state in the right place.
+Cleaner hierarchy.
+Shorter rules.
+Better writing.
+```
+
+<div class="section-label">What this did not mean</div>
+
+This was not giving up on structure.
+
+Mnemosyne still needs state. It still needs memory routing. It still needs relationship deltas, world snapshots, payload logs, and repair tools. The lesson was not that prompts should be vague.
+
+The lesson was that the narrator prompt and the developer/debug machinery are different surfaces.
+
+The model should receive the smallest useful brief that preserves continuity and behavior.
+
+The developer should be able to inspect the full machinery somewhere else.
+
+That distinction became a UI problem too.
 
 <div class="section-label">The UI-flow reset</div>
 
-The next mistake came from the UI side.
+Around the same time, the interface problem became obvious.
 
-A design handoff mock looked good. It had a calmer app flow: a left rail, a home surface, Play, State Map, Characters, Settings, and dev progress details. It felt more like a real product than the dense launcher that had grown out of the engine work.
+The current UI worked, but it looked like a dense control panel. Too many buttons, too many backend concepts, too much machinery visible at once. That matched the prompt problem almost perfectly.
 
-But the mock did not know Mnemosyne.
-
-It did not know the real app's Souls, Settings, conversations, archive behavior, .mne import/export, editor, payload tools, dev mode, benchmark scars, or the difference between player-facing state and GM/dev state.
-
-So the useful lesson was not "copy the mock."
-
-The useful lesson was:
-
-> Use the mock's flow.
->
-> Keep the real app's features.
-
-I got that wrong once.
-
-A separate mock-data V2 prototype made the app look cleaner while leaving real functionality behind. That was the exact wrong artifact. Mnemosyne did not need a fake prettier app. It needed the existing app reorganized.
-
-The correction was feature parity first.
-
-<div class="section-label">Paper/editorial human UI</div>
-
-The visual direction also got clarified.
-
-Not the dark mock skin.
-
-The app wants a book/editorial paper direction: warm paper, ink, hairline rules, restrained accent, enough editorial hierarchy to organize a complex engine without turning it into a dashboard.
-
-The reason is not only taste.
-
-Mnemosyne is reading-first. The user spends time inside scenes, memories, state, and session records. A paper surface makes redaction feel native too. Hidden State Map fields can read like a declassified document instead of a broken UI.
-
-That matters because State Map visibility is not binary.
-
-<div class="section-label">Terminal dev UI</div>
-
-The human UI should be paper.
-
-The dev UI should not.
-
-Dev mode is the machine room: pipeline traces, evaluator status, repair attempts, payload inspection, benchmark residue, logs, and commands. It should feel separate. Terminal language fits there because the user is not reading a scene in that mode. They are operating the engine.
-
-That split became part of the design:
+The product was doing the same thing in two places:
 
 ```txt
-Human surface: paper/editorial.
-Dev surface: terminal/machine room.
+The prompt showed too much machinery to the narrator.
+The UI showed too much machinery to the player.
 ```
 
-Mixing them makes both worse.
+The mock UI helped, but not because it was a complete product spec. It did not know Mnemosyne's actual features. It invented some things, flattened others, and missed parts of the real app.
 
-<div class="section-label">State Map redaction</div>
+Its useful lesson was flow.
 
-State Map also changed shape.
+One surface should not do every job.
 
-The first instinct was to ask whether showing everything would break immersion. It can.
+<div class="section-label">Paper and terminal</div>
 
-But deleting the view is not the answer.
+The visual split became clear:
 
-The better answer is a single State Map with visibility rules.
+```txt
+Player-facing fiction: paper / book / editorial-lite.
+Developer and GM machinery: terminal.
+```
 
-Realistic mode shows little. Reader mode can show more Soul-facing information. GM or god mode can show the whole operational map: who knows what, who misbelieves what, plot state, relationship numbers, memory, objects, timeline, and hidden state.
+Paper fits the story layer. It makes the transcript, Soul view, and records feel like reading, journals, dossiers, and case files. It also makes redaction natural. Hidden knowledge can appear as blacked-out text in reader/god modes instead of looking like a broken app.
 
-The backend should keep all of it.
+Terminal fits the machine layer. The Dev console, payload trace, pipeline stages, benchmark output, and raw diagnostics should feel like the back room. That is where the engine can be explicit without contaminating the fiction surface.
 
-The UI decides what the current seat may see.
+This is the same architectural split expressed visually:
 
-That means redaction is a presentation layer, not data loss.
+```txt
+Soul / Play / readable records = paper.
+Pipeline / payload / repair / debug = terminal.
+```
 
-<div class="section-label">Feature parity</div>
+<div class="section-label">State Map without spoiling the story</div>
 
-This became the hard requirement.
+The State Map needed the same treatment.
 
-The UI overhaul is not a mock app creation task.
+A full state view is useful, but not every user should see every field in every mode. A player in realistic mode should not get a god-view of secret beliefs, hidden knowledge, or offscreen plot truth. That spoils the story.
 
-Every existing feature has to land somewhere in the new flow:
+So State Map became a visibility problem, not a deletion problem.
 
-- Home for resuming and selecting sessions
-- Play for the actual RP surface
-- State Map as the full state hub
-- Library or Workshop for Souls, settings, import/export, and editing
-- Settings as a real destination, not a buried drawer
-- Dev mode as a clear terminal-styled entry
+The backend keeps the state.
 
-The mock's "Campaigns" becomes Home.
+The mode decides how much is visible:
 
-The mock's Play remains Play.
+```txt
+Realistic: omit hidden knowledge entirely.
+Reader: redact sensitive fields with optional reveal.
+God / GM / Dev: show the full machine-readable truth.
+```
 
-The mock's State Map becomes Mnemosyne's state hub, backed by real Soul and World data.
+Omit and redact are not the same.
 
-The mock's Characters cannot be copied literally, because Mnemosyne's real objects are Souls, Settings, sessions, and editor surfaces.
+If realistic mode shows `misbelieves — censored`, it still leaks that a secret exists. In realistic play, even the existence of the hidden field may be too much. In reader mode, the redaction is part of the pleasure. In god mode, the whole map is allowed.
 
-That mapping matters more than the mock's labels.
+That made the mock's State Map idea usable without turning solo immersive RP into a spoiler dashboard.
 
-<div class="section-label">What the logs corrected</div>
+<div class="section-label">What got better</div>
 
-The causal logs make the public history sharper.
+The direction became cleaner.
 
-The mock provider did not prove real model behavior. It proved the pipe.
+Prompt side:
 
-Raw chat and dead summaries both failed, which is why Context Compiler V2 and patch protocol mattered together.
+```txt
+Do not add more cages.
+Clarify the actual boundary.
+Keep the narrator brief compact.
+Move debug machinery out of the narrator's face.
+```
 
-The latest exchange bug was not a mystical model failure. It was the app feeding the head of the previous narrator response while claiming to feed the final state.
+UI side:
 
-Fresh Scenario State fixed part of the dirty-brief problem.
+```txt
+Do not make one mega-control-panel.
+Split by user intent.
+Let Play read like a book.
+Let records read like dossiers.
+Let Dev look like a terminal.
+```
 
-Prompt Cleanup V2 fixed the next layer: too much machinery in the narrator's face.
+The same design law applied to both:
 
-The UI reset fixed the product layer: do not replace the real app with a pretty mock. Reorganize the real app without losing features.
+```txt
+The fiction surface should feel alive.
+The machine surface should be inspectable.
+Do not confuse the two.
+```
+
+<div class="section-label">What stayed rough</div>
+
+This did not finish the product.
+
+It created a clearer direction, but the actual app still needed hard work:
+
+- State Map had to render real loaded Soul/session data, not mock data.
+- Library and Workshop had to preserve every existing creation/editing feature.
+- Settings needed to become a real page, not just a drawer.
+- Play needed a calm pipeline indicator without turning into Dev mode.
+- Home needed a clear Continue flow and honest shelves.
+- Redaction needed to be mode-aware instead of just decorative.
+- Dev needed to stay reachable without overwhelming normal play.
+
+The important part was the standard:
+
+```txt
+No fake mock-data victory.
+No pretty UI that lies about what the backend can do.
+No hiding real features just to make the screen calmer.
+```
+
+The mock was inspiration.
+
+The real app was the source of truth.
 
 <div class="section-label">Next</div>
 
-The next public phase should not claim that the UI mock proved backend truth.
+The next work is not one single feature.
 
-It did not.
+It is convergence.
 
-The backend truth still comes from payloads, state exports, visible chat logs, and real model runs.
+The engine needs to keep becoming safer and more inspectable: restore tools, provenance, memory inspector, better retrieval, entity separation, and payload timing.
 
-The UI truth is different:
+The interface needs to expose that power without dumping the machinery on the player.
 
-Can the user find the right surface?
+So the next product direction is:
 
-Can they resume a session without hunting?
+```txt
+Paper for play.
+Editorial-lite for records.
+Terminal for Dev.
+Real State Map data.
+Mode-aware redaction.
+Feature parity before polish.
+```
 
-Can they see the Soul without reading debug sludge?
+Mnemosyne should not become a prettier control panel.
 
-Can they enter Dev mode without polluting Play?
+It should become a readable fiction surface with a serious engine underneath.
 
-Can State Map reveal or redact based on mode?
+That is the actual cleanup.
 
-Can the new flow carry every old feature?
+Not only shorter prompts.
 
-That is the bar.
-
-Not prettier.
-
-Accurate.
+A cleaner boundary between story and machine.
