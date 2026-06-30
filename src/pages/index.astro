@@ -58,7 +58,7 @@ const projects = (await getCollection('projects'))
             </ul>
             <div class="card-actions">
               {project.data.repo && <a class="cta-link muted" href={project.data.repo}>GitHub</a>}
-              <a class="cta-link muted" href="/devlog/">Devlog Hub</a>
+              {project.data.devlog && <a class="cta-link muted" href={project.data.devlog}>Devlogs</a>}
             </div>
           </article>
         ))}
