@@ -18,6 +18,31 @@ highlights:
   - Scoped the project around proving the core loop before building a full game.
   - Used UE5 third-person foundations with C++ core systems and Blueprint tuning.
   - "Built around readable player feedback: equation state, operation effects, correct answer execution, and wrong-answer consequences."
+media:
+  - title: Equation enemy
+    type: placeholder
+    caption: Planned screenshot slot for an enemy presenting equation state in combat.
+    status: planned
+  - title: Operation weapon interaction
+    type: placeholder
+    caption: Planned demo slot for transforming an equation through combat actions.
+    status: planned
+  - title: X weapon execution
+    type: placeholder
+    caption: Planned demo slot for executing an enemy with the correct value of x.
+    status: planned
+  - title: Wrong-answer evolution
+    type: placeholder
+    caption: Planned demo slot for showing combat consequences after an incorrect answer.
+    status: planned
+  - title: UE5 prototype view
+    type: placeholder
+    caption: Planned screenshot slot for the first playable third-person prototype.
+    status: planned
+proofNotes:
+  - First playable prototype, not a full RPG.
+  - Core loop is equation-duel combat.
+  - Core systems are C++ with Blueprint tuning.
 showHighlightsPanel: false
 tags:
   - game prototype

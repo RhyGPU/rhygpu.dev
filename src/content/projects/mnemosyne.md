@@ -23,6 +23,40 @@ highlights:
   - Added fresh-session boundaries to prevent cross-session relationship and world-state contamination.
   - Refined narrator prompting so characters can act without resolving user reactions.
   - Designed a paper/terminal UI split for fiction surfaces and developer tools.
+architecture:
+  - User input
+  - Context Compiler
+  - Narrator model
+  - Visible narration + hidden state
+  - Parser / validator
+  - Soul / World / relationship updates
+  - Payload inspector / debug logs
+  - Next turn
+media:
+  - title: Play view
+    type: placeholder
+    caption: Planned screenshot slot for the main fiction/player surface once a public capture is ready.
+    status: planned
+  - title: State Map / Soul view
+    type: placeholder
+    caption: Planned screenshot slot for memory and state visibility without exposing private session content.
+    status: planned
+  - title: Payload inspector
+    type: placeholder
+    caption: Planned screenshot slot for the debug surface that shows exact model payloads.
+    status: planned
+  - title: Repair / regenerate flow
+    type: placeholder
+    caption: Planned screenshot slot for recovery workflows around bad generations and state repair.
+    status: planned
+  - title: Settings / provider profile
+    type: placeholder
+    caption: Planned screenshot slot for model/provider configuration once the public UI is capture-ready.
+    status: planned
+proofNotes:
+  - Devlogs document the design evolution from raw state blocks to inspectable session architecture.
+  - GitHub repo contains the working alpha source.
+  - README documents current implemented systems and known limitations.
 showHighlightsPanel: false
 tags:
   - local-first

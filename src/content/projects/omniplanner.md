@@ -20,6 +20,31 @@ highlights:
   - Created a simple Windows launch path with dependency install, build, and launch flow.
   - Structured planning around goals, weeks, habits, calendar blocks, and email instead of one generic task list.
   - Framed AI as optional assistance inside a planning system, not the entire product.
+media:
+  - title: Weekly planning view
+    type: placeholder
+    caption: Planned screenshot slot for the weekly planning surface.
+    status: planned
+  - title: Goals view
+    type: placeholder
+    caption: Planned screenshot slot for goal organization and review.
+    status: planned
+  - title: Habits view
+    type: placeholder
+    caption: Planned screenshot slot for recurring habit tracking.
+    status: planned
+  - title: Calendar blocks
+    type: placeholder
+    caption: Planned screenshot slot for time-block planning.
+    status: planned
+  - title: AI assistance panel
+    type: placeholder
+    caption: Planned screenshot slot for optional AI assistance inside the planning workspace.
+    status: planned
+proofNotes:
+  - Desktop-first app rather than a web-only planner.
+  - App data is stored locally on the device.
+  - Windows launcher flow exists through run.bat and create-shortcut.bat.
 showHighlightsPanel: false
 tags:
   - planning

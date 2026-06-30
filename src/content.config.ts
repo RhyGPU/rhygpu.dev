@@ -8,6 +8,21 @@ const commitSchema = z.object({
   url: z.string().url().optional()
 });
 
+const mediaSchema = z.object({
+  title: z.string(),
+  type: z.enum(['screenshot', 'video', 'diagram', 'placeholder']).default('placeholder'),
+  src: z.string().optional(),
+  alt: z.string().optional(),
+  caption: z.string(),
+  status: z.enum(['available', 'planned']).default('planned')
+});
+
+const demoLinkSchema = z.object({
+  title: z.string(),
+  url: z.string(),
+  caption: z.string().optional()
+});
+
 const devlogs = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/devlogs' }),
   schema: z.object({
@@ -39,6 +54,10 @@ const projects = defineCollection({
     devlog: z.string().optional(),
     stack: z.array(z.string()).default([]),
     highlights: z.array(z.string()).default([]),
+    architecture: z.array(z.string()).default([]),
+    media: z.array(mediaSchema).default([]),
+    demoLinks: z.array(demoLinkSchema).default([]),
+    proofNotes: z.array(z.string()).default([]),
     showHighlightsPanel: z.boolean().default(true),
     tags: z.array(z.string()).default([])
   })

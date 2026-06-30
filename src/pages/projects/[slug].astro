@@ -14,6 +14,9 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
+const hasArchitecture = project.data.architecture.length > 0;
+const hasMedia = project.data.media.length > 0 || project.data.demoLinks.length > 0;
+const hasProofNotes = project.data.proofNotes.length > 0;
 ---
 <BaseLayout title={`${project.data.title} | RhyGPU`} description={project.data.summary}>
   <div class="wrap">
@@ -44,6 +47,62 @@ const { Content } = await render(project);
           <p class="section-label">Technical highlights</p>
           <ul class="highlight-list">
             {project.data.highlights.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {hasArchitecture && (
+        <section class="project-panel">
+          <p class="section-label">Architecture / System Shape</p>
+          <div class="architecture-card" aria-label={`${project.data.title} architecture flow`}>
+            {project.data.architecture.map((step) => <span>{step}</span>)}
+          </div>
+        </section>
+      )}
+
+      {hasMedia && (
+        <section class="project-panel">
+          <p class="section-label">Screenshots / Demo Proof</p>
+          {project.data.demoLinks.length > 0 && (
+            <div class="link-row proof-demo-links">
+              {project.data.demoLinks.map((link) => (
+                <a class="cta-link muted" href={link.url} title={link.caption}>{link.title}</a>
+              ))}
+            </div>
+          )}
+          {project.data.media.length > 0 && (
+            <div class="media-grid">
+              {project.data.media.map((item) => (
+                <article class={`media-card ${item.status === 'planned' ? 'planned' : 'available'}`}>
+                  <div class="media-frame">
+                    {item.src ? (
+                      <img src={item.src} alt={item.alt ?? item.title} loading="lazy" />
+                    ) : (
+                      <div class="media-placeholder">
+                        <span>{item.type}</span>
+                        <strong>{item.title}</strong>
+                      </div>
+                    )}
+                  </div>
+                  <div class="media-copy">
+                    <div class="media-topline">
+                      <h3>{item.title}</h3>
+                      <span class={`proof-status ${item.status}`}>{item.status}</span>
+                    </div>
+                    <p>{item.caption}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
+      {hasProofNotes && (
+        <section class="project-panel">
+          <p class="section-label">Proof Notes</p>
+          <ul class="proof-note-list">
+            {project.data.proofNotes.map((note) => <li>{note}</li>)}
           </ul>
         </section>
       )}
