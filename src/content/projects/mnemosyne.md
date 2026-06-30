@@ -33,18 +33,36 @@ architecture:
   - Payload inspector / debug logs
   - Next turn
 media:
+  - title: Home dashboard
+    type: screenshot
+    src: /projects/mnemosyne/home-dashboard.png
+    alt: Mnemosyne home dashboard showing living worlds, recent sessions, and engine status.
+    caption: The home dashboard shows persistent worlds, recent sessions, and engine state as first-class navigation instead of disposable chats.
+    status: available
   - title: Play view
-    type: placeholder
-    caption: Planned screenshot slot for the main fiction/player surface once a public capture is ready.
-    status: planned
+    type: screenshot
+    src: /projects/mnemosyne/play-view.png
+    alt: Mnemosyne play view with the turn pipeline, message composer, model mode, and dev controls.
+    caption: The main writing surface where the user interacts with the narrator while the engine maintains state behind the scene.
+    status: available
   - title: State Map / Soul view
-    type: placeholder
-    caption: Planned screenshot slot for memory and state visibility without exposing private session content.
-    status: planned
+    type: screenshot
+    src: /projects/mnemosyne/state-map-or-soul-view.png
+    alt: Mnemosyne State Map showing scene state, characters, relationships, objects, timeline, and memory inspector.
+    caption: Inspectable character and continuity state separated from the visible transcript.
+    status: available
   - title: Payload inspector
-    type: placeholder
-    caption: Planned screenshot slot for the debug surface that shows exact model payloads.
-    status: planned
+    type: screenshot
+    src: /projects/mnemosyne/payload-inspector.png
+    alt: Mnemosyne terminal developer UI showing pipeline logs, memory cycle, API debug, LLM payload counts, repair controls, and benchmark runner.
+    caption: Debug view for the exact model payload and surrounding pipeline state, used to diagnose continuity failures from input instead of guessing from output.
+    status: available
+  - title: Library scene launcher
+    type: screenshot
+    src: /projects/mnemosyne/library-scene-launcher.png
+    alt: Mnemosyne library launcher showing scene selection, primary character selection, and session start controls.
+    caption: The launcher separates source world and character setup from isolated session starts, keeping scenario boundaries explicit.
+    status: available
   - title: Repair / regenerate flow
     type: placeholder
     caption: Planned screenshot slot for recovery workflows around bad generations and state repair.
