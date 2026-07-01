@@ -29,7 +29,7 @@ const hasProofNotes = project.data.proofNotes.length > 0;
         <span class="status-pill">{project.data.status}</span>
         {project.data.repo && <a class="cta-link" href={project.data.repo}>GitHub</a>}
         {project.data.demo && <a class="cta-link" href={project.data.demo}>Demo</a>}
-        {project.data.devlog && <a class="cta-link muted" href={project.data.devlog}>Devlogs</a>}
+        <a class="cta-link muted" href={`/projects/${project.data.slug}/devlog/`}>Devlogs</a>
       </div>
       <ul class="stack-list hero-stack" aria-label={`${project.data.title} stack`}>
         {project.data.stack.map((item) => <li>{item}</li>)}
@@ -110,7 +110,7 @@ const hasProofNotes = project.data.proofNotes.length > 0;
         <p class="section-label">Links</p>
         <div class="link-row">
           {project.data.repo && <a class="cta-link" href={project.data.repo}>Repository</a>}
-          {project.data.devlog && <a class="cta-link muted" href={project.data.devlog}>Devlogs</a>}
+          <a class="cta-link muted" href={`/projects/${project.data.slug}/devlog/`}>Devlogs</a>
           <a class="cta-link muted" href="/projects/">All projects</a>
         </div>
       </section>

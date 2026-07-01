@@ -96,8 +96,6 @@ a:focus-visible { outline: 1px solid rgba(90,171,230,0.6); outline-offset: 3px; 
 .covered ol { color: var(--text-body); margin-left: 1.1rem; }
 .covered li { margin: 0.5rem 0; font-size: 14px; }
 
-.closing { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); font: 400 12px var(--mono); color: var(--text-muted); letter-spacing: 0.04em; }
-
 /* ============ Devlog list ============ */
 .devlog-list { list-style: none; margin-top: 8px; }
 .devlog-link { display: grid; grid-template-columns: 52px 1fr auto; gap: 0 20px; align-items: center; padding: 17px 12px; border-top: 1px solid var(--border); border-radius: 8px; transition: background 0.16s; }
@@ -106,6 +104,9 @@ a:focus-visible { outline: 1px solid rgba(90,171,230,0.6); outline-offset: 3px; 
 .devlog-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .devlog-title { font: 600 15px var(--sans); color: var(--text); transition: color 0.16s; }
 .devlog-project { font: 600 9.5px var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border-strong); border-radius: 4px; padding: 2px 6px; line-height: 1.4; }
+.devlog-empty { margin-top: 8px; padding: 40px 28px; border: 1px dashed var(--border-strong); border-radius: 12px; text-align: center; }
+.devlog-empty-title { font: 600 clamp(1.1rem, 2.4vw, 1.4rem) var(--display); color: var(--text); margin-bottom: 8px; }
+.devlog-empty-sub { font: 400 14px var(--sans); color: var(--text-muted); max-width: 420px; margin: 0 auto; line-height: 1.6; }
 .devlog-sub { display: block; font: 400 13px var(--sans); color: var(--text-muted); margin-top: 5px; line-height: 1.5; }
 .devlog-chevron { font: 600 15px var(--sans); color: var(--teal); align-self: center; transition: transform 0.2s; }
 .devlog-link:hover .devlog-chevron { transform: translateX(3px); }
@@ -156,7 +157,6 @@ a:focus-visible { outline: 1px solid rgba(90,171,230,0.6); outline-offset: 3px; 
 .project-panel { margin-top: 44px; }
 .highlight-list { list-style: none; display: grid; gap: 10px; }
 .highlight-list li { color: var(--text-body); border-left: 2px solid var(--border-strong); background: rgba(255,255,255,0.02); border-radius: 0 8px 8px 0; padding: 12px 14px; font-size: 14px; line-height: 1.6; }
-.panel-copy { color: var(--text-body); font-size: 14px; line-height: 1.7; max-width: 680px; margin-bottom: 16px; }
 
 .flow-diagram { display: grid; gap: 8px; margin: 2rem 0; max-width: 560px; }
 .flow-diagram span { position: relative; display: block; border: 1px solid rgba(90,171,230,0.22); background: rgba(90,171,230,0.06); border-radius: 8px; color: var(--text-body); padding: 11px 13px; font-size: 12.5px; line-height: 1.4; }

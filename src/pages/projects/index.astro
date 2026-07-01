@@ -32,7 +32,7 @@ const projects = (await getCollection('projects'))
           </ul>
           <div class="card-actions">
             {project.data.repo && <a class="cta-link muted" href={project.data.repo}>GitHub</a>}
-            {project.data.devlog && <a class="cta-link muted" href={project.data.devlog}>Devlogs</a>}
+            <a class="cta-link muted" href={`/projects/${project.data.slug}/devlog/`}>Devlogs</a>
           </div>
         </article>
       ))}

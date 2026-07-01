@@ -33,9 +33,6 @@
       "type": "string",
       "format": "uri"
     },
-    "devlog": {
-      "type": "string"
-    },
     "stack": {
       "default": [],
       "type": "array",

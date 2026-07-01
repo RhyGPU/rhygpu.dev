@@ -6,13 +6,11 @@ import SiteFooter from '../components/SiteFooter.astro';
 interface Props {
   title: string;
   description?: string;
-  chrome?: boolean;
 }
 
 const {
   title,
-  description = "RhyGPU — Rhy's Systems Lab: a personal lab for AI tools, robotics systems, hardware experiments, devlogs, resumes, and long-term technical work.",
-  chrome = true
+  description = "RhyGPU — Rhy's Systems Lab: a personal lab for AI tools, robotics systems, hardware experiments, devlogs, resumes, and long-term technical work."
 } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 ---
@@ -40,8 +38,8 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
     />
   </head>
   <body>
-    {chrome && <SiteNav />}
+    <SiteNav />
     <slot />
-    {chrome && <SiteFooter />}
+    <SiteFooter />
   </body>
 </html>

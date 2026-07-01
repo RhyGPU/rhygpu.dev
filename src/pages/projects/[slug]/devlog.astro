@@ -8,18 +8,15 @@ export async function getStaticPaths() {
   const devlogs = (await getCollection('devlogs'))
     .filter((post) => post.data.status === 'published');
 
-  return projects
-    .map((project) => ({
+  return projects.map((project) => ({
+    params: { slug: project.data.slug },
+    props: {
       project,
       posts: devlogs
         .filter((post) => post.data.project.toLowerCase() === project.data.title.toLowerCase())
         .sort((a, b) => Number(b.data.number) - Number(a.data.number))
-    }))
-    .filter((entry) => entry.posts.length > 0)
-    .map((entry) => ({
-      params: { slug: entry.project.data.slug },
-      props: entry
-    }));
+    }
+  }));
 }
 
 const { project, posts } = Astro.props;
@@ -36,19 +33,26 @@ const count = posts.length;
       <p class="kicker">{project.data.title} · Devlog</p>
       <h1 class="post-title">{project.data.title} Devlogs</h1>
       {project.data.subtitle && <p class="post-subtitle">{project.data.subtitle}</p>}
-      <p class="post-meta">{count} {count === 1 ? 'entry' : 'entries'} · newest first</p>
+      <p class="post-meta">{count > 0 ? `${count} ${count === 1 ? 'entry' : 'entries'} · newest first` : 'Journal in progress'}</p>
     </header>
 
-    <ul class="devlog-list">
-      {posts.map((post) => (
-        <PostCard
-          href={`/devlog/${post.data.slug}/`}
-          number={post.data.number}
-          title={post.data.title}
-          summary={post.data.summary}
-        />
-      ))}
-    </ul>
+    {count > 0 ? (
+      <ul class="devlog-list">
+        {posts.map((post) => (
+          <PostCard
+            href={`/devlog/${post.data.slug}/`}
+            number={post.data.number}
+            title={post.data.title}
+            summary={post.data.summary}
+          />
+        ))}
+      </ul>
+    ) : (
+      <div class="devlog-empty">
+        <p class="devlog-empty-title">No devlogs yet.</p>
+        <p class="devlog-empty-sub">This journal is being written as {project.data.title} develops. Check back soon.</p>
+      </div>
+    )}
 
     <div class="section-actions">
       <a class="cta-link muted" href={`/projects/${project.data.slug}/`}>Back to project</a>

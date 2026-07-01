@@ -51,7 +51,6 @@ const projects = defineCollection({
     summary: z.string(),
     repo: z.string().url().optional(),
     demo: z.string().url().optional(),
-    devlog: z.string().optional(),
     stack: z.array(z.string()).default([]),
     highlights: z.array(z.string()).default([]),
     architecture: z.array(z.string()).default([]),
