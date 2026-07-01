@@ -1,0 +1,288 @@
+rhygpu.dev — Build Session Chat Log
+Date: 2026-07-01
+Participants: Junna (user) · Claude (Claude Code, Opus 4.8)
+Project: rhygpu.dev — Astro portfolio + devlog engine
+Scope of session: import a homepage design, unify the whole site on one design
+system, make project cards clickable, build a per-project devlog engine, clean up
+dead code, add the site itself as a self-documenting project, fix a sort bug.
+
+This is raw session source material for writing rhygpu.dev devlogs.
+
+═══════════════════════════════════════════════════════════════════════════════
+[1] USER
+═══════════════════════════════════════════════════════════════════════════════
+Use the claude_design MCP (https://api.anthropic.com/v1/design/mcp, auth via
+/design-login) to import this project:
+https://claude.ai/design/p/751b34a6-b3ba-4a6e-bc1e-ff22a599a46e?file=RhyGPU+Homepage.dc.html
+Implement: RhyGPU Homepage.dc.html
+
+── CLAUDE
+Loaded the DesignSync tool and tried to read the project, but the design MCP
+needs interactive /design-login, which isn't available in this environment.
+Asked the user to either use "Send to Claude Code Web" or provide the files
+directly.
+
+═══════════════════════════════════════════════════════════════════════════════
+[2] USER
+═══════════════════════════════════════════════════════════════════════════════
+@"C:\Users\T-ROBOTICS\Downloads\Homepage design feedback.zip"
+@"C:\Users\T-ROBOTICS\Downloads\RhyGPU Homepage.html"
+use this instead
+
+── CLAUDE
+Extracted the zip (RhyGPU Homepage.dc.html, Homepage Options.dc.html, support.js)
+and read the target design. Key design language:
+  - bg #15130f (olive/warm dark), text #ece7dd
+  - fonts: Space Grotesk (display), IBM Plex Sans (body), IBM Plex Mono (labels)
+  - accents: blue #5aabe6, green #7cc98f, teal #57bcae
+  - sticky nav w/ "R" badge, hero, stat strip, flagship split card, secondary
+    project cards, devlog list, footer.
+Read the existing Astro project (BaseLayout, global.css, index.astro, project +
+devlog collections). Rebuilt src/pages/index.astro with the new design, wired to
+REAL content collections (projects, devlogs) instead of the design's hardcoded
+placeholders; flagship uses the real Mnemosyne screenshot. Fixed placeholder nav
+links (About/Resume/Contact had pointed at #about/#footer). Scoped all new styles
+to the homepage so the rest of the site was untouched.
+Created .claude/launch.json, ran npm install, started the dev server, verified via
+DOM inspection + accessibility snapshot (3 projects, 11 devlogs, image loads, no
+404s), ran astro check (0 errors).
+Flagged that the homepage now looked different from the rest of the (serif) site.
+
+═══════════════════════════════════════════════════════════════════════════════
+[3] USER
+═══════════════════════════════════════════════════════════════════════════════
+First see the og structure of page branches then fix all pages. Also, change title.
+"Memory systems & desktop apps, built local-first.
+Experimental interfaces from somewhere between the engine room, the writing desk,
+and the terminal."
+what are good ideas that match the theme
+
+── CLAUDE
+Read every page + shared stylesheet and mapped the structure: all pages except the
+new homepage shared one serif system (BaseLayout → .wrap → .post-header/.prose,
+blue-black bg, italic Fraunces). Only the homepage had diverged.
+Presented 4 headline directions (Software that remembers / Engine room↔terminal /
+Make the machine legible / AI that holds its state) via a question.
+
+── USER (answer)
+"I don't like any of this. Its not meysm,eose page or other project's page, its my
+homepage a site of me for me and by me. Projects are stuff I present on it for me
+for various purposes"
+
+── CLAUDE
+Reframed: this is a PERSONAL homepage, not a product pitch. Asked two things:
+(1) how to introduce you — Name-first / Identity nameplate / Personal ethos /
+Just a greeting; (2) which name to front — Junna / RhyGPU / Both.
+
+── USER (answer)
+Framing: "Personal ethos" →
+  H1: I build software I can actually see inside.
+  Sub: Local-first AI tools and memory systems — inspectable, stateful, and mine.
+       From the engine room, the writing desk, and the terminal.
+Name: RhyGPU
+
+── CLAUDE
+Centralized the design system so all pages match (one system, the new one):
+  - NEW src/components/SiteNav.astro — sticky "R" nav, real-route links + active
+    state, rendered once from BaseLayout on every page.
+  - Rewrote SiteFooter.astro as a full-bleed bar; centralized into BaseLayout
+    (removed the 7 per-page copies → exactly one nav + one footer per page).
+  - BaseLayout.astro now loads Space Grotesk + IBM Plex fonts globally + wraps
+    every page in shared nav/footer.
+  - Re-themed global.css end-to-end (olive bg, Space Grotesk headings, IBM Plex,
+    blue/green/teal accents, rounded cards w/ hover lift) — kept all class names so
+    projects/devlogs/about/resume/contact restyle without markup churn.
+  - Rewrote index.astro to use shared chrome + global tokens + new copy.
+Verified: astro check 0 errors; full build all pages; DOM/computed-style checks on
+all 8 page types confirmed uniform theme (Space Grotesk titles, mono labels, blue
+CTAs, one nav + one footer each). Screenshot renderer hung (tool-side), so verified
+via computed styles.
+
+═══════════════════════════════════════════════════════════════════════════════
+[4] USER  (final settings)
+═══════════════════════════════════════════════════════════════════════════════
+Browser/SEO title:  RhyGPU — Rhy's Systems Lab
+Hero title:         I build systems I can understand, inspect, and own.
+Subtitle:           A personal lab for AI tools, robotics systems, hardware
+                    experiments, devlogs, resumes, and long-term technical work.
+(Korean gloss: 내가 이해하고, 들여다보고, 소유할 수 있는 시스템을 만드는 공간.)
+
+── CLAUDE
+Applied to index.astro (title, eyebrow "Rhy's Systems Lab", H1, tagline) and updated
+the site-wide default description in BaseLayout to the "Systems Lab" positioning.
+Verified in browser (title/og:title/meta/H1/tagline all correct); screenshot now
+rendered. Flagged a content mismatch: the hero now promises robotics + hardware but
+all 3 projects are software; also the stat strip still reads "Rust / +TS,C++,
+Electron".
+
+═══════════════════════════════════════════════════════════════════════════════
+[5] USER
+═══════════════════════════════════════════════════════════════════════════════
+Make the whole box for each project clickable to go to each projects page and
+remove open project button
+
+── CLAUDE
+Flagship card: added a full-card cover link to the project page, removed the
+"Open project →" button; kept GitHub → and Devlogs → clickable above the cover via
+z-index. Secondary cards already had full-card covers. Verified by clicking the card
+body (over the title) — navigated to /projects/mnemosyne/. Screenshot confirmed the
+button gone.
+
+═══════════════════════════════════════════════════════════════════════════════
+[6] USER
+═══════════════════════════════════════════════════════════════════════════════
+seperate homepage for each project's dev logs
+
+── CLAUDE
+All 11 devlogs were Mnemosyne; other projects had none. Built:
+  - NEW route src/pages/projects/[slug]/devlog.astro — per-project devlog index,
+    generated only for projects with ≥1 devlog (at this point).
+  - Global /devlog/ reframed as the cross-project journal: retitled "Devlogs", a
+    "By project" chip row, and a project label per entry (PostCard optional prop).
+  - Individual entries stayed at /devlog/[slug]/ (stable URLs).
+  - Pointed mnemosyne.md devlog field + homepage flagship "Devlogs →" at the
+    per-project page.
+Verified: build 21 pages; /projects/mnemosyne/devlog/ (11 entries) + global page
+render correctly.
+
+═══════════════════════════════════════════════════════════════════════════════
+[7] USER
+═══════════════════════════════════════════════════════════════════════════════
+clean up uslees shit
+
+── CLAUDE
+Scanned for dead code after the refactor. Removed:
+  - `chrome` prop in BaseLayout (never set to false — speculative).
+  - `.panel-copy` in global.css (0 refs).
+  - `.closing` in global.css (0 refs; word only appears in devlog prose).
+Verified every other CSS class still referenced; build 0 errors, 21 pages.
+Flagged (didn't delete): ASTRO_MIGRATION_ROADMAP.md, deep-research-report.md, and
+the large raw-log folders — asked before deleting user content.
+
+═══════════════════════════════════════════════════════════════════════════════
+[8] USER
+═══════════════════════════════════════════════════════════════════════════════
+you can get rid of them except the raw logs... we need them to write the damn dev
+logs, aside from them what are missing? like photos of demos? what are there?
+
+── CLAUDE
+Deleted ASTRO_MIGRATION_ROADMAP.md + deep-research-report.md; kept all raw logs.
+Full inventory of gaps:
+  DEMO MEDIA: Mnemosyne 5 real PNGs + 2 placeholders; OmniPlanner 0 (all 5
+    placeholders); Pythagorean 0 (all 5 placeholders). No demo links anywhere.
+  DEVLOGS: only Mnemosyne (11); other two have none.
+  CONTENT MISMATCH: hero promises robotics/hardware; no such project.
+  SITE POLISH: no favicon, no og:image, no résumé PDF, no contact email.
+Recommended fastest wins: og:image + favicon; then drop in screenshots; then resolve
+the robotics/hardware promise.
+
+═══════════════════════════════════════════════════════════════════════════════
+[9] USER
+═══════════════════════════════════════════════════════════════════════════════
+also i don't see omiplanner and pythagorean harmony's delogs page nor the button to
+get there on the project cards. I will write them eventually. Im working on them
+
+── CLAUDE
+Made every project get a devlog page + button automatically:
+  - projects/[slug]/devlog.astro now generates for ALL projects, with a clean
+    "No devlogs yet — journal in progress" empty state (dashed card).
+  - Devlog buttons everywhere via slug-computed URLs: homepage flagship +
+    secondary cards (OmniPlanner/Pythagorean now show GitHub + Devlogs), projects-
+    index cards, project detail (meta row + links).
+  - Removed the now-redundant `devlog` frontmatter field (schema + mnemosyne.md);
+    URLs are derived from slug, so new projects auto-get devlog pages/buttons.
+Verified: build 23 pages; both new empty devlog pages return 200 with the empty
+state; all buttons point correctly.
+
+═══════════════════════════════════════════════════════════════════════════════
+[10] USER
+═══════════════════════════════════════════════════════════════════════════════
+sould I add dev log for dev page too? lmao
+
+── CLAUDE
+Opinion: yes, lightly — the footer already links "Site Source", the site positions
+you as building in the open, and the per-project devlog infra already exists, so it's
+basically free. Risk: don't let the meta-log upstage real work (keep it last / quiet).
+Suggested adding the site as a low-key project (order 99) so it flows through the same
+system; offered to scaffold it + a first entry.
+
+═══════════════════════════════════════════════════════════════════════════════
+[11] USER
+═══════════════════════════════════════════════════════════════════════════════
+Make one
+
+── CLAUDE
+  - NEW src/content/projects/rhygpu-dev.md — "rhygpu.dev", featured:false, order:99
+    (sits last), status "Live", linked to the site repo, full project page (why the
+    site is a project / core systems / what it demonstrates).
+  - NEW src/content/devlogs/site-000-building-the-lab.md — "Building the Lab",
+    number 000, project "rhygpu.dev", dated 2026-07-01. Covers: the design import →
+    one design system → typed content → self-documenting devlog engine. Same
+    first-person, section-label voice as the Mnemosyne logs, a touch lighter.
+Flows through the system: /projects/rhygpu-dev/, its /devlog/ (1 entry), the entry
+at /devlog/site-000-building-the-lab/, global "By project" shows rhygpu.dev · 1,
+homepage lists it last (stat now 4). Build 26 pages, 0 errors.
+
+═══════════════════════════════════════════════════════════════════════════════
+[12] USER
+═══════════════════════════════════════════════════════════════════════════════
+More stuff to fix?
+
+── CLAUDE
+Scanned and found a REAL bug plus the known gaps.
+  FIXED NOW:
+  - Devlog sort bug: homepage feed + global /devlog/ sorted by `number`, which is
+    per-project. All 11 Mnemosyne logs are dated 2026-05-29; the site log is
+    2026-07-01, so the genuinely newest entry was buried and future projects'
+    numbers would collide. Changed both to sort by DATE desc, with number as
+    tiebreaker (preserves Mnemosyne 010→000 order, surfaces newest).
+  - Added project labels to the homepage "Latest devlogs" rows (now multi-project,
+    so RHYGPU.DEV vs MNEMOSYNE must be distinguishable).
+  Verified: build 26 pages; homepage latest now #1 = "Building the Lab" (rhygpu.dev),
+  then Mnemosyne 010→007; global top = rhygpu.dev then Mnemosyne 010.
+
+  STILL OPEN (needs input/assets):
+  - hash:"TBD" commits on devlogs 008/009/010 render a literal "TBD" (needs real
+    hashes or removal).
+  - Site log now headlines the homepage feed — keep / backdate / exclude rhygpu.dev
+    from the homepage feed? (user's call)
+  - No favicon; no og:image (biggest share win); OmniPlanner/Pythagorean 0
+    screenshots (+2 Mnemosyne placeholders); robotics/hardware promise vs content;
+    résumé PDF; contact email; (minor) no robots.txt.
+
+═══════════════════════════════════════════════════════════════════════════════
+[13] USER
+═══════════════════════════════════════════════════════════════════════════════
+wonderful now, export this session's chat log like the files in download
+
+── CLAUDE
+Exported this transcript to Downloads (this file).
+
+═══════════════════════════════════════════════════════════════════════════════
+FILES TOUCHED THIS SESSION (for devlog reference)
+═══════════════════════════════════════════════════════════════════════════════
+Created:
+  src/components/SiteNav.astro
+  src/pages/projects/[slug]/devlog.astro
+  src/content/projects/rhygpu-dev.md
+  src/content/devlogs/site-000-building-the-lab.md
+  .claude/launch.json
+Rewrote / heavily edited:
+  src/pages/index.astro          (new homepage: hero, stats, flagship, secondary,
+                                  devlog feed; clickable cards; date sort; labels)
+  src/styles/global.css          (full olive/Space-Grotesk re-theme + shared chrome)
+  src/layouts/BaseLayout.astro   (fonts + shared SiteNav/SiteFooter + meta)
+  src/components/SiteFooter.astro (full-bleed footer)
+  src/components/PostCard.astro   (optional project label)
+  src/pages/devlog/index.astro    (cross-project journal + by-project row + sort)
+  src/pages/projects/index.astro  (always-on Devlogs button)
+  src/pages/projects/[slug].astro (always-on Devlogs button)
+  src/content.config.ts           (removed unused `devlog` field)
+  src/content/projects/mnemosyne.md (removed `devlog` field)
+Deleted:
+  ASTRO_MIGRATION_ROADMAP.md
+  deep-research-report.md
+Removed dead code:
+  BaseLayout `chrome` prop; global.css `.panel-copy` and `.closing`
+
+END OF LOG
