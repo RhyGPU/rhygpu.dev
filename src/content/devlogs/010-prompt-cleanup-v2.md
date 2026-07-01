@@ -15,9 +15,10 @@ tags:
   - state-map
   - dev-console
 commits:
-  - hash: "TBD"
-    title: "Prompt Cleanup V2 and UI flow reset"
+  - hash: "f39d7b7"
+    title: "Scene Narrator Prompt V1 / Prompt Cleanup V2"
     repo: "RhyGPU/mnemosyne"
+    url: "https://github.com/RhyGPU/mnemosyne/commit/f39d7b7c1ebe3f0f4f7ca0f379d25c8a6dc85f02"
 ---
 
 Fresh sessions fixed one kind of contamination.

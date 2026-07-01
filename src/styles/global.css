@@ -177,6 +177,14 @@ a:focus-visible { outline: 1px solid rgba(90,171,230,0.6); outline-offset: 3px; 
 .proof-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 2rem 0; }
 .proof-list span { border: 1px solid rgba(90,171,230,0.25); background: rgba(90,171,230,0.06); color: var(--blue); border-radius: 6px; padding: 7px 10px; font: 500 11px var(--mono); letter-spacing: 0.04em; }
 
+.loop-diagram { display: grid; grid-template-columns: repeat(7, minmax(128px, 1fr)); gap: 10px; margin: 2rem 0 0.6rem; overflow-x: auto; padding-bottom: 8px; }
+.loop-diagram article { position: relative; min-height: 166px; border: 1px solid rgba(90,171,230,0.22); background: rgba(90,171,230,0.045); border-radius: 12px; padding: 16px 14px; }
+.loop-diagram article:not(:last-child)::after { content: '->'; position: absolute; right: -10px; top: 50%; transform: translate(50%, -50%); color: var(--blue); font: 600 12px var(--mono); background: var(--bg); border: 1px solid rgba(90,171,230,0.22); border-radius: 999px; padding: 2px 5px; z-index: 2; }
+.loop-diagram span { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 22px; border: 1px solid var(--border-strong); border-radius: 6px; color: var(--text-muted); font: 600 10px var(--mono); letter-spacing: 0.08em; margin-bottom: 12px; }
+.loop-diagram h3 { color: var(--blue); font: 600 11px var(--mono); letter-spacing: 0.1em; line-height: 1.35; margin: 0 0 8px; text-transform: uppercase; }
+.loop-diagram p { color: var(--text-body); font-size: 12.5px; line-height: 1.55; margin: 0; }
+.diagram-caption { color: var(--text-muted) !important; font: 500 12px/1.6 var(--mono) !important; letter-spacing: 0.02em; margin-top: 0.7rem !important; }
+
 .architecture-card { display: grid; gap: 8px; margin-top: 18px; padding: 16px; border: 1px solid rgba(90,171,230,0.2); background: rgba(90,171,230,0.04); border-radius: 12px; }
 .architecture-card span { position: relative; display: block; border: 1px solid var(--border-strong); background: rgba(255,255,255,0.02); border-radius: 8px; color: var(--text-body); padding: 10px 12px; font-size: 12.5px; line-height: 1.45; }
 .architecture-card span:not(:last-child)::after { content: '→'; display: block; color: var(--blue); font-size: 11px; line-height: 1; margin-top: 9px; }
@@ -217,6 +225,9 @@ a:focus-visible { outline: 1px solid rgba(90,171,230,0.6); outline-offset: 3px; 
   .site-nav-inner { padding: 14px 20px; }
   .site-footer-inner { padding: 26px 20px; }
   .project-grid, .case-grid, .media-grid, .contact-grid { grid-template-columns: 1fr; }
+  .loop-diagram { grid-template-columns: 1fr; overflow-x: visible; }
+  .loop-diagram article { min-height: auto; }
+  .loop-diagram article:not(:last-child)::after { content: 'v'; right: auto; left: 18px; top: auto; bottom: -13px; transform: none; }
   .project-card.featured { grid-column: auto; }
   .post-nav { grid-template-columns: 1fr; }
   .journal-links a { grid-template-columns: 1fr; gap: 4px; }

@@ -21,30 +21,53 @@ highlights:
   - Structured planning around goals, weeks, habits, calendar blocks, and email instead of one generic task list.
   - Framed AI as optional assistance inside a planning system, not the entire product.
 media:
-  - title: Weekly planning view
-    type: placeholder
-    caption: Planned screenshot slot for the weekly planning surface.
-    status: planned
-  - title: Goals view
-    type: placeholder
-    caption: Planned screenshot slot for goal organization and review.
-    status: planned
-  - title: Habits view
-    type: placeholder
-    caption: Planned screenshot slot for recurring habit tracking.
-    status: planned
-  - title: Calendar blocks
-    type: placeholder
-    caption: Planned screenshot slot for time-block planning.
-    status: planned
-  - title: AI assistance panel
-    type: placeholder
-    caption: Planned screenshot slot for optional AI assistance inside the planning workspace.
-    status: planned
+  - title: Dashboard overview
+    type: screenshot
+    src: /projects/omniplanner/dashboard-overview.png
+    alt: OmniPlanner dashboard showing upcoming events, habits, quick todos, recent email state, and local sync status.
+    caption: Daily execution surface combining events, habits, todos, email status, and local-only state in one desktop workspace.
+    status: available
+  - title: Pulse reminders
+    type: screenshot
+    src: /projects/omniplanner/pulse-reminders.png
+    alt: OmniPlanner Pulse view showing daily reminders, event alarms, sleep alarm rules, and reminder toggles.
+    caption: Reminder and nudge layer for morning planning, habit check-ins, focus alerts, and sleep-related routines.
+    status: available
+  - title: Priority inbox
+    type: screenshot
+    src: /projects/omniplanner/priority-inbox.png
+    alt: OmniPlanner Priority Inbox showing an email-style planning message and disabled calendar action until provider setup.
+    caption: Inbox workflow for planning-relevant messages, with calendar actions gated by provider configuration instead of fake availability.
+    status: available
+  - title: Month view
+    type: screenshot
+    src: /projects/omniplanner/month-view.png
+    alt: OmniPlanner monthly calendar view for July 2026 with tasks distributed across days.
+    caption: Month-level planning view for scanning scheduled work and task distribution across the calendar.
+    status: available
+  - title: Deep planner week
+    type: screenshot
+    src: /projects/omniplanner/deep-planner-week.png
+    alt: OmniPlanner Deep Planner weekly view with business goals, well-being goals, focus goals, habits, time blocks, and week review.
+    caption: Weekly operating surface combining goals, focus, habits, todos, calendar blocks, and plan-versus-actual review.
+    status: available
+  - title: Life Vision board
+    type: screenshot
+    src: /projects/omniplanner/life-vision-board.png
+    alt: OmniPlanner Life Vision Board showing monthly focus cards and a selected July goal.
+    caption: Longer-horizon planning surface for annual or monthly focus areas beyond the immediate week.
+    status: available
+  - title: Settings and local data
+    type: screenshot
+    src: /projects/omniplanner/settings-data.png
+    alt: OmniPlanner Settings and Data page showing AI provider selection, email accounts, local notifications, backup export, restore, calendar import, and zero-knowledge storage.
+    caption: Local-first infrastructure view for provider setup, email connection, notifications, backup, restore, calendar import, and local storage messaging.
+    status: available
 proofNotes:
   - Desktop-first app rather than a web-only planner.
   - App data is stored locally on the device.
   - Windows launcher flow exists through run.bat and create-shortcut.bat.
+  - Real screenshots show the current dashboard, inbox, calendar, deep planning, reminders, vision, and settings/data surfaces.
 showHighlightsPanel: false
 tags:
   - planning

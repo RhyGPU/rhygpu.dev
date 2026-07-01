@@ -14,9 +14,10 @@ tags:
   - world-state
   - prompt-cleanup
 commits:
-  - hash: "TBD"
+  - hash: "1a13926"
     title: "Fresh Session / Reset Scenario State V1"
     repo: "RhyGPU/mnemosyne"
+    url: "https://github.com/RhyGPU/mnemosyne/commit/1a1392640a5cdc494fde11b0fd0d25e68679ef0a"
 ---
 
 The logs did what I built them to do.

@@ -69,6 +69,46 @@ Wrong answers should not merely say "incorrect." They should create combat conse
 
 ## Prototype Combat Loop
 
+<div class="loop-diagram" aria-label="Pythagorean Harmony equation duel combat loop">
+  <article>
+    <span>01</span>
+    <h3>Enemy Equation</h3>
+    <p>Enemy state is shown as an equation, not just HP.</p>
+  </article>
+  <article>
+    <span>02</span>
+    <h3>Read Under Pressure</h3>
+    <p>Player survives attacks while reading the equation.</p>
+  </article>
+  <article>
+    <span>03</span>
+    <h3>Operation Weapon</h3>
+    <p>Weapon actions apply algebraic operations.</p>
+  </article>
+  <article>
+    <span>04</span>
+    <h3>Transform Equation</h3>
+    <p>The enemy state changes as the equation is simplified.</p>
+  </article>
+  <article>
+    <span>05</span>
+    <h3>Solve x</h3>
+    <p>Player identifies the correct value.</p>
+  </article>
+  <article>
+    <span>06</span>
+    <h3>X Weapon Execute</h3>
+    <p>Correct value enables execution.</p>
+  </article>
+  <article>
+    <span>07</span>
+    <h3>Wrong Answer Evolution</h3>
+    <p>Incorrect answer changes enemy state instead of only showing failure.</p>
+  </article>
+</div>
+
+<p class="diagram-caption">System diagram, not a gameplay screenshot. It shows the intended equation-duel loop while the prototype visuals remain early.</p>
+
 1. Read the enemy equation.
 2. Survive enemy attacks.
 3. Input numbers or choose operation weapons.

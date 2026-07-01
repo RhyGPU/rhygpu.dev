@@ -14,9 +14,10 @@ tags:
   - payload
   - state
 commits:
-  - hash: "TBD"
+  - hash: "1a13926"
     title: "Debug Log Export V1, visible chat export and LLM payload history"
     repo: "RhyGPU/mnemosyne"
+    url: "https://github.com/RhyGPU/mnemosyne/commit/1a1392640a5cdc494fde11b0fd0d25e68679ef0a"
 ---
 
 Regenerate made bad outputs recoverable.
