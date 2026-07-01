@@ -10,7 +10,10 @@ const secondary = projects.filter((p) => p.data.slug !== flagship.data.slug);
 
 const devlogs = (await getCollection('devlogs'))
   .filter((post) => post.data.status === 'published')
-  .sort((a, b) => Number(b.data.number) - Number(a.data.number));
+  .sort((a, b) =>
+    b.data.date.getTime() - a.data.date.getTime() ||
+    Number(b.data.number) - Number(a.data.number)
+  );
 
 const latestDevlogs = devlogs.slice(0, 5);
 
@@ -115,7 +118,10 @@ const statusDot = (status: string) => {
       {latestDevlogs.map((post) => (
         <a href={`/devlog/${post.data.slug}/`} class="home-devlog-row">
           <span class="home-devlog-n">{post.data.number}</span>
-          <span class="home-devlog-title">{post.data.title}</span>
+          <span class="home-devlog-titlewrap">
+            <span class="home-devlog-title">{post.data.title}</span>
+            <span class="home-devlog-tag">{post.data.project}</span>
+          </span>
           <span class="home-devlog-blurb">{post.data.summary}</span>
           <span class="home-devlog-arrow">→</span>
         </a>
@@ -191,7 +197,9 @@ const statusDot = (status: string) => {
 .home-devlog-row { display: flex; gap: 20px; align-items: center; padding: 17px 12px; border-top: 1px solid var(--border); text-decoration: none; border-radius: 8px; transition: background .16s; }
 .home-devlog-row:hover { background: rgba(255,255,255,.03); }
 .home-devlog-n { font: 700 18px var(--display); color: var(--text-dim); flex: none; }
-.home-devlog-title { font: 600 15px var(--sans); color: var(--text); width: 300px; flex: none; }
+.home-devlog-titlewrap { display: flex; align-items: center; gap: 10px; width: 320px; flex: none; }
+.home-devlog-title { font: 600 15px var(--sans); color: var(--text); }
+.home-devlog-tag { font: 600 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border-strong); border-radius: 4px; padding: 2px 5px; white-space: nowrap; }
 .home-devlog-blurb { font: 400 13.5px/1.5 var(--sans); color: var(--text-muted); flex: 1; }
 .home-devlog-arrow { font: 600 15px var(--sans); color: var(--teal); flex: none; }
 
@@ -203,7 +211,7 @@ const statusDot = (status: string) => {
   .home-stats { grid-template-columns: repeat(2, 1fr); }
   .home-stat:nth-child(2) { border-right: 0; }
   .home-devlog-row { flex-wrap: wrap; gap: 6px 20px; }
-  .home-devlog-title { width: auto; }
+  .home-devlog-titlewrap { width: auto; }
   .home-devlog-blurb { flex-basis: 100%; }
 }
 </style>

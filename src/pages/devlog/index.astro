@@ -5,7 +5,10 @@ import PostCard from '../../components/PostCard.astro';
 
 const posts = (await getCollection('devlogs'))
   .filter((post) => post.data.status === 'published')
-  .sort((a, b) => Number(b.data.number) - Number(a.data.number));
+  .sort((a, b) =>
+    b.data.date.getTime() - a.data.date.getTime() ||
+    Number(b.data.number) - Number(a.data.number)
+  );
 
 const projects = await getCollection('projects');
 
