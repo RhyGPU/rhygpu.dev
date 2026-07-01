@@ -8,7 +8,7 @@ const posts = (await getCollection('devlogs'))
   .filter((post) => post.data.status === 'published')
   .sort((a, b) => Number(b.data.number) - Number(a.data.number));
 ---
-<BaseLayout title="Mnemosyne Devlogs | RhyGPU" description="Mnemosyne devlog archive.">
+<BaseLayout title="Mnemosyne Devlogs | RhyGPU" description="Development journal for Mnemosyne's local-first AI memory architecture, state systems, and debugging tools.">
   <div class="wrap">
     <a class="back" href="/">rhygpu.dev</a>
 
