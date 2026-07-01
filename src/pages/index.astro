@@ -1,87 +1,280 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SiteFooter from '../components/SiteFooter.astro';
-import PostCard from '../components/PostCard.astro';
-
-const posts = (await getCollection('devlogs'))
-  .filter((post) => post.data.status === 'published')
-  .sort((a, b) => Number(b.data.number) - Number(a.data.number))
-  .slice(0, 5);
 
 const projects = (await getCollection('projects'))
   .sort((a, b) => a.data.order - b.data.order);
+
+const flagship = projects.find((p) => p.data.featured) ?? projects[0];
+const secondary = projects.filter((p) => p.data.slug !== flagship.data.slug);
+
+const devlogs = (await getCollection('devlogs'))
+  .filter((post) => post.data.status === 'published')
+  .sort((a, b) => Number(b.data.number) - Number(a.data.number));
+
+const latestDevlogs = devlogs.slice(0, 5);
+
+const flagshipMedia = flagship.data.media?.find((m) => m.status === 'available' && m.src);
+
+const statusDot = (status: string) => {
+  const s = status.toLowerCase();
+  if (s.includes('alpha') || s.includes('active')) return '#7cc98f';
+  if (s.includes('prototype')) return '#5aabe6';
+  return '#948d80';
+};
 ---
 <BaseLayout title="RhyGPU" description="RhyGPU portfolio hub for local-first AI tools, memory systems, desktop apps, and experimental interfaces.">
-  <div class="wrap">
-    <header class="site-header">
-      <p class="eyebrow">rhygpu.dev</p>
-      <h1 class="site-name">
-        RhyGPU
-        <span>// portfolio hub</span>
-      </h1>
-      <p class="tagline">
-        Building local-first AI tools, memory systems, desktop apps, and experimental interfaces.
-        The work lives somewhere between engine room, writing desk, and terminal.
-      </p>
-      <div class="hero-actions">
-        <a class="cta-link" href="/projects/">View projects</a>
-        <a class="cta-link muted" href="/devlog/">Read devlogs</a>
+  <div class="home">
+    <nav class="home-nav-bar">
+      <div class="home-nav-inner">
+        <a href="#top" class="home-logo">
+          <span class="home-logo-badge">R</span>
+          <span class="home-logo-text">RhyGPU</span>
+        </a>
+        <div class="home-links">
+          <a href="#projects">Projects</a>
+          <a href="#devlog">Devlog</a>
+          <a href="/about/">About</a>
+          <a href="/resume/">Resume</a>
+          <a href="/contact/">Contact</a>
+          <a href="https://github.com/RhyGPU" target="_blank" rel="noreferrer" class="home-github">GitHub ↗</a>
+        </div>
       </div>
-      <nav class="home-nav" aria-label="Primary">
-        <a href="/projects/">Projects</a>
-        <a href="/devlog/">Devlog</a>
-        <a href="/about/">About</a>
-        <a href="/resume/">Resume</a>
-        <a href="/contact/">Contact</a>
-        <a href="https://github.com/RhyGPU">GitHub</a>
-      </nav>
-    </header>
+    </nav>
 
-    <div class="rule" data-label="projects"></div>
+    <div id="top" class="home-shell">
 
-    <section aria-label="Featured projects">
-      <p class="section-label">Featured Projects</p>
-      <div class="project-grid compact">
-        {projects.map((project) => (
-          <article class={`project-card ${project.data.featured ? 'featured' : ''}`}>
-            <a class="card-cover-link" href={`/projects/${project.data.slug}/`} aria-label={`Open ${project.data.title} project page`}></a>
-            <div class="card-topline">
-              <span class="status-pill">{project.data.status}</span>
-              {project.data.featured && <span class="featured-mark">flagship</span>}
+      <section class="home-hero">
+        <p class="home-eyebrow">Portfolio hub · local-first AI</p>
+        <h1 class="home-title">Memory systems &amp; desktop apps, built local-first.</h1>
+        <div class="home-hero-bottom">
+          <p class="home-tagline">Experimental interfaces from somewhere between the engine room, the writing desk, and the terminal.</p>
+          <div class="home-cta-group">
+            <a href="#projects" class="home-btn-primary">View projects</a>
+            <a href="#devlog" class="home-btn-secondary">Read devlogs</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="home-stats">
+        <div class="home-stat">
+          <div class="home-stat-value">{projects.length}</div>
+          <div class="home-stat-label">active projects</div>
+        </div>
+        <div class="home-stat">
+          <div class="home-stat-value">{devlogs.length}</div>
+          <div class="home-stat-label">devlog entries</div>
+        </div>
+        <div class="home-stat">
+          <div class="home-stat-value">Rust</div>
+          <div class="home-stat-label">+ TS, C++, Electron</div>
+        </div>
+        <div class="home-stat">
+          <div class="home-stat-value">Local</div>
+          <div class="home-stat-label">first, always</div>
+        </div>
+      </div>
+
+      <section id="projects" class="home-flagship">
+        <p class="home-section-label">Featured — flagship</p>
+        <article class="home-flagship-card">
+          <div class="home-flagship-copy">
+            <div class="home-flagship-badge">
+              <span class="home-flagship-dot" style={`background:${statusDot(flagship.data.status)};box-shadow:0 0 10px ${statusDot(flagship.data.status)}`}></span>
+              <span class="label" style={`color:${statusDot(flagship.data.status)}`}>{flagship.data.status.toUpperCase()}</span>
             </div>
-            <h2>{project.data.title}</h2>
-            {project.data.subtitle && <p class="project-subtitle">{project.data.subtitle}</p>}
-            <p>{project.data.summary}</p>
-            <ul class="stack-list" aria-label={`${project.data.title} stack`}>
-              {project.data.stack.slice(0, 4).map((item) => <li>{item}</li>)}
-            </ul>
-            <div class="card-actions">
-              {project.data.repo && <a class="cta-link muted" href={project.data.repo}>GitHub</a>}
-              {project.data.devlog && <a class="cta-link muted" href={project.data.devlog}>Devlogs</a>}
+            <h2 class="home-flagship-title">{flagship.data.title}</h2>
+            <p class="home-flagship-desc">{flagship.data.summary}</p>
+            <div class="home-tag-row">
+              {flagship.data.stack.slice(0, 4).map((item) => <span class="home-tag">{item}</span>)}
             </div>
+            <div class="home-flagship-links">
+              {flagship.data.repo && <a class="gh" href={flagship.data.repo} target="_blank" rel="noreferrer">GitHub →</a>}
+              <a class="dl" href="#devlog">Devlogs →</a>
+            </div>
+          </div>
+          <div class="home-flagship-media">
+            {flagshipMedia
+              ? <img src={flagshipMedia.src} alt={flagshipMedia.alt ?? flagship.data.title} loading="lazy" />
+              : <span class="home-flagship-placeholder">[ app screenshot ]</span>}
+          </div>
+        </article>
+      </section>
+
+      <div class="home-secondary-grid">
+        {secondary.map((project) => (
+          <article class="home-secondary-card">
+            <div class="home-secondary-head">
+              <h3>{project.data.title}</h3>
+              <span class="home-secondary-badge">{project.data.status.toUpperCase()}</span>
+            </div>
+            <p class="home-secondary-desc">{project.data.summary}</p>
+            <div class="home-secondary-tags">
+              {project.data.stack.slice(0, 4).map((item) => <span class="home-secondary-tag">{item}</span>)}
+            </div>
+            {project.data.repo && <a class="home-secondary-link" href={project.data.repo} target="_blank" rel="noreferrer">GitHub →</a>}
           </article>
         ))}
       </div>
-    </section>
 
-    <div class="rule" data-label="journal"></div>
+      <div class="home-devlog-head" id="devlog">
+        <h2>Latest devlogs</h2>
+        <a href="/devlog/">Open full journal →</a>
+      </div>
+      <div class="home-devlog-list">
+        {latestDevlogs.map((post) => (
+          <a href={`/devlog/${post.data.slug}/`} class="home-devlog-row">
+            <span class="home-devlog-n">{post.data.number}</span>
+            <span class="home-devlog-title">{post.data.title}</span>
+            <span class="home-devlog-blurb">{post.data.summary}</span>
+            <span class="home-devlog-arrow">→</span>
+          </a>
+        ))}
+      </div>
 
-    <p class="section-label">Latest Devlogs</p>
-    <ul class="devlog-list">
-      {posts.map((post) => (
-        <PostCard
-          href={`/devlog/${post.data.slug}/`}
-          number={post.data.number}
-          title={post.data.title}
-          summary={post.data.summary}
-        />
-      ))}
-    </ul>
-    <div class="section-actions">
-      <a class="cta-link muted" href="/devlog/">Open full journal</a>
     </div>
 
-    <SiteFooter />
+    <footer id="footer" class="home-footer">
+      <div class="home-footer-inner">
+        <div class="home-footer-status">
+          <span class="home-footer-dot"></span>
+          <span class="label">rhygpu.dev is live</span>
+        </div>
+        <nav class="home-footer-links">
+          <a href="#projects">Projects</a>
+          <a href="#devlog">Devlog</a>
+          <a href="/about/">About</a>
+          <a href="/resume/">Resume</a>
+          <a href="/contact/">Contact</a>
+          <a href="https://github.com/RhyGPU" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/junna-j-912665270/" target="_blank" rel="noreferrer">LinkedIn</a>
+        </nav>
+      </div>
+    </footer>
   </div>
 </BaseLayout>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+.home {
+  --hbg: #15130f;
+  --htext: #ece7dd;
+  --hmuted: #948d80;
+  --hdim: #6d6759;
+  --hbody: #c2bbaf;
+  --hborder: rgba(255,255,255,.09);
+  --hborder-strong: rgba(255,255,255,.16);
+  --hblue: #5aabe6;
+  --hblue-hover: #78bdef;
+  --hgreen: #7cc98f;
+  --hteal: #57bcae;
+  background: var(--hbg);
+  color: var(--htext);
+  font-family: 'IBM Plex Sans', sans-serif;
+  min-height: 100vh;
+}
+
+.home-nav-bar { position: sticky; top: 0; z-index: 50; background: rgba(21,19,15,.82); backdrop-filter: blur(12px); border-bottom: 1px solid var(--hborder); }
+.home-nav-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; gap: 16px; }
+.home-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.home-logo-badge { width: 26px; height: 26px; border-radius: 7px; background: var(--hblue); display: inline-flex; align-items: center; justify-content: center; font: 700 14px 'Space Grotesk', sans-serif; color: var(--hbg); }
+.home-logo-text { font: 600 17px 'Space Grotesk', sans-serif; letter-spacing: -.02em; color: var(--htext); }
+.home-links { display: flex; gap: 8px; font: 500 13.5px 'IBM Plex Sans', sans-serif; align-items: center; flex-wrap: wrap; }
+.home-links a { color: var(--hmuted); text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: color .16s, background .16s; }
+.home-links a:hover { color: var(--htext); background: rgba(255,255,255,.05); }
+.home-links a.home-github { margin-left: 6px; color: var(--htext); padding: 8px 15px; border: 1px solid var(--hborder-strong); border-radius: 6px; font-size: 12.5px; }
+.home-links a.home-github:hover { border-color: var(--hblue); background: rgba(90,171,230,.08); color: var(--htext); }
+
+.home-shell { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+
+.home-hero { padding: 76px 0 44px; }
+.home-eyebrow { font: 600 12px 'IBM Plex Mono', monospace; letter-spacing: .16em; text-transform: uppercase; color: var(--hblue); margin-bottom: 22px; }
+.home-title { font: 700 clamp(2.4rem, 6.4vw, 5.25rem)/.98 'Space Grotesk', sans-serif; letter-spacing: -.035em; margin: 0 0 26px; max-width: 900px; }
+.home-hero-bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.home-tagline { font: 400 18px/1.6 'IBM Plex Sans', sans-serif; color: var(--hbody); margin: 0; max-width: 540px; }
+.home-cta-group { display: flex; gap: 12px; flex-wrap: wrap; }
+.home-btn-primary { display: inline-flex; align-items: center; padding: 13px 24px; background: var(--hblue); color: var(--hbg); font: 600 14px 'IBM Plex Sans', sans-serif; border-radius: 8px; text-decoration: none; transition: background .16s, transform .16s; }
+.home-btn-primary:hover { background: var(--hblue-hover); transform: translateY(-1px); }
+.home-btn-secondary { display: inline-flex; align-items: center; padding: 13px 24px; border: 1px solid var(--hborder-strong); color: var(--htext); font: 500 14px 'IBM Plex Sans', sans-serif; border-radius: 8px; text-decoration: none; transition: border-color .16s, background .16s; }
+.home-btn-secondary:hover { border-color: rgba(255,255,255,.4); background: rgba(255,255,255,.04); }
+
+.home-stats { margin-top: 8px; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--hborder); border-radius: 10px; overflow: hidden; }
+.home-stat { padding: 18px 22px; border-right: 1px solid var(--hborder); }
+.home-stat:last-child { border-right: 0; }
+.home-stat-value { font: 700 26px 'Space Grotesk', sans-serif; color: var(--hblue); }
+.home-stat-label { font: 400 12px 'IBM Plex Sans', sans-serif; color: var(--hmuted); }
+
+.home-section-label { font: 600 12px 'IBM Plex Mono', monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--hmuted); margin-bottom: 16px; }
+
+.home-flagship { padding: 64px 0 20px; scroll-margin-top: 80px; }
+.home-flagship-card { display: grid; grid-template-columns: 1.15fr 1fr; border: 1px solid var(--hborder-strong); border-radius: 12px; overflow: hidden; transition: border-color .18s; }
+.home-flagship-card:hover { border-color: rgba(90,171,230,.35); }
+.home-flagship-copy { padding: 34px; }
+.home-flagship-badge { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.home-flagship-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.home-flagship-badge .label { font: 600 11px 'IBM Plex Mono', monospace; letter-spacing: .06em; }
+.home-flagship-title { font: 700 clamp(1.9rem, 4.4vw, 42px)/1 'Space Grotesk', sans-serif; letter-spacing: -.02em; margin: 0 0 14px; }
+.home-flagship-desc { font: 400 15.5px/1.6 'IBM Plex Sans', sans-serif; color: var(--hbody); margin: 0 0 22px; }
+.home-tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 24px; }
+.home-tag { font: 500 11px 'IBM Plex Mono', monospace; color: var(--htext); background: rgba(255,255,255,.07); padding: 4px 10px; border-radius: 5px; }
+.home-flagship-links { display: flex; gap: 18px; font: 600 13px 'IBM Plex Sans', sans-serif; }
+.home-flagship-links a.gh { color: var(--hblue); text-decoration: none; transition: color .16s; }
+.home-flagship-links a.gh:hover { color: var(--hblue-hover); }
+.home-flagship-links a.dl { color: var(--hteal); text-decoration: none; transition: color .16s; }
+.home-flagship-links a.dl:hover { color: #74cfc2; }
+.home-flagship-media { border-left: 1px solid var(--hborder-strong); display: flex; align-items: center; justify-content: center; min-height: 300px; background: repeating-linear-gradient(45deg, rgba(90,171,230,.10) 0 12px, rgba(90,171,230,.02) 12px 24px); }
+.home-flagship-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.home-flagship-placeholder { font: 500 12px 'IBM Plex Mono', monospace; color: var(--hdim); letter-spacing: .05em; }
+
+.home-secondary-grid { padding: 8px 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.home-secondary-card { border: 1px solid var(--hborder-strong); border-radius: 12px; padding: 26px; transition: border-color .18s, transform .18s; }
+.home-secondary-card:hover { border-color: rgba(90,171,230,.35); transform: translateY(-2px); }
+.home-secondary-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.home-secondary-head h3 { font: 600 23px 'Space Grotesk', sans-serif; margin: 0; }
+.home-secondary-badge { font: 600 10px 'IBM Plex Mono', monospace; color: var(--hmuted); letter-spacing: .05em; white-space: nowrap; }
+.home-secondary-desc { font: 400 14px/1.55 'IBM Plex Sans', sans-serif; color: var(--hbody); margin: 0 0 18px; }
+.home-secondary-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.home-secondary-tag { font: 500 10.5px 'IBM Plex Mono', monospace; color: var(--hmuted); border: 1px solid var(--hborder-strong); padding: 3px 8px; border-radius: 5px; }
+.home-secondary-link { font: 600 12.5px 'IBM Plex Sans', sans-serif; color: var(--hblue); text-decoration: none; transition: color .16s; }
+.home-secondary-link:hover { color: var(--hblue-hover); }
+
+.home-devlog-head { padding: 48px 0 20px; scroll-margin-top: 80px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.home-devlog-head h2 { font: 600 24px 'Space Grotesk', sans-serif; margin: 0; }
+.home-devlog-head a { font: 600 13px 'IBM Plex Sans', sans-serif; color: var(--hblue); text-decoration: none; transition: color .16s; }
+.home-devlog-head a:hover { color: var(--hblue-hover); }
+
+.home-devlog-row { display: flex; gap: 20px; align-items: center; padding: 17px 12px; border-top: 1px solid var(--hborder); text-decoration: none; border-radius: 8px; transition: background .16s; }
+.home-devlog-row:hover { background: rgba(255,255,255,.03); }
+.home-devlog-n { font: 700 18px 'Space Grotesk', sans-serif; color: var(--hdim); flex: none; }
+.home-devlog-title { font: 600 15px 'IBM Plex Sans', sans-serif; color: var(--htext); width: 300px; flex: none; }
+.home-devlog-blurb { font: 400 13.5px/1.5 'IBM Plex Sans', sans-serif; color: var(--hmuted); flex: 1; }
+.home-devlog-arrow { font: 600 15px 'IBM Plex Sans', sans-serif; color: var(--hteal); flex: none; }
+
+.home-footer { border-top: 1px solid var(--hborder); margin-top: 56px; scroll-margin-top: 80px; }
+.home-footer-inner { max-width: 1080px; margin: 0 auto; padding: 30px 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.home-footer-status { display: flex; align-items: center; gap: 10px; }
+.home-footer-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--hgreen); display: inline-block; }
+.home-footer-status .label { font: 400 13px 'IBM Plex Mono', monospace; color: var(--hmuted); }
+.home-footer-links { display: flex; gap: 18px; flex-wrap: wrap; font: 400 12.5px 'IBM Plex Sans', sans-serif; }
+.home-footer-links a { color: var(--hmuted); text-decoration: none; transition: color .16s; }
+.home-footer-links a:hover { color: var(--htext); }
+
+@media (max-width: 860px) {
+  .home-nav-inner { padding: 14px 20px; }
+  .home-shell { padding: 0 20px; }
+  .home-flagship-card { grid-template-columns: 1fr; }
+  .home-flagship-media { min-height: 220px; border-left: 0; border-top: 1px solid var(--hborder-strong); }
+  .home-secondary-grid { grid-template-columns: 1fr; }
+  .home-stats { grid-template-columns: repeat(2, 1fr); }
+  .home-stat:nth-child(2) { border-right: 0; }
+  .home-devlog-row { flex-wrap: wrap; gap: 6px 20px; }
+  .home-devlog-title { width: auto; }
+  .home-devlog-blurb { flex-basis: 100%; }
+  .home-footer-inner { padding: 24px 20px; }
+}
+
+@media (max-width: 620px) {
+  .home-links a:not(.home-github) { display: none; }
+}
+</style>
