@@ -1,12 +1,19 @@
 ---
 import '../styles/global.css';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 
 interface Props {
   title: string;
   description?: string;
+  chrome?: boolean;
 }
 
-const { title, description = 'RhyGPU portfolio for local-first AI tools, memory systems, desktop apps, and experimental interfaces.' } = Astro.props;
+const {
+  title,
+  description = 'RhyGPU — I build local-first AI tools, memory systems, and desktop apps: inspectable, stateful, and mine.',
+  chrome = true
+} = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 <!doctype html>
@@ -25,8 +32,16 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
+    {chrome && <SiteNav />}
     <slot />
+    {chrome && <SiteFooter />}
   </body>
 </html>

@@ -1,7 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SiteFooter from '../../components/SiteFooter.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -116,7 +115,5 @@ const hasProofNotes = project.data.proofNotes.length > 0;
         </div>
       </section>
     </main>
-
-    <SiteFooter />
   </div>
 </BaseLayout>

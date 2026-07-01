@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>OmniPlanner | RhyGPU</title><meta name="description" content="An Electron desktop app for personal planning workflows, built around local data, weekly structure, goals, habits, and optional AI assistance."><link rel="canonical" href="https://rhygpu.dev/projects/omniplanner/"><meta property="og:title" content="OmniPlanner | RhyGPU"><meta property="og:description" content="An Electron desktop app for personal planning workflows, built around local data, weekly structure, goals, habits, and optional AI assistance."><meta property="og:site_name" content="RhyGPU"><meta property="og:type" content="website"><meta property="og:url" content="https://rhygpu.dev/projects/omniplanner/"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="OmniPlanner | RhyGPU"><meta name="twitter:description" content="An Electron desktop app for personal planning workflows, built around local data, weekly structure, goals, habits, and optional AI assistance."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/BaseLayout.D5VYmAXm.css"></head><body><nav class="site-nav" aria-label="Primary"><div class="site-nav-inner"><a href="/" class="site-nav-logo" aria-label="RhyGPU home"><span class="site-nav-badge">R</span><span class="site-nav-name">RhyGPU</span></a><div class="site-nav-links"><a href="/projects/" class="site-nav-link active" aria-current="page">Projects</a><a href="/devlog/" class="site-nav-link">Devlog</a><a href="/about/" class="site-nav-link">About</a><a href="/resume/" class="site-nav-link">Resume</a><a href="/contact/" class="site-nav-link">Contact</a><a href="https://github.com/RhyGPU" target="_blank" rel="noreferrer" class="site-nav-github">GitHub ↗</a></div></div></nav><div class="wrap"><a class="back" href="/projects/">Projects</a><header class="project-hero"><p class="kicker">Project</p><h1 class="post-title">OmniPlanner</h1><p class="post-subtitle">Desktop-first planning workspace for goals, weeks, habits, calendar blocks, and AI-assisted organization.</p><div class="project-meta-row"><span class="status-pill">Active App</span><a class="cta-link" href="https://github.com/RhyGPU/OmniPlanner">GitHub</a></div><ul class="stack-list hero-stack" aria-label="OmniPlanner stack"><li>Electron</li><li>Vite</li><li>React</li><li>TypeScript</li><li>JavaScript</li><li>Local app data</li></ul></header><main class="project-page"><section class="prose project-copy"><h2 id="problem">Problem</h2>
+<p>Personal planning breaks down when the system is split across too many surfaces.</p>
+<p>Goals live in one place. Weekly planning lives somewhere else. Habits become a separate tracker. Calendar blocks sit in a calendar app. Email keeps pulling attention back into the inbox. The result is not a planning workflow. It is a collection of disconnected reminders.</p>
+<p>Generic productivity apps can fail from the other direction. They become heavy enough to avoid, or abstract enough that they stop helping with daily execution. A task list is not the same as a week. A week is not the same as a goal system. A calendar block is not the same as a habit.</p>
+<p>AI assistance is only useful if it attaches to structure. A floating chatbot can suggest plans, but it does not become the place where the user’s week, goals, habits, calendar, and email workflow actually live.</p>
+<h2 id="solution">Solution</h2>
+<p>OmniPlanner is a desktop-first local planning workspace.</p>
+<p>The app is aimed at the practical overlap between weekly structure, goals, habits, calendar blocks, email, and optional AI support. It treats planning as a working surface instead of a passive database.</p>
+<p>The product direction is close to an “executive life OS” style app, but grounded in local workflows: open the desktop app, see the planning system, adjust the week, and use AI as assistance inside that structure rather than as the entire product.</p>
+<h2 id="core-systems">Core Systems</h2>
+<div class="case-grid">
+  <article>
+    <h3>Weekly Planning</h3>
+    <p>The central planning surface: organize the week as a concrete operating unit instead of a loose pile of tasks.</p>
+  </article>
+  <article>
+    <h3>Goals</h3>
+    <p>Goal structure gives the week direction and keeps planning tied to longer-running intent.</p>
+  </article>
+  <article>
+    <h3>Calendar Blocks</h3>
+    <p>Time blocks connect plans to execution windows, making the schedule part of the planning workflow.</p>
+  </article>
+  <article>
+    <h3>Habits</h3>
+    <p>Habit tracking keeps recurring behavior visible beside goals and weekly execution.</p>
+  </article>
+  <article>
+    <h3>Email Workflow</h3>
+    <p>Email is treated as part of the organization surface instead of a separate attention trap.</p>
+  </article>
+  <article>
+    <h3>Optional AI Assistance</h3>
+    <p>AI support belongs inside the planning system, helping organize and reason over structure without replacing user ownership.</p>
+  </article>
+  <article>
+    <h3>Local Data / Desktop Launcher</h3>
+    <p>App data is stored locally on the device, and the project is built as a desktop app rather than a browser-only planner.</p>
+  </article>
+  <article>
+    <h3>Windows Launch + Shortcut Flow</h3>
+    <p><code>run.bat</code> provides the launch path, while <code>create-shortcut.bat</code> creates a desktop shortcut. The launcher installs dependencies on first run, builds if needed, then opens Electron.</p>
+  </article>
+</div>
+<h2 id="technical-highlights">Technical Highlights</h2>
+<ul>
+<li>Built a desktop-first productivity app rather than a web-only planner.</li>
+<li>Used Electron with a Vite/React/TypeScript app structure.</li>
+<li>Designed around local-first app data.</li>
+<li>Created a simple Windows launch path with dependency install, build, and app launch behavior.</li>
+<li>Added shortcut creation so the app can be re-entered like a normal desktop workspace.</li>
+<li>Structured planning around goals, weeks, habits, calendar blocks, and email instead of one generic task list.</li>
+<li>Framed AI as optional assistance inside a planning system, not the entire product.</li>
+</ul>
+<h2 id="current-status">Current Status</h2>
+<p>OmniPlanner is a working desktop app and active secondary project.</p>
+<p>The Windows launch flow exists: the top-level scripts route into the app folder, <code>run.bat</code> launches the app, and <code>create-shortcut.bat</code> creates a desktop shortcut. The app stores data locally on the device. The project also has developer commands for install, build, launch, Vite dev server, and Electron start flows.</p>
+<p>This is not being presented as a polished public release. Public polish, packaging, and deeper documentation are still ongoing work unless the repo proves otherwise.</p>
+<h2 id="what-this-demonstrates">What This Demonstrates</h2>
+<div class="proof-list">
+  <span>Desktop app development</span>
+  <span>Product design for personal workflows</span>
+  <span>Local-first data thinking</span>
+  <span>Practical launcher/setup design</span>
+  <span>AI-assisted productivity design</span>
+  <span>UX structure for planning systems</span>
+</div>
+</section><section class="project-panel"><p class="section-label">Screenshots / Demo Proof</p><div class="media-grid"><article class="media-card planned"><div class="media-frame"><div class="media-placeholder"><span>placeholder</span><strong>Weekly planning view</strong></div></div><div class="media-copy"><div class="media-topline"><h3>Weekly planning view</h3><span class="proof-status planned">planned</span></div><p>Planned screenshot slot for the weekly planning surface.</p></div></article><article class="media-card planned"><div class="media-frame"><div class="media-placeholder"><span>placeholder</span><strong>Goals view</strong></div></div><div class="media-copy"><div class="media-topline"><h3>Goals view</h3><span class="proof-status planned">planned</span></div><p>Planned screenshot slot for goal organization and review.</p></div></article><article class="media-card planned"><div class="media-frame"><div class="media-placeholder"><span>placeholder</span><strong>Habits view</strong></div></div><div class="media-copy"><div class="media-topline"><h3>Habits view</h3><span class="proof-status planned">planned</span></div><p>Planned screenshot slot for recurring habit tracking.</p></div></article><article class="media-card planned"><div class="media-frame"><div class="media-placeholder"><span>placeholder</span><strong>Calendar blocks</strong></div></div><div class="media-copy"><div class="media-topline"><h3>Calendar blocks</h3><span class="proof-status planned">planned</span></div><p>Planned screenshot slot for time-block planning.</p></div></article><article class="media-card planned"><div class="media-frame"><div class="media-placeholder"><span>placeholder</span><strong>AI assistance panel</strong></div></div><div class="media-copy"><div class="media-topline"><h3>AI assistance panel</h3><span class="proof-status planned">planned</span></div><p>Planned screenshot slot for optional AI assistance inside the planning workspace.</p></div></article></div></section><section class="project-panel"><p class="section-label">Proof Notes</p><ul class="proof-note-list"><li>Desktop-first app rather than a web-only planner.</li><li>App data is stored locally on the device.</li><li>Windows launcher flow exists through run.bat and create-shortcut.bat.</li></ul></section><section class="project-panel"><p class="section-label">Links</p><div class="link-row"><a class="cta-link" href="https://github.com/RhyGPU/OmniPlanner">Repository</a><a class="cta-link muted" href="/projects/">All projects</a></div></section></main></div><footer class="site-footer" id="footer"><div class="site-footer-inner"><div class="site-footer-status"><span class="site-footer-dot"></span><span>rhygpu.dev is live</span></div><nav class="site-footer-links" aria-label="Footer"><a href="/projects/">Projects</a><a href="/devlog/">Devlog</a><a href="/about/">About</a><a href="/resume/">Resume</a><a href="/contact/">Contact</a><a href="https://github.com/RhyGPU" target="_blank" rel="noreferrer">GitHub</a><a href="https://github.com/RhyGPU/rhygpu.dev" target="_blank" rel="noreferrer">Site Source</a><a href="https://www.linkedin.com/in/junna-j-912665270/" target="_blank" rel="noreferrer">LinkedIn</a></nav></div></footer></body></html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>010, Prompt Cleanup V2 | RhyGPU</title><meta name="description" content="How Mnemosyne moved from adding more prompt rules to cleaning the narrator brief, preserving character agency, and separating player paper UI from terminal dev machinery."><link rel="canonical" href="https://rhygpu.dev/devlog/010-prompt-cleanup-v2/"><meta property="og:title" content="010, Prompt Cleanup V2 | RhyGPU"><meta property="og:description" content="How Mnemosyne moved from adding more prompt rules to cleaning the narrator brief, preserving character agency, and separating player paper UI from terminal dev machinery."><meta property="og:site_name" content="RhyGPU"><meta property="og:type" content="website"><meta property="og:url" content="https://rhygpu.dev/devlog/010-prompt-cleanup-v2/"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="010, Prompt Cleanup V2 | RhyGPU"><meta name="twitter:description" content="How Mnemosyne moved from adding more prompt rules to cleaning the narrator brief, preserving character agency, and separating player paper UI from terminal dev machinery."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/BaseLayout.D5VYmAXm.css"></head><body><nav class="site-nav" aria-label="Primary"><div class="site-nav-inner"><a href="/" class="site-nav-logo" aria-label="RhyGPU home"><span class="site-nav-badge">R</span><span class="site-nav-name">RhyGPU</span></a><div class="site-nav-links"><a href="/projects/" class="site-nav-link">Projects</a><a href="/devlog/" class="site-nav-link active" aria-current="page">Devlog</a><a href="/about/" class="site-nav-link">About</a><a href="/resume/" class="site-nav-link">Resume</a><a href="/contact/" class="site-nav-link">Contact</a><a href="https://github.com/RhyGPU" target="_blank" rel="noreferrer" class="site-nav-github">GitHub ↗</a></div></div></nav><div class="wrap"><a class="back" href="/">rhygpu.dev</a><article><header class="post-header"><p class="kicker">Mnemosyne · 010</p><h1 class="post-title">Prompt Cleanup V2</h1><p class="post-subtitle">Less machinery in the narrator&#39;s face, cleaner action doctrine, and the first UI-flow reset.</p><p class="post-meta">May 29, 2026 · Mnemosyne</p></header><div class="prose"><p>Fresh sessions fixed one kind of contamination.</p>
+<p>They did not fix the bigger pattern.</p>
+<p>By this point, Mnemosyne had a lot of correct machinery: Soul continuity, World Log, recent events, relationship pressure, latest exchange priority, payload inspection, visible chat export, payload history, regenerate, and fresh scenario state.</p>
+<p>The backend was getting smarter.</p>
+<p>The narrator prompt was getting worse.</p>
+<div class="section-label">What changed</div>
+<p>This pass was the first time the answer was not another rule.</p>
+<p>The system prompt had become a pile of defensive instructions:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>agency rules</span></span>
+<span class="line"><span>device rules</span></span>
+<span class="line"><span>time rules</span></span>
+<span class="line"><span>attribution rules</span></span>
+<span class="line"><span>psychology explanation</span></span>
+<span class="line"><span>hidden-state schema</span></span>
+<span class="line"><span>status reports</span></span>
+<span class="line"><span>context priority</span></span>
+<span class="line"><span>memory instructions</span></span>
+<span class="line"><span>relationship stats</span></span>
+<span class="line"><span>world snapshot</span></span>
+<span class="line"><span>recent memories</span></span>
+<span class="line"><span>recent chat</span></span>
+<span class="line"><span>latest exchange</span></span></code></pre>
+<p>Each rule had a reason. None of them were random.</p>
+<p>A rule existed because the model had once stolen the user’s action. Another existed because it invented elapsed time. Another existed because it touched the user’s phone too aggressively. Another existed because it confused narrator prose with user dialogue. Another existed because stale world state poisoned a new scene.</p>
+<p>The problem was that all of those local fixes were now competing with the core job:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Write the next scene well.</span></span></code></pre>
+<p>The model was being briefed, but it was also being lawyered.</p>
+<div class="section-label">Why I touched this</div>
+<p>The most revealing comparison was outside the app.</p>
+<p>A simpler Janitor-style setup could sometimes produce more natural prose than Mnemosyne, even when Mnemosyne had better state. That was uncomfortable, because the whole point of Mnemosyne was not to make the model worse in exchange for continuity.</p>
+<p>That told me the bug was not only memory.</p>
+<p>It was presentation.</p>
+<p>The engine had useful context, but it was throwing too much machinery into the narrator’s face. The narrator was not only receiving a scene brief. It was receiving a legal document, a psychology note, a state schema, a continuity checklist, and a debugging protocol all at once.</p>
+<p>The character stopped feeling careful.</p>
+<p>She started feeling constrained.</p>
+<div class="section-label">The wrong instinct</div>
+<p>The wrong instinct was to keep adding narrower prohibitions.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Do not touch the phone.</span></span>
+<span class="line"><span>Do not infer objects.</span></span>
+<span class="line"><span>Do not invent time.</span></span>
+<span class="line"><span>Do not move too much.</span></span>
+<span class="line"><span>Do not act too strongly.</span></span>
+<span class="line"><span>Do not control the user.</span></span>
+<span class="line"><span>Do not change state too aggressively.</span></span></code></pre>
+<p>That kind of prompt can stop some failures.</p>
+<p>It also sedates the narrator.</p>
+<p>A living character needs to be able to act. She should be able to reach, interrupt, refuse, challenge, retreat, escalate, hesitate, grab for her own phone, or use the room around her.</p>
+<p>The real boundary is not:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>The character must not act.</span></span></code></pre>
+<p>The real boundary is:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>The character may act.</span></span>
+<span class="line"><span>The user's response belongs to the user.</span></span></code></pre>
+<p>That is a cleaner doctrine.</p>
+<div class="section-label">Action doctrine</div>
+<p>The device rule exposed the distinction.</p>
+<p>Bad:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Aurora takes the phone from his hand, unlocks it, scrolls through the messages, and reads everything.</span></span></code></pre>
+<p>That resolves the user’s side of the interaction. It steals the result.</p>
+<p>Good:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Aurora lunges for the phone, fingers closing toward the edge of the screen. "Give me that."</span></span></code></pre>
+<p>That creates pressure. It gives the character agency. It still leaves the user room to pull back, let go, resist, speak, or change the scene.</p>
+<p>So the prompt needed fewer object-specific bans and more general action law:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Portray decisive character attempts.</span></span>
+<span class="line"><span>Do not resolve the user's reaction.</span></span>
+<span class="line"><span>Describe what the character perceives.</span></span>
+<span class="line"><span>Do not claim the user's internal state unless the user gave it.</span></span>
+<span class="line"><span>Concrete time requires evidence.</span></span></code></pre>
+<p>Those rules are shorter, broader, and closer to the real boundary.</p>
+<div class="section-label">Prompt cleanup</div>
+<p>Prompt Cleanup V2 meant separating the narrator brief from the engine internals.</p>
+<p>The narrator needs:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>role</span></span>
+<span class="line"><span>scene state</span></span>
+<span class="line"><span>character state</span></span>
+<span class="line"><span>relationship pressure</span></span>
+<span class="line"><span>relevant memory</span></span>
+<span class="line"><span>latest exchange</span></span>
+<span class="line"><span>current user message</span></span>
+<span class="line"><span>action doctrine</span></span></code></pre>
+<p>The narrator does not need every piece of mechanical explanation every turn.</p>
+<p>It should not be forced to read a long lecture about the whole architecture before writing a single response. The state engine can remain strict underneath. The visible prompt can be calmer.</p>
+<p>That became the new direction:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Less machinery in the narrator's face.</span></span>
+<span class="line"><span>More useful state in the right place.</span></span>
+<span class="line"><span>Cleaner hierarchy.</span></span>
+<span class="line"><span>Shorter rules.</span></span>
+<span class="line"><span>Better writing.</span></span></code></pre>
+<div class="section-label">What this did not mean</div>
+<p>This was not giving up on structure.</p>
+<p>Mnemosyne still needs state. It still needs memory routing. It still needs relationship deltas, world snapshots, payload logs, and repair tools. The lesson was not that prompts should be vague.</p>
+<p>The lesson was that the narrator prompt and the developer/debug machinery are different surfaces.</p>
+<p>The model should receive the smallest useful brief that preserves continuity and behavior.</p>
+<p>The developer should be able to inspect the full machinery somewhere else.</p>
+<p>That distinction became a UI problem too.</p>
+<div class="section-label">The UI-flow reset</div>
+<p>Around the same time, the interface problem became obvious.</p>
+<p>The current UI worked, but it looked like a dense control panel. Too many buttons, too many backend concepts, too much machinery visible at once. That matched the prompt problem almost perfectly.</p>
+<p>The product was doing the same thing in two places:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>The prompt showed too much machinery to the narrator.</span></span>
+<span class="line"><span>The UI showed too much machinery to the player.</span></span></code></pre>
+<p>The mock UI helped, but not because it was a complete product spec. It did not know Mnemosyne’s actual features. It invented some things, flattened others, and missed parts of the real app.</p>
+<p>Its useful lesson was flow.</p>
+<p>One surface should not do every job.</p>
+<div class="section-label">Paper and terminal</div>
+<p>The visual split became clear:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Player-facing fiction: paper / book / editorial-lite.</span></span>
+<span class="line"><span>Developer and GM machinery: terminal.</span></span></code></pre>
+<p>Paper fits the story layer. It makes the transcript, Soul view, and records feel like reading, journals, dossiers, and case files. It also makes redaction natural. Hidden knowledge can appear as blacked-out text in reader/god modes instead of looking like a broken app.</p>
+<p>Terminal fits the machine layer. The Dev console, payload trace, pipeline stages, benchmark output, and raw diagnostics should feel like the back room. That is where the engine can be explicit without contaminating the fiction surface.</p>
+<p>This is the same architectural split expressed visually:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Soul / Play / readable records = paper.</span></span>
+<span class="line"><span>Pipeline / payload / repair / debug = terminal.</span></span></code></pre>
+<div class="section-label">State Map without spoiling the story</div>
+<p>The State Map needed the same treatment.</p>
+<p>A full state view is useful, but not every user should see every field in every mode. A player in realistic mode should not get a god-view of secret beliefs, hidden knowledge, or offscreen plot truth. That spoils the story.</p>
+<p>So State Map became a visibility problem, not a deletion problem.</p>
+<p>The backend keeps the state.</p>
+<p>The mode decides how much is visible:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Realistic: omit hidden knowledge entirely.</span></span>
+<span class="line"><span>Reader: redact sensitive fields with optional reveal.</span></span>
+<span class="line"><span>God / GM / Dev: show the full machine-readable truth.</span></span></code></pre>
+<p>Omit and redact are not the same.</p>
+<p>If realistic mode shows <code>misbelieves — censored</code>, it still leaks that a secret exists. In realistic play, even the existence of the hidden field may be too much. In reader mode, the redaction is part of the pleasure. In god mode, the whole map is allowed.</p>
+<p>That made the mock’s State Map idea usable without turning solo immersive RP into a spoiler dashboard.</p>
+<div class="section-label">What got better</div>
+<p>The direction became cleaner.</p>
+<p>Prompt side:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Do not add more cages.</span></span>
+<span class="line"><span>Clarify the actual boundary.</span></span>
+<span class="line"><span>Keep the narrator brief compact.</span></span>
+<span class="line"><span>Move debug machinery out of the narrator's face.</span></span></code></pre>
+<p>UI side:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Do not make one mega-control-panel.</span></span>
+<span class="line"><span>Split by user intent.</span></span>
+<span class="line"><span>Let Play read like a book.</span></span>
+<span class="line"><span>Let records read like dossiers.</span></span>
+<span class="line"><span>Let Dev look like a terminal.</span></span></code></pre>
+<p>The same design law applied to both:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>The fiction surface should feel alive.</span></span>
+<span class="line"><span>The machine surface should be inspectable.</span></span>
+<span class="line"><span>Do not confuse the two.</span></span></code></pre>
+<div class="section-label">What stayed rough</div>
+<p>This did not finish the product.</p>
+<p>It created a clearer direction, but the actual app still needed hard work:</p>
+<ul>
+<li>State Map had to render real loaded Soul/session data, not mock data.</li>
+<li>Library and Workshop had to preserve every existing creation/editing feature.</li>
+<li>Settings needed to become a real page, not just a drawer.</li>
+<li>Play needed a calm pipeline indicator without turning into Dev mode.</li>
+<li>Home needed a clear Continue flow and honest shelves.</li>
+<li>Redaction needed to be mode-aware instead of just decorative.</li>
+<li>Dev needed to stay reachable without overwhelming normal play.</li>
+</ul>
+<p>The important part was the standard:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>No fake mock-data victory.</span></span>
+<span class="line"><span>No pretty UI that lies about what the backend can do.</span></span>
+<span class="line"><span>No hiding real features just to make the screen calmer.</span></span></code></pre>
+<p>The mock was inspiration.</p>
+<p>The real app was the source of truth.</p>
+<div class="section-label">Next</div>
+<p>The next work is not one single feature.</p>
+<p>It is convergence.</p>
+<p>The engine needs to keep becoming safer and more inspectable: restore tools, provenance, memory inspector, better retrieval, entity separation, and payload timing.</p>
+<p>The interface needs to expose that power without dumping the machinery on the player.</p>
+<p>So the next product direction is:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Paper for play.</span></span>
+<span class="line"><span>Editorial-lite for records.</span></span>
+<span class="line"><span>Terminal for Dev.</span></span>
+<span class="line"><span>Real State Map data.</span></span>
+<span class="line"><span>Mode-aware redaction.</span></span>
+<span class="line"><span>Feature parity before polish.</span></span></code></pre>
+<p>Mnemosyne should not become a prettier control panel.</p>
+<p>It should become a readable fiction surface with a serious engine underneath.</p>
+<p>That is the actual cleanup.</p>
+<p>Not only shorter prompts.</p>
+<p>A cleaner boundary between story and machine.</p>
+<section class="covered"><h2>Covered commits</h2><ol><li><code>TBD</code> Prompt Cleanup V2 and UI flow reset</li></ol></section><nav class="post-nav" aria-label="Post navigation"><a class="nav-card" href="/devlog/009-starting-fresh-without-erasing-the-soul/"><span>Previous</span><strong>009, Starting Fresh Without Erasing the Soul</strong></a><div></div></nav></div></article></div><footer class="site-footer" id="footer"><div class="site-footer-inner"><div class="site-footer-status"><span class="site-footer-dot"></span><span>rhygpu.dev is live</span></div><nav class="site-footer-links" aria-label="Footer"><a href="/projects/">Projects</a><a href="/devlog/">Devlog</a><a href="/about/">About</a><a href="/resume/">Resume</a><a href="/contact/">Contact</a><a href="https://github.com/RhyGPU" target="_blank" rel="noreferrer">GitHub</a><a href="https://github.com/RhyGPU/rhygpu.dev" target="_blank" rel="noreferrer">Site Source</a><a href="https://www.linkedin.com/in/junna-j-912665270/" target="_blank" rel="noreferrer">LinkedIn</a></nav></div></footer></body></html>

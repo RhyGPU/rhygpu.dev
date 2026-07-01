@@ -1,6 +1,5 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import SiteFooter from '../components/SiteFooter.astro';
 import CommitList from '../components/CommitList.astro';
 
 interface CommitEntry {
@@ -65,7 +64,5 @@ const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month:
         )}
       </div>
     </article>
-
-    <SiteFooter />
   </div>
 </BaseLayout>

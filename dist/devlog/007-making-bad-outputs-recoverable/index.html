@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>007, Making Bad Outputs Recoverable | RhyGPU</title><meta name="description" content="UX comfort, regenerate/fix response, and the road to real branching."><link rel="canonical" href="https://rhygpu.dev/devlog/007-making-bad-outputs-recoverable/"><meta property="og:title" content="007, Making Bad Outputs Recoverable | RhyGPU"><meta property="og:description" content="UX comfort, regenerate/fix response, and the road to real branching."><meta property="og:site_name" content="RhyGPU"><meta property="og:type" content="website"><meta property="og:url" content="https://rhygpu.dev/devlog/007-making-bad-outputs-recoverable/"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="007, Making Bad Outputs Recoverable | RhyGPU"><meta name="twitter:description" content="UX comfort, regenerate/fix response, and the road to real branching."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/BaseLayout.D5VYmAXm.css"></head><body><nav class="site-nav" aria-label="Primary"><div class="site-nav-inner"><a href="/" class="site-nav-logo" aria-label="RhyGPU home"><span class="site-nav-badge">R</span><span class="site-nav-name">RhyGPU</span></a><div class="site-nav-links"><a href="/projects/" class="site-nav-link">Projects</a><a href="/devlog/" class="site-nav-link active" aria-current="page">Devlog</a><a href="/about/" class="site-nav-link">About</a><a href="/resume/" class="site-nav-link">Resume</a><a href="/contact/" class="site-nav-link">Contact</a><a href="https://github.com/RhyGPU" target="_blank" rel="noreferrer" class="site-nav-github">GitHub ↗</a></div></div></nav><div class="wrap"><a class="back" href="/">rhygpu.dev</a><article><header class="post-header"><p class="kicker">Mnemosyne · 007</p><h1 class="post-title">Making Bad Outputs Recoverable</h1><p class="post-subtitle">UX comfort, regenerate/fix response, and the road to real branching.</p><p class="post-meta">May 29, 2026 · Mnemosyne</p></header><div class="prose"><p>After the payload cleanup, the backend finally looked stable enough to breathe.</p>
+<p>The latest exchange was being fed from the right end of the previous narrator response. Recent chat was lower priority. The payload inspector was no longer misleading me. The model was finally seeing the right anchor more often.</p>
+<p>The obvious next backend task looked like Memory Hygiene V2.</p>
+<p>Less duplicate memory.</p>
+<p>Less irrelevant memory.</p>
+<p>Better retrieval.</p>
+<p>That was all good.</p>
+<p>But it was not the thing making the app uncomfortable to use.</p>
+<p>The problem was simpler:</p>
+<p>The app still made it annoying to recover from bad outputs.</p>
+<p>And bad outputs are not going away.</p>
+<div class="section-label">What changed</div>
+<p>This pass shifted from backend memory to app comfort.</p>
+<p>First came the small friction fixes:</p>
+<ul>
+<li>keep Return to Library visible while scrolling</li>
+<li>make the chat header sticky</li>
+<li>show feedback when copying the LLM payload</li>
+</ul>
+<p>Small stuff.</p>
+<p>But small stuff matters when the app is something I actually use.</p>
+<p>If I have to scroll to the top just to leave a chat, that is friction. If I click Copy LLM Payload and get no feedback, I have to wonder whether it worked. If the app feels annoying during testing, I will avoid testing it.</p>
+<p>That is bad for the project.</p>
+<p>So the next feature was not smarter memory.</p>
+<p>It was making the app less irritating.</p>
+<p>Then came the bigger comfort feature:</p>
+<p>Regenerate / Fix Last Response.</p>
+<p>Because even with better context, the narrator can still mess up.</p>
+<p>It can repeat a scene beat.</p>
+<p>It can misread who said what.</p>
+<p>It can invent time.</p>
+<p>It can continue from the wrong emotional tone.</p>
+<p>It can give an answer that is almost good, but wrong in one specific way.</p>
+<p>The app needed a fast correction loop.</p>
+<div class="section-label">Why I touched this</div>
+<p>The payload fixes made the system more stable, but they did not make the model perfect.</p>
+<p>That is the important difference.</p>
+<p>A better context compiler can reduce failure.</p>
+<p>It cannot eliminate LLM behavior.</p>
+<p>So the question changed again.</p>
+<p>Not:</p>
+<blockquote>
+<p>How do I prevent every bad response?</p>
+</blockquote>
+<p>But:</p>
+<blockquote>
+<p>What happens when a bad response appears?</p>
+</blockquote>
+<p>Before this, the answer was ugly. I had to manually retry, edit around the problem, or keep pushing the scene forward and hope it recovered.</p>
+<p>That is not good enough for long-form RP.</p>
+<p>The user needs to be able to say:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Regenerate this.</span></span></code></pre>
+<p>or:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Fix this response.</span></span>
+<span class="line"><span>Do not replay the phone reveal.</span></span>
+<span class="line"><span>Continue from the kitchen.</span></span></code></pre>
+<p>without destroying the session.</p>
+<p>That is the real product need.</p>
+<div class="section-label">UX Comfort Pass</div>
+<p>The first comfort pass was intentionally small.</p>
+<p>The Return to Library button needed to stay visible. I should not have to scroll back to the top of a long RP session just to leave the chat.</p>
+<p>The payload copy button needed feedback. If I copy the LLM payload, the app should confirm it.</p>
+<p>Not with a giant modal.</p>
+<p>Just:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Copied!</span></span></code></pre>
+<p>or:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Payload copied.</span></span></code></pre>
+<p>Then it disappears.</p>
+<p>That is not a deep feature. It is just basic usability.</p>
+<p>But it made the app feel less like a prototype and more like something I could keep open while debugging.</p>
+<p>The rule was simple:</p>
+<p>Do not touch the backend.</p>
+<p>Do not change hidden state.</p>
+<p>Do not change provider behavior.</p>
+<p>Just reduce friction.</p>
+<div class="section-label">Regenerate</div>
+<p>Regenerate is the first real recovery tool.</p>
+<p>The behavior is simple:</p>
+<p>The latest user message stays the same.</p>
+<p>The app asks the model for a new narrator response.</p>
+<p>The old narrator response gets replaced, or at least clearly treated as discarded.</p>
+<p>V1 does not need full branching yet.</p>
+<p>That matters because full branching is a different system. Regenerate is a practical fix. It gives me a way to recover from a bad continuation without building a whole timeline tree immediately.</p>
+<p>The point is speed.</p>
+<p>If the model gives a bad answer, I should not have to repair the whole session manually.</p>
+<p>Click regenerate.</p>
+<p>Get another attempt.</p>
+<p>Move on.</p>
+<div class="section-label">Fix with instruction</div>
+<p>Regenerate is useful when the answer is generally bad.</p>
+<p>Fix with instruction is useful when the answer is close.</p>
+<p>Sometimes the model gets the tone right but repeats an old scene beat. Sometimes it writes well but invents time. Sometimes it understands the relationship but forgets the physical state.</p>
+<p>In that case, I do not want a blind reroll.</p>
+<p>I want to tell it what went wrong.</p>
+<p>Example:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Continue from the kitchen.</span></span>
+<span class="line"><span>Do not replay the phone reveal.</span></span>
+<span class="line"><span>Keep the same emotional beat.</span></span></code></pre>
+<p>That instruction should be high-priority for the next generation.</p>
+<p>But it should not become permanent memory.</p>
+<p>That is important.</p>
+<p>A correction instruction is not character history. It is not Soul memory. It is not a world event. It is a temporary repair command for the next response.</p>
+<p>If the app stores it as memory, the system gets polluted.</p>
+<p>So Fix with Instruction has to live in a separate category:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>temporary correction context</span></span></code></pre>
+<p>not:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>character memory</span></span></code></pre>
+<div class="section-label">State safety</div>
+<p>This feature is not just UI.</p>
+<p>The dangerous part is hidden state.</p>
+<p>If the model already produced a response, that response may have also produced a hidden-state patch. It may have updated memory, relationship state, world state, or recent events.</p>
+<p>If I regenerate and the app simply applies another hidden-state patch on top, the discarded response still affects the Soul.</p>
+<p>That is bad.</p>
+<p>It means a response I rejected can still change the character.</p>
+<p>So regenerate needs state safety.</p>
+<p>The preferred behavior is:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Before generation:</span></span>
+<span class="line"><span>save a snapshot</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>If regenerating:</span></span>
+<span class="line"><span>restore snapshot</span></span>
+<span class="line"><span>remove or replace old assistant response</span></span>
+<span class="line"><span>generate again</span></span>
+<span class="line"><span>apply only the accepted replacement</span></span></code></pre>
+<p>That is the real difference between a chat UI gimmick and a memory engine feature.</p>
+<p>In a normal chatbot, regenerate just means “give me another answer.”</p>
+<p>In Mnemosyne, regenerate also means:</p>
+<blockquote>
+<p>Do not let rejected state become canon.</p>
+</blockquote>
+<div class="section-label">What got better</div>
+<p>Bad outputs stopped being dead ends.</p>
+<p>That is the real improvement.</p>
+<p>Before this, a wrong narrator response created pressure. Either accept it and continue, or manually fight the system.</p>
+<p>After this, there is a correction loop.</p>
+<p>The model can fail.</p>
+<p>The user can push back.</p>
+<p>The app can try again.</p>
+<p>That makes the whole project more usable.</p>
+<p>It also changes how testing feels. I no longer need every response to be perfect. I need the app to make recovery cheap.</p>
+<p>That is a healthier expectation for an LLM-based RP engine.</p>
+<div class="section-label">What is still rough</div>
+<p>This is still not true branching.</p>
+<p>That became obvious immediately.</p>
+<p>Regenerate / Fix Last Response works for the latest output. But if I go back to an older assistant response and choose a different version, the later messages still belong to the old timeline.</p>
+<p>That is not a branch.</p>
+<p>That is just response variant selection.</p>
+<p>A real branch means each response choice owns its own future.</p>
+<p>Something like:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>User 1</span></span>
+<span class="line"><span>  Assistant 1A</span></span>
+<span class="line"><span>    User 2A</span></span>
+<span class="line"><span>      Assistant 2A</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>User 1</span></span>
+<span class="line"><span>  Assistant 1B</span></span>
+<span class="line"><span>    User 2B</span></span>
+<span class="line"><span>      Assistant 2B</span></span></code></pre>
+<p>If I choose Assistant 1B, the app should not keep showing the later messages from Assistant 1A’s timeline as if nothing changed.</p>
+<p>That needs a branch model.</p>
+<p>Not just variants.</p>
+<div class="section-label">The next problem</div>
+<p>The next issue was not only branching.</p>
+<p>It was logs.</p>
+<p>A consistency issue showed up, and the right move was not to immediately add more tracking.</p>
+<p>That would be another overbuild.</p>
+<p>The better move was to inspect the evidence first.</p>
+<p>I need two kinds of logs:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>visible chat export</span></span></code></pre>
+<p>Only what the user sees. No hidden state. No engine junk. Just the readable RP transcript.</p>
+<p>And:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>backend payload history</span></span></code></pre>
+<p>The actual LLM inputs over time, not only the current payload.</p>
+<p>That matters because consistency bugs can come from many places:</p>
+<ul>
+<li>character profile</li>
+<li>latest exchange</li>
+<li>status block</li>
+<li>memory section</li>
+<li>world snapshot</li>
+<li>model invention</li>
+</ul>
+<p>Before adding more tracking, I need to know which layer is causing the contradiction.</p>
+<p>That is the same lesson as the payload inspector.</p>
+<p>Inspect first.</p>
+<p>Then build.</p>
+<div class="section-label">Next</div>
+<p>Next is making the session inspectable.</p>
+<p>Regenerate makes bad outputs recoverable.</p>
+<p>But branching and consistency debugging need better records.</p>
+<p>The next layer should export:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>visible chat log</span></span>
+<span class="line"><span>backend payload history</span></span></code></pre>
+<p>Then the app can answer the question that keeps coming back:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>Did the model invent this,</span></span>
+<span class="line"><span>or did we feed it conflicting state?</span></span></code></pre>
+<p>That has to come before full branch timelines.</p>
+<p>Bad outputs are recoverable now.</p>
+<p>Next, the session needs to become inspectable.</p>
+<section class="covered"><h2>Covered commits</h2><ol><li><a href="https://github.com/RhyGPU/mnemosyne/commit/a543e1c8651dbb9149716081fddfc1c0bc18ca65"><code>a543e1c</code></a> Improve chat navigation and payload copy feedback</li><li><a href="https://github.com/RhyGPU/mnemosyne/commit/13f8dbe177655a66f408d7c40cc9c90640394634"><code>13f8dbe</code></a> Anti-replay retry payload metadata fix</li></ol></section><nav class="post-nav" aria-label="Post navigation"><a class="nav-card" href="/devlog/006-opening-the-black-box/"><span>Previous</span><strong>006, Opening the Black Box</strong></a><a class="nav-card" href="/devlog/008-making-the-session-inspectable/"><span>Next</span><strong>008, Making the Session Inspectable</strong></a></nav></div></article></div><footer class="site-footer" id="footer"><div class="site-footer-inner"><div class="site-footer-status"><span class="site-footer-dot"></span><span>rhygpu.dev is live</span></div><nav class="site-footer-links" aria-label="Footer"><a href="/projects/">Projects</a><a href="/devlog/">Devlog</a><a href="/about/">About</a><a href="/resume/">Resume</a><a href="/contact/">Contact</a><a href="https://github.com/RhyGPU" target="_blank" rel="noreferrer">GitHub</a><a href="https://github.com/RhyGPU/rhygpu.dev" target="_blank" rel="noreferrer">Site Source</a><a href="https://www.linkedin.com/in/junna-j-912665270/" target="_blank" rel="noreferrer">LinkedIn</a></nav></div></footer></body></html>

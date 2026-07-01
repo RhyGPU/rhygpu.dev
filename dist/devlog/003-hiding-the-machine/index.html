@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>003, Hiding the Machine | RhyGPU</title><meta name="description" content="Mock provider, encoded hidden state, real model testing, and the first output-side Mnemosyne loop."><link rel="canonical" href="https://rhygpu.dev/devlog/003-hiding-the-machine/"><meta property="og:title" content="003, Hiding the Machine | RhyGPU"><meta property="og:description" content="Mock provider, encoded hidden state, real model testing, and the first output-side Mnemosyne loop."><meta property="og:site_name" content="RhyGPU"><meta property="og:type" content="website"><meta property="og:url" content="https://rhygpu.dev/devlog/003-hiding-the-machine/"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="003, Hiding the Machine | RhyGPU"><meta name="twitter:description" content="Mock provider, encoded hidden state, real model testing, and the first output-side Mnemosyne loop."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/BaseLayout.D5VYmAXm.css"></head><body><nav class="site-nav" aria-label="Primary"><div class="site-nav-inner"><a href="/" class="site-nav-logo" aria-label="RhyGPU home"><span class="site-nav-badge">R</span><span class="site-nav-name">RhyGPU</span></a><div class="site-nav-links"><a href="/projects/" class="site-nav-link">Projects</a><a href="/devlog/" class="site-nav-link active" aria-current="page">Devlog</a><a href="/about/" class="site-nav-link">About</a><a href="/resume/" class="site-nav-link">Resume</a><a href="/contact/" class="site-nav-link">Contact</a><a href="https://github.com/RhyGPU" target="_blank" rel="noreferrer" class="site-nav-github">GitHub ↗</a></div></div></nav><div class="wrap"><a class="back" href="/">rhygpu.dev</a><article><header class="post-header"><p class="kicker">Mnemosyne · 003</p><h1 class="post-title">Hiding the Machine</h1><p class="post-subtitle">Mock provider, encoded hidden state, and the first real model test.</p><p class="post-meta">May 29, 2026 · Mnemosyne</p></header><div class="prose"><p>The first app problem was output control.</p>
+<p>The model could write a scene, but the app had to catch the machine part before the player saw it.</p>
+<p>That was the job here: visible narration for the player, hidden state for the engine.</p>
+<p>The old crude code block was useful because I could inspect it. I could see trust move, fear move, a memory get flagged, or the scene state change. But if that block stayed visible after every message, the RP experience was dead.</p>
+<p>No raw JSON under the dialogue. No trust deltas sitting in the scene. No memory tags breaking the mood. No system residue reminding the player that the character is being calculated.</p>
+<blockquote>
+<p>The player sees the story. The engine reads the state.</p>
+</blockquote>
+<div class="section-label">What changed</div>
+<p>The desktop app started becoming more than a prompt experiment.</p>
+<p>Tauri gave the project a body: a window, a chat interface, Rust behind it, React in front of it, local Soul files, provider settings, and a place for the state loop to run.</p>
+<p>The output loop started taking shape:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="txt"><code><span class="line"><span>User Message</span></span>
+<span class="line"><span>        ↓</span></span>
+<span class="line"><span>Compiled Context</span></span>
+<span class="line"><span>        ↓</span></span>
+<span class="line"><span>Model Response</span></span>
+<span class="line"><span>        ↓</span></span>
+<span class="line"><span>Visible Narration + Hidden State</span></span>
+<span class="line"><span>        ↓</span></span>
+<span class="line"><span>Strip / Parse</span></span>
+<span class="line"><span>        ↓</span></span>
+<span class="line"><span>Soul / World Update</span></span>
+<span class="line"><span>        ↓</span></span>
+<span class="line"><span>Save</span></span></code></pre>
+<p>That was the first version of the app actually breathing.</p>
+<div class="section-label">Why the mock existed</div>
+<p>The mock provider was not real RP testing.</p>
+<p>It was scaffolding.</p>
+<p>It proved that the UI could send a turn, the backend could return a response, the response could include hidden state, and the app could update the chat. That mattered. But it was not testing narration, psychology, or model behavior.</p>
+<p>The mock did not surprise me. It did not drift. It did not forget the format. It did not leak state because a model got confused. It returned what the code told it to return.</p>
+<p>Useful for the pipe. Useless as proof that the RP experience worked.</p>
+<p>That distinction became important later because it is easy to overclaim a mock.</p>
+<p>The mock proved that Mnemosyne could move data through the desktop app. It did not prove that a real model would obey the narrator role, preserve the hidden-state boundary, keep user agency clean, or update a Soul without smearing scene facts into character memory. Once a real LLM entered the loop, the narrator/character boundary could bend, hidden state could leak, and the output could arrive malformed. It did not prove emotional pacing. It did not prove that the parser could survive a model trying to be helpful in the wrong shape.</p>
+<p>So this pass should not be read as “the engine worked.”</p>
+<p>It should be read as:</p>
+<blockquote>
+<p>The pipe existed.</p>
+<p>Now it needed to survive an actual model.</p>
+</blockquote>
+<div class="section-label">The first real model test</div>
+<p>The useful failures came from actual LLMs.</p>
+<p>I was already using OpenRouter models for AI RP testing, so using free OpenRouter models inside the app was the obvious next step. I needed real generations to see whether the system survived contact with a model that could misunderstand, improvise, ignore formatting, or write something good for the wrong reason.</p>
+<p>The first real test felt good in a way the mock never could.</p>
+<p>A real model answered. The chat moved. The scene had atmosphere. The narration had texture. It was not finished, but the product stopped feeling imaginary for a moment.</p>
+<p>Then the warning showed up.</p>
+<p>The output was nice, but it was also wrong in a dangerous way: the model wanted to talk like the character instead of staying as the narrator.</p>
+<p>That mattered because Mnemosyne is not supposed to be another character impersonator. The narrator should describe the character. The Soul and World Log should carry continuity underneath. If the model collapses into being the character, knowledge boundaries collapse with it.</p>
+<p>The first real test proved two things at once:</p>
+<blockquote>
+<p>It could feel good.</p>
+<p>Feeling good was not enough.</p>
+</blockquote>
+<div class="section-label">Encoded hidden state</div>
+<p>Plain hidden JSON was easy to inspect, but too fragile for the actual path.</p>
+<p>It could leak into the visible response. It could get wrapped in prose. It could be malformed by the model. It also made the boundary between narration and machinery feel weaker than it should.</p>
+<p>So the hidden state moved toward an encoded payload.</p>
+<p>The app needed a recognizable marker, a compact body, and a parser that could support the new format without destroying older test transcripts.</p>
+<p>That is where the <code>mne1.&lt;base64url&gt;</code> style payload started to matter.</p>
+<p>The narration is for the player. The encoded hidden state is for the engine.</p>
+<div class="section-label">Diagnostics</div>
+<p>Once the state became hidden, debugging got harder.</p>
+<p>If the Soul updated wrong, I needed to know why. If parsing failed, I needed to know where. If a memory got added, scored, discarded, or consolidated, I needed a place to inspect the cycle without dumping the machinery into the player’s chat.</p>
+<p>That made the turn debug panel and memory cycle diagnostics necessary.</p>
+<p>Not as polish.</p>
+<p>As survival.</p>
+<p>The player should not see the machinery. The developer absolutely needs to.</p>
+<div class="section-label">What this exposed</div>
+<p>This pass made the first hard boundary visible.</p>
+<p>The model should write and propose.</p>
+<p>The app should catch, parse, validate, and manage.</p>
+<p>At this stage I was still asking one model response to do too much: write the scene, stay in narrator mode, respect user agency, output hidden state, flag memory, judge importance, update relationship values, and remember to forget.</p>
+<p>That burden was already showing cracks.</p>
+<p>But the app now had somewhere to put the cracks. The mock gave the pipe a shape. Real models gave it failure cases. Encoded hidden state gave the engine something safer to parse. Diagnostics gave me a way to see behind the curtain.</p>
+<p>That was enough to move forward.</p>
+<section class="covered"><h2>Covered commits</h2><ol><li><a href="https://github.com/RhyGPU/mnemosyne/commit/f26cbfead602bea6003dc6445337c8b73ba77bc4"><code>f26cbfe</code></a> Add AGPL-3.0 license</li><li><a href="https://github.com/RhyGPU/mnemosyne/commit/a6429539c7fb38ec92f790ad3c3ee6afaf753903"><code>a642953</code></a> Scaffold Tauri desktop client</li><li><a href="https://github.com/RhyGPU/mnemosyne/commit/b0697faee12dbac371a443caea62ca99e6b70086"><code>b0697fa</code></a> Wire mock provider turn flow</li><li><a href="https://github.com/RhyGPU/mnemosyne/commit/aee79720d2c325d1bc55f704ae82a633cbd5fbcc"><code>aee7972</code></a> Encode mock hidden state</li><li><a href="https://github.com/RhyGPU/mnemosyne/commit/365d105634de01d784884622766279c83c60a987"><code>365d105</code></a> Surface memory cycle diagnostics</li><li><a href="https://github.com/RhyGPU/mnemosyne/commit/21f5efdf29fe70955561eab4ee10183fbda4f7c1"><code>21f5efd</code></a> Add turn debug panel</li></ol></section><nav class="post-nav" aria-label="Post navigation"><a class="nav-card" href="/devlog/002-splitting-memory-in-two/"><span>Previous</span><strong>002, Splitting Memory in Two</strong></a><a class="nav-card" href="/devlog/004-feeding-the-model-a-session-packet/"><span>Next</span><strong>004, Feeding the Model a Session Packet</strong></a></nav></div></article></div><footer class="site-footer" id="footer"><div class="site-footer-inner"><div class="site-footer-status"><span class="site-footer-dot"></span><span>rhygpu.dev is live</span></div><nav class="site-footer-links" aria-label="Footer"><a href="/projects/">Projects</a><a href="/devlog/">Devlog</a><a href="/about/">About</a><a href="/resume/">Resume</a><a href="/contact/">Contact</a><a href="https://github.com/RhyGPU" target="_blank" rel="noreferrer">GitHub</a><a href="https://github.com/RhyGPU/rhygpu.dev" target="_blank" rel="noreferrer">Site Source</a><a href="https://www.linkedin.com/in/junna-j-912665270/" target="_blank" rel="noreferrer">LinkedIn</a></nav></div></footer></body></html>
