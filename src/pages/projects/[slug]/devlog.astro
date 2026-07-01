@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostCard from '../../../components/PostCard.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  const devlogs = (await getCollection('devlogs'))
+    .filter((post) => post.data.status === 'published');
+
+  return projects
+    .map((project) => ({
+      project,
+      posts: devlogs
+        .filter((post) => post.data.project.toLowerCase() === project.data.title.toLowerCase())
+        .sort((a, b) => Number(b.data.number) - Number(a.data.number))
+    }))
+    .filter((entry) => entry.posts.length > 0)
+    .map((entry) => ({
+      params: { slug: entry.project.data.slug },
+      props: entry
+    }));
+}
+
+const { project, posts } = Astro.props;
+const count = posts.length;
+---
+<BaseLayout
+  title={`${project.data.title} Devlogs | RhyGPU`}
+  description={`Development journal for ${project.data.title}: ${project.data.subtitle ?? project.data.summary}`}
+>
+  <div class="wrap">
+    <a class="back" href={`/projects/${project.data.slug}/`}>{project.data.title}</a>
+
+    <header class="post-header">
+      <p class="kicker">{project.data.title} · Devlog</p>
+      <h1 class="post-title">{project.data.title} Devlogs</h1>
+      {project.data.subtitle && <p class="post-subtitle">{project.data.subtitle}</p>}
+      <p class="post-meta">{count} {count === 1 ? 'entry' : 'entries'} · newest first</p>
+    </header>
+
+    <ul class="devlog-list">
+      {posts.map((post) => (
+        <PostCard
+          href={`/devlog/${post.data.slug}/`}
+          number={post.data.number}
+          title={post.data.title}
+          summary={post.data.summary}
+        />
+      ))}
+    </ul>
+
+    <div class="section-actions">
+      <a class="cta-link muted" href={`/projects/${project.data.slug}/`}>Back to project</a>
+      <a class="cta-link muted" href="/devlog/">All devlogs</a>
+    </div>
+  </div>
+</BaseLayout>

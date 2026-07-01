@@ -6,18 +6,42 @@ import PostCard from '../../components/PostCard.astro';
 const posts = (await getCollection('devlogs'))
   .filter((post) => post.data.status === 'published')
   .sort((a, b) => Number(b.data.number) - Number(a.data.number));
+
+const projects = await getCollection('projects');
+
+// Projects that actually have published devlogs, for the "browse by project" row.
+const projectStreams = projects
+  .map((project) => ({
+    title: project.data.title,
+    slug: project.data.slug,
+    count: posts.filter((post) => post.data.project.toLowerCase() === project.data.title.toLowerCase()).length
+  }))
+  .filter((stream) => stream.count > 0)
+  .sort((a, b) => b.count - a.count);
 ---
-<BaseLayout title="Mnemosyne Devlogs | RhyGPU" description="Development journal for Mnemosyne's local-first AI memory architecture, state systems, and debugging tools.">
+<BaseLayout title="Devlogs | RhyGPU" description="Development journals across every RhyGPU project: architecture decisions, failures, and the fixes that followed.">
   <div class="wrap">
     <a class="back" href="/">rhygpu.dev</a>
 
     <header class="post-header">
       <p class="kicker">Archive</p>
-      <h1 class="post-title">Mnemosyne Devlogs</h1>
-      <p class="post-subtitle">A structured record of the engine, its failures, and the fixes that followed.</p>
-      <p class="post-meta">Auto-generated from Markdown content.</p>
+      <h1 class="post-title">Devlogs</h1>
+      <p class="post-subtitle">Development journals across every RhyGPU project — the decisions, the failures, and the fixes that followed.</p>
+      <p class="post-meta">{posts.length} entries · newest first</p>
     </header>
 
+    {projectStreams.length > 0 && (
+      <section aria-label="Devlogs by project">
+        <p class="section-label">By project</p>
+        <div class="link-row">
+          {projectStreams.map((stream) => (
+            <a class="cta-link muted" href={`/projects/${stream.slug}/devlog/`}>{stream.title} · {stream.count}</a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <p class="section-label">All entries</p>
     <ul class="devlog-list">
       {posts.map((post) => (
         <PostCard
@@ -25,6 +49,7 @@ const posts = (await getCollection('devlogs'))
           number={post.data.number}
           title={post.data.title}
           summary={post.data.summary}
+          project={post.data.project}
         />
       ))}
     </ul>

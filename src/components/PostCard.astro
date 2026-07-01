@@ -4,15 +4,19 @@ interface Props {
   number: string;
   title: string;
   summary: string;
+  project?: string;
 }
 
-const { href, number, title, summary } = Astro.props;
+const { href, number, title, summary, project } = Astro.props;
 ---
 <li class="devlog-item">
   <a href={href} class="devlog-link">
     <span class="devlog-num">{number}</span>
     <span>
-      <span class="devlog-title">{title}</span>
+      <span class="devlog-title-row">
+        <span class="devlog-title">{title}</span>
+        {project && <span class="devlog-project">{project}</span>}
+      </span>
       <span class="devlog-sub">{summary}</span>
     </span>
     <span class="devlog-chevron">→</span>

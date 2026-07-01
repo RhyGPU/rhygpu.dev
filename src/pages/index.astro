@@ -63,6 +63,7 @@ const statusDot = (status: string) => {
     <section id="projects" class="home-flagship">
       <p class="home-section-label">Featured — flagship</p>
       <article class="home-flagship-card">
+        <a class="home-flagship-cover" href={`/projects/${flagship.data.slug}/`} aria-label={`Open ${flagship.data.title}`}></a>
         <div class="home-flagship-copy">
           <div class="home-flagship-badge">
             <span class="home-flagship-dot" style={`background:${statusDot(flagship.data.status)};box-shadow:0 0 10px ${statusDot(flagship.data.status)}`}></span>
@@ -74,9 +75,8 @@ const statusDot = (status: string) => {
             {flagship.data.stack.slice(0, 4).map((item) => <span class="home-tag">{item}</span>)}
           </div>
           <div class="home-flagship-links">
-            <a class="cover" href={`/projects/${flagship.data.slug}/`} aria-label={`Open ${flagship.data.title}`}>Open project →</a>
             {flagship.data.repo && <a class="gh" href={flagship.data.repo} target="_blank" rel="noreferrer">GitHub →</a>}
-            <a class="dl" href="#devlog">Devlogs →</a>
+            {flagship.data.devlog && <a class="dl" href={flagship.data.devlog}>Devlogs →</a>}
           </div>
         </div>
         <div class="home-flagship-media">
@@ -145,9 +145,11 @@ const statusDot = (status: string) => {
 .home-section-label { font: 600 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; }
 
 .home-flagship { padding: 64px 0 20px; scroll-margin-top: 80px; }
-.home-flagship-card { display: grid; grid-template-columns: 1.15fr 1fr; border: 1px solid var(--border-strong); border-radius: 12px; overflow: hidden; transition: border-color .18s; }
+.home-flagship-card { position: relative; display: grid; grid-template-columns: 1.15fr 1fr; border: 1px solid var(--border-strong); border-radius: 12px; overflow: hidden; transition: border-color .18s; }
 .home-flagship-card:hover { border-color: rgba(90,171,230,.35); }
-.home-flagship-copy { padding: 34px; }
+.home-flagship-cover { position: absolute; inset: 0; z-index: 1; }
+.home-flagship-cover:focus-visible { outline: 1px solid rgba(90,171,230,.55); outline-offset: -2px; }
+.home-flagship-copy { position: relative; padding: 34px; }
 .home-flagship-badge { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 .home-flagship-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .home-flagship-badge .label { font: 600 11px var(--mono); letter-spacing: .06em; }
@@ -155,9 +157,7 @@ const statusDot = (status: string) => {
 .home-flagship-desc { font: 400 15.5px/1.6 var(--sans); color: var(--text-body); margin: 0 0 22px; }
 .home-tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 24px; }
 .home-tag { font: 500 11px var(--mono); color: var(--text); background: rgba(255,255,255,.07); padding: 4px 10px; border-radius: 5px; }
-.home-flagship-links { display: flex; flex-wrap: wrap; gap: 18px; font: 600 13px var(--sans); }
-.home-flagship-links a.cover { color: var(--blue); text-decoration: none; transition: color .16s; }
-.home-flagship-links a.cover:hover { color: var(--blue-hover); }
+.home-flagship-links { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 18px; font: 600 13px var(--sans); }
 .home-flagship-links a.gh { color: var(--text-muted); text-decoration: none; transition: color .16s; }
 .home-flagship-links a.gh:hover { color: var(--text); }
 .home-flagship-links a.dl { color: var(--teal); text-decoration: none; transition: color .16s; }

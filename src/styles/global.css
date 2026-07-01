@@ -103,7 +103,9 @@ a:focus-visible { outline: 1px solid rgba(90,171,230,0.6); outline-offset: 3px; 
 .devlog-link { display: grid; grid-template-columns: 52px 1fr auto; gap: 0 20px; align-items: center; padding: 17px 12px; border-top: 1px solid var(--border); border-radius: 8px; transition: background 0.16s; }
 .devlog-link:hover { background: rgba(255,255,255,0.03); }
 .devlog-num { font: 700 16px var(--display); color: var(--text-dim); }
+.devlog-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .devlog-title { font: 600 15px var(--sans); color: var(--text); transition: color 0.16s; }
+.devlog-project { font: 600 9.5px var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border-strong); border-radius: 4px; padding: 2px 6px; line-height: 1.4; }
 .devlog-sub { display: block; font: 400 13px var(--sans); color: var(--text-muted); margin-top: 5px; line-height: 1.5; }
 .devlog-chevron { font: 600 15px var(--sans); color: var(--teal); align-self: center; transition: transform 0.2s; }
 .devlog-link:hover .devlog-chevron { transform: translateX(3px); }
