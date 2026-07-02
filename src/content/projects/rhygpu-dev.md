@@ -29,24 +29,28 @@ architecture:
   - Public portfolio
 media:
   - title: Homepage portfolio hub
+    type: screenshot
+    src: /projects/rhygpu-dev/homepage-portfolio-hub.png
+    alt: rhygpu.dev homepage showing the portfolio hero, featured projects, latest devlogs, and shared navigation.
+    caption: Portfolio landing page organizing projects, devlogs, and profile navigation into one reader path.
+    status: available
+  - title: Projects index
     type: placeholder
-    caption: Planned screenshot slot for the public homepage once the project set is stable.
+    caption: Planned screenshot slot for the project collection view showing flagship, secondary app, prototype, and meta-site structure.
     status: planned
-  - title: Project page template
+  - title: Mnemosyne case study
     type: placeholder
-    caption: Planned screenshot slot for the reusable case-study page layout.
+    caption: Planned screenshot slot for the flagship case-study page combining architecture, proof media, devlog links, and roadmap.
     status: planned
   - title: Devlog archive
+    type: screenshot
+    src: /projects/rhygpu-dev/devlog-archive.png
+    alt: rhygpu.dev devlog archive showing project filters and chronological development journal entries.
+    caption: Development journal archive for project history and technical decision records.
+    status: available
+  - title: rhygpu.dev project page
     type: placeholder
-    caption: Planned screenshot slot for the shared development journal and per-project devlog views.
-    status: planned
-  - title: Metadata / social preview
-    type: placeholder
-    caption: Planned proof slot for link-preview metadata once a real OG image exists.
-    status: planned
-  - title: Build / archive log view
-    type: placeholder
-    caption: Planned proof slot for showing how raw build notes are retained as archive material, not the main portfolio path.
+    caption: Planned screenshot slot for the meta-project page documenting the portfolio system itself as a build artifact.
     status: planned
 proofNotes:
   - Mnemosyne, OmniPlanner, and Pythagorean Harmony are represented as project pages.
