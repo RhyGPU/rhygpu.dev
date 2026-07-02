@@ -6,7 +6,6 @@ order: 3
 subtitle: "Equation-duel combat prototype for a fantasy third-person action RPG."
 status: "Playable Prototype"
 summary: "A UE5 prototype exploring math-based combat, where enemies are defeated by transforming equations with operation weapons and executing with the correct value of x."
-repo: "https://github.com/RhyGPU/PythagoreanHarmony"
 stack:
   - Unreal Engine 5
   - C++
@@ -43,6 +42,7 @@ proofNotes:
   - First playable prototype, not a full RPG.
   - Core loop is equation-duel combat.
   - Core systems are C++ with Blueprint tuning.
+  - Source repo is currently private while the prototype is being cleaned up.
 showHighlightsPanel: false
 tags:
   - game prototype
@@ -183,6 +183,8 @@ Pythagorean Harmony is a first playable prototype and lab project.
 The current focus is proving whether equation-duel combat can feel readable, tactical, and physical enough to justify deeper game development. It is not a full RPG yet. A full world, progression system, enemy roster, and long-term content are out of scope for the current prototype.
 
 The working frame is "Math Souls Prototype: Equation Duel": prove the duel, then decide whether the larger game deserves to exist.
+
+Source repo is currently private while the prototype is being cleaned up.
 
 ## What This Demonstrates
 
