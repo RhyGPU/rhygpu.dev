@@ -211,7 +211,8 @@ const statusDot = (status: string) => {
   .home-stats { grid-template-columns: repeat(2, 1fr); }
   .home-stat:nth-child(2) { border-right: 0; }
   .home-devlog-row { flex-wrap: wrap; gap: 6px 20px; }
-  .home-devlog-titlewrap { width: auto; }
+  .home-devlog-titlewrap { width: auto; min-width: 0; flex: 1 1 220px; flex-wrap: wrap; }
+  .home-devlog-title { min-width: 0; }
   .home-devlog-blurb { flex-basis: 100%; }
 }
 </style>
