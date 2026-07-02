@@ -7,6 +7,8 @@ subtitle: "Portfolio system and development archive for RhyGPU projects."
 status: "Active Site"
 summary: "The Astro portfolio, devlog hub, and meta-build archive for RhyGPU projects: a public layer that turns raw project history into readable case studies."
 repo: "https://github.com/RhyGPU/rhygpu.dev"
+devlog: "/projects/rhygpu-dev/devlog/"
+devlogLabel: "Site journal"
 stack:
   - Astro
   - TypeScript

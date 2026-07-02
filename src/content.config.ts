@@ -50,6 +50,8 @@ const projects = defineCollection({
     status: z.string(),
     summary: z.string(),
     repo: z.string().url().optional(),
+    devlog: z.string().optional(),
+    devlogLabel: z.string().optional(),
     demo: z.string().url().optional(),
     stack: z.array(z.string()).default([]),
     highlights: z.array(z.string()).default([]),

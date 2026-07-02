@@ -79,7 +79,7 @@ const statusDot = (status: string) => {
           </div>
           <div class="home-flagship-links">
             {flagship.data.repo && <a class="gh" href={flagship.data.repo} target="_blank" rel="noreferrer">GitHub →</a>}
-            <a class="dl" href={`/projects/${flagship.data.slug}/devlog/`}>Devlogs →</a>
+            {flagship.data.devlog && <a class="dl" href={flagship.data.devlog}>{flagship.data.devlogLabel ?? 'Devlogs'} →</a>}
           </div>
         </div>
         <div class="home-flagship-media">
@@ -104,7 +104,7 @@ const statusDot = (status: string) => {
           </div>
           <div class="home-secondary-links">
             {project.data.repo && <a class="home-secondary-link" href={project.data.repo} target="_blank" rel="noreferrer">GitHub →</a>}
-            <a class="home-secondary-link" href={`/projects/${project.data.slug}/devlog/`}>Devlogs →</a>
+            {project.data.devlog && <a class="home-secondary-link" href={project.data.devlog}>{project.data.devlogLabel ?? 'Devlogs'} →</a>}
           </div>
         </article>
       ))}

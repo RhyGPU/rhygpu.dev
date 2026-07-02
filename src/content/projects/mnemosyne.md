@@ -7,6 +7,8 @@ subtitle: "Local-first memory architecture for persistent AI characters."
 status: "Active Alpha"
 summary: "A desktop AI narrative engine that separates character memory, world state, prompt context, and debugging traces so LLM-driven characters can change without losing continuity."
 repo: "https://github.com/RhyGPU/mnemosyne"
+devlog: "/projects/mnemosyne/devlog/"
+devlogLabel: "Devlogs"
 stack:
   - Tauri
   - React
