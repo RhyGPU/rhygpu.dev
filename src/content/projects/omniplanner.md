@@ -6,6 +6,9 @@ order: 2
 subtitle: "Desktop-first planning workspace for goals, weeks, habits, calendar blocks, and AI-assisted organization."
 status: "Active App"
 summary: "An Electron desktop app for personal planning workflows, built around local data, weekly structure, goals, habits, and optional AI assistance."
+icon:
+  src: /projects/omniplanner/app-icon.png
+  alt: OmniPlanner app icon.
 repo: "https://github.com/RhyGPU/OmniPlanner"
 stack:
   - Electron

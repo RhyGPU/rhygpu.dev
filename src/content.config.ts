@@ -17,6 +17,11 @@ const mediaSchema = z.object({
   status: z.enum(['available', 'planned']).default('planned')
 });
 
+const iconSchema = z.object({
+  src: z.string(),
+  alt: z.string()
+});
+
 const demoLinkSchema = z.object({
   title: z.string(),
   url: z.string(),
@@ -49,6 +54,7 @@ const projects = defineCollection({
     subtitle: z.string().optional(),
     status: z.string(),
     summary: z.string(),
+    icon: iconSchema.optional(),
     repo: z.string().url().optional(),
     devlog: z.string().optional(),
     devlogLabel: z.string().optional(),

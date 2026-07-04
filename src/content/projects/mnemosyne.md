@@ -6,6 +6,9 @@ order: 1
 subtitle: "Local-first memory architecture for persistent AI characters."
 status: "Active Alpha"
 summary: "A desktop AI narrative engine that separates character memory, world state, prompt context, and debugging traces so LLM-driven characters can change without losing continuity."
+icon:
+  src: /projects/mnemosyne/app-icon.png
+  alt: Mnemosyne app icon.
 repo: "https://github.com/RhyGPU/mnemosyne"
 devlog: "/projects/mnemosyne/devlog/"
 devlogLabel: "Devlogs"

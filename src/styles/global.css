@@ -129,6 +129,8 @@ a:focus-visible { outline: 1px solid rgba(90,171,230,0.6); outline-offset: 3px; 
 .card-cover-link:focus-visible { outline: 1px solid rgba(90,171,230,0.55); outline-offset: 3px; }
 .project-card:focus-within { border-color: rgba(90,171,230,0.28); }
 .card-topline { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+.project-card-identity { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+.project-card-icon { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border-strong); background: rgba(255,255,255,0.04); object-fit: cover; flex: 0 0 auto; }
 .status-pill, .featured-mark { display: inline-flex; align-items: center; width: fit-content; font: 600 10px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border-strong); border-radius: 5px; padding: 4px 8px; line-height: 1; }
 .featured-mark { color: var(--blue); border-color: rgba(90,171,230,0.3); }
 .project-card h2 { font: 600 clamp(1.4rem, 3vw, 1.7rem) var(--display); color: var(--text); line-height: 1.1; margin-bottom: 10px; }
@@ -149,6 +151,10 @@ a:focus-visible { outline: 1px solid rgba(90,171,230,0.6); outline-offset: 3px; 
 
 /* ============ Project detail ============ */
 .project-hero { padding: 40px 0 32px; border-bottom: 1px solid var(--border); animation: fadeUp 0.7s ease both; }
+.project-hero-heading { display: flex; align-items: center; gap: 18px; margin-bottom: 16px; }
+.project-hero-heading .kicker { margin-bottom: 12px; }
+.project-hero-heading .post-title { margin-bottom: 0; }
+.project-hero-icon { width: 72px; height: 72px; border-radius: 16px; border: 1px solid var(--border-strong); background: rgba(255,255,255,0.04); object-fit: cover; box-shadow: 0 14px 32px rgba(0,0,0,0.22); flex: 0 0 auto; }
 .project-meta-row { margin-top: 22px; }
 .hero-stack { margin-top: 20px; }
 .project-page { animation: fadeUp 0.7s 0.08s ease both; }

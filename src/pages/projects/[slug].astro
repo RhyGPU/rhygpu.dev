@@ -22,8 +22,13 @@ const hasProofNotes = project.data.proofNotes.length > 0;
     <a class="back" href="/projects/">Projects</a>
 
     <header class="project-hero">
-      <p class="kicker">Project</p>
-      <h1 class="post-title">{project.data.title}</h1>
+      <div class="project-hero-heading">
+        {project.data.icon && <img class="project-hero-icon" src={project.data.icon.src} alt={project.data.icon.alt} />}
+        <div>
+          <p class="kicker">Project</p>
+          <h1 class="post-title">{project.data.title}</h1>
+        </div>
+      </div>
       {project.data.subtitle && <p class="post-subtitle">{project.data.subtitle}</p>}
       <div class="project-meta-row">
         <span class="status-pill">{project.data.status}</span>

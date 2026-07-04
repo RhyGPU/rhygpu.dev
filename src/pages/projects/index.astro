@@ -21,7 +21,10 @@ const projects = (await getCollection('projects'))
         <article class={`project-card ${project.data.featured ? 'featured' : ''}`}>
           <a class="card-cover-link" href={`/projects/${project.data.slug}/`} aria-label={`Open ${project.data.title} project page`}></a>
           <div class="card-topline">
-            <span class="status-pill">{project.data.status}</span>
+            <div class="project-card-identity">
+              {project.data.icon && <img class="project-card-icon" src={project.data.icon.src} alt={project.data.icon.alt} loading="lazy" />}
+              <span class="status-pill">{project.data.status}</span>
+            </div>
             {project.data.featured && <span class="featured-mark">flagship</span>}
           </div>
           <h2>{project.data.title}</h2>
