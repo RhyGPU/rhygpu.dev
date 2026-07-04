@@ -1,0 +1,23 @@
+{
+  "name": "rhygpu.dev",
+  "short_name": "RhyGPU",
+  "description": "Portfolio and development archive for RhyGPU projects.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#15130f",
+  "theme_color": "#15130f",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

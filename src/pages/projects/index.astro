@@ -5,7 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const projects = (await getCollection('projects'))
   .sort((a, b) => a.data.order - b.data.order);
 ---
-<BaseLayout title="Projects | RhyGPU" description="RhyGPU project portfolio: local-first AI tools, desktop apps, and experimental interfaces.">
+<BaseLayout title="Projects | RhyGPU" description="RhyGPU project portfolio: local-first AI tools, desktop apps, and experimental interfaces." image="/projects/rhygpu-dev/homepage-portfolio-hub.png">
   <div class="wrap">
     <a class="back" href="/">rhygpu.dev</a>
 

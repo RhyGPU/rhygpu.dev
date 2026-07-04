@@ -9,6 +9,7 @@ summary: "An Electron desktop app for personal planning workflows, built around 
 icon:
   src: /projects/omniplanner/app-icon.png
   alt: OmniPlanner app icon.
+ogImage: /projects/omniplanner/dashboard-overview.png
 repo: "https://github.com/RhyGPU/OmniPlanner"
 stack:
   - Electron

@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const projects = (await getCollection('projects'))
@@ -8,12 +8,15 @@ const projects = (await getCollection('projects'))
 const flagship = projects.find((p) => p.data.featured) ?? projects[0];
 const secondary = projects.filter((p) => p.data.slug !== flagship.data.slug);
 
+type DevlogEntry = CollectionEntry<'devlogs'>;
+
+const sortDevlogs = (a: DevlogEntry, b: DevlogEntry) =>
+  b.data.date.getTime() - a.data.date.getTime() ||
+  b.data.number.localeCompare(a.data.number, undefined, { numeric: true });
+
 const devlogs = (await getCollection('devlogs'))
   .filter((post) => post.data.status === 'published')
-  .sort((a, b) =>
-    b.data.date.getTime() - a.data.date.getTime() ||
-    Number(b.data.number) - Number(a.data.number)
-  );
+  .sort(sortDevlogs);
 
 const latestDevlogs = devlogs.slice(0, 5);
 
@@ -29,6 +32,7 @@ const statusDot = (status: string) => {
 <BaseLayout
   title="RhyGPU — Rhy's Systems Lab"
   description="A personal lab for AI tools, robotics systems, hardware experiments, devlogs, resumes, and long-term technical work."
+  image="/projects/rhygpu-dev/homepage-portfolio-hub.png"
 >
   <div class="home-shell" id="top">
 

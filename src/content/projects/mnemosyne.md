@@ -9,6 +9,7 @@ summary: "A desktop AI narrative engine that separates character memory, world s
 icon:
   src: /projects/mnemosyne/app-icon.png
   alt: Mnemosyne app icon.
+ogImage: /projects/mnemosyne/home-dashboard.png
 repo: "https://github.com/RhyGPU/mnemosyne"
 devlog: "/projects/mnemosyne/devlog/"
 devlogLabel: "Devlogs"

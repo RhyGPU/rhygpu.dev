@@ -5,7 +5,10 @@ import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
 export async function getStaticPaths() {
   const posts = (await getCollection('devlogs'))
     .filter((post) => post.data.status === 'published')
-    .sort((a, b) => Number(a.data.number) - Number(b.data.number));
+    .sort((a, b) =>
+      a.data.date.getTime() - b.data.date.getTime() ||
+      a.data.number.localeCompare(b.data.number, undefined, { numeric: true })
+    );
 
   return posts.map((post, index) => {
     const previous = posts[index - 1];
@@ -32,6 +35,12 @@ export async function getStaticPaths() {
 
 const { post, previous, next } = Astro.props;
 const { Content } = await render(post);
+const projectImages: Record<string, string> = {
+  'Mnemosyne': '/projects/mnemosyne/home-dashboard.png',
+  'OmniPlanner': '/projects/omniplanner/dashboard-overview.png',
+  'rhygpu.dev': '/projects/rhygpu-dev/devlog-archive.png'
+};
+const image = projectImages[post.data.project];
 ---
 <BlogPostLayout
   number={post.data.number}
@@ -41,6 +50,7 @@ const { Content } = await render(post);
   project={post.data.project}
   date={post.data.date}
   commits={post.data.commits}
+  image={image}
   previous={previous}
   next={next}
 >

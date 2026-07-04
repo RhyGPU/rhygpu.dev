@@ -1,5 +1,10 @@
 # rhygpu.dev
 
+![Status: Active Site](https://img.shields.io/badge/status-active%20site-5aabe6)
+![Built with Astro](https://img.shields.io/badge/built%20with-Astro-ff5d01)
+![Content: Projects + Devlogs](https://img.shields.io/badge/content-projects%20%2B%20devlogs-57bcae)
+![Portfolio: rhygpu.dev](https://img.shields.io/badge/portfolio-rhygpu.dev-ece7dd)
+
 rhygpu.dev is the public portfolio and development archive for RhyGPU projects. It turns project repos, devlogs, screenshots, and build history into a layered reader path: homepage, project case studies, development journal, and profile pages.
 
 This repo is a static Astro site. It is not just a generic personal homepage; it is the portfolio hub, case-study site, devlog surface, and meta-build archive for RhyGPU work.
@@ -34,6 +39,8 @@ Project metadata can include:
 - `repo` - enables the repository CTA when present.
 - `devlog` - enables the devlog CTA when present.
 - `devlogLabel` - controls the devlog CTA label text.
+- `icon` - optional app/project icon for project cards and detail pages.
+- `ogImage` - optional real social preview image for share cards.
 - `media` - screenshots, diagrams, and other project visuals.
 - `proofNotes` - implementation notes, evidence, or source-status notes.
 - `architecture` - system structure, technical model, or design notes.

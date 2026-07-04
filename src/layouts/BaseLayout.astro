@@ -6,13 +6,19 @@ import SiteFooter from '../components/SiteFooter.astro';
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  type?: 'website' | 'article';
 }
 
 const {
   title,
-  description = "RhyGPU — Rhy's Systems Lab: a personal lab for AI tools, robotics systems, hardware experiments, devlogs, resumes, and long-term technical work."
+  description = "RhyGPU | Rhy's Systems Lab: a personal lab for AI tools, robotics systems, hardware experiments, devlogs, resumes, and long-term technical work.",
+  image,
+  type = 'website'
 } = Astro.props;
+
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const imageUrl = image ? new URL(image, Astro.site).toString() : undefined;
 ---
 <!doctype html>
 <html lang="en">
@@ -22,14 +28,21 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#15130f" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:site_name" content="RhyGPU" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalUrl} />
-    <meta name="twitter:card" content="summary" />
+    {imageUrl && <meta property="og:image" content={imageUrl} />}
+    {imageUrl && <meta property="og:image:alt" content={title} />}
+    <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

@@ -55,6 +55,7 @@ const projects = defineCollection({
     status: z.string(),
     summary: z.string(),
     icon: iconSchema.optional(),
+    ogImage: z.string().optional(),
     repo: z.string().url().optional(),
     devlog: z.string().optional(),
     devlogLabel: z.string().optional(),

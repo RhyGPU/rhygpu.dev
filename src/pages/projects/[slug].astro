@@ -17,7 +17,7 @@ const hasArchitecture = project.data.architecture.length > 0;
 const hasMedia = project.data.media.length > 0 || project.data.demoLinks.length > 0;
 const hasProofNotes = project.data.proofNotes.length > 0;
 ---
-<BaseLayout title={`${project.data.title} | RhyGPU`} description={project.data.summary}>
+<BaseLayout title={`${project.data.title} | RhyGPU`} description={project.data.summary} image={project.data.ogImage}>
   <div class="wrap">
     <a class="back" href="/projects/">Projects</a>
 
