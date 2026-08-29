@@ -11,6 +11,8 @@ icon:
   alt: OmniPlanner app icon.
 ogImage: /projects/omniplanner/dashboard-overview.png
 repo: "https://github.com/RhyGPU/OmniPlanner"
+devlog: "/projects/omniplanner/devlog/"
+devlogLabel: "Devlogs"
 stack:
   - Electron
   - Vite
@@ -152,6 +154,37 @@ OmniPlanner is a working desktop app and active secondary project.
 The Windows launch flow exists: the top-level scripts route into the app folder, `run.bat` launches the app, and `create-shortcut.bat` creates a desktop shortcut. The app stores data locally on the device. The project also has developer commands for install, build, launch, Vite dev server, and Electron start flows.
 
 This is not being presented as a polished public release. Public polish, packaging, and deeper documentation are still ongoing work unless the repo proves otherwise.
+
+## Development Journal
+
+<div class="journal-links">
+  <a href="/devlog/omni-000-before-omniplanner-had-a-repository/"><strong>000</strong><span>Origin: the pre-repository planner, its first code audit, and the bugs that defined the data model.</span></a>
+  <a href="/devlog/omni-001-the-web-planner-became-a-desktop-app/"><strong>001</strong><span>Foundation: the first repository, local Electron shell, provider-neutral AI, and reproducible desktop builds.</span></a>
+  <a href="/devlog/omni-002-the-last-week-of-february-disappeared/"><strong>002</strong><span>Calendar truth: restoring the missing final week and making monthly and weekly views edit the same data.</span></a>
+  <a href="/devlog/omni-003-the-app-was-still-a-folder/"><strong>003</strong><span>Re-entry: double-click launchers, first-run setup, and a desktop shortcut for the working checkout.</span></a>
+  <a href="/devlog/omni-004-five-checkmarks-two-flames/"><strong>004</strong><span>Adaptability: truthful weekly habit progress, readable columns, zoom, and local AI providers.</span></a>
+  <a href="/devlog/omni-005-deleting-a-habit-should-not-delete-the-past/"><strong>005</strong><span>Habit identity: forward deletion, future-week reconciliation, cross-week streaks, and preserved history.</span></a>
+  <a href="/devlog/omni-006-an-email-became-a-time-block/"><strong>006</strong><span>Integration: IMAP retrieval, email-to-calendar extraction, and ICS events entering the shared week store.</span></a>
+  <a href="/devlog/omni-007-the-network-fix-was-too-powerful/"><strong>007</strong><span>Desktop boundary: fixing focus and connectivity while exposing the cost of elevation and generic network IPC.</span></a>
+  <a href="/devlog/omni-008-a-goal-stopped-being-a-text-box/"><strong>008</strong><span>Goal domain: versioned migrations, GoalItem lifecycle, and one-way links from weekly execution.</span></a>
+  <a href="/devlog/omni-009-the-password-left-localstorage/"><strong>009</strong><span>Credential hardening: safeStorage, migrated secrets, daily goal links, and the first fallback failures.</span></a>
+  <a href="/devlog/omni-010-a-goal-had-tasks-but-no-time/"><strong>010</strong><span>Execution coverage: goal-aware calendar blocks, deterministic focus gaps, and derived weekly trends.</span></a>
+  <a href="/devlog/omni-011-the-planner-outgrew-electron/"><strong>011</strong><span>Cross-device foundation: platform services, IndexedDB PWA, Capacitor, reminders, and resilient restore.</span></a>
+  <a href="/devlog/omni-012-nothing-writes-until-confirm/"><strong>012</strong><span>First-run trust: honest empty states, readiness gates, and previews before restore or calendar writes.</span></a>
+  <a href="/devlog/omni-013-the-first-release-gate-had-138-tests/"><strong>013</strong><span>Release confidence: typecheck, ID migration, 138 tests, manual gates, and traceable email failures.</span></a>
+  <a href="/devlog/omni-014-oauth-worked-on-a-branch/"><strong>014</strong><span>Feature-branch email: bounded IMAP, PKCE OAuth, token refresh, and explicit unmerged status.</span></a>
+  <a href="/devlog/omni-015-the-license-named-the-wrong-project/"><strong>015</strong><span>Publication: history-aware secret scanning, AGPL-3.0-or-later, and the corrected copied notice.</span></a>
+  <a href="/devlog/omni-016-the-process-was-running-but-the-planner-was-hidden/"><strong>016</strong><span>Desktop launch truth: Windows wrappers, single-instance Electron, a visible planner window, and scoped deduplication.</span></a>
+  <a href="/devlog/omni-017-the-dashboard-arrived-before-it-could-render/"><strong>017</strong><span>Execution cockpit: Dashboard, actuals, Pulse rules, a render-time failure, and the July 2 repair.</span></a>
+  <a href="/devlog/omni-018-the-local-model-was-not-part-of-the-repository/"><strong>018</strong><span>Local-first v3: file-backed planner state, untracked llamafiles, local server control, and usage estimates.</span></a>
+  <a href="/devlog/omni-019-rich-email-was-not-the-same-as-safe-email/"><strong>019</strong><span>MIME inbox: text and HTML alternatives, iframe containment, plaintext fallback, and unfinished remote-content policy.</span></a>
+  <a href="/devlog/omni-020-the-pomodoro-chimed-but-the-week-stayed-empty/"><strong>020</strong><span>Execution UI: Pomodoro actuals, morning briefing, event checklists, and the silent week-key persistence failure.</span></a>
+  <a href="/devlog/omni-021-closing-the-window-could-not-kill-the-alarm/"><strong>021</strong><span>Desktop alarms: persisted main-process timers, wake recovery, system tray, and opt-in launch at login.</span></a>
+  <a href="/devlog/omni-022-a-new-week-was-not-allowed-to-inherit-everything/"><strong>022</strong><span>Week transition: canonical key repair and explicit carry, reschedule, or drop for goal-linked work.</span></a>
+  <a href="/devlog/omni-023-the-background-process-was-not-a-tray/"><strong>023</strong><span>Desktop acceptance: the invisible tray, missing time controls, repaired quit path, and an unclosed smoke-test gate.</span></a>
+  <a href="/devlog/omni-024-dismissing-an-alarm-became-work/"><strong>024</strong><span>Alarm integration: weekly repeats, wake missions, planner-backed dismissal, and Smart Snooze's unfinished semantics.</span></a>
+  <a href="/devlog/omni-025-pulse-swallowed-the-clock/"><strong>025</strong><span>Pulse v4.2: five clock utilities, shared Pomodoro state, custom alarm audio, and renderer-bound timer lifecycles.</span></a>
+</div>
 
 ## What This Demonstrates
 

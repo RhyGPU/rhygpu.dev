@@ -2,7 +2,7 @@
 title: "Pythagorean Harmony"
 slug: "pythagorean-harmony"
 featured: false
-order: 3
+order: 4
 subtitle: "Equation-duel combat prototype for a fantasy third-person action RPG."
 status: "Playable Prototype"
 summary: "A UE5 prototype exploring math-based combat, where enemies are defeated by transforming equations with operation weapons and executing with the correct value of x."

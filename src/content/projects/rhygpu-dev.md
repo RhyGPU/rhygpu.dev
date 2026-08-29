@@ -2,7 +2,7 @@
 title: "rhygpu.dev"
 slug: "rhygpu-dev"
 featured: false
-order: 4
+order: 5
 subtitle: "Portfolio system and development archive for RhyGPU projects."
 status: "Active Site"
 summary: "The Astro portfolio, devlog hub, and meta-build archive for RhyGPU projects: a public layer that turns raw project history into readable case studies."
