@@ -1,0 +1,399 @@
+{
+  "format_version": 1,
+  "generated_at": "2026-08-28T16:53:38.881786+00:00",
+  "source_roots": {
+    "claude_code": "C:\\Users\\T-ROBOTICS\\.claude\\projects",
+    "codex": "C:\\Users\\T-ROBOTICS\\.codex\\sessions"
+  },
+  "targets": [
+    {
+      "path": "D:\\정준화\\between_dawns",
+      "exists": true,
+      "label": "between_dawns",
+      "git_common_dir": "d:\\정준화\\between_dawns\\.git",
+      "git_remote": "github.com/rhygpu/between_dawns"
+    },
+    {
+      "path": "D:\\정준화\\OmniPlanner",
+      "exists": true,
+      "label": "OmniPlanner",
+      "git_common_dir": "d:\\정준화\\omniplanner\\.git",
+      "git_remote": "github.com/rhygpu/omniplanner"
+    },
+    {
+      "path": "D:\\정준화\\rhygpu.dev",
+      "exists": true,
+      "label": "rhygpu.dev",
+      "git_common_dir": "d:\\정준화\\rhygpu.dev\\.git",
+      "git_remote": "github.com/rhygpu/rhygpu.dev"
+    },
+    {
+      "path": "D:\\정준화\\mnemosyne",
+      "exists": true,
+      "label": "mnemosyne",
+      "git_common_dir": "d:\\정준화\\mnemosyne\\.git",
+      "git_remote": "github.com/rhygpu/mnemosyne"
+    }
+  ],
+  "filtering": {
+    "included_roles": [
+      "user",
+      "assistant"
+    ],
+    "excluded": [
+      "system/developer messages",
+      "reasoning/thinking",
+      "tool calls and tool results",
+      "terminal output",
+      "attachments and images",
+      "subagent and sidechain sessions",
+      "fenced, HTML, and Markdown-indented code blocks",
+      "known injected context blocks"
+    ],
+    "retained": [
+      "inline identifiers and short inline code spans inside prose"
+    ]
+  },
+  "counts": {
+    "sessions": 20,
+    "messages": 4076,
+    "products": {
+      "codex": 16,
+      "claude_code": 4
+    },
+    "targets": {
+      "mnemosyne": 9,
+      "rhygpu.dev": 3,
+      "OmniPlanner": 1,
+      "between_dawns": 7
+    },
+    "roles": {
+      "user": 353,
+      "assistant": 3723
+    },
+    "parse_errors": 0
+  },
+  "sessions": [
+    {
+      "product": "codex",
+      "session_id": "019df0d1-218f-7480-aead-46137d847bd0",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\05\\04\\rollout-2026-05-04T11-28-50-019df0d1-218f-7480-aead-46137d847bd0.jsonl",
+      "cwd": "C:\\Users\\T-ROBOTICS\\Downloads\\mnemosyne",
+      "target": "D:\\정준화\\mnemosyne",
+      "target_label": "mnemosyne",
+      "started_at": "2026-05-04T02:28:50.794Z",
+      "ended_at": "2026-05-06T01:39:50.176Z",
+      "output_path": "mnemosyne\\codex\\20260504_019df0d1-218f-7480-aead-46137d847bd0.md",
+      "message_count": 27,
+      "role_counts": {
+        "user": 2,
+        "assistant": 25
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "019e55b1-3042-7af0-aa50-2515dd9017bc",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\05\\24\\rollout-2026-05-24T01-35-41-019e55b1-3042-7af0-aa50-2515dd9017bc.jsonl",
+      "cwd": "C:\\Users\\T-ROBOTICS\\Downloads\\mnemosyne",
+      "target": "D:\\정준화\\mnemosyne",
+      "target_label": "mnemosyne",
+      "started_at": "2026-05-23T16:35:41.158Z",
+      "ended_at": "2026-05-26T09:25:38.717Z",
+      "output_path": "mnemosyne\\codex\\20260523_019e55b1-3042-7af0-aa50-2515dd9017bc.md",
+      "message_count": 82,
+      "role_counts": {
+        "user": 8,
+        "assistant": 74
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "019e878a-f031-77d2-8866-c2d8bd3827a6",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\06\\02\\rollout-2026-06-02T17-54-51-019e878a-f031-77d2-8866-c2d8bd3827a6.jsonl",
+      "cwd": "C:\\Users\\T-ROBOTICS\\Downloads\\mnemosyne",
+      "target": "D:\\정준화\\mnemosyne",
+      "target_label": "mnemosyne",
+      "started_at": "2026-06-02T08:54:51.224Z",
+      "ended_at": "2026-06-10T14:27:05.848Z",
+      "output_path": "mnemosyne\\codex\\20260602_019e878a-f031-77d2-8866-c2d8bd3827a6.md",
+      "message_count": 635,
+      "role_counts": {
+        "user": 20,
+        "assistant": 615
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "019ec15c-0955-7562-966f-ebc0dd343a55",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\06\\13\\rollout-2026-06-13T23-21-39-019ec15c-0955-7562-966f-ebc0dd343a55.jsonl",
+      "cwd": "C:\\Users\\T-ROBOTICS\\Downloads\\mnemosyne",
+      "target": "D:\\정준화\\mnemosyne",
+      "target_label": "mnemosyne",
+      "started_at": "2026-06-13T14:21:39.953Z",
+      "ended_at": "2026-06-17T01:04:02.607Z",
+      "output_path": "mnemosyne\\codex\\20260613_019ec15c-0955-7562-966f-ebc0dd343a55.md",
+      "message_count": 223,
+      "role_counts": {
+        "user": 10,
+        "assistant": 213
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "019edf27-1dc5-7931-9467-d0cec3693019",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\06\\19\\rollout-2026-06-19T18-12-25-019edf27-1dc5-7931-9467-d0cec3693019.jsonl",
+      "cwd": "C:\\Users\\T-ROBOTICS\\Downloads\\mnemosyne",
+      "target": "D:\\정준화\\mnemosyne",
+      "target_label": "mnemosyne",
+      "started_at": "2026-06-19T09:12:25.596Z",
+      "ended_at": "2026-06-19T13:54:17.372Z",
+      "output_path": "mnemosyne\\codex\\20260619_019edf27-1dc5-7931-9467-d0cec3693019.md",
+      "message_count": 140,
+      "role_counts": {
+        "user": 9,
+        "assistant": 131
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "019eecd5-1cd6-73a0-a61d-b88a93793b18",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\06\\22\\rollout-2026-06-22T09-57-35-019eecd5-1cd6-73a0-a61d-b88a93793b18.jsonl",
+      "cwd": "D:\\정준화\\mnemosyne",
+      "target": "D:\\정준화\\mnemosyne",
+      "target_label": "mnemosyne",
+      "started_at": "2026-06-22T00:57:35.086Z",
+      "ended_at": "2026-07-24T00:24:56.312Z",
+      "output_path": "mnemosyne\\codex\\20260622_019eecd5-1cd6-73a0-a61d-b88a93793b18.md",
+      "message_count": 124,
+      "role_counts": {
+        "user": 11,
+        "assistant": 113
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "019eff9c-e677-7f31-b539-48924bf74cb5",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\06\\26\\rollout-2026-06-26T01-28-58-019eff9c-e677-7f31-b539-48924bf74cb5.jsonl",
+      "cwd": "D:\\정준화\\mnemosyne",
+      "target": "D:\\정준화\\mnemosyne",
+      "target_label": "mnemosyne",
+      "started_at": "2026-06-25T16:28:58.493Z",
+      "ended_at": "2026-07-24T11:22:52.093Z",
+      "output_path": "mnemosyne\\codex\\20260625_019eff9c-e677-7f31-b539-48924bf74cb5.md",
+      "message_count": 956,
+      "role_counts": {
+        "user": 47,
+        "assistant": 909
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "019f1338-a3ef-7d63-a851-f38682ae0546",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\06\\29\\rollout-2026-06-29T20-51-51-019f1338-a3ef-7d63-a851-f38682ae0546.jsonl",
+      "cwd": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log",
+      "target": "D:\\정준화\\rhygpu.dev",
+      "target_label": "rhygpu.dev",
+      "started_at": "2026-06-29T11:51:51.942Z",
+      "ended_at": "2026-07-02T02:33:27.450Z",
+      "output_path": "rhygpu.dev\\codex\\20260629_019f1338-a3ef-7d63-a851-f38682ae0546.md",
+      "message_count": 538,
+      "role_counts": {
+        "user": 44,
+        "assistant": 494
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "019f1e72-50c3-7ae2-8d16-71b03447a823",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\07\\02\\rollout-2026-07-02T01-10-42-019f1e72-50c3-7ae2-8d16-71b03447a823.jsonl",
+      "cwd": "D:\\정준화\\OmniPlanner",
+      "target": "D:\\정준화\\OmniPlanner",
+      "target_label": "OmniPlanner",
+      "started_at": "2026-07-01T16:10:42.061Z",
+      "ended_at": "2026-07-01T16:13:08.495Z",
+      "output_path": "OmniPlanner\\codex\\20260701_019f1e72-50c3-7ae2-8d16-71b03447a823.md",
+      "message_count": 11,
+      "role_counts": {
+        "user": 1,
+        "assistant": 10
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "019f2b20-9048-7113-a774-3735426ad89c",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\07\\04\\rollout-2026-07-04T12-16-28-019f2b20-9048-7113-a774-3735426ad89c.jsonl",
+      "cwd": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log",
+      "target": "D:\\정준화\\rhygpu.dev",
+      "target_label": "rhygpu.dev",
+      "started_at": "2026-07-04T03:16:28.190Z",
+      "ended_at": "2026-08-25T17:46:59.581Z",
+      "output_path": "rhygpu.dev\\codex\\20260704_019f2b20-9048-7113-a774-3735426ad89c.md",
+      "message_count": 123,
+      "role_counts": {
+        "user": 7,
+        "assistant": 116
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "019fa910-2917-70e1-9765-77044ac3ef6d",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\07\\28\\rollout-2026-07-28T23-10-36-019fa910-2917-70e1-9765-77044ac3ef6d.jsonl",
+      "cwd": "D:\\정준화\\mnemosyne",
+      "target": "D:\\정준화\\mnemosyne",
+      "target_label": "mnemosyne",
+      "started_at": "2026-07-28T14:10:36.763Z",
+      "ended_at": "2026-08-10T12:44:40.644Z",
+      "output_path": "mnemosyne\\codex\\20260728_019fa910-2917-70e1-9765-77044ac3ef6d.md",
+      "message_count": 188,
+      "role_counts": {
+        "user": 31,
+        "assistant": 157
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "01a02e10-0369-7d71-aa98-4752715a9b66",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\08\\23\\rollout-2026-08-23T18-59-56-01a02e10-0369-7d71-aa98-4752715a9b66.jsonl",
+      "cwd": "D:\\정준화\\between_dawns",
+      "target": "D:\\정준화\\between_dawns",
+      "target_label": "between_dawns",
+      "started_at": "2026-08-23T09:59:56.521Z",
+      "ended_at": "2026-08-23T14:18:33.718Z",
+      "output_path": "between_dawns\\codex\\20260823_01a02e10-0369-7d71-aa98-4752715a9b66.md",
+      "message_count": 40,
+      "role_counts": {
+        "user": 10,
+        "assistant": 30
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "01a02f17-f881-79c2-89e4-d91cc5d4a734",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\08\\23\\rollout-2026-08-23T23-48-15-01a02f17-f881-79c2-89e4-d91cc5d4a734.jsonl",
+      "cwd": "D:\\정준화\\between_dawns",
+      "target": "D:\\정준화\\between_dawns",
+      "target_label": "between_dawns",
+      "started_at": "2026-08-23T14:48:15.233Z",
+      "ended_at": "2026-08-24T14:58:48.312Z",
+      "output_path": "between_dawns\\codex\\20260823_01a02f17-f881-79c2-89e4-d91cc5d4a734.md",
+      "message_count": 234,
+      "role_counts": {
+        "user": 16,
+        "assistant": 218
+      }
+    },
+    {
+      "product": "claude_code",
+      "session_id": "11b24157-8efa-4d96-8cd0-e180e3e10603",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.claude\\projects\\D------between-dawns\\11b24157-8efa-4d96-8cd0-e180e3e10603.jsonl",
+      "cwd": "D:\\정준화\\between_dawns",
+      "target": "D:\\정준화\\between_dawns",
+      "target_label": "between_dawns",
+      "started_at": "2026-08-24T06:39:35.456Z",
+      "ended_at": "2026-08-24T14:30:44.916Z",
+      "output_path": "between_dawns\\claude_code\\20260824_11b24157-8efa-4d96-8cd0-e180e3e10603.md",
+      "message_count": 65,
+      "role_counts": {
+        "user": 14,
+        "assistant": 51
+      }
+    },
+    {
+      "product": "claude_code",
+      "session_id": "2396ef50-e845-4975-b72a-e5e7364313be",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.claude\\projects\\D------between-dawns\\2396ef50-e845-4975-b72a-e5e7364313be.jsonl",
+      "cwd": "D:\\정준화\\between_dawns",
+      "target": "D:\\정준화\\between_dawns",
+      "target_label": "between_dawns",
+      "started_at": "2026-08-24T06:39:35.456Z",
+      "ended_at": "2026-08-25T14:44:01.128Z",
+      "output_path": "between_dawns\\claude_code\\20260824_2396ef50-e845-4975-b72a-e5e7364313be.md",
+      "message_count": 147,
+      "role_counts": {
+        "user": 31,
+        "assistant": 116
+      }
+    },
+    {
+      "product": "claude_code",
+      "session_id": "7f828e43-ba45-4cee-b075-257f45b0f034",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.claude\\projects\\D------between-dawns\\7f828e43-ba45-4cee-b075-257f45b0f034.jsonl",
+      "cwd": "D:\\정준화\\between_dawns",
+      "target": "D:\\정준화\\between_dawns",
+      "target_label": "between_dawns",
+      "started_at": "2026-08-24T06:39:35.456Z",
+      "ended_at": "2026-08-28T01:10:37.411Z",
+      "output_path": "between_dawns\\claude_code\\20260824_7f828e43-ba45-4cee-b075-257f45b0f034.md",
+      "message_count": 366,
+      "role_counts": {
+        "user": 56,
+        "assistant": 310
+      }
+    },
+    {
+      "product": "claude_code",
+      "session_id": "9d56f9f6-5115-4d0a-a6b6-9bc446573548",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.claude\\projects\\D------between-dawns\\9d56f9f6-5115-4d0a-a6b6-9bc446573548.jsonl",
+      "cwd": "D:\\정준화\\between_dawns",
+      "target": "D:\\정준화\\between_dawns",
+      "target_label": "between_dawns",
+      "started_at": "2026-08-24T06:39:35.456Z",
+      "ended_at": "2026-08-25T14:46:26.293Z",
+      "output_path": "between_dawns\\claude_code\\20260824_9d56f9f6-5115-4d0a-a6b6-9bc446573548.md",
+      "message_count": 148,
+      "role_counts": {
+        "user": 31,
+        "assistant": 117
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "01a03a01-760a-7533-b7c9-bc6dc1e05277",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\08\\26\\rollout-2026-08-26T02-39-29-01a03a01-760a-7533-b7c9-bc6dc1e05277.jsonl",
+      "cwd": "D:\\정준화\\between_dawns",
+      "target": "D:\\정준화\\between_dawns",
+      "target_label": "between_dawns",
+      "started_at": "2026-08-25T17:39:29.419Z",
+      "ended_at": "2026-08-25T17:44:14.084Z",
+      "output_path": "between_dawns\\codex\\20260825_01a03a01-760a-7533-b7c9-bc6dc1e05277.md",
+      "message_count": 10,
+      "role_counts": {
+        "user": 2,
+        "assistant": 8
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "01a03a02-b73e-79f0-be2f-3209c54bd5c6",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\08\\26\\rollout-2026-08-26T02-40-51-01a03a02-b73e-79f0-be2f-3209c54bd5c6.jsonl",
+      "cwd": "D:\\정준화\\mnemosyne",
+      "target": "D:\\정준화\\mnemosyne",
+      "target_label": "mnemosyne",
+      "started_at": "2026-08-25T17:40:51.771Z",
+      "ended_at": "2026-08-25T17:55:12.624Z",
+      "output_path": "mnemosyne\\codex\\20260825_01a03a02-b73e-79f0-be2f-3209c54bd5c6.md",
+      "message_count": 12,
+      "role_counts": {
+        "user": 1,
+        "assistant": 11
+      }
+    },
+    {
+      "product": "codex",
+      "session_id": "01a04940-bb25-7d62-9b8a-87d9abeb427f",
+      "source_path": "C:\\Users\\T-ROBOTICS\\.codex\\sessions\\2026\\08\\29\\rollout-2026-08-29T01-42-54-01a04940-bb25-7d62-9b8a-87d9abeb427f.jsonl",
+      "cwd": "D:\\정준화\\rhygpu.dev\\Mnemosyne Chat Log",
+      "target": "D:\\정준화\\rhygpu.dev",
+      "target_label": "rhygpu.dev",
+      "started_at": "2026-08-28T16:42:54.329Z",
+      "ended_at": "2026-08-28T16:52:44.932Z",
+      "output_path": "rhygpu.dev\\codex\\20260828_01a04940-bb25-7d62-9b8a-87d9abeb427f.md",
+      "message_count": 7,
+      "role_counts": {
+        "user": 2,
+        "assistant": 5
+      }
+    }
+  ],
+  "parse_errors": []
+}
